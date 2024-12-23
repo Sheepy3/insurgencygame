@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxejesper0f6a"]
+
+[ext_resource type="Texture2D" uid="uid://dby1iiu3hleyj" path="res://Assets/node.png" id="1_a2mu2"]
+
+[node name="Map_Node" type="Node2D"]
+
+[node name="Node" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_a2mu2")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -33.5
+offset_right = 20.0
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 48
+text = "1"
+horizontal_alignment = 1

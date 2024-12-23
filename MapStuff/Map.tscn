@@ -1,0 +1,83 @@
+[gd_scene load_steps=3 format=3 uid="uid://dteesqpw1o4v5"]
+
+[ext_resource type="Script" path="res://MapStuff/map.gd" id="1_bhwkw"]
+[ext_resource type="PackedScene" uid="uid://cxejesper0f6a" path="res://MapStuff/Map_Node.tscn" id="2_t43bk"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_bhwkw")
+
+[node name="Map_Node" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-120, 0)
+
+[node name="Map_Node2" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(120, 0)
+
+[node name="Map_Node3" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-480, 240)
+
+[node name="Map_Node4" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-240, 240)
+
+[node name="Map_Node5" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(240, 240)
+
+[node name="Map_Node6" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(480, 240)
+
+[node name="Map_Node7" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-600, 480)
+
+[node name="Map_Node8" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-120, 480)
+
+[node name="Map_Node9" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(120, 480)
+
+[node name="Map_Node10" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(600, 480)
+
+[node name="Map_Node11" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-480, 720)
+
+[node name="Map_Node12" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-240, 720)
+
+[node name="Map_Node13" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(240, 720)
+
+[node name="Map_Node14" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(480, 720)
+
+[node name="Map_Node15" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-600, 960)
+
+[node name="Map_Node16" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-120, 960)
+
+[node name="Map_Node17" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(120, 960)
+
+[node name="Map_Node18" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(600, 960)
+
+[node name="Map_Node19" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-480, 1200)
+
+[node name="Map_Node20" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-240, 1200)
+
+[node name="Map_Node21" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(240, 1200)
+
+[node name="Map_Node22" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(480, 1200)
+
+[node name="Map_Node23" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(-120, 1440)
+
+[node name="Map_Node24" parent="." instance=ExtResource("2_t43bk")]
+position = Vector2(120, 1440)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(0, 720)
+zoom = Vector2(0.4, 0.4)
