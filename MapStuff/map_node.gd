@@ -5,7 +5,7 @@ func _ready() -> void:
 	get_parent().update_label.connect(_update_label)
 	pass # Replace with function body.
 	
-func _update_label():
+func _update_label()-> void:
 	$Label.text = name
 	pass
 	
