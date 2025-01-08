@@ -4,7 +4,7 @@ extends Node2D
 func _ready() -> void:
 	get_parent().update_label.connect(_update_label)
 	pass # Replace with function body.
-
+	
 func _update_label():
 	$Label.text = name
 	pass
