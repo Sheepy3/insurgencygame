@@ -1,21 +1,35 @@
 extends Node2D
 signal update_label
-
+var path:PackedScene = preload("res://MapStuff/Path.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var num: int = 1
-	for child: Node in get_children():
+	var num: int = 1 #iterator for name
+	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child is not Camera2D:
-			child.name = str(num)
+			child.name = str(num) #name all nodes
+			#generate paths
 			num+=1
+	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
+		if child is not Camera2D:
+			for keys:int in The_nodes[child.name]: 
+				var constructed_name:String = child.name+"-"+str(keys) #constructs name from node of origin and node it connects to 
+				if not find_child(constructed_name): #check if node exists already
+				#print(constructed_name) #debug
+					var new_path:Node = path.instantiate() #new path instance
+					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
+					new_path.name = constructed_name #set name of new path
+					child.add_child(new_path) #add new path to scene as child of its origin node
+
 	update_label.emit()
-	print(Traverse_test(1, 19))
+	#print(Traverse_test(1, 19))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+	
 # Define the graph as a dictionary where each node points to a list of connected nodes
+# Note: this ought to be replaced with a more flexible system. 
 const The_nodes = {
 "1": [2, 4], 
 "2": [1, 5],
@@ -42,7 +56,8 @@ const The_nodes = {
 "23": [20, 24],
 "24": [21, 23]
 }
-func Traverse_test(Start: int, End: int)-> Dictionary:
+
+func Pathfind(Start: int, End: int)-> Dictionary: #BFS algorithm
 # initializing initial variables (que, list of visited nodes, current position in the que
 	var The_que: Array = []
 	var Visited: Dictionary = {}
@@ -54,10 +69,8 @@ func Traverse_test(Start: int, End: int)-> Dictionary:
 		var Position: int = The_que.pop_front()
 		# When sertch reatches "End" number returs the path  
 		if Position == End:
-			print(Position)
 			var Route: Array = []
 			while Position != Start:
-				print(Position)
 				Route.append(Position)
 				Position = Visited.get(Position)
 			#Takes the path and transforms it from End -> Start to Start -> End 
@@ -73,4 +86,4 @@ func Traverse_test(Start: int, End: int)-> Dictionary:
 					Visited[Adj] = Position  
 					# Adds neighboring node to the queue
 					The_que.append(Adj) 
-	return{}
+	return{} #prevents error lol

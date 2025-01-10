@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://MapStuff/map.gd" id="1_bhwkw"]
 [ext_resource type="PackedScene" uid="uid://cxejesper0f6a" path="res://MapStuff/Map_Node.tscn" id="2_t43bk"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Map" type="Node2D"]
 script = ExtResource("1_bhwkw")
 
 [node name="Map_Node" parent="." instance=ExtResource("2_t43bk")]
