@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cxejesper0f6a"]
+[gd_scene load_steps=5 format=3 uid="uid://cxejesper0f6a"]
 
 [ext_resource type="Script" path="res://MapStuff/map_node.gd" id="1_8ofst"]
 [ext_resource type="Texture2D" uid="uid://dby1iiu3hleyj" path="res://Assets/node.png" id="1_a2mu2"]
+[ext_resource type="Script" path="res://MapStuff/map_node_area_2d.gd" id="3_eyrtf"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4tgex"]
 
 [node name="Map_Node" type="Node2D"]
 script = ExtResource("1_8ofst")
@@ -26,3 +29,12 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 48
 text = "1"
 horizontal_alignment = 1
+
+[node name="Map_Node_Area2D" type="Area2D" parent="."]
+script = ExtResource("3_eyrtf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Map_Node_Area2D"]
+scale = Vector2(6, 6)
+shape = SubResource("CircleShape2D_4tgex")
+
+[connection signal="mouse_shape_entered" from="Map_Node_Area2D" to="Map_Node_Area2D" method="_on_map_node_area_2d_mouse_shape_entered"]
