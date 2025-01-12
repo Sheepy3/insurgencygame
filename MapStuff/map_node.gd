@@ -3,7 +3,8 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	get_parent().update_label.connect(_update_label)
+	if get_parent().name != "root":
+		get_parent().update_label.connect(_update_label)
 	pass # Replace with function body.
 	
 func _update_label()-> void:

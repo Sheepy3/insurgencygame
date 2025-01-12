@@ -5,22 +5,25 @@ var path:PackedScene = preload("res://MapStuff/Path.tscn")
 func _ready() -> void:
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
-		if child is not Camera2D:
+		if child is Node2D and child is not Camera2D:
 			var M_node_area: Node = child.find_child("Map_Node_Area2D")
 			M_node_area.A_node_clicked.connect(pass_name)
 			child.name = str(num) #name all nodes
 			num+=1
+	#print(get_children())
+	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
-		if child is not Camera2D:
+		if child is Node2D and child is not Camera2D:
 			for keys:int in The_nodes[child.name]: 
 				var constructed_name:String = child.name+"-"+str(keys) #constructs name from node of origin and node it connects to 
-				if not find_child(constructed_name): #check if node exists already
-				#print(constructed_name) #debug
+				var reversed_constructed_name:String = str(keys)+"-"+child.name
+				if not (generated_paths.has(reversed_constructed_name) or generated_paths.has(constructed_name)) : #check if node exists already
+
 					var new_path:Node = path.instantiate() #new path instance
 					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
 					child.add_child(new_path) #add new path to scene as child of its origin node
-
+					generated_paths.append(constructed_name)
 	update_label.emit()
 	#print(Traverse_test(1, 19))
 
