@@ -6,8 +6,9 @@ func _ready() -> void:
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child is not Camera2D:
+			var M_node_area: Node = child.find_child("Map_Node_Area2D")
+			M_node_area.A_node_clicked.connect(pass_name)
 			child.name = str(num) #name all nodes
-			#generate paths
 			num+=1
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child is not Camera2D:
@@ -23,6 +24,8 @@ func _ready() -> void:
 	update_label.emit()
 	#print(Traverse_test(1, 19))
 
+func pass_name(Name: String) ->void:
+	print(Name)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
