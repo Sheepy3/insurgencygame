@@ -36,3 +36,5 @@ script = ExtResource("3_eyrtf")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map_Node_Area2D"]
 scale = Vector2(6, 6)
 shape = SubResource("CircleShape2D_4tgex")
+
+[connection signal="input_event" from="Map_Node_Area2D" to="." method="_on_map_node_area_2d_input_event"]
