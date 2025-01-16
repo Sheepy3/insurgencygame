@@ -38,7 +38,7 @@ func Update_action(action: String = "") ->void:
 func Check_action(Name: String) ->void:
 	if Last_action == "Base":
 		find_child(Name).On_node = "Base"
-		print("You have placed a base on node" + Name)
+		print("You have placed a base on node " + Name)
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 

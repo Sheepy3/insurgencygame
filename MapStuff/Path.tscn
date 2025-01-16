@@ -4,9 +4,9 @@
 [ext_resource type="Script" path="res://MapStuff/path.gd" id="1_j4goj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nxxog"]
-size = Vector2(236, 28)
+size = Vector2(114, 28)
 
-[node name="Node2D" type="Node2D"]
+[node name="Path_Node" type="Node2D"]
 script = ExtResource("1_j4goj")
 
 [node name="Node" type="Sprite2D" parent="."]
@@ -17,8 +17,8 @@ texture = ExtResource("1_dqgnp")
 
 [node name="Node_Path_Area2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Node_Path_Area2D"]
-position = Vector2(120, 0)
+[node name="Node_Path_CollisionShape2D" type="CollisionShape2D" parent="Node_Path_Area2D"]
+position = Vector2(117, 0)
 shape = SubResource("RectangleShape2D_nxxog")
 
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]

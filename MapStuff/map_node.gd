@@ -18,7 +18,7 @@ func _update_label()-> void:
 func _on_map_node_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
-		get_parent().find_child("UI").find_child("Dynamic_Clicked").text = "Node " + $Label.text
+		get_parent().find_child("Dynamic_Clicked").text = "Node " + $Label.text #Dispalys 
 		A_node_clicked.emit(name)
 		print(On_node)
 

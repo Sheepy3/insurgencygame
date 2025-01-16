@@ -10,8 +10,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-
+#Activiates whe the "Place Base" button is pressed
 func _on_button_pressed() -> void:
-	The_action.emit("Base")
-	find_child("Dynamic_Action").text = "Base placing"
+	The_action.emit("Base") #transmits signal that Base button has been pressed
+	find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
 	 

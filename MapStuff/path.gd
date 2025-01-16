@@ -16,3 +16,4 @@ func _process(delta: float) -> void:
 func _on_node_path_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		print("you have clicked on Path " + name)
+		find_parent("Map_parent").find_child("Dynamic_Clicked").text = "Path " + name
