@@ -27,20 +27,32 @@ func _ready() -> void:
 					child.add_child(new_path) #add new path to scene as child of its origin node
 					generated_paths.append(constructed_name)
 	update_label.emit()
-	#print(Traverse_test(1, 19))
-
-func pass_name(Name: String) ->void:
-	print(Name)
 
 func Update_action(action: String = "") ->void:
 	Last_action = action
 
 func Check_action(Name: String) ->void:
+	var Current_node: Node = find_child(Name)
 	if Last_action == "Base":
-		find_child(Name).On_node = "Base"
+		Current_node.On_node = "Base"
 		print("You have placed a base on node " + Name)
+		Current_node.find_child("Building").show()
+		Current_node.Has_building = true
+		find_child("Dynamic_Action").text = "None"
+		print(Current_node.Has_building)
+		Last_action = ""
+	if Last_action == "Fighter" and  Current_node.Has_building:
+		print("You have placed a Fighter at a base on node " + Name)
+		Current_node.find_child("Fighter_Unit").show()
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
+		pass
+	if Last_action == "Influence":
+		print("You have placed a Influnce on node " + Name)
+		Current_node.find_child("Influence_Unit").show()
+		find_child("Dynamic_Action").text = "None"
+		Last_action = ""
+		pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
