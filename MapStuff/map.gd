@@ -1,14 +1,16 @@
 extends Node2D
 signal update_label
 var path:PackedScene = preload("res://MapStuff/Path.tscn")
+var Last_action: String = ""
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$UI.The_action.connect(Update_action)
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child is Node2D and child is not Camera2D:
-			var M_node_area: Node = child.find_child("Map_Node_Area2D")
-			M_node_area.A_node_clicked.connect(pass_name)
 			child.name = str(num) #name all nodes
+			child.A_node_clicked.connect(Check_action)
 			num+=1
 	#print(get_children())
 	var generated_paths:Array
@@ -29,6 +31,16 @@ func _ready() -> void:
 
 func pass_name(Name: String) ->void:
 	print(Name)
+
+func Update_action(action: String = "") ->void:
+	Last_action = action
+
+func Check_action(Name: String) ->void:
+	if Last_action == "Base":
+		find_child(Name).On_node = "Base"
+		print("You have placed a base on node " + Name)
+		find_child("Dynamic_Action").text = "None"
+		Last_action = ""
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

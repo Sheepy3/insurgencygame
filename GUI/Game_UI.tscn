@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=2 format=3 uid="uid://bqpth4hjbjugk"]
+
+[ext_resource type="Script" path="res://GUI/game_ui.gd" id="1_2if7r"]
 
 [node name="UI" type="CanvasLayer"]
+script = ExtResource("1_2if7r")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 offset_right = 40.0
@@ -36,3 +39,5 @@ text = "None"
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Place Base"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
