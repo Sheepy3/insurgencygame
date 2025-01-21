@@ -14,6 +14,10 @@ config/name="InsurgencyGame"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Overseer="*res://Helper_Scripts/Overseer.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=2
