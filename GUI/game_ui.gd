@@ -23,3 +23,13 @@ func _on_fighter_button_pressed() -> void:
 func _on_influence_button_pressed() -> void:
 	The_action.emit("Influence") #transmits signal that Base button has been pressed
 	find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
+
+#Activiates whe the "Intelligence" button is pressed
+func _on_intelligence_network_button_pressed() -> void:
+	The_action.emit("Intelligence") #transmits signal that Intelligence button has been pressed
+	find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
+	
+#Activiates whe the "Logistics" button is pressed
+func _on_logistics_network_button_pressed() -> void:
+	The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
+	find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)

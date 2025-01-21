@@ -51,6 +51,16 @@ layout_mode = 2
 size_flags_vertical = 4
 text = "Influence"
 
+[node name="Intelligence_Network_Button" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Intelligence"
+
+[node name="Logistics_Network_Button" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Logistics"
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Base_Button" to="." method="_on_base_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Fighter_Button" to="." method="_on_fighter_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Influence_Button" to="." method="_on_influence_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Intelligence_Network_Button" to="." method="_on_intelligence_network_button_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Logistics_Network_Button" to="." method="_on_logistics_network_button_pressed"]

@@ -5,10 +5,10 @@ signal A_node_clicked(Name: String)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	$Building.hide() 
 	$Fighter_Unit.hide() 
 	$Influence_Unit.hide()
-	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	if get_parent().name != "root":
 		get_parent().update_label.connect(_update_label)
 	

@@ -10,7 +10,7 @@ func _ready() -> void:
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child is Node2D and child is not Camera2D:
 			child.name = str(num) #name all nodes
-			child.A_node_clicked.connect(Check_action)
+			child.A_node_clicked.connect(Check_node_action)
 			num+=1
 	#print(get_children())
 	var generated_paths:Array
@@ -20,8 +20,8 @@ func _ready() -> void:
 				var constructed_name:String = child.name+"-"+str(keys) #constructs name from node of origin and node it connects to 
 				var reversed_constructed_name:String = str(keys)+"-"+child.name
 				if not (generated_paths.has(reversed_constructed_name) or generated_paths.has(constructed_name)) : #check if node exists already
-
 					var new_path:Node = path.instantiate() #new path instance
+					new_path.A_path_clicked.connect(Check_path_action)
 					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
 					child.add_child(new_path) #add new path to scene as child of its origin node
@@ -31,7 +31,7 @@ func _ready() -> void:
 func Update_action(action: String = "") ->void:
 	Last_action = action
 
-func Check_action(Name: String) ->void:
+func Check_node_action(Name: String) ->void:
 	var Current_node: Node = find_child(Name)
 	if Last_action == "Base":
 		Current_node.On_node = "Base"
@@ -46,13 +46,29 @@ func Check_action(Name: String) ->void:
 		Current_node.find_child("Fighter_Unit").show()
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
-		pass
 	if Last_action == "Influence":
 		print("You have placed a Influnce on node " + Name)
 		Current_node.find_child("Influence_Unit").show()
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
-		pass
+
+func Check_path_action(Name: String) -> void:
+	var Path_parent_array: Array = Name.split("-")
+	var Path_parent: Node = find_child(Path_parent_array[0])
+	var Current_path: Node 
+	for child in Path_parent.get_children():
+		if child.name == Name:
+			Current_path = child
+	if Last_action == "Intelligence":
+		print("You have placed a Intelligence Network on path " + Name)
+		Current_path.find_child("Intelligence_Network").show()
+		find_child("Dynamic_Action").text = "None"
+		Last_action = ""
+	if Last_action == "Logistics":
+		print("You have placed a Logistics Network on path " + Name)
+		Current_path.find_child("Logistics_Network").show()
+		find_child("Dynamic_Action").text = "None"
+		Last_action = ""
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
