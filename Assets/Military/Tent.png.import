@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxbv8uido7ikq"
-path="res://.godot/imported/Fighter.svg-acc10c859215513de47b836873258f81.ctex"
+uid="uid://cjgd2islnk1dx"
+path="res://.godot/imported/Tent.png-6f3d6f555f5308f2ff7e7222e90bfa80.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Military/Fighter.svg"
-dest_files=["res://.godot/imported/Fighter.svg-acc10c859215513de47b836873258f81.ctex"]
+source_file="res://Assets/Military/Tent.png"
+dest_files=["res://.godot/imported/Tent.png-6f3d6f555f5308f2ff7e7222e90bfa80.ctex"]
 
 [params]
 
@@ -32,6 +32,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

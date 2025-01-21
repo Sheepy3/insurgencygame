@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fu0vylutpkgc"
-path="res://.godot/imported/Base.png-2fd9d62077da7decacaaf3c72a2ae761.ctex"
+uid="uid://hu7nw3o7h36q"
+path="res://.godot/imported/binoculars.png-04e8145d24c39dead1a8dc483f9114be.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Military/Base.png"
-dest_files=["res://.godot/imported/Base.png-2fd9d62077da7decacaaf3c72a2ae761.ctex"]
+source_file="res://Assets/Military/binoculars.png"
+dest_files=["res://.godot/imported/binoculars.png-04e8145d24c39dead1a8dc483f9114be.ctex"]
 
 [params]
 
