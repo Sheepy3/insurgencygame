@@ -16,7 +16,7 @@ func _ready() -> void:
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child is Node2D and child is not Camera2D:
-			for keys:int in The_nodes[child.name]: 
+			for keys:int in Overseer.The_nodes[child.name]: 
 				var constructed_name:String = child.name+"-"+str(keys) #constructs name from node of origin and node it connects to 
 				var reversed_constructed_name:String = str(keys)+"-"+child.name
 				if not (generated_paths.has(reversed_constructed_name) or generated_paths.has(constructed_name)) : #check if node exists already
@@ -76,32 +76,7 @@ func _process(delta: float) -> void:
 	
 # Define the graph as a dictionary where each node points to a list of connected nodes
 # Note: this ought to be replaced with a more flexible system. 
-const The_nodes = {
-"1": [2, 4], 
-"2": [1, 5],
-"3": [4, 7],
-"4": [1, 3, 8],
-"5": [2, 6, 9],
-"6": [5, 10],
-"7": [3, 11],
-"8": [4, 9, 12],
-"9": [5, 8, 13],
-"10": [6, 14],
-"11": [7, 12, 15],
-"12": [8, 11, 16],
-"13": [9, 14, 17],
-"14": [10, 13, 18],
-"15": [11, 19],
-"16": [12, 17, 20],
-"17": [13, 16, 21],
-"18": [14, 22],
-"19": [15, 20],
-"20": [16, 23],
-"21": [17, 22, 24],
-"22": [18, 21],
-"23": [20, 24],
-"24": [21, 23]
-}
+
 
 func Pathfind(Start: int, End: int)-> Dictionary: #BFS algorithm
 # initializing initial variables (que, list of visited nodes, current position in the que
@@ -126,7 +101,7 @@ func Pathfind(Start: int, End: int)-> Dictionary: #BFS algorithm
 			return {"path": Route, "length": Route.size()}
 		else: 
 			# Explores the other nodes that are directly connected to current node
-			for Adj: int in The_nodes.get(str(Position), []):
+			for Adj: int in Overseer.The_nodes.get(str(Position), []):
 				if not Visited.has(Adj):
 					# Adding the new adjacents to the visited list as a key, with their parent as a value 
 					Visited[Adj] = Position  
