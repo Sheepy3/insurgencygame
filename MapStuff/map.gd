@@ -25,6 +25,7 @@ func _ready() -> void:
 					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
 					child.add_child(new_path) #add new path to scene as child of its origin node
+					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
 	update_label.emit()
 
@@ -33,6 +34,7 @@ func Update_action(action: String = "") ->void:
 
 func Check_node_action(Name: String) ->void:
 	var Current_node: Node = find_child(Name)
+	print(Current_node)
 	if Last_action == "Base":
 		Current_node.On_node = "Base"
 		print("You have placed a base on node " + Name)
@@ -53,12 +55,13 @@ func Check_node_action(Name: String) ->void:
 		Last_action = ""
 
 func Check_path_action(Name: String) -> void:
-	var Path_parent_array: Array = Name.split("-")
-	var Path_parent: Node = find_child(Path_parent_array[0])
-	var Current_path: Node 
-	for child in Path_parent.get_children():
-		if child.name == Name:
-			Current_path = child
+	var Current_path: Node = find_child(Name)
+	#var Path_parent_array: Array = Name.split("-")
+	#var Path_parent: Node = find_child(Path_parent_array[0])
+	#var Current_path: Node 
+	#for child in Path_parent.get_children():
+	#	if child.name == Name:
+	#		Current_path = child
 	if Last_action == "Intelligence":
 		print("You have placed a Intelligence Network on path " + Name)
 		Current_path.find_child("Intelligence_Network").show()
