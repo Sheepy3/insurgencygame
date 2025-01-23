@@ -88,7 +88,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Cycle Player:"
 
-[node name="Label" type="Label" parent="PanelContainer2/VBoxContainer/HSplitContainer"]
+[node name="Dynamic_Player" type="Label" parent="PanelContainer2/VBoxContainer/HSplitContainer"]
 layout_mode = 2
 text = "[Current Player]"
 
@@ -127,4 +127,5 @@ wait_time = 3.0
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Influence_Button" to="." method="_on_influence_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Intelligence_Network_Button" to="." method="_on_intelligence_network_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Logistics_Network_Button" to="." method="_on_logistics_network_button_pressed"]
+[connection signal="pressed" from="PanelContainer2/VBoxContainer/HSplitContainer/Player_Switch_Button" to="." method="_on_player_switch_button_pressed"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]

@@ -5,6 +5,8 @@ signal The_action(action: String)
 func _ready() -> void:
 	$Error_Message.hide()
 	show()
+	Overseer.change_player.connect(player_switch_ui)
+	Overseer.cycle_players()
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,6 +38,13 @@ func _on_logistics_network_button_pressed() -> void:
 	The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
 	find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
 
+func _on_player_switch_button_pressed() -> void:
+	Overseer.cycle_players()
+	pass # Replace with function body.
+	
+func player_switch_ui() -> void:
+	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
+	
 func action_error(error_message:String) -> void:
 	$Error_Message.text = error_message
 	$Error_Message.show()
