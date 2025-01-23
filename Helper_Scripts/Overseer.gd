@@ -1,13 +1,15 @@
 extends Node
-
+#to-do: add player colors
 var players:Array = ["Player 1", "Player 2"] #hardcoded, would be procedurally generated based on playercount
 var players_colors:Array = ["#ff0000", "#0000ff"]
 var selected_player_index:int = -1
 var current_player:String
-#to-do: add player colors 
+ 
 enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
+var current_phase:int = MAINTENENCE
 
 signal change_player
+signal change_phase
 
 func cycle_players() -> void:
 	var playerquant:int = players.size()-1
@@ -21,6 +23,15 @@ func cycle_players() -> void:
 		current_player = players[selected_player_index]
 		change_player.emit()
 		print(current_player)
+
+func cycle_phases() -> void:
+	print(current_phase)
+	if current_phase < COLLECT:
+		current_phase+=1
+		change_phase.emit()
+	else:
+		current_phase = MAINTENENCE
+		change_phase.emit()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

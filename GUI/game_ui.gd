@@ -5,8 +5,10 @@ signal The_action(action: String)
 func _ready() -> void:
 	$Error_Message.hide()
 	show()
-	Overseer.change_player.connect(player_switch_ui)
+	Overseer.change_player.connect(_player_switch_ui)
+	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.cycle_players()
+	_phase_switch_ui()
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -42,9 +44,29 @@ func _on_player_switch_button_pressed() -> void:
 	Overseer.cycle_players()
 	pass # Replace with function body.
 	
-func player_switch_ui() -> void:
+func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
 	
+func _phase_switch_ui() -> void:
+	match Overseer.current_phase:
+		0:
+			$Current_Phase.text = "Maintenence"
+		1:
+			$Current_Phase.text = "Purchase Units & Infrastructure"
+		2:
+			$Current_Phase.text = "Place Infrastructure"
+		3:
+			$Current_Phase.text = "Move Units"
+		4:
+			$Current_Phase.text = "Place Military Units & Infrastructure"
+		5:
+			$Current_Phase.text = "Collect Resources"
+
+func _on_phase_button_pressed() -> void:
+	
+	Overseer.cycle_phases()
+
+
 func action_error(error_message:String) -> void:
 	$Error_Message.text = error_message
 	$Error_Message.show()
