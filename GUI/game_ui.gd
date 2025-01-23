@@ -3,6 +3,8 @@ signal The_action(action: String)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Error_Message.hide()
+	show()
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,3 +35,11 @@ func _on_intelligence_network_button_pressed() -> void:
 func _on_logistics_network_button_pressed() -> void:
 	The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
 	find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+
+func action_error(error_message:String) -> void:
+	$Error_Message.text = error_message
+	$Error_Message.show()
+	$Error_timer.start()
+
+func _on_error_timer_timeout() -> void:
+	$Error_Message.hide()

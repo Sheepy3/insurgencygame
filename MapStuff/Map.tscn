@@ -86,3 +86,4 @@ zoom = Vector2(0.4, 0.4)
 script = ExtResource("3_ftre2")
 
 [node name="UI" parent="." instance=ExtResource("3_vxjy0")]
+visible = false
