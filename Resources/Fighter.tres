@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Unit" load_steps=2 format=3 uid="uid://b2vfy3evdvmci"]
+
+[ext_resource type="Script" path="res://Resources/Unit.gd" id="1_6s4ka"]
+
+[resource]
+script = ExtResource("1_6s4ka")
+character_class = 0
+player = ""
+color = ""

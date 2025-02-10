@@ -1,7 +1,10 @@
 extends Node2D
 signal A_node_clicked(Name: String)
-@export var On_node: String = ""
-@export var Has_building: bool = false
+var On_node: String = ""
+var Has_building: bool = false
+var units:Array
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

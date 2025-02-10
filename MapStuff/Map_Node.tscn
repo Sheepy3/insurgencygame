@@ -7,7 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://b2errj0riq702" path="res://Assets/Military/soldier.png" id="5_gfwxx"]
 [ext_resource type="Texture2D" uid="uid://hu7nw3o7h36q" path="res://Assets/Military/binoculars.png" id="6_ldtvt"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_4tgex"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nkv3a"]
+radius = 7.0
+height = 21.0
 
 [node name="Map_Node" type="Node2D"]
 script = ExtResource("1_8ofst")
@@ -37,8 +39,10 @@ horizontal_alignment = 1
 script = ExtResource("3_eyrtf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map_Node_Area2D"]
+position = Vector2(0, 21)
+rotation = 1.5708
 scale = Vector2(6, 6)
-shape = SubResource("CircleShape2D_4tgex")
+shape = SubResource("CapsuleShape2D_nkv3a")
 
 [node name="Building" type="Sprite2D" parent="."]
 texture_filter = 1

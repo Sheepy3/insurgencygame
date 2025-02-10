@@ -17,12 +17,12 @@ func cycle_players() -> void:
 		selected_player_index +=1
 		current_player = players[selected_player_index]
 		change_player.emit()
-		print(current_player)
+		print(selected_player_index)
 	else:
 		selected_player_index = 0
 		current_player = players[selected_player_index]
 		change_player.emit()
-		print(current_player)
+		print(selected_player_index)
 
 func cycle_phases() -> void:
 	print(current_phase)
