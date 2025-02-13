@@ -39,3 +39,10 @@ func _on_fighter_unit_visibility_changed() -> void:
 	$Fighter_Unit.material.set_shader_parameter("tint_color", color)
 	$Fighter_Unit.material.set_shader_parameter("intensity", 0.2)
 	pass # Replace with function body.
+
+
+func _on_building_visibility_changed() -> void:
+	var color:Vector3 = Overseer.players_colors[Overseer.selected_player_index]
+	print(color)
+	$Building.material.set_shader_parameter("tint_color", color)
+	$Building.material.set_shader_parameter("intensity", 0.2)
