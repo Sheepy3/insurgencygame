@@ -1,7 +1,7 @@
 extends Node
 #to-do: add player colors
 var players:Array = ["Player 1", "Player 2"] #hardcoded, would be procedurally generated based on playercount
-var players_colors:Array = ["#ff0000", "#0000ff"]
+var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var selected_player_index:int = -1
 var current_player:String
  

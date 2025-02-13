@@ -32,3 +32,10 @@ func _on_map_node_area_2d_input_event(viewport: Node, event: InputEvent, shape_i
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+
+func _on_fighter_unit_visibility_changed() -> void:
+	var color:Vector3 = Overseer.players_colors[Overseer.selected_player_index]
+	$Fighter_Unit.material.set_shader_parameter("tint_color", color)
+	$Fighter_Unit.material.set_shader_parameter("intensity", 0.2)
+	pass # Replace with function body.
