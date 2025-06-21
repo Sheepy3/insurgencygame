@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://ck130fomwb5h1"]
+
+[ext_resource type="Script" uid="uid://dyei3nxhc4w6o" path="res://MapStuff/unit_visual.gd" id="1_x8p7o"]
+[ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="2_wd323"]
+[ext_resource type="Texture2D" uid="uid://b2errj0riq702" path="res://Assets/Military/soldier.png" id="3_rsuyw"]
+[ext_resource type="Texture2D" uid="uid://hu7nw3o7h36q" path="res://Assets/Military/binoculars.png" id="4_gfa1p"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0eri"]
+resource_local_to_scene = true
+shader = ExtResource("2_wd323")
+shader_parameter/tint_color = Color(1, 0.439216, 0.423529, 1)
+shader_parameter/intensity = 0.009
+shader_parameter/saturation = 1.0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_x8p7o")
+
+[node name="F_sprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_n0eri")
+texture = ExtResource("3_rsuyw")
+
+[node name="I_sprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_n0eri")
+position = Vector2(0, 4)
+texture = ExtResource("4_gfa1p")

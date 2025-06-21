@@ -1,12 +1,27 @@
-[gd_scene load_steps=6 format=3 uid="uid://cnknkmgkv4fmh"]
+[gd_scene load_steps=9 format=3 uid="uid://cnknkmgkv4fmh"]
 
 [ext_resource type="Texture2D" uid="uid://dleeh87lisrl8" path="res://Assets/Path.png" id="1_dqgnp"]
 [ext_resource type="Script" uid="uid://dhasmtbnro8ql" path="res://MapStuff/path.gd" id="1_j4goj"]
 [ext_resource type="Texture2D" uid="uid://bl4in8y7ejslq" path="res://Assets/Infastructure/Intelligence Network.png" id="3_kp47p"]
+[ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="3_twyoa"]
 [ext_resource type="Texture2D" uid="uid://c2dnb5mhuprh6" path="res://Assets/Infastructure/Logistics Network.png" id="4_0b5u6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nxxog"]
 size = Vector2(114, 28)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lw2ce"]
+resource_local_to_scene = true
+shader = ExtResource("3_twyoa")
+shader_parameter/tint_color = Color(1, 0, 0, 1)
+shader_parameter/intensity = 0.2
+shader_parameter/saturation = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_twyoa"]
+resource_local_to_scene = true
+shader = ExtResource("3_twyoa")
+shader_parameter/tint_color = Color(1, 0, 0, 1)
+shader_parameter/intensity = 0.2
+shader_parameter/saturation = 1.0
 
 [node name="Path_Node" type="Node2D"]
 script = ExtResource("1_j4goj")
@@ -14,25 +29,30 @@ script = ExtResource("1_j4goj")
 [node name="Node" type="Sprite2D" parent="."]
 z_index = -1
 texture_filter = 1
-position = Vector2(120, 0)
+position = Vector2(120.5, 0)
+scale = Vector2(1.1125, 1)
 texture = ExtResource("1_dqgnp")
 
 [node name="Node_Path_Area2D" type="Area2D" parent="."]
+position = Vector2(121, 0)
 
 [node name="Node_Path_CollisionShape2D" type="CollisionShape2D" parent="Node_Path_Area2D"]
-position = Vector2(117, 0)
 shape = SubResource("RectangleShape2D_nxxog")
 
 [node name="Intelligence_Network" type="Sprite2D" parent="."]
 z_index = -1
-position = Vector2(117, 7)
-scale = Vector2(0.9, 0.9)
+texture_filter = 1
+material = SubResource("ShaderMaterial_lw2ce")
+position = Vector2(120.5, 7.9)
+scale = Vector2(1.1125, 1.0125)
 texture = ExtResource("3_kp47p")
 
 [node name="Logistics_Network" type="Sprite2D" parent="."]
 z_index = -1
-position = Vector2(117, -7)
-scale = Vector2(0.9, 0.9)
+texture_filter = 1
+material = SubResource("ShaderMaterial_twyoa")
+position = Vector2(120.5, -7.9)
+scale = Vector2(1.1125, 1.0125)
 texture = ExtResource("4_0b5u6")
 
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]

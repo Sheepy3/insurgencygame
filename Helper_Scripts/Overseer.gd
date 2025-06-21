@@ -1,7 +1,11 @@
 extends Node
-#to-do: add player colors
-var players:Array = ["Player 1", "Player 2"] #hardcoded, would be procedurally generated based on playercount
-var players_colors:Array = ["#ff0000", "#0000ff"]
+
+
+#todo: convert player system to use resources for each player. these variables are gonna be unstable
+#when networking is added, and the "current player" thing doesnt work if players take turns at the same time. 
+
+var players:Array = ["Player 1", "Player 2"] #currently hardcoded, would be procedurally generated based on playercount
+var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var selected_player_index:int = -1
 var current_player:String
  
@@ -17,12 +21,12 @@ func cycle_players() -> void:
 		selected_player_index +=1
 		current_player = players[selected_player_index]
 		change_player.emit()
-		print(current_player)
+		print(selected_player_index)
 	else:
 		selected_player_index = 0
 		current_player = players[selected_player_index]
 		change_player.emit()
-		print(current_player)
+		print(selected_player_index)
 
 func cycle_phases() -> void:
 	print(current_phase)
