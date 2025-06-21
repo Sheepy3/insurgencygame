@@ -2,6 +2,7 @@ extends Node2D
 signal A_node_clicked(Name: String)
 #var On_node: String = ""
 var Has_building: bool = false
+var building:Resource
 @export var node_owner:String
 
 func _ready() -> void:
@@ -15,7 +16,7 @@ func _update_label()-> void:
 	$Label.text = name
 
 # Detects when Node is clicked on by mouse
-func _on_map_node_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		get_parent().find_child("Dynamic_Clicked").text = "Node " + $Label.text #Dispalys 
@@ -29,8 +30,8 @@ var base_resource:Resource=load("res://Resources/Miliary_Base.tres")
 var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 enum{FIGHTER,INFLUENCE}
 
-func add_building(player:String, type:int) -> void:
-	var building:Resource = base_resource.duplicate(true)
+func add_building(player:String, _type:int) -> void:
+	building = base_resource.duplicate(true)
 	node_owner = player
 	var color:Vector3 = Overseer.players_colors[Overseer.selected_player_index]
 	#print(color)
@@ -64,8 +65,8 @@ func _reorder_units() -> void:
 	
 	var nodes:Array = $Units.get_children()
 	var count:int = nodes.size()
-	var min_x:int 
-	var max_x:int 
+	var min_x:float 
+	var max_x:float
 
 	if count < 5:
 		min_x = -30

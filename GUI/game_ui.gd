@@ -11,9 +11,6 @@ func _ready() -> void:
 	_phase_switch_ui()
 	pass # Replace with function body.
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:

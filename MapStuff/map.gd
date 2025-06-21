@@ -97,10 +97,6 @@ func Check_path_action(Name: String) -> void:
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
 # Define the graph as a dictionary where each node points to a list of connected nodes
 # Note: this ought to be replaced with a more flexible system. 
 
