@@ -24,6 +24,7 @@ func _ready() -> void:
 					new_path.A_path_clicked.connect(Check_path_action)
 					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
+					new_path.add_to_group("Paths")
 					child.add_child(new_path) #add new path to scene as child of its origin node
 					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
@@ -49,7 +50,8 @@ func Check_node_action(Name: String) ->void:
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 	if Last_action == "Influence":
-		print("You have placed a Influnce on node " + Name)
+		Path_check(find_child(Name))
+		print("You have placed a Influence on node " + Name)
 		Current_node.find_child("Influence_Unit").show()
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
@@ -66,11 +68,13 @@ func Check_path_action(Name: String) -> void:
 		print("You have placed a Intelligence Network on path " + Name)
 		Current_path.find_child("Intelligence_Network").show()
 		find_child("Dynamic_Action").text = "None"
+		Current_path.Has_intel = true
 		Last_action = ""
 	if Last_action == "Logistics":
 		print("You have placed a Logistics Network on path " + Name)
 		Current_path.find_child("Logistics_Network").show()
 		find_child("Dynamic_Action").text = "None"
+		Current_path.Has_logs = true
 		Last_action = ""
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -111,3 +115,28 @@ func Pathfind(Start: int, End: int)-> Dictionary: #BFS algorithm
 					# Adds neighboring node to the queue
 					The_que.append(Adj) 
 	return{} #prevents error lol
+
+
+func Path_check(Desired: Node) ->bool:
+	var The_que: Array = []
+	var Visited: Dictionary = {}
+	var Route: Array = [""]
+	var x: int = 0
+	Visited[Desired] = ""
+	The_que.append(Desired)
+	while The_que.size() > 0:
+		var Position: Node = The_que.pop_front()
+		for Spots: Node in get_children(): 
+			if Spots is Node2D and Spots is not Camera2D or CanvasLayer:
+				print(Spots.name)
+				for Paths: Node in Spots.get_children():
+					if Paths is Node2D and Paths.is_in_group("Paths"):
+						#var micro_child: Node = find_child("Intelligence_Network")
+						print(Paths.name)
+						if Paths.Has_intel == true:
+							The_que.append(Paths)
+							Route[x] = Paths.name
+							x += x
+							print(Route) 
+		pass
+	return false

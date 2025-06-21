@@ -1,7 +1,8 @@
 extends Node2D
 signal A_path_clicked(Name: String)
 @export var connection:Vector2
-
+@export var Has_intel: bool = false
+@export var Has_logs: bool = false 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
