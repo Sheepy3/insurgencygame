@@ -18,13 +18,13 @@ func _ready() -> void:
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child is Node2D and child is not Camera2D:
-			for keys:int in Overseer.The_nodes[child.name]: 
-				var constructed_name:String = child.name+"-"+str(keys) #constructs name from node of origin and node it connects to 
-				var reversed_constructed_name:String = str(keys)+"-"+child.name
+			for value:int in Overseer.The_nodes[child.name]: 
+				var constructed_name:String = child.name+"-"+str(value) #constructs name from node of origin and node it connects to 
+				var reversed_constructed_name:String = str(value)+"-"+child.name
 				if not (generated_paths.has(reversed_constructed_name) or generated_paths.has(constructed_name)) : #check if node exists already
 					var new_path:Node = path.instantiate() #new path instance
 					new_path.A_path_clicked.connect(Check_path_action)
-					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
+					new_path.connection = find_child(str(value)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
 					child.add_child(new_path) #add new path to scene as child of its origin node
 					new_path.set_owner(child)
