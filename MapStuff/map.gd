@@ -79,14 +79,21 @@ func Check_path_action(Name: String) -> void:
 	#for child in Path_parent.get_children():
 	#	if child.name == Name:
 	#		Current_path = child
+	
+	# need to update this when new network system implemented
 	if Last_action == "Intelligence":
 		print("You have placed a Intelligence Network on path " + Name)
-		Current_path.find_child("Intelligence_Network").show()
+		var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
+		path_to_edit.show()
+		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 	if Last_action == "Logistics":
 		print("You have placed a Logistics Network on path " + Name)
-		Current_path.find_child("Logistics_Network").show()
+		var path_to_edit:Node = Current_path.find_child("Logistics_Network")
+		path_to_edit.show()
+		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 
