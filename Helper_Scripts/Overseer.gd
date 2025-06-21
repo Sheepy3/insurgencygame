@@ -4,6 +4,8 @@ var players:Array = ["Player 1", "Player 2"] #hardcoded, would be procedurally g
 var players_colors:Array = ["#ff0000", "#0000ff"]
 var selected_player_index:int = -1
 var current_player:String
+#var Mind_map:AStar2D = AStar2D.new()
+var Logistics_map:AStar2D = AStar2D.new()
  
 enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
 var current_phase:int = MAINTENENCE
