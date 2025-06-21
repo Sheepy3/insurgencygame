@@ -2,6 +2,8 @@ extends Node2D
 signal update_label
 var path:PackedScene = preload("res://MapStuff/Path.tscn")
 var Last_action: String = ""
+enum{FIGHTER,INFLUENCE}
+enum{BASE}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -35,22 +37,37 @@ func Update_action(action: String = "") ->void:
 func Check_node_action(Name: String) ->void:
 	var Current_node: Node = find_child(Name)
 	print(Current_node)
+	
 	if Last_action == "Base":
-		Current_node.On_node = "Base"
-		print("You have placed a base on node " + Name)
-		Current_node.find_child("Building").show()
-		Current_node.Has_building = true
-		find_child("Dynamic_Action").text = "None"
-		print(Current_node.Has_building)
-		Last_action = ""
-	if Last_action == "Fighter" and  Current_node.Has_building:
-		print("You have placed a Fighter at a base on node " + Name)
-		Current_node.find_child("Fighter_Unit").show()
-		find_child("Dynamic_Action").text = "None"
-		Last_action = ""
+		#currently you can place bases on top of other bases.
+		if Current_node.Has_building:
+			$UI.action_error("there is already a base on this node!")
+		else:
+			#Current_node.On_node = "Base"
+			print("You have placed a base on node " + Name)
+			Current_node.add_building(Overseer.current_player, BASE)
+			#Current_node.find_child("Building").show()
+			Current_node.Has_building = true
+			find_child("Dynamic_Action").text = "None"
+			print(Current_node.Has_building)
+			Last_action = ""
+		
+	if Last_action == "Fighter":
+		if not Current_node.Has_building:
+			$UI.action_error("Fighters must be placed at your own base")
+		if  Current_node.node_owner == Overseer.current_player:
+			print("You have placed a Fighter at a base on node " + Name)
+			Current_node.add_unit(Overseer.current_player,FIGHTER)
+			#Current_node.find_child("Fighter_Unit").show()
+			find_child("Dynamic_Action").text = "None"
+			Last_action = ""
+		else:
+			$UI.action_error("Fighters must be placed at your own base")
+
 	if Last_action == "Influence":
 		print("You have placed a Influnce on node " + Name)
-		Current_node.find_child("Influence_Unit").show()
+		Current_node.add_unit("current_player",INFLUENCE)
+		#Current_node.find_child("Influence_Unit").show()
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 

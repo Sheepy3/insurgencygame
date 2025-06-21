@@ -3,7 +3,7 @@ shader_type canvas_item;
 // also stole saturation code from https://www.youtube.com/watch?v=Pu2muzzvS4M
 uniform vec3 tint_color : source_color = vec3(1.0, 0.0, 0.0);
 uniform float intensity : hint_range(0, 1) = 0.2;
-uniform float saturation : hint_range(0, 30) = 30;
+uniform float saturation : hint_range(0, 30) = 1;
 
 mat4 saturation_matrix(float s){
 	vec3 luminance = vec3(0.3086,0.6094, 0.0820);
