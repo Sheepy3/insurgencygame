@@ -18,7 +18,7 @@ func _update_label()-> void:
 # Detects when Node is clicked on by mouse
 func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
-		print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
+		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		get_parent().find_child("Dynamic_Clicked").text = "Node " + $Label.text #Dispalys 
 		A_node_clicked.emit(name)
 
@@ -67,17 +67,9 @@ func _reorder_units() -> void:
 	var count:int = nodes.size()
 	var min_x:float 
 	var max_x:float
-
-	if count < 5:
-		min_x = -30
-		max_x = 30
-	if count >= 5:
-		min_x = -50
-		max_x = 50
-	if count > 8:
-		min_x = -70
-		max_x = 70
-
+	min_x = max(-10-(count*5),-80)
+	max_x = min(10+(count*5),80)
+	
 	if count == 0:
 		return
 	if count == 1:
@@ -87,3 +79,7 @@ func _reorder_units() -> void:
 	var spacing:float = (max_x - min_x) / (count - 1)
 	for i in range(count):
 		nodes[i].position.x = min_x + i * spacing
+		
+		if (i % 2 != 0) && count > 2:
+			nodes[i].Unit_Data.offcolor = true
+			nodes[i].recolor()

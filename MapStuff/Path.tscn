@@ -15,6 +15,7 @@ shader = ExtResource("3_twyoa")
 shader_parameter/tint_color = Color(1, 0, 0, 1)
 shader_parameter/intensity = 0.2
 shader_parameter/saturation = 1.0
+shader_parameter/value = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_twyoa"]
 resource_local_to_scene = true
@@ -22,6 +23,7 @@ shader = ExtResource("3_twyoa")
 shader_parameter/tint_color = Color(1, 0, 0, 1)
 shader_parameter/intensity = 0.2
 shader_parameter/saturation = 1.0
+shader_parameter/value = 1.0
 
 [node name="Path_Node" type="Node2D"]
 script = ExtResource("1_j4goj")

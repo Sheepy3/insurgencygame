@@ -4,7 +4,7 @@ shader_type canvas_item;
 uniform vec3 tint_color : source_color = vec3(1.0, 0.0, 0.0);
 uniform float intensity : hint_range(0, 1) = 0.2;
 uniform float saturation : hint_range(0, 30) = 1;
-
+uniform float value      : hint_range(0, 2)  = 1.0;
 mat4 saturation_matrix(float s){
 	vec3 luminance = vec3(0.3086,0.6094, 0.0820);
 	float sr = (1.0 - s) * luminance.r;
@@ -21,5 +21,9 @@ mat4 saturation_matrix(float s){
 
 void fragment(){
     vec4 front = texture(TEXTURE, UV);
-    COLOR = saturation_matrix(saturation)*mix(front, vec4(tint_color, front.a), intensity);
+    vec4 tinted = mix(front, vec4(tint_color, front.a), intensity);
+    vec3 sat = (saturation_matrix(saturation) * tinted).rgb;
+    sat *= value;
+    COLOR = vec4(sat, front.a);
+    //COLOR = saturation_matrix(saturation)*mix(front, vec4(tint_color, front.a), intensity);
 }

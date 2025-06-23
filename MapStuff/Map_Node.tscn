@@ -14,7 +14,8 @@ resource_local_to_scene = true
 shader = ExtResource("5_ap6hx")
 shader_parameter/tint_color = Color(1, 0, 0, 1)
 shader_parameter/intensity = 0.2
-shader_parameter/saturation = 30.0
+shader_parameter/saturation = 1.0
+shader_parameter/value = 1.0
 
 [node name="Map_Node" type="Node2D"]
 script = ExtResource("1_8ofst")

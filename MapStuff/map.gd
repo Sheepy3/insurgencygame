@@ -36,7 +36,7 @@ func Update_action(action: String = "") ->void:
 
 func Check_node_action(Name: String) ->void:
 	var Current_node: Node = find_child(Name)
-	print(Current_node)
+	#print(Current_node)
 	
 	if Last_action == "Base":
 		#currently you can place bases on top of other bases.
@@ -49,7 +49,7 @@ func Check_node_action(Name: String) ->void:
 			#Current_node.find_child("Building").show()
 			Current_node.Has_building = true
 			find_child("Dynamic_Action").text = "None"
-			print(Current_node.Has_building)
+			#print(Current_node.Has_building)
 			Last_action = ""
 		
 	if Last_action == "Fighter":
@@ -86,9 +86,9 @@ func Check_path_action(Name: String) -> void:
 		var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
 		path_to_edit.show()
 		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
-
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
+		
 	if Last_action == "Logistics":
 		print("You have placed a Logistics Network on path " + Name)
 		var path_to_edit:Node = Current_path.find_child("Logistics_Network")
