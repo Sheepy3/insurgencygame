@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cbv2liai04byg" path="res://MapStuff/map_node.gd" id="1_8ofst"]
 [ext_resource type="Texture2D" uid="uid://dtvbbivd8lmtc" path="res://Assets/node_new.png" id="2_k5010"]
+
 [ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="4_5ec75"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="5_ap6hx"]
 

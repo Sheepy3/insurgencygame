@@ -8,6 +8,8 @@ var players:Array = ["Player 1", "Player 2"] #currently hardcoded, would be proc
 var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var selected_player_index:int = -1
 var current_player:String
+#var Mind_map:AStar2D = AStar2D.new()
+var Logistics_map:AStar2D = AStar2D.new()
  
 enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
 var current_phase:int = MAINTENENCE

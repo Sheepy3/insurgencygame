@@ -1,7 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://cnknkmgkv4fmh"]
 
 [ext_resource type="Texture2D" uid="uid://dleeh87lisrl8" path="res://Assets/Path.png" id="1_dqgnp"]
+
 [ext_resource type="Script" uid="uid://dhasmtbnro8ql" path="res://MapStuff/path.gd" id="1_j4goj"]
+
 [ext_resource type="Texture2D" uid="uid://bl4in8y7ejslq" path="res://Assets/Infastructure/Intelligence Network.png" id="3_kp47p"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="3_twyoa"]
 [ext_resource type="Texture2D" uid="uid://c2dnb5mhuprh6" path="res://Assets/Infastructure/Logistics Network.png" id="4_0b5u6"]

@@ -13,8 +13,9 @@ func _ready() -> void:
 		if child is Node2D and child is not Camera2D:
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
+			Overseer.Mind_map.add_point(num,child.position,0)
+			Overseer.Logistics_map.add_point(num,child.position,0)
 			num+=1
-	#print(get_children())
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child is Node2D and child is not Camera2D:
@@ -26,10 +27,12 @@ func _ready() -> void:
 					new_path.A_path_clicked.connect(Check_path_action)
 					new_path.connection = find_child(str(value)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
+					new_path.add_to_group("Paths")
 					child.add_child(new_path) #add new path to scene as child of its origin node
 					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
 	update_label.emit()
+	#Generate_mind() [for possible future use...]
 
 func Update_action(action: String = "") ->void:
 	Last_action = action
@@ -65,14 +68,17 @@ func Check_node_action(Name: String) ->void:
 			$UI.action_error("Fighters must be placed at your own base")
 
 	if Last_action == "Influence":
+
 		print("You have placed a Influnce on node " + Name)
 		Current_node.add_unit("current_player",INFLUENCE)
 		#Current_node.find_child("Influence_Unit").show()
+
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 
 func Check_path_action(Name: String) -> void:
 	var Current_path: Node = find_child(Name)
+
 	#var Path_parent_array: Array = Name.split("-")
 	#var Path_parent: Node = find_child(Path_parent_array[0])
 	#var Current_path: Node 
@@ -81,12 +87,15 @@ func Check_path_action(Name: String) -> void:
 	#		Current_path = child
 	
 	# need to update this when new network system implemented
+
 	if Last_action == "Intelligence":
 		print("You have placed a Intelligence Network on path " + Name)
 		var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
 		path_to_edit.show()
 		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
+		Current_path.Has_intel = true
+		Logistics_add_path(Current_path.name)
 		Last_action = ""
 		
 	if Last_action == "Logistics":
@@ -95,7 +104,9 @@ func Check_path_action(Name: String) -> void:
 		path_to_edit.show()
 		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
+		Current_path.Has_logs = true
 		Last_action = ""
+
 
 # Define the graph as a dictionary where each node points to a list of connected nodes
 # Note: this ought to be replaced with a more flexible system. 
@@ -131,3 +142,39 @@ func Pathfind(Start: int, End: int)-> Dictionary: #BFS algorithm
 					# Adds neighboring node to the queue
 					The_que.append(Adj) 
 	return{} #prevents error lol
+
+#Origional idea for base placing logic
+#func Path_check(Desired: Node) ->bool:
+	#var The_que: Array = []
+	#var Visited: Dictionary = {}
+	#var Route: Array = [""]
+	#var x: int = 0
+	#Visited[Desired] = ""
+	#The_que.append(Desired)
+	#while The_que.size() > 0:
+		#var Position: Node = The_que.pop_front()
+		#for Spots: Node in get_children(): 
+			#if Spots is Node2D and Spots is not Camera2D or CanvasLayer:
+				#print(Spots.name)
+				#for Paths: Node in Spots.get_children():
+					#if Paths is Node2D and Paths.is_in_group("Paths"):
+						##var micro_child: Node = find_child("Intelligence_Network")
+						#print(Paths.name)
+						#if Paths.Has_intel == true:
+							#The_que.append(Paths)
+							#Route[x] = Paths.name
+							#x += x
+							#print(Route) 
+		#pass
+	#return false
+	
+#Below is for possible future use
+#func Generate_mind() -> void: 
+	#for x:String in Overseer.The_nodes.keys(): 
+		#for y:int in Overseer.The_nodes[x]:
+			#Overseer.Mind_map.connect_points(int(x),y,true)
+	#print(Overseer.Mind_map.get_id_path(1,24))
+
+func Logistics_add_path(Road:String) -> void:
+	var The_Roads: Array = Road.split("-")
+	Overseer.Logistics_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
