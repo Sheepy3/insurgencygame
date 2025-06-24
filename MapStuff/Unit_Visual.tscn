@@ -9,8 +9,8 @@
 resource_local_to_scene = true
 shader = ExtResource("2_wd323")
 shader_parameter/tint_color = Color(1, 0.439216, 0.423529, 1)
-shader_parameter/intensity = 0.009
-shader_parameter/saturation = 1.0
+shader_parameter/intensity = 0.2
+shader_parameter/saturation = 13.135
 shader_parameter/value = 1.0
 
 [node name="Node2D" type="Node2D"]

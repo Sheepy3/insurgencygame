@@ -11,6 +11,8 @@ var current_player:String
 #var Mind_map:AStar2D = AStar2D.new()
 var Logistics_map:AStar2D = AStar2D.new()
  
+var base_list:Array
+
 enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
 var current_phase:int = MAINTENENCE
 

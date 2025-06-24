@@ -34,10 +34,11 @@ func add_building(player:String, _type:int) -> void:
 	building = base_resource.duplicate(true)
 	node_owner = player
 	var color:Vector3 = Overseer.players_colors[Overseer.selected_player_index]
-	#print(color)
+	building.location = int(name)
+	Overseer.base_list.append(building) #adds building to the base list
+
 	$Building.material.set_shader_parameter("tint_color", color)
-	$Building.material.set_shader_parameter("intensity", 0.1)
-	$Building.material.set_shader_parameter("saturation", 2)
+	$Building.material.set_shader_parameter("saturation", 0.4)
 	$Building.show()
 	
 func add_unit(player:String, type:int) -> void:
@@ -83,3 +84,4 @@ func _reorder_units() -> void:
 		if (i % 2 != 0) && count > 2:
 			nodes[i].Unit_Data.offcolor = true
 			nodes[i].recolor()
+	
