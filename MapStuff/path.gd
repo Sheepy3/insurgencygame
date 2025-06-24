@@ -10,14 +10,14 @@ func _ready() -> void:
 	$Intelligence_Network.hide()
 	$Logistics_Network.hide()
 	look_at(connection) # point towards connection
-	pass # Replace with function body.
 
+	if rad_to_deg(rotation) > 90:
+		$Intelligence_Network.set_flip_v(true)
+		$Intelligence_Network.set_flip_h(true)
+		$Logistics_Network.set_flip_v(true)
+		$Logistics_Network.set_flip_h(true)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func _on_node_path_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_node_path_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		print("you have clicked on Path " + name)
 		find_parent("Map_parent").find_child("Dynamic_Clicked").text = "Path " + name

@@ -1,8 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dteesqpw1o4v5"]
 
-[ext_resource type="Script" uid="uid://bhx0kmwucepyo" path="res://MapStuff/map.gd" id="1_bhwkw"]
+[ext_resource type="Script" uid="uid://cecjltaerihui" path="res://MapStuff/map.gd" id="1_bhwkw"]
 [ext_resource type="PackedScene" uid="uid://cxejesper0f6a" path="res://MapStuff/Map_Node.tscn" id="2_t43bk"]
-[ext_resource type="Script" uid="uid://brololwc3hucp" path="res://GUI/camera_2d.gd" id="3_ftre2"]
+[ext_resource type="Script" uid="uid://dos6ix3a4pbte" path="res://GUI/camera_2d.gd" id="3_ftre2"]
+
 [ext_resource type="PackedScene" uid="uid://bqpth4hjbjugk" path="res://GUI/Game_UI.tscn" id="3_vxjy0"]
 
 [node name="Map_parent" type="Node2D"]

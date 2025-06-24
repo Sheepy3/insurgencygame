@@ -7,10 +7,10 @@ func _ready() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var bounds:int = 1000
 	var move_vector:Vector2
-	var speed:int = 10
+	#var speed:int = 10
 	if Input.is_action_pressed("Move_up"):
 		if not position.y < -1*bounds:
 			move_vector.y=-1

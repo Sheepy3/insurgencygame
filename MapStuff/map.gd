@@ -2,6 +2,8 @@ extends Node2D
 signal update_label
 var path:PackedScene = preload("res://MapStuff/Path.tscn")
 var Last_action: String = ""
+enum{FIGHTER,INFLUENCE}
+enum{BASE}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,13 +19,13 @@ func _ready() -> void:
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child is Node2D and child is not Camera2D:
-			for keys:int in Overseer.The_nodes[child.name]: 
-				var constructed_name:String = child.name+"-"+str(keys) #constructs name from node of origin and node it connects to 
-				var reversed_constructed_name:String = str(keys)+"-"+child.name
+			for value:int in Overseer.The_nodes[child.name]: 
+				var constructed_name:String = child.name+"-"+str(value) #constructs name from node of origin and node it connects to 
+				var reversed_constructed_name:String = str(value)+"-"+child.name
 				if not (generated_paths.has(reversed_constructed_name) or generated_paths.has(constructed_name)) : #check if node exists already
 					var new_path:Node = path.instantiate() #new path instance
 					new_path.A_path_clicked.connect(Check_path_action)
-					new_path.connection = find_child(str(keys)).position #give new path coordinates to point to 
+					new_path.connection = find_child(str(value)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
 					new_path.add_to_group("Paths")
 					child.add_child(new_path) #add new path to scene as child of its origin node
@@ -37,49 +39,75 @@ func Update_action(action: String = "") ->void:
 
 func Check_node_action(Name: String) ->void:
 	var Current_node: Node = find_child(Name)
-	print(Current_node)
+	#print(Current_node)
+	
 	if Last_action == "Base":
-		Current_node.On_node = "Base"
-		print("You have placed a base on node " + Name)
-		Current_node.find_child("Building").show()
-		Current_node.Has_building = true
-		find_child("Dynamic_Action").text = "None"
-		print(Current_node.Has_building)
-		Last_action = ""
-	if Last_action == "Fighter" and  Current_node.Has_building:
-		print("You have placed a Fighter at a base on node " + Name)
-		Current_node.find_child("Fighter_Unit").show()
-		find_child("Dynamic_Action").text = "None"
-		Last_action = ""
+		#currently you can place bases on top of other bases.
+		if Current_node.Has_building:
+			$UI.action_error("there is already a base on this node!")
+		else:
+			#Current_node.On_node = "Base"
+			print("You have placed a base on node " + Name)
+			Current_node.add_building(Overseer.current_player, BASE)
+			#Current_node.find_child("Building").show()
+			Current_node.Has_building = true
+			find_child("Dynamic_Action").text = "None"
+			#print(Current_node.Has_building)
+			Last_action = ""
+		
+	if Last_action == "Fighter":
+		if not Current_node.Has_building:
+			$UI.action_error("Fighters must be placed at your own base")
+		if  Current_node.node_owner == Overseer.current_player:
+			print("You have placed a Fighter at a base on node " + Name)
+			Current_node.add_unit(Overseer.current_player,FIGHTER)
+			#Current_node.find_child("Fighter_Unit").show()
+			find_child("Dynamic_Action").text = "None"
+			Last_action = ""
+		else:
+			$UI.action_error("Fighters must be placed at your own base")
+
 	if Last_action == "Influence":
-		#Path_check(find_child(Name))
-		#Will implement the above function later
-		print("You have placed a Influence on node " + Name)
-		Current_node.find_child("Influence_Unit").show()
+
+		print("You have placed a Influnce on node " + Name)
+		Current_node.add_unit("current_player",INFLUENCE)
+		#Current_node.find_child("Influence_Unit").show()
+
 		find_child("Dynamic_Action").text = "None"
 		Last_action = ""
 
 func Check_path_action(Name: String) -> void:
 	var Current_path: Node = find_child(Name)
+
+	#var Path_parent_array: Array = Name.split("-")
+	#var Path_parent: Node = find_child(Path_parent_array[0])
+	#var Current_path: Node 
+	#for child in Path_parent.get_children():
+	#	if child.name == Name:
+	#		Current_path = child
+	
+	# need to update this when new network system implemented
+
 	if Last_action == "Intelligence":
 		print("You have placed a Intelligence Network on path " + Name)
-		Current_path.find_child("Intelligence_Network").show()
+		var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
+		path_to_edit.show()
+		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_intel = true
 		Logistics_add_path(Current_path.name)
 		Last_action = ""
+		
 	if Last_action == "Logistics":
 		print("You have placed a Logistics Network on path " + Name)
-		Current_path.find_child("Logistics_Network").show()
+		var path_to_edit:Node = Current_path.find_child("Logistics_Network")
+		path_to_edit.show()
+		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_logs = true
 		Last_action = ""
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-@warning_ignore("unused_parameter")
-func _process(delta: float) -> void:
-	pass
-	
+
 # Define the graph as a dictionary where each node points to a list of connected nodes
 # Note: this ought to be replaced with a more flexible system. 
 

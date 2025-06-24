@@ -1,19 +1,29 @@
-[gd_scene load_steps=8 format=3 uid="uid://cxejesper0f6a"]
+[gd_scene load_steps=7 format=3 uid="uid://cxejesper0f6a"]
 
-[ext_resource type="Script" uid="uid://5nk5d8lkpham" path="res://MapStuff/map_node.gd" id="1_8ofst"]
+[ext_resource type="Script" uid="uid://cbv2liai04byg" path="res://MapStuff/map_node.gd" id="1_8ofst"]
 [ext_resource type="Texture2D" uid="uid://dtvbbivd8lmtc" path="res://Assets/node_new.png" id="2_k5010"]
-[ext_resource type="Script" uid="uid://c36tftnq0e1st" path="res://MapStuff/map_node_area_2d.gd" id="3_eyrtf"]
-[ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="4_5ec75"]
-[ext_resource type="Texture2D" uid="uid://b2errj0riq702" path="res://Assets/Military/soldier.png" id="5_gfwxx"]
-[ext_resource type="Texture2D" uid="uid://hu7nw3o7h36q" path="res://Assets/Military/binoculars.png" id="6_ldtvt"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_4tgex"]
+[ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="4_5ec75"]
+[ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="5_ap6hx"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nkv3a"]
+radius = 7.0
+height = 21.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xxeh8"]
+resource_local_to_scene = true
+shader = ExtResource("5_ap6hx")
+shader_parameter/tint_color = Color(1, 0, 0, 1)
+shader_parameter/intensity = 0.2
+shader_parameter/saturation = 1.0
+shader_parameter/value = 1.0
 
 [node name="Map_Node" type="Node2D"]
 script = ExtResource("1_8ofst")
 
 [node name="Node" type="Sprite2D" parent="."]
 texture_filter = 1
+position = Vector2(0, -12)
 texture = ExtResource("2_k5010")
 
 [node name="Label" type="Label" parent="."]
@@ -34,25 +44,19 @@ text = "1"
 horizontal_alignment = 1
 
 [node name="Map_Node_Area2D" type="Area2D" parent="."]
-script = ExtResource("3_eyrtf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map_Node_Area2D"]
+position = Vector2(0, 8)
+rotation = 1.5708
 scale = Vector2(6, 6)
-shape = SubResource("CircleShape2D_4tgex")
+shape = SubResource("CapsuleShape2D_nkv3a")
 
 [node name="Building" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -7)
+material = SubResource("ShaderMaterial_xxeh8")
+position = Vector2(0, -17)
 texture = ExtResource("4_5ec75")
 
-[node name="Fighter_Unit" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(30, -10)
-texture = ExtResource("5_gfwxx")
-
-[node name="Influence_Unit" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(-26, -10)
-texture = ExtResource("6_ldtvt")
+[node name="Units" type="Node2D" parent="."]
 
 [connection signal="input_event" from="Map_Node_Area2D" to="." method="_on_map_node_area_2d_input_event"]
