@@ -10,15 +10,15 @@ func _ready() -> void:
 	$UI.The_action.connect(Update_action)
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
-		if child is Node2D and child is not Camera2D:
+		if child is Node2D and child is not Camera2D and child is not Sprite2D:
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
-			Overseer.Mind_map.add_point(num,child.position,0)
+			#Overseer.Mind_map.add_point(num,child.position,0)
 			Overseer.Logistics_map.add_point(num,child.position,0)
 			num+=1
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
-		if child is Node2D and child is not Camera2D:
+		if child is Node2D and child is not Camera2D and child is not Sprite2D:
 			for value:int in Overseer.The_nodes[child.name]: 
 				var constructed_name:String = child.name+"-"+str(value) #constructs name from node of origin and node it connects to 
 				var reversed_constructed_name:String = str(value)+"-"+child.name
