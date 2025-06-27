@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cxejesper0f6a"]
+[gd_scene load_steps=8 format=3 uid="uid://cxejesper0f6a"]
 
 [ext_resource type="Script" uid="uid://cbv2liai04byg" path="res://MapStuff/map_node.gd" id="1_8ofst"]
 [ext_resource type="Texture2D" uid="uid://dtvbbivd8lmtc" path="res://Assets/node_new.png" id="2_k5010"]
+[ext_resource type="Texture2D" uid="uid://1cn52mej0hu" path="res://Assets/node_new_shadow.png" id="2_u4wi3"]
 [ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="4_5ec75"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="5_ap6hx"]
 
@@ -20,9 +21,14 @@ shader_parameter/value = 1.0
 [node name="Map_Node" type="Node2D"]
 script = ExtResource("1_8ofst")
 
-[node name="Node" type="Sprite2D" parent="."]
+[node name="Node_Shadow" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -12)
+position = Vector2(0, -16)
+texture = ExtResource("2_u4wi3")
+
+[node name="Node_Visual" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -15)
 texture = ExtResource("2_k5010")
 
 [node name="Label" type="Label" parent="."]
@@ -53,9 +59,10 @@ shape = SubResource("CapsuleShape2D_nkv3a")
 [node name="Building" type="Sprite2D" parent="."]
 texture_filter = 1
 material = SubResource("ShaderMaterial_xxeh8")
-position = Vector2(0, -17)
+position = Vector2(0, -22)
 texture = ExtResource("4_5ec75")
 
 [node name="Units" type="Node2D" parent="."]
+position = Vector2(0, -16)
 
 [connection signal="input_event" from="Map_Node_Area2D" to="." method="_on_map_node_area_2d_input_event"]
