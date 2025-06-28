@@ -943,7 +943,7 @@ texture = ExtResource("4_lw2ce")
 material = SubResource("ShaderMaterial_pka5v")
 position = Vector2(0, -1.5)
 sprite_frames = SubResource("SpriteFrames_atbbf")
-frame_progress = 0.819735
+frame_progress = 0.689034
 
 [node name="Logistics_Network" type="Sprite2D" parent="."]
 visible = false
@@ -957,6 +957,6 @@ material = SubResource("ShaderMaterial_3mjvh")
 position = Vector2(0, -1)
 sprite_frames = SubResource("SpriteFrames_q25ov")
 animation = &"Default"
-frame_progress = 0.400885
+frame_progress = 0.270185
 
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]
