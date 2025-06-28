@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cnknkmgkv4fmh"]
 
-[ext_resource type="Texture2D" uid="uid://dleeh87lisrl8" path="res://Assets/Path.png" id="1_dqgnp"]
 [ext_resource type="Script" uid="uid://dhasmtbnro8ql" path="res://MapStuff/path.gd" id="1_j4goj"]
+[ext_resource type="Texture2D" uid="uid://deb74x05nkhkh" path="res://Assets/Path_2.png" id="2_twyoa"]
 [ext_resource type="Texture2D" uid="uid://bl4in8y7ejslq" path="res://Assets/Infastructure/Intelligence Network.png" id="3_kp47p"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="3_twyoa"]
 [ext_resource type="Texture2D" uid="uid://c2dnb5mhuprh6" path="res://Assets/Infastructure/Logistics Network.png" id="4_0b5u6"]
@@ -26,14 +26,13 @@ shader_parameter/saturation = 1.0
 shader_parameter/value = 1.0
 
 [node name="Path_Node" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_j4goj")
 
 [node name="Node" type="Sprite2D" parent="."]
-z_index = -1
 texture_filter = 1
 position = Vector2(120.5, 0)
-scale = Vector2(1.1125, 1)
-texture = ExtResource("1_dqgnp")
+texture = ExtResource("2_twyoa")
 
 [node name="Node_Path_Area2D" type="Area2D" parent="."]
 position = Vector2(121, 0)
@@ -42,19 +41,17 @@ position = Vector2(121, 0)
 shape = SubResource("RectangleShape2D_nxxog")
 
 [node name="Intelligence_Network" type="Sprite2D" parent="."]
-z_index = -1
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_lw2ce")
-position = Vector2(120.5, 7.9)
-scale = Vector2(1.1125, 1.0125)
+position = Vector2(120, 10.5)
 texture = ExtResource("3_kp47p")
 
 [node name="Logistics_Network" type="Sprite2D" parent="."]
-z_index = -1
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_twyoa")
-position = Vector2(120.5, -7.9)
-scale = Vector2(1.1125, 1.0125)
+position = Vector2(120, -10.5)
 texture = ExtResource("4_0b5u6")
 
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]
