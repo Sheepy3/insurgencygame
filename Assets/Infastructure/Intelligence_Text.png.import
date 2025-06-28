@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl4in8y7ejslq"
-path="res://.godot/imported/Intelligence Network.png-8fbc50faf18aa6ca7eec353cf65f1681.ctex"
+uid="uid://dxuj4dk4ag2pw"
+path="res://.godot/imported/Intelligence_Text.png-e43b8a51395bec8f5e6f4620b8fcd0d0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Infastructure/Intelligence Network.png"
-dest_files=["res://.godot/imported/Intelligence Network.png-8fbc50faf18aa6ca7eec353cf65f1681.ctex"]
+source_file="res://Assets/Infastructure/Intelligence_Text.png"
+dest_files=["res://.godot/imported/Intelligence_Text.png-e43b8a51395bec8f5e6f4620b8fcd0d0.ctex"]
 
 [params]
 

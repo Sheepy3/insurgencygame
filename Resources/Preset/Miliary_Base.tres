@@ -7,4 +7,5 @@ script = ExtResource("1_xkhb1")
 unit_type = 0
 player = ""
 color = Vector3(0, 0, 0)
+location = 0
 metadata/_custom_type_script = "uid://d25rq5rq01wjc"

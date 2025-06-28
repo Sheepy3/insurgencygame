@@ -88,11 +88,13 @@ func Check_path_action(Name: String) -> void:
 	
 	# need to update this when new network system implemented
 
+
 	if Last_action == "Intelligence":
 		print("You have placed a Intelligence Network on path " + Name)
-		var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
-		path_to_edit.show()
-		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+		Current_path.add_intel_network(Overseer.current_player)
+		#var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
+		#path_to_edit.show()
+		#path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_intel = true
 		Logistics_add_path(Current_path.name)
@@ -100,9 +102,11 @@ func Check_path_action(Name: String) -> void:
 		
 	if Last_action == "Logistics":
 		print("You have placed a Logistics Network on path " + Name)
-		var path_to_edit:Node = Current_path.find_child("Logistics_Network")
-		path_to_edit.show()
-		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+		Current_path.add_logistics_network(Overseer.current_player)
+		#var path_to_edit:Node = Current_path.find_child("Logistics_Network")
+		#path_to_edit.show()
+		#path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+		#path_to_edit.
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_logs = true
 		Last_action = ""
