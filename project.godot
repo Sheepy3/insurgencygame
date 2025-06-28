@@ -28,6 +28,10 @@ gdscript/warnings/untyped_declaration=2
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [input]
 
 Mouse_left_click={
@@ -68,4 +72,5 @@ Scroll_down={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
