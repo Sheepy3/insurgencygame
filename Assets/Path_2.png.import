@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2dnb5mhuprh6"
-path="res://.godot/imported/Logistics Network.png-71604b53463046572492ce2824ced1ec.ctex"
+uid="uid://deb74x05nkhkh"
+path="res://.godot/imported/Path_2.png-f9908e7a4612b23512710706b8fc3d2c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Infastructure/Logistics Network.png"
-dest_files=["res://.godot/imported/Logistics Network.png-71604b53463046572492ce2824ced1ec.ctex"]
+source_file="res://Assets/Path_2.png"
+dest_files=["res://.godot/imported/Path_2.png-f9908e7a4612b23512710706b8fc3d2c.ctex"]
 
 [params]
 

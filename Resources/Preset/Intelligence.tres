@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Network" load_steps=2 format=3 uid="uid://y2afusirgtcp"]
+
+[ext_resource type="Script" uid="uid://bg43knix3qyqd" path="res://Resources/Network.gd" id="1_j60v4"]
+
+[resource]
+script = ExtResource("1_j60v4")
+unit_type = 0
+player = ""
+color = Vector3(0, 0, 0)
+metadata/_custom_type_script = "uid://bg43knix3qyqd"

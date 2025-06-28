@@ -12,7 +12,6 @@ config_version=5
 
 config/name="InsurgencyGame"
 run/main_scene="res://MapStuff/Map.tscn"
-
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
@@ -26,8 +25,12 @@ gdscript/warnings/untyped_declaration=2
 
 [display]
 
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
 
 [input]
 
@@ -69,4 +72,6 @@ Scroll_down={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
+2d/snap/snap_2d_transforms_to_pixel=true
