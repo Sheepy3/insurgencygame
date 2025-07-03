@@ -25,8 +25,9 @@ gdscript/warnings/untyped_declaration=2
 
 [display]
 
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+window/snap/snap_2d_vertices_to_pixel=false
 
 [gui]
 
@@ -74,4 +75,5 @@ Scroll_down={
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
-2d/snap/snap_2d_transforms_to_pixel=true
+textures/decals/filter=0
+textures/light_projectors/filter=0

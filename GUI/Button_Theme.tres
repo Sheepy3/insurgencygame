@@ -5,3 +5,6 @@
 [resource]
 default_font = ExtResource("1_5u6fc")
 default_font_size = 24
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 9

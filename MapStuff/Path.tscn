@@ -940,6 +940,7 @@ position = Vector2(120, 10.5)
 texture = ExtResource("4_lw2ce")
 
 [node name="Intelligence_Text" type="AnimatedSprite2D" parent="Intelligence_Network"]
+visible = false
 material = SubResource("ShaderMaterial_pka5v")
 position = Vector2(0, -1.5)
 sprite_frames = SubResource("SpriteFrames_atbbf")
@@ -949,10 +950,11 @@ frame_progress = 0.689034
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_f2bj7")
-position = Vector2(120, -10)
+position = Vector2(120, -10.5)
 texture = ExtResource("4_lw2ce")
 
 [node name="Logistics_Text" type="AnimatedSprite2D" parent="Logistics_Network"]
+visible = false
 material = SubResource("ShaderMaterial_3mjvh")
 position = Vector2(0, -1)
 sprite_frames = SubResource("SpriteFrames_q25ov")
