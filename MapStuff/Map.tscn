@@ -89,7 +89,7 @@ position = Vector2(120, 1440)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, 720)
-zoom = Vector2(0.4, 0.4)
+zoom = Vector2(0.2, 0.2)
 script = ExtResource("3_ftre2")
 
 [node name="UI" parent="." instance=ExtResource("3_vxjy0")]

@@ -933,30 +933,26 @@ position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_nxxog")
 
 [node name="Intelligence_Network" type="Sprite2D" parent="."]
-visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_lw2ce")
 position = Vector2(120, 10.5)
 texture = ExtResource("4_lw2ce")
 
 [node name="Intelligence_Text" type="AnimatedSprite2D" parent="Intelligence_Network"]
-visible = false
 material = SubResource("ShaderMaterial_pka5v")
-position = Vector2(0, -1.5)
+position = Vector2(0, -0.5)
 sprite_frames = SubResource("SpriteFrames_atbbf")
 frame_progress = 0.689034
 
 [node name="Logistics_Network" type="Sprite2D" parent="."]
-visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_f2bj7")
 position = Vector2(120, -10.5)
 texture = ExtResource("4_lw2ce")
 
 [node name="Logistics_Text" type="AnimatedSprite2D" parent="Logistics_Network"]
-visible = false
 material = SubResource("ShaderMaterial_3mjvh")
-position = Vector2(0, -1)
+position = Vector2(0, -0.5)
 sprite_frames = SubResource("SpriteFrames_q25ov")
 animation = &"Default"
 frame_progress = 0.270185
