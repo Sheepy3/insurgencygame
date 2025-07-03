@@ -13,7 +13,7 @@ func _ready() -> void:
 		if child is Node2D and child is not Camera2D:
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
-			Overseer.Mind_map.add_point(num,child.position,0)
+			#Overseer.Mind_map.add_point(num,child.position,0)
 			Overseer.Logistics_map.add_point(num,child.position,0)
 			num+=1
 	var generated_paths:Array
