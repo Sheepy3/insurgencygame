@@ -10,6 +10,7 @@ var selected_player_index:int = -1
 var current_player:String
 #var Mind_map:AStar2D = AStar2D.new()
 var Logistics_map:AStar2D = AStar2D.new()
+var Intelligence_map:AStar2D = AStar2D.new()
  
 var base_list:Array
 

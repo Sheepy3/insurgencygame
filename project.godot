@@ -12,7 +12,6 @@ config_version=5
 
 config/name="InsurgencyGame"
 run/main_scene="res://MapStuff/Map.tscn"
-
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 

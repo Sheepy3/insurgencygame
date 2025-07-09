@@ -13,8 +13,9 @@ func _ready() -> void:
 		if child is Node2D and child is not Camera2D:
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
-			Overseer.Mind_map.add_point(num,child.position,0)
+			#Overseer.Mind_map.add_point(num,child.position,0)
 			Overseer.Logistics_map.add_point(num,child.position,0)
+			Overseer.Intelligence_map.add_point(num,child.position,0)
 			num+=1
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
@@ -40,21 +41,28 @@ func Update_action(action: String = "") ->void:
 func Check_node_action(Name: String) ->void:
 	var Current_node: Node = find_child(Name)
 	#print(Current_node)
-	
+
 	if Last_action == "Base":
 		#currently you can place bases on top of other bases.
 		if Current_node.Has_building:
 			$UI.action_error("there is already a base on this node!")
-		else:
-			#Current_node.On_node = "Base"
+		elif Overseer.base_list.size() > 0:
+			if Base_possible(Current_node.name) == true:
+				#Current_node.On_node = "Base"
+				print("You have placed a base on node " + Name)
+				Current_node.add_building(Overseer.current_player, BASE)
+				#Current_node.find_child("Building").show()
+				Current_node.Has_building = true
+				find_child("Dynamic_Action").text = "None"
+				#print(Current_node.Has_building)
+				Last_action = ""
+		elif Overseer.base_list.size() == 0:
 			print("You have placed a base on node " + Name)
 			Current_node.add_building(Overseer.current_player, BASE)
-			#Current_node.find_child("Building").show()
 			Current_node.Has_building = true
 			find_child("Dynamic_Action").text = "None"
-			#print(Current_node.Has_building)
 			Last_action = ""
-		
+
 	if Last_action == "Fighter":
 		if not Current_node.Has_building:
 			$UI.action_error("Fighters must be placed at your own base")
@@ -95,7 +103,7 @@ func Check_path_action(Name: String) -> void:
 		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_intel = true
-		Logistics_add_path(Current_path.name)
+		Intelligence_add_astar_path(Current_path.name)
 		Last_action = ""
 		
 	if Last_action == "Logistics":
@@ -105,6 +113,7 @@ func Check_path_action(Name: String) -> void:
 		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_logs = true
+		Logistics_add_astar_path(Current_path.name)
 		Last_action = ""
 
 
@@ -175,6 +184,19 @@ func Pathfind(Start: int, End: int)-> Dictionary: #BFS algorithm
 			#Overseer.Mind_map.connect_points(int(x),y,true)
 	#print(Overseer.Mind_map.get_id_path(1,24))
 
-func Logistics_add_path(Road:String) -> void:
+func Logistics_add_astar_path(Road:String) -> void:
 	var The_Roads: Array = Road.split("-")
 	Overseer.Logistics_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
+	Overseer.The_nodes.values()
+	 
+func Intelligence_add_astar_path(Road:String)-> void:
+	var The_Roads: Array = Road.split("-")
+	Overseer.Intelligence_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
+	Overseer.The_nodes.values()
+
+func Base_possible(Desired:String)-> bool:
+	for x:Resource in Overseer.base_list:
+		var Existing:int = x.location
+		if Overseer.Logistics_map.get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_map.get_id_path(Existing,int(Desired),false).size() > 0:
+			return true
+	return false
