@@ -1,7 +1,9 @@
+
 [gd_scene load_steps=133 format=3 uid="uid://cnknkmgkv4fmh"]
 
 [ext_resource type="Script" uid="uid://dhasmtbnro8ql" path="res://MapStuff/path.gd" id="1_j4goj"]
 [ext_resource type="Texture2D" uid="uid://deb74x05nkhkh" path="res://Assets/Path_2.png" id="2_twyoa"]
+
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="3_twyoa"]
 [ext_resource type="Texture2D" uid="uid://dsnku4l10cxlf" path="res://Assets/Infastructure/Blank_Network.png" id="4_lw2ce"]
 [ext_resource type="Texture2D" uid="uid://dxuj4dk4ag2pw" path="res://Assets/Infastructure/Intelligence_Text.png" id="5_lw2ce"]
