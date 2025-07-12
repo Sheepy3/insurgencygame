@@ -23,9 +23,9 @@ func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shap
 		A_node_clicked.emit(name)
 
 var unit_list:Array 
-var fighter_resource:Resource=load("res://Resources/Fighter.tres")
-var influence_resource:Resource=load("res://Resources/Influence.tres")
-var base_resource:Resource=load("res://Resources/Miliary_Base.tres")
+var fighter_resource:Resource=load("res://Resources/Preset/Fighter.tres")
+var influence_resource:Resource=load("res://Resources/Preset/Influence.tres")
+var base_resource:Resource=load("res://Resources/Preset/Miliary_Base.tres")
 
 var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 enum{FIGHTER,INFLUENCE}

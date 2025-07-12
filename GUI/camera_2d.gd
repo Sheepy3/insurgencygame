@@ -1,9 +1,5 @@
 extends Camera2D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+@export var zoom_factor:float = 0.1
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -24,7 +20,13 @@ func _process(_delta: float) -> void:
 		if not position.x > bounds:
 			move_vector.x=1
 	position += move_vector*10
+	var dir:int = 0
 	if Input.is_action_just_released("Scroll_up"):
-		zoom +=Vector2(0.1,0.1)
+		dir = 1
 	if Input.is_action_just_released("Scroll_down"):
-		zoom -=Vector2(0.1,0.1)
+		dir = -1
+	var new_zoom:Vector2 = zoom + Vector2.ONE * (dir*zoom_factor)
+	new_zoom.x = clamp(new_zoom.x,0.2,1.5)
+	new_zoom.y = clamp(new_zoom.y,0.2,1.5)
+	zoom = new_zoom
+	

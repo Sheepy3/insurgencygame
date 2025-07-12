@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="Unit" load_steps=2 format=3 uid="uid://bwg2sqtvqr0a2"]
-
-[ext_resource type="Script" uid="uid://c6pbnwwtnjtrs" path="res://Resources/Unit.gd" id="1_u1qwa"]
-
-[resource]
-script = ExtResource("1_u1qwa")
-unit_type = 1
-player = ""
-color = Vector3(0, 0, 0)

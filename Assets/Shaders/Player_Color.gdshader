@@ -2,7 +2,7 @@ shader_type canvas_item;
 // stolen from https://godotshaders.com/shader/tint-blend/, thank you!
 // also stole saturation code from https://www.youtube.com/watch?v=Pu2muzzvS4M
 uniform vec3 tint_color : source_color = vec3(1.0, 0.0, 0.0);
-uniform float intensity : hint_range(0, 1) = 0.2; //removed because redundant. 
+uniform float intensity : hint_range(0, 1) = 0.2; //removed because redundant.
 uniform float saturation : hint_range(0, 30) = 1;
 uniform float value      : hint_range(0, 2)  = 1.0;
 mat4 saturation_matrix(float s){
@@ -21,7 +21,7 @@ mat4 saturation_matrix(float s){
 
 void fragment(){
     vec4 front = texture(TEXTURE, UV);
-    vec4 tinted = mix(front, vec4(tint_color, front.a), 0.5); 
+    vec4 tinted = mix(front, vec4(tint_color, front.a), 0.5);
     vec3 sat = (saturation_matrix(saturation) * tinted).rgb;
     sat *= value;
     COLOR = vec4(sat, front.a);

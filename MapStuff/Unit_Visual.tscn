@@ -26,5 +26,4 @@ texture = ExtResource("3_rsuyw")
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")
-position = Vector2(0, 4)
 texture = ExtResource("4_gfa1p")

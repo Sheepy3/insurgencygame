@@ -10,7 +10,7 @@ func _ready() -> void:
 	$UI.The_action.connect(Update_action)
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
-		if child is Node2D and child is not Camera2D:
+		if child is Node2D and child is not Camera2D and child is not Sprite2D:
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
 			#Overseer.Mind_map.add_point(num,child.position,0)
@@ -19,7 +19,7 @@ func _ready() -> void:
 			num+=1
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
-		if child is Node2D and child is not Camera2D:
+		if child is Node2D and child is not Camera2D and child is not Sprite2D:
 			for value:int in Overseer.The_nodes[child.name]: 
 				var constructed_name:String = child.name+"-"+str(value) #constructs name from node of origin and node it connects to 
 				var reversed_constructed_name:String = str(value)+"-"+child.name
@@ -96,11 +96,13 @@ func Check_path_action(Name: String) -> void:
 	
 	# need to update this when new network system implemented
 
+
 	if Last_action == "Intelligence":
 		print("You have placed a Intelligence Network on path " + Name)
-		var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
-		path_to_edit.show()
-		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+		Current_path.add_intel_network(Overseer.current_player)
+		#var path_to_edit:Node = Current_path.find_child("Intelligence_Network")
+		#path_to_edit.show()
+		#path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_intel = true
 		Intelligence_add_astar_path(Current_path.name)
@@ -108,9 +110,11 @@ func Check_path_action(Name: String) -> void:
 		
 	if Last_action == "Logistics":
 		print("You have placed a Logistics Network on path " + Name)
-		var path_to_edit:Node = Current_path.find_child("Logistics_Network")
-		path_to_edit.show()
-		path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+		Current_path.add_logistics_network(Overseer.current_player)
+		#var path_to_edit:Node = Current_path.find_child("Logistics_Network")
+		#path_to_edit.show()
+		#path_to_edit.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+		#path_to_edit.
 		find_child("Dynamic_Action").text = "None"
 		Current_path.Has_logs = true
 		Logistics_add_astar_path(Current_path.name)
