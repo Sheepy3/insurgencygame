@@ -68,7 +68,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Map_Node_Area2D" type="Area2D" parent="."]
-visible = false
 z_index = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map_Node_Area2D"]
