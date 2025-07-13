@@ -1,5 +1,4 @@
 extends Node
-var testhex:PackedScene = preload("res://MapStuff/TEST_Hex.tscn")
 var testdot:PackedScene = preload("res://MapStuff/Map_Node.tscn")
 #@export var s:int
 @export var size:int =1
@@ -9,7 +8,7 @@ func _ready() -> void:
 	var centers := hex_centers(size, 280)  # e.g. N=1 ring, s= center to vertex distance
 	for i in range(centers.size()):
 		var v:Vector2 = centers[i]
-		var new_hex:Node = testhex.instantiate()
+		#var new_hex:Node = testhex.instantiate()
 		#new_hex.position = v
 		#add_child(new_hex)
 		var points := vertices(v,280)
