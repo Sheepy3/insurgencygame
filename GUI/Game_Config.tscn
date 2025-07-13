@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgbqd71wy0wmq"]
+
+[ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="1_8cj6o"]
+[ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="2_qer0v"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -61.5
+offset_top = -85.5
+offset_right = 61.5
+offset_bottom = 85.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -40.5
+offset_right = 48.0
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Map Size"
+label_settings = ExtResource("1_8cj6o")
+
+[node name="OptionButton" type="OptionButton" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_qer0v")
+item_count = 4
+popup/item_0/text = "Tiny (2)"
+popup/item_0/id = 0
+popup/item_1/text = "Small (2-3)"
+popup/item_1/id = 1
+popup/item_2/text = "Normal (4)"
+popup/item_2/id = 2
+popup/item_3/text = "Large (6)"
+popup/item_3/id = 3
+
+[node name="Control" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = ExtResource("2_qer0v")
+text = "Start Game"
