@@ -9,7 +9,6 @@ func _ready() -> void:
 	$Node_Path_Area2D.set_pickable(true) #sets-up the clickable area for the path nodes
 	$Intelligence_Network.hide()
 	$Logistics_Network.hide()
-	$Intelligence_Network/Intelligence_Text.set_autoplay("Default")
 	$Intelligence_Network/Intelligence_Text.play()
 	$Logistics_Network/Logistics_Text.play()
 	look_at(connection) # point towards connection

@@ -12,6 +12,7 @@ func _ready() -> void:
 
 func _initialize() -> void:
 	$UI.The_action.connect(Update_action)
+	$UI.show()
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child is Node2D and child is not Camera2D and child is not Sprite2D:
