@@ -7,3 +7,4 @@ script = ExtResource("1_u1qwa")
 unit_type = 1
 player = ""
 color = Vector3(0, 0, 0)
+offcolor = false

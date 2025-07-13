@@ -7,6 +7,10 @@ enum{BASE}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	pass
+	#Generate_mind() [for possible future use...]
+
+func _initialize() -> void:
 	$UI.The_action.connect(Update_action)
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
@@ -32,7 +36,7 @@ func _ready() -> void:
 					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
 	update_label.emit()
-	#Generate_mind() [for possible future use...]
+
 
 func Update_action(action: String = "") ->void:
 	Last_action = action

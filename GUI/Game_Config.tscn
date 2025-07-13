@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dgbqd71wy0wmq"]
+[gd_scene load_steps=4 format=3 uid="uid://dgbqd71wy0wmq"]
 
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="1_8cj6o"]
+[ext_resource type="Script" uid="uid://b28exbrfutx15" path="res://GUI/game_config.gd" id="1_rixy8"]
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="2_qer0v"]
 
-[node name="CanvasLayer" type="CanvasLayer"]
+[node name="GameConfig" type="CanvasLayer"]
+script = ExtResource("1_rixy8")
 
 [node name="Panel" type="Panel" parent="."]
 anchors_preset = 8
@@ -61,3 +63,6 @@ size_flags_horizontal = 4
 size_flags_vertical = 6
 theme = ExtResource("2_qer0v")
 text = "Start Game"
+
+[connection signal="item_selected" from="Panel/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]

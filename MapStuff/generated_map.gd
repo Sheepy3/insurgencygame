@@ -1,17 +1,18 @@
-extends Node2D
+extends Node
 var testhex:PackedScene = preload("res://MapStuff/TEST_Hex.tscn")
-var testdot:PackedScene = preload("res://MapStuff/TEST_DOT.tscn")
-@export var s:int
+var testdot:PackedScene = preload("res://MapStuff/Map_Node.tscn")
+#@export var s:int
+@export var size:int =1
 
 func _ready() -> void:
 	var sum_points:Array
-	var centers := hex_centers(1, s)  # e.g. N=1 ring, s= center to vertex distance
+	var centers := hex_centers(size, 360)  # e.g. N=1 ring, s= center to vertex distance
 	for i in range(centers.size()):
 		var v:Vector2 = centers[i]
 		var new_hex:Node = testhex.instantiate()
-		new_hex.position = v
-		add_child(new_hex)
-		var points := vertices(new_hex.position,s)
+		#new_hex.position = v
+		#add_child(new_hex)
+		var points := vertices(v,360)
 		sum_points.append_array(points)
 		
 	var sum_points_pruned:Array
@@ -36,9 +37,26 @@ func _ready() -> void:
 	)
 	for o in range(sum_points_pruned.size()):
 		var new_dot:Node = testdot.instantiate()
+		new_dot.name = str((o+1))
 		new_dot.position = sum_points_pruned[o]
 		new_dot.find_child("Label").text = str(o+1)
-		add_child(new_dot)
+		get_parent().add_child(new_dot)
+		new_dot.set_owner(get_parent())
+	var the_nodes:Dictionary
+	for key: Node in get_parent().get_children():
+		if key is Node2D and key is not Camera2D and key is not Sprite2D:
+			#var base:Node = find_child("3")
+			#print(base.position.distance_squared_to(key.position))
+			var connections:Array
+			for value:Node in get_parent().get_children():
+				if value is Node2D and value is not Camera2D and value is not Sprite2D:
+					if key.position.distance_squared_to(value.position) < 130000 and key.position.distance_squared_to(value.position) != 0:
+						connections.append(int(value.name))
+			the_nodes[str(key.name)] = connections
+	Overseer.The_nodes = the_nodes
+	print(Overseer.The_nodes)
+	get_parent()._initialize()
+
 
 #generates virtual hexagons 
 func hex_centers(n: int, s: float) -> Array:
