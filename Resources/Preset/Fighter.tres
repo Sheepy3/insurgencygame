@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_6s4ka")
-character_class = 0
+unit_type = 0
 player = ""
-color = ""
+color = Vector3(0, 0, 0)
+offcolor = false

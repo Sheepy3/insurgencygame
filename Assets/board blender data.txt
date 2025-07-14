@@ -1,0 +1,8 @@
+the boards are produced using a (not yet added to the repo) blender project using geometry nodes. for the four sizes of board, they are pre-rendered using the following configurations:
+
+
+board sizes:
+board scale: 4.0, orthoscale: 10.23, 4835x4835
+board scale: 2.5 , orthoscale: 7.67, 3625x3625 
+board scale: 1 , orthoscale: 5.11,  2419x2419
+board scale: 0.25, orthoscale: 3.84, 1815x1815

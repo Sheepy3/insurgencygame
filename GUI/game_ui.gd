@@ -4,7 +4,7 @@ signal The_action(action: String)
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Error_Message.hide()
-	show()
+	#show()
 	Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.cycle_players()

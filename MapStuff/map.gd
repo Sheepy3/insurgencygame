@@ -7,7 +7,12 @@ enum{BASE}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	pass
+	#Generate_mind() [for possible future use...]
+
+func _initialize(size:int) -> void:
 	$UI.The_action.connect(Update_action)
+	$UI.show()
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child is Node2D and child is not Camera2D and child is not Sprite2D:
@@ -32,6 +37,19 @@ func _ready() -> void:
 					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
 	update_label.emit()
+	match size:
+		0:
+			var board_texture:Texture2D = load("res://Assets/Board_tiny.webp")
+			$Board.set_texture(board_texture)
+		1:
+			var board_texture:Texture2D = load("res://Assets/Board_small.webp")
+			$Board.set_texture(board_texture)
+		2:
+			var board_texture:Texture2D = load("res://Assets/Board_normal.webp")
+			$Board.set_texture(board_texture)
+		3:
+			var board_texture:Texture2D = load("res://Assets/Board_large.webp")
+			$Board.set_texture(board_texture)
 
 func Update_action(action: String = "") ->void:
 	Last_action = action
