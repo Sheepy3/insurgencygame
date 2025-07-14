@@ -10,7 +10,7 @@ func _ready() -> void:
 	$Intelligence_Network.hide()
 	$Logistics_Network.hide()
 	#$Intelligence_Network/Intelligence_Text.play()
-	$Logistics_Network/Logistics_Text.play()
+	#$Logistics_Network/Logistics_Text.play()
 	look_at(connection) # point towards connection
 
 	if rad_to_deg(rotation) > 90:
