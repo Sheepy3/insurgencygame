@@ -17,3 +17,5 @@ currently, some placeholder assets are being used, which are credited below. the
 "US Green Army Miniature 001 - Photogrammetry" (https://skfb.ly/o87HV) by Trinh Nguyen is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 "Military Tent / Військовий Намет" (https://skfb.ly/prIUP) by Lvilka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+<a href="https://www.flaticon.com/free-icons/ak-47" title="ak 47 icons">Ak 47 icons created by Muhammad Atif - Flaticon</a>
