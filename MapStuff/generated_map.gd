@@ -1,7 +1,7 @@
 extends Node
 var testdot:PackedScene = preload("res://MapStuff/Map_Node.tscn")
 #@export var s:int
-@export var size:int =1
+@export var size:int 
 
 func _ready() -> void:
 	var sum_points:Array
@@ -53,8 +53,7 @@ func _ready() -> void:
 						connections.append(int(value.name))
 			the_nodes[str(key.name)] = connections
 	Overseer.The_nodes = the_nodes
-	print(Overseer.The_nodes)
-	get_parent()._initialize()
+	get_parent()._initialize(size)
 
 
 #generates virtual hexagons 

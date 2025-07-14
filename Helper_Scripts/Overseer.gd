@@ -25,15 +25,15 @@ func cycle_players() -> void:
 		selected_player_index +=1
 		current_player = players[selected_player_index]
 		change_player.emit()
-		print(selected_player_index)
+		#print(selected_player_index)
 	else:
 		selected_player_index = 0
 		current_player = players[selected_player_index]
 		change_player.emit()
-		print(selected_player_index)
+		#print(selected_player_index)
 
 func cycle_phases() -> void:
-	print(current_phase)
+	#print(current_phase)
 	if current_phase < COLLECT:
 		current_phase+=1
 		change_phase.emit()

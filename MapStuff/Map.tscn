@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dteesqpw1o4v5"]
+[gd_scene load_steps=5 format=3 uid="uid://dteesqpw1o4v5"]
 
 [ext_resource type="Script" uid="uid://cecjltaerihui" path="res://MapStuff/map.gd" id="1_bhwkw"]
-[ext_resource type="Texture2D" uid="uid://cdu8cqpr0ngay" path="res://Assets/Board_Test.webp" id="2_4jjmt"]
 [ext_resource type="Script" uid="uid://dos6ix3a4pbte" path="res://GUI/camera_2d.gd" id="3_ftre2"]
 [ext_resource type="PackedScene" uid="uid://bqpth4hjbjugk" path="res://GUI/Game_UI.tscn" id="3_vxjy0"]
 [ext_resource type="PackedScene" uid="uid://dgbqd71wy0wmq" path="res://GUI/Game_Config.tscn" id="5_4jjmt"]
@@ -9,11 +8,10 @@
 [node name="Map_parent" type="Node2D"]
 script = ExtResource("1_bhwkw")
 
-[node name="BoardTest" type="Sprite2D" parent="."]
+[node name="Board" type="Sprite2D" parent="."]
 z_index = -3
 texture_filter = 1
 scale = Vector2(1.00098, 1)
-texture = ExtResource("2_4jjmt")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.2, 0.2)
