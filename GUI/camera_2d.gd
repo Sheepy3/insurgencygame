@@ -3,7 +3,7 @@ extends Camera2D
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var bounds:int = 1000
 	var move_vector:Vector2
 	#var speed:int = 10
@@ -19,7 +19,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_pressed("Move_right"):
 		if not position.x > bounds:
 			move_vector.x=1
-	position += move_vector*10
+	position += move_vector*800*delta
 	var dir:int = 0
 	if Input.is_action_just_released("Scroll_up"):
 		dir = 1
