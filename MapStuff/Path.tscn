@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cnknkmgkv4fmh"]
+[gd_scene load_steps=17 format=3 uid="uid://cnknkmgkv4fmh"]
 
 [ext_resource type="Script" uid="uid://dhasmtbnro8ql" path="res://MapStuff/path.gd" id="1_j4goj"]
 [ext_resource type="Texture2D" uid="uid://deb74x05nkhkh" path="res://Assets/Path_2.png" id="2_twyoa"]
@@ -7,9 +7,13 @@
 [ext_resource type="Shader" uid="uid://g4sywj1bk4px" path="res://Assets/Shaders/Scrolling.gdshader" id="5_pka5v"]
 [ext_resource type="Texture2D" uid="uid://dxnmdi6fpd6g0" path="res://Assets/Infastructure/intelligence_text.png" id="6_3mjvh"]
 [ext_resource type="Texture2D" uid="uid://cjwe66tmvmwjr" path="res://Assets/Infastructure/logistics_text.png" id="7_pka5v"]
+[ext_resource type="Shader" uid="uid://dwn1s3xdbui1p" path="res://Assets/Shaders/mask.gdshader" id="8_f2bj7"]
+[ext_resource type="Texture2D" uid="uid://drgvjknpbfisx" path="res://Assets/lightmask.png" id="10_58pqk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nxxog"]
 size = Vector2(114, 45)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5b33m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lw2ce"]
 resource_local_to_scene = true
@@ -57,15 +61,12 @@ shader_parameter/tint_mix = 0.5
 shader_parameter/saturation = 1.0
 shader_parameter/value = 1.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ohwi"]
+shader = ExtResource("8_f2bj7")
+
 [node name="Path_Node" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_j4goj")
-
-[node name="Node" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(120.5, 0)
-scale = Vector2(1, 0.98)
-texture = ExtResource("2_twyoa")
 
 [node name="Node_Path_Area2D" type="Area2D" parent="."]
 position = Vector2(121, 0)
@@ -74,26 +75,53 @@ position = Vector2(121, 0)
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_nxxog")
 
-[node name="Intelligence_Network" type="Sprite2D" parent="."]
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+copy_mode = 2
+
+[node name="Node" type="Sprite2D" parent="BackBufferCopy"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_5b33m")
+position = Vector2(120.5, 0)
+scale = Vector2(1, 0.98)
+texture = ExtResource("2_twyoa")
+
+[node name="Intelligence_Network" type="Sprite2D" parent="BackBufferCopy"]
+unique_name_in_owner = true
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_lw2ce")
 position = Vector2(120, 10.5)
 texture = ExtResource("4_lw2ce")
 
-[node name="Intelligence_Text" type="Sprite2D" parent="Intelligence_Network"]
+[node name="Intelligence_Text" type="Sprite2D" parent="BackBufferCopy/Intelligence_Network"]
+unique_name_in_owner = true
 texture_filter = 1
 material = SubResource("ShaderMaterial_pka5v")
 texture = ExtResource("6_3mjvh")
 
-[node name="Logistics_Network" type="Sprite2D" parent="."]
+[node name="Logistics_Network" type="Sprite2D" parent="BackBufferCopy"]
+unique_name_in_owner = true
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_f2bj7")
 position = Vector2(120, -10.5)
 texture = ExtResource("4_lw2ce")
 
-[node name="Logistics_Text" type="Sprite2D" parent="Logistics_Network"]
+[node name="Logistics_Text" type="Sprite2D" parent="BackBufferCopy/Logistics_Network"]
+unique_name_in_owner = true
 texture_filter = 1
 material = SubResource("ShaderMaterial_58pqk")
 texture = ExtResource("7_pka5v")
+
+[node name="Mask" type="Sprite2D" parent="BackBufferCopy"]
+material = SubResource("ShaderMaterial_6ohwi")
+scale = Vector2(1, 0.98)
+texture = ExtResource("10_58pqk")
+
+[node name="Mask2" type="Sprite2D" parent="BackBufferCopy"]
+material = SubResource("ShaderMaterial_6ohwi")
+position = Vector2(280, 0)
+scale = Vector2(1, 0.98)
+texture = ExtResource("10_58pqk")
 
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]
