@@ -122,9 +122,6 @@ func Check_path_action(Name: String) -> void:
 		else:
 			$UI.action_error("You must place Logistics Networks next to an existing one!")
 
-# Define the graph as a dictionary where each node points to a list of connected nodes
-# Note: this ought to be replaced with a more flexible system. 
-
 func Logistics_add_astar_path(Road:String) -> void:
 	var The_Roads: Array = Road.split("-")
 	Overseer.Logistics_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)

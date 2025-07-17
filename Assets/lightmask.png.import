@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjwe66tmvmwjr"
-path="res://.godot/imported/logistics_text.png-a4b34d3d7021daa4c375cfb2bb866f78.ctex"
+uid="uid://drgvjknpbfisx"
+path="res://.godot/imported/lightmask.png-1c63a976edd7a655349a0e4ed3a9516f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Infastructure/logistics_text.png"
-dest_files=["res://.godot/imported/logistics_text.png-a4b34d3d7021daa4c375cfb2bb866f78.ctex"]
+source_file="res://Assets/lightmask.png"
+dest_files=["res://.godot/imported/lightmask.png-1c63a976edd7a655349a0e4ed3a9516f.ctex"]
 
 [params]
 

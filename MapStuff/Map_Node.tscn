@@ -30,24 +30,32 @@ shader_parameter/value = 1.0
 script = ExtResource("1_8ofst")
 
 [node name="Node_Shadow" type="Sprite2D" parent="."]
+light_mask = 0
 z_index = -2
 texture_filter = 1
 position = Vector2(0, -16)
 texture = ExtResource("2_u4wi3")
 
 [node name="Node_Body" type="Sprite2D" parent="."]
+light_mask = 0
+visibility_layer = 2
 z_index = -1
 texture_filter = 1
 position = Vector2(0, -15)
 texture = ExtResource("3_i1oa1")
 
 [node name="Node_top" type="Sprite2D" parent="."]
+light_mask = 0
+visibility_layer = 2
 z_index = 1
 texture_filter = 1
 position = Vector2(0, -15)
 texture = ExtResource("4_2ecm6")
 
 [node name="Label" type="Label" parent="."]
+visible = false
+light_mask = 2
+visibility_layer = 2
 z_index = 1
 texture_filter = 1
 anchors_preset = 8
@@ -68,9 +76,13 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Map_Node_Area2D" type="Area2D" parent="."]
+light_mask = 2
+visibility_layer = 2
 z_index = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Map_Node_Area2D"]
+light_mask = 2
+visibility_layer = 2
 position = Vector2(0, 17)
 rotation = 1.5708
 scale = Vector2(6, 6)

@@ -1,6 +1,6 @@
 extends Camera2D
-@export var zoom_factor:float = 0.1
-
+#@export var zoom_factor:float = 0.1
+var zoom_level:int
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -25,8 +25,12 @@ func _process(delta: float) -> void:
 		dir = 1
 	if Input.is_action_just_released("Scroll_down"):
 		dir = -1
-	var new_zoom:Vector2 = zoom + Vector2.ONE * (dir*zoom_factor)
-	new_zoom.x = clamp(new_zoom.x,0.2,1.5)
-	new_zoom.y = clamp(new_zoom.y,0.2,1.5)
-	zoom = new_zoom
-	
+	zoom_level += dir
+	clamp(zoom_level,0,3)
+	match zoom_level:
+		0:
+			zoom=lerp(zoom,Vector2(0.25,0.25),0.5)
+		1:
+			zoom= lerp(zoom,Vector2(0.5,0.5),0.5)
+		2: 
+			zoom= lerp(zoom,Vector2(1,1),0.5)

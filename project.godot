@@ -25,6 +25,7 @@ gdscript/warnings/untyped_declaration=2
 
 [display]
 
+window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/snap/snap_2d_vertices_to_pixel=false
@@ -75,5 +76,8 @@ Scroll_down={
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
+textures/default_filters/anisotropic_filtering_level=0
 textures/decals/filter=0
 textures/light_projectors/filter=0
+mesh_lod/snap_controls_to_pixels=true
+mesh_lod/stretch/scale_mode="fractional"
