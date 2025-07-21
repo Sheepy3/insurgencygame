@@ -64,7 +64,7 @@ func Check_node_action(Name: String) ->void:
 		elif Overseer.base_list.size() > 0:
 			if Base_possible(Current_node.name) == true:
 				print("You have placed a base on node " + Name)
-				Current_node.add_building(Overseer.current_player, BASE)
+				Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].base_list, BASE)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
 				Last_action = ""
@@ -88,7 +88,7 @@ func Check_node_action(Name: String) ->void:
 
 	if Last_action == "Influence":
 		if Influence_possible(Current_node.name) == true:
-			print("You have placed a Influnce on node " + Name)
+			print("You have placed a Influence on node " + Name)
 			Current_node.add_unit("current_player",INFLUENCE)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
