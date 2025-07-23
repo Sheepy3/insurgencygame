@@ -101,8 +101,9 @@ func Check_path_action(Name: String) -> void:
 	var Current_path: Node = find_child(Name)
 
 	if Last_action == "Intelligence":
-		print(Overseer.selected_player_index)
-		if Intell_possible(Current_path.name) == true:
+		if Current_path.Has_intel:
+			$UI.action_error("there is already an Intelligence network on this path!")
+		elif Intell_possible(Current_path.name) == true:
 			print("You have placed a Intelligence network on path " + Name)
 			Current_path.add_intel_network()
 			find_child("Dynamic_Action").text = "None"
@@ -113,8 +114,9 @@ func Check_path_action(Name: String) -> void:
 			$UI.action_error("You must place Intelligence networks next to an existing one!")
 
 	if Last_action == "Logistics":
-		print(Overseer.selected_player_index)
-		if Logs_possible(Current_path.name) == true:
+		if Current_path.Has_logs:
+			$UI.action_error("there is already an Logistics network on this path!")
+		elif Logs_possible(Current_path.name) == true:
 			print("You have placed a Logistics Network on path " + Name)
 			Current_path.add_logistics_network()
 			find_child("Dynamic_Action").text = "None"
