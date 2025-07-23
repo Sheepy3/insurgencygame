@@ -32,10 +32,10 @@ enum{FIGHTER,INFLUENCE}
 
 func add_building(player:String, _type:int) -> void:
 	building = base_resource.duplicate(true)
-	node_owner = Overseer.player_list[Overseer.current_palayer_index].Player_ID
+	node_owner = Overseer.player_list[Overseer.selected_player_index].Player_name
 	var color:Vector3 = Overseer.players_colors[Overseer.selected_player_index]
 	building.location = int(name)
-	Overseer.player_list[Overseer.current_palayer_index].append(building) #adds building to the base list
+	Overseer.player_list[Overseer.selected_player_index].base_list.append(building) #adds building to the base list
 
 	$Building.material.set_shader_parameter("tint_color", color)
 	$Building.material.set_shader_parameter("saturation", 0.4)
