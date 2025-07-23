@@ -11,8 +11,8 @@ var selected_player_index:int = -1
 var current_player:String
 var Logistics_map:AStar2D = AStar2D.new()
 var Intelligence_map:AStar2D = AStar2D.new()
- 
-#var base_list:Array
+var Logistics_array:Array 
+var Intelligence_array:Array
 
 enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
 var current_phase:int = MAINTENENCE
@@ -25,6 +25,10 @@ func populate_player_list(Game_Size:int)-> void:
 		player_list.append(Player_resource.duplicate(true))
 		Player_resource.color = players_colors[x]
 		player_list[x].Player_name = "Player " + str(x+1)
+		var Logistics_map:AStar2D = AStar2D.new()
+		var Intelligence_map:AStar2D = AStar2D.new()
+		Logistics_array.append(Logistics_map)
+		Intelligence_array.append(Intelligence_map)
 
 func cycle_players() -> void:
 	var playerquant:int = player_list.size()-1
@@ -48,7 +52,5 @@ func cycle_phases() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	populate_player_list(2)
-	print(player_list[0].color)
-	print(player_list[1].color)
 
 var The_nodes:Dictionary

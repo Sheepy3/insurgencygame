@@ -29,13 +29,13 @@ func _on_node_path_area_2d_input_event(_viewport: Node, _event: InputEvent, _sha
 		find_parent("Map_parent").find_child("Dynamic_Clicked").text = "Path " + name
 		A_path_clicked.emit(name)
 
-func add_intel_network(player:String) -> void:
+func add_intel_network() -> void:
 	$Intelligence_Network.show()
 	$Intelligence_Network.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 	$Intelligence_Network/Intelligence_Text.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 	pass
 
-func add_logistics_network(player:String) -> void:
+func add_logistics_network() -> void:
 	$Logistics_Network.show()
 	$Logistics_Network/Logistics_Text.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 	$Logistics_Network.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
