@@ -31,7 +31,6 @@ func _process(delta: float) -> void:
 		dir = -1
 	zoom_level += dir
 	zoom_level = clamp(zoom_level,0,2)
-	print(zoom_level)
 	match zoom_level:
 		0:
 			zoom=lerp(zoom,Vector2(0.25,0.25),0.5)
