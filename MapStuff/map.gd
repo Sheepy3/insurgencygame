@@ -56,9 +56,13 @@ func _initialize(size:int) -> void:
 func Update_action(action: String = "") ->void:
 	Last_action = action
 
-func Check_node_action(Name: String) ->void:
-	var Current_node: Node = find_child(Name)
+var Current_node: Node
 
+func Check_node_action(Name: String) ->void:
+	if Current_node:
+		Current_node.remove_selection_circle()
+	Current_node = find_child(Name)
+	Current_node.add_selection_circle()
 	if Last_action == "Base":
 		#currently you can place bases on top of other bases.
 		if Current_node.Has_building:

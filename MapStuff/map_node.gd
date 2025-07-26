@@ -118,4 +118,28 @@ func _randomize_sprites() -> void:
 	$Node_Body.texture = selected_sprite
 	
 	
+func remove_selection_circle() -> void:
+	target_radius = 0.1
+	target_speed  = 3.0
+	lerpspeed=0.05
+	#print("removing circle from %s" % name)
+	pass
+
+func add_selection_circle() -> void:
+	target_radius = 0.25
+	target_speed  = 1.0
+	lerpspeed=0.3
+
+var lerpspeed:float = 0.5
+var current_radius:  float = 0.0
+var target_radius:   float = 0.0
+
+var current_speed:   float = 0.0
+var target_speed:    float = 0.0
+
+func _process(_delta:float) -> void:
+	current_radius = lerp(current_radius, target_radius, lerpspeed)
+	current_speed  = lerp(current_speed,  target_speed,  lerpspeed)
+	%Selection_Circle.material.set_shader_parameter("radius", current_radius)
+	%Selection_Circle.material.set_shader_parameter("speed", current_speed)
 	
