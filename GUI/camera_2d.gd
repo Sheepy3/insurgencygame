@@ -7,9 +7,9 @@ func _process(delta: float) -> void:
 	var bounds:int = 1000
 	var move_vector:Vector2
 	if Input.is_action_pressed("Cam_Speed"):
-		camera_speed=1600
+		camera_speed=2000
 	else:
-		camera_speed=800
+		camera_speed=1000
 	#var speed:int = 10
 	if Input.is_action_pressed("Move_up"):
 		if not position.y < -1*bounds:
