@@ -1,18 +1,18 @@
 extends Node
 
-
 #todo: convert player system to use resources for each player. these variables are gonna be unstable
 #when networking is added, and the "current player" thing doesnt work if players take turns at the same time. 
 
-var players:Array = ["Player 1", "Player 2"] #currently hardcoded, would be procedurally generated based on playercount
+#var players:Array = ["Player 1", "Player 2"] #currently hardcoded, would be procedurally generated based on playercount
 var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
+var player_list:Array
+var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
 var selected_player_index:int = -1
 var current_player:String
-#var Mind_map:AStar2D = AStar2D.new()
 var Logistics_map:AStar2D = AStar2D.new()
 var Intelligence_map:AStar2D = AStar2D.new()
- 
-var base_list:Array
+var Logistics_array:Array 
+var Intelligence_array:Array
 
 enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
 var current_phase:int = MAINTENENCE
@@ -20,21 +20,28 @@ var current_phase:int = MAINTENENCE
 signal change_player
 signal change_phase
 
+func populate_player_list(Game_Size:int)-> void:
+	for x:int in range(Game_Size):
+		player_list.append(Player_resource.duplicate(true))
+		Player_resource.color = players_colors[x]
+		player_list[x].Player_name = "Player " + str(x+1)
+		var Logistics_map:AStar2D = AStar2D.new()
+		var Intelligence_map:AStar2D = AStar2D.new()
+		Logistics_array.append(Logistics_map)
+		Intelligence_array.append(Intelligence_map)
+
 func cycle_players() -> void:
-	var playerquant:int = players.size()-1
+	var playerquant:int = player_list.size()-1
 	if selected_player_index < playerquant:
 		selected_player_index +=1
-		current_player = players[selected_player_index]
+		current_player = player_list[selected_player_index].Player_name
 		change_player.emit()
-		#print(selected_player_index)
 	else:
 		selected_player_index = 0
-		current_player = players[selected_player_index]
+		current_player = player_list[selected_player_index].Player_name
 		change_player.emit()
-		#print(selected_player_index)
 
 func cycle_phases() -> void:
-	#print(current_phase)
 	if current_phase < COLLECT:
 		current_phase+=1
 		change_phase.emit()
@@ -44,32 +51,6 @@ func cycle_phases() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	populate_player_list(2)
 
-
-var The_nodes:Dictionary# = {
-#"1": [2, 4], 
-#"2": [1, 5],
-#"3": [4, 7],
-#"4": [1, 3, 8],
-#"5": [2, 6, 9],
-#"6": [5, 10],
-#"7": [3, 11],
-#"8": [4, 9, 12],
-#"9": [5, 8, 13],
-#"10": [6, 14],
-#"11": [7, 12, 15],
-#"12": [8, 11, 16],
-#"13": [9, 14, 17],
-#"14": [10, 13, 18],
-#"15": [11, 19],
-#"16": [12, 17, 20],
-#"17": [13, 16, 21],
-#"18": [14, 22],
-#"19": [15, 20],
-#"20": [16, 23],
-#"21": [17, 22, 24],
-#"22": [18, 21],
-#"23": [20, 24],
-#"24": [21, 23]
-#}
+var The_nodes:Dictionary

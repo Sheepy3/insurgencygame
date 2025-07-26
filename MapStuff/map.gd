@@ -8,7 +8,6 @@ enum{BASE}
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
-	#Generate_mind() [for possible future use...]
 
 func _initialize(size:int) -> void:
 	$UI.The_action.connect(Update_action)
@@ -18,9 +17,11 @@ func _initialize(size:int) -> void:
 		if child is Node2D and child is not Camera2D and child is not Sprite2D:
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
-			Overseer.Logistics_map.add_point(num,child.position,0)
-			Overseer.Intelligence_map.add_point(num,child.position,0)
+			for Astars: int in Overseer.player_list.size():
+				Overseer.Logistics_array[Astars].add_point(num,child.position,0)
+				Overseer.Intelligence_array[Astars].add_point(num,child.position,0)
 			num+=1
+			
 	var generated_paths:Array
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child is Node2D and child is not Camera2D and child is not Sprite2D:
@@ -37,6 +38,7 @@ func _initialize(size:int) -> void:
 					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
 	update_label.emit()
+
 	match size:
 		0:
 			var board_texture:Texture2D = load("res://Assets/Board_tiny.webp")
@@ -61,18 +63,18 @@ func Check_node_action(Name: String) ->void:
 		#currently you can place bases on top of other bases.
 		if Current_node.Has_building:
 			$UI.action_error("there is already a base on this node!")
-		elif Overseer.base_list.size() > 0:
+		elif Overseer.player_list[Overseer.selected_player_index].base_list.size() > 0:
 			if Base_possible(Current_node.name) == true:
 				print("You have placed a base on node " + Name)
-				Current_node.add_building(Overseer.current_player, BASE)
+				Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].Player_name, BASE)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 			else:
 				$UI.action_error("You do not have the conditions to place a Base!")
-		elif Overseer.base_list.size() == 0:
+		elif Overseer.player_list[Overseer.selected_player_index].base_list.size() == 0:
 			print("You have placed a base on node " + Name)
-			Current_node.add_building(Overseer.current_player, BASE)
+			Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].Player_name, BASE)
 			Current_node.Has_building = true
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
@@ -88,7 +90,7 @@ func Check_node_action(Name: String) ->void:
 
 	if Last_action == "Influence":
 		if Influence_possible(Current_node.name) == true:
-			print("You have placed a Influnce on node " + Name)
+			print("You have placed a Influence on node " + Name)
 			Current_node.add_unit("current_player",INFLUENCE)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
@@ -98,12 +100,12 @@ func Check_node_action(Name: String) ->void:
 func Check_path_action(Name: String) -> void:
 	var Current_path: Node = find_child(Name)
 
-	# need to update this when new network system implemented
-
 	if Last_action == "Intelligence":
-		if Intell_possible(Current_path.name) == true:
+		if Current_path.Has_intel:
+			$UI.action_error("there is already an Intelligence network on this path!")
+		elif Intell_possible(Current_path.name) == true:
 			print("You have placed a Intelligence network on path " + Name)
-			Current_path.add_intel_network(Overseer.current_player)
+			Current_path.add_intel_network()
 			find_child("Dynamic_Action").text = "None"
 			Current_path.Has_intel = true
 			Intelligence_add_astar_path(Current_path.name)
@@ -112,9 +114,11 @@ func Check_path_action(Name: String) -> void:
 			$UI.action_error("You must place Intelligence networks next to an existing one!")
 
 	if Last_action == "Logistics":
-		if Logs_possible(Current_path.name) == true:
+		if Current_path.Has_logs:
+			$UI.action_error("there is already an Logistics network on this path!")
+		elif Logs_possible(Current_path.name) == true:
 			print("You have placed a Logistics Network on path " + Name)
-			Current_path.add_logistics_network(Overseer.current_player)
+			Current_path.add_logistics_network()
 			find_child("Dynamic_Action").text = "None"
 			Current_path.Has_logs = true
 			Logistics_add_astar_path(Current_path.name)
@@ -124,40 +128,38 @@ func Check_path_action(Name: String) -> void:
 
 func Logistics_add_astar_path(Road:String) -> void:
 	var The_Roads: Array = Road.split("-")
-	Overseer.Logistics_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
-	Overseer.The_nodes.values()
+	Overseer.Logistics_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
  
 func Intelligence_add_astar_path(Road:String)-> void:
 	var The_Roads: Array = Road.split("-")
-	Overseer.Intelligence_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
-	Overseer.The_nodes.values()
+	Overseer.Intelligence_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 
 func Base_possible(Desired:String)-> bool:
-	for x:Resource in Overseer.base_list:
+	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
 		var Existing:int = x.location
-		if Overseer.Logistics_map.get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_map.get_id_path(Existing,int(Desired),false).size() > 0:
+		if Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0:
 			return true
 	return false
 
 func Intell_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	for x:Resource in Overseer.base_list:
+	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
 		var Existing:int = x.location
-		if Overseer.Intelligence_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Intelligence_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+		if Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
 			return true
 	return false
 
 func Logs_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	for x:Resource in Overseer.base_list:
+	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
 		var Existing:int = x.location
-		if Overseer.Logistics_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Logistics_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+		if Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
 			return true
 	return false
 
 func Influence_possible(Desired:String)-> bool:
-	for x:Resource in Overseer.base_list:
+	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
 		var Existing:int = x.location
-		if Overseer.Intelligence_map.get_id_path(Existing,int(Desired),false).size() > 0: 
+		if Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0: 
 			return true
 	return false
