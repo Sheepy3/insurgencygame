@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxnmdi6fpd6g0"
-path="res://.godot/imported/Intelligence_Text.png-e43b8a51395bec8f5e6f4620b8fcd0d0.ctex"
+uid="uid://cfvymklkoad01"
+path="res://.godot/imported/node_split_top_4.png-4bbdde64f06832e28867769aa9bbe3cd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Infastructure/Intelligence_Text.png"
-dest_files=["res://.godot/imported/Intelligence_Text.png-e43b8a51395bec8f5e6f4620b8fcd0d0.ctex"]
+source_file="res://Assets/Map_Tiles/Top/node_split_top_4.png"
+dest_files=["res://.godot/imported/node_split_top_4.png-4bbdde64f06832e28867769aa9bbe3cd.ctex"]
 
 [params]
 

@@ -8,7 +8,7 @@ var building:Resource
 func _ready() -> void:
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	$Building.hide() 
-
+	_randomize_sprites()
 	if get_parent().name != "root":
 		get_parent().update_label.connect(_update_label)
 
@@ -84,4 +84,38 @@ func _reorder_units() -> void:
 		if (i % 2 != 0) && count > 2:
 			nodes[i].Unit_Data.offcolor = true
 			nodes[i].recolor()
+	
+
+func _randomize_sprites() -> void:
+	var top_array:Array = [
+	preload("res://Assets/Map_Tiles/Top/node_split_top.png"),
+	preload("res://Assets/Map_Tiles/Top/node_split_top_2.png"),
+	preload("res://Assets/Map_Tiles/Top/node_split_top_3.png"),
+	preload("res://Assets/Map_Tiles/Top/node_split_top_4.png"),
+	]
+	var foliage_array:Array = [
+	preload("res://Assets/Map_Tiles/Foliage/Ferns0.png"),
+	preload("res://Assets/Map_Tiles/Foliage/Ferns0.png"),
+	preload("res://Assets/Map_Tiles/Foliage/Ferns0.png"),
+	preload("res://Assets/Map_Tiles/Foliage/Ferns.png"),
+	preload("res://Assets/Map_Tiles/Foliage/Ferns2.png")
+	]
+	var base_array:Array = [
+	preload("res://Assets/Map_Tiles/Base/node_split_base.png"),
+	preload("res://Assets/Map_Tiles/Base/node_split_base_2.png"),
+	preload("res://Assets/Map_Tiles/Base/node_split_base_3.png"),
+	preload("res://Assets/Map_Tiles/Base/node_split_base_4.png")
+	]
+	
+	var random_index:int = randi() % top_array.size()
+	var selected_sprite:Texture= top_array[random_index]
+	$Node_top.texture = selected_sprite
+	random_index = randi() % foliage_array.size()
+	selected_sprite = foliage_array[random_index]
+	$Foliage.texture = selected_sprite
+	random_index = randi() % base_array.size()
+	selected_sprite = base_array[random_index]
+	$Node_Body.texture = selected_sprite
+	
+	
 	
