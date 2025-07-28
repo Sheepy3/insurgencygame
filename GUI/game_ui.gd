@@ -12,7 +12,6 @@ func _ready() -> void:
 	$Store_Container.hide()
 	pass # Replace with function body.
 
-
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:
 	The_action.emit("Base") #transmits signal that Base button has been pressed
@@ -32,7 +31,7 @@ func _on_influence_button_pressed() -> void:
 func _on_intelligence_network_button_pressed() -> void:
 	The_action.emit("Intelligence") #transmits signal that Intelligence button has been pressed
 	find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
-	
+
 #Activiates whe the "Logistics" button is pressed
 func _on_logistics_network_button_pressed() -> void:
 	The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
@@ -44,7 +43,8 @@ func _on_player_switch_button_pressed() -> void:
 	
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
-	
+	update_Player_Info()
+
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
 		0:
@@ -74,7 +74,28 @@ func _on_error_timer_timeout() -> void:
 func _on_open_market_button_pressed() -> void:
 	$Store_Container.show()
 	$Open_Market_Button.hide()
-	
+
 func _on_close_button_pressed() -> void:
 	$Store_Container.hide()
 	$Open_Market_Button.show()
+
+func _on_buy_button_pressed() -> void:
+	print("I BUY BUTTON PROPERLY")
+	pass # Replace with function body.
+
+func _on_sell_button_pressed() -> void:
+	print("I SELL BUTTON PROPERLY")
+	pass # Replace with function body.
+
+func _on_manpower_button_pressed() -> void:
+	print("I MANPOWER BUTTON PROPERLY")
+	pass # Replace with function body.
+
+func _on_weapons_button_pressed() -> void:
+	print("I WEAPONS BUTTON PROPERLY")
+	pass # Replace with function body.
+
+func update_Player_Info() -> void:
+	$Player_Info/HBoxContainer/Guns.text = str(Overseer.player_list[Overseer.selected_player_index].Weapons)
+	$Player_Info/HBoxContainer/Money.text = str(Overseer.player_list[Overseer.selected_player_index].Money)
+	$Player_Info/HBoxContainer/Population.text = str(Overseer.player_list[Overseer.selected_player_index].Man_power)
