@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=11 format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
@@ -14,6 +14,20 @@ font_size = 32
 font_color = Color(1, 0, 0, 1)
 outline_size = 9
 outline_color = Color(0.251859, 0, 0.0484084, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tsku8"]
+font = ExtResource("4_w20xb")
+font_size = 22
+outline_size = 9
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_tsku8"]
+default_font = ExtResource("4_w20xb")
+default_font_size = 24
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 9
+OptionButton/constants/outline_size = 9
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_2if7r")
@@ -184,6 +198,75 @@ expand_mode = 2
 layout_mode = 2
 text = "0"
 
+[node name="Store_Container" type="PanelContainer" parent="."]
+offset_left = 1016.0
+offset_top = 1.0
+offset_right = 1152.0
+offset_bottom = 137.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Store_Container"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Store_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Store_Container/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="Store_Container/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+text = "Support Market"
+label_settings = SubResource("LabelSettings_tsku8")
+horizontal_alignment = 1
+
+[node name="Close_Button" type="Button" parent="Store_Container/VBoxContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme = SubResource("Theme_tsku8")
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Store_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Store_Container/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Buy_Button" type="Button" parent="Store_Container/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Buy"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Store_Container/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Sell_Button" type="Button" parent="Store_Container/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Sell"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Store_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Store_Container/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
+[node name="Weapons_Button" type="Button" parent="Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+text = "Weapons ↔ $3"
+
+[node name="Manpower_Button" type="Button" parent="Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer"]
+layout_mode = 2
+text = "Man power ↔ $5"
+
+[node name="Open_Market_Button" type="Button" parent="."]
+offset_left = 1064.0
+offset_top = 280.0
+offset_right = 1126.0
+offset_bottom = 307.0
+theme = ExtResource("3_fbkqq")
+text = "Market"
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Base_Button" to="." method="_on_base_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Fighter_Button" to="." method="_on_fighter_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Influence_Button" to="." method="_on_influence_button_pressed"]
@@ -192,3 +275,5 @@ text = "0"
 [connection signal="pressed" from="PanelContainer2/VBoxContainer/Phase_Button" to="." method="_on_phase_button_pressed"]
 [connection signal="pressed" from="PanelContainer2/VBoxContainer/HSplitContainer/Player_Switch_Button" to="." method="_on_player_switch_button_pressed"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
+[connection signal="pressed" from="Store_Container/VBoxContainer/PanelContainer/HBoxContainer/Close_Button" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="Open_Market_Button" to="." method="_on_open_market_button_pressed"]

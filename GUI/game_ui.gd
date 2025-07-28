@@ -9,6 +9,7 @@ func _ready() -> void:
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.cycle_players()
 	_phase_switch_ui()
+	$Store_Container.hide()
 	pass # Replace with function body.
 
 
@@ -60,9 +61,7 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Collect Resources"
 
 func _on_phase_button_pressed() -> void:
-	
 	Overseer.cycle_phases()
-
 
 func action_error(error_message:String) -> void:
 	$Error_Message.text = error_message
@@ -71,3 +70,11 @@ func action_error(error_message:String) -> void:
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
+
+func _on_open_market_button_pressed() -> void:
+	$Store_Container.show()
+	$Open_Market_Button.hide()
+	
+func _on_close_button_pressed() -> void:
+	$Store_Container.hide()
+	$Open_Market_Button.show()
