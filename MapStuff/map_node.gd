@@ -7,7 +7,7 @@ var building:Resource
 
 func _ready() -> void:
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
-	$Building.hide() 
+	#$Building.hide() 
 	_randomize_sprites()
 	if get_parent().name != "root":
 		get_parent().update_label.connect(_update_label)
@@ -37,9 +37,9 @@ func add_building(player:String, _type:int) -> void:
 	building.location = int(name)
 	Overseer.player_list[Overseer.selected_player_index].base_list.append(building) #adds building to the base list
 
-	$Building.material.set_shader_parameter("tint_color", color)
-	$Building.material.set_shader_parameter("saturation", 0.4)
-	$Building.show()
+	%Building.material.set_shader_parameter("tint_color", color)
+	%Building.material.set_shader_parameter("saturation", 0.4)
+	%Building.show()
 
 func add_unit(player:String, type:int) -> void:
 	var unique_unit:Resource
@@ -58,13 +58,13 @@ func add_unit(player:String, type:int) -> void:
 	
 	var unit_visual := unit_scene.instantiate()
 	unit_visual.Unit_Data = unique_unit
-	$Units.add_child(unit_visual)
+	%Units.add_child(unit_visual)
 	#print("added child")
 	_reorder_units()
 
 func _reorder_units() -> void:
 	
-	var nodes:Array = $Units.get_children()
+	var nodes:Array = %Units.get_children()
 	var count:int = nodes.size()
 	var min_x:float 
 	var max_x:float
@@ -93,13 +93,6 @@ func _randomize_sprites() -> void:
 	preload("res://Assets/Map_Tiles/Top/node_split_top_3.png"),
 	preload("res://Assets/Map_Tiles/Top/node_split_top_4.png"),
 	]
-	var foliage_array:Array = [
-	preload("res://Assets/Map_Tiles/Foliage/Ferns0.png"),
-	preload("res://Assets/Map_Tiles/Foliage/Ferns0.png"),
-	preload("res://Assets/Map_Tiles/Foliage/Ferns0.png"),
-	preload("res://Assets/Map_Tiles/Foliage/Ferns.png"),
-	preload("res://Assets/Map_Tiles/Foliage/Ferns2.png")
-	]
 	var base_array:Array = [
 	preload("res://Assets/Map_Tiles/Base/node_split_base.png"),
 	preload("res://Assets/Map_Tiles/Base/node_split_base_2.png"),
@@ -110,12 +103,33 @@ func _randomize_sprites() -> void:
 	var random_index:int = randi() % top_array.size()
 	var selected_sprite:Texture= top_array[random_index]
 	$Node_top.texture = selected_sprite
-	random_index = randi() % foliage_array.size()
-	selected_sprite = foliage_array[random_index]
-	$Foliage.texture = selected_sprite
 	random_index = randi() % base_array.size()
 	selected_sprite = base_array[random_index]
 	$Node_Body.texture = selected_sprite
+	
+	var count:int = randi_range(1, 5)   
+	var foliage:PackedScene = preload("res://MapStuff/Map_node/Foliage.tscn")
+	#var center:Vector2 = position
+	for i in range(count):
+		var new_foliage:Node2D = foliage.instantiate()
+		var offset:Vector2 = get_random_point_in_ellipse(0,0,68,30)
+		new_foliage.position = Vector2(0,-10)+offset
+		$Sort.add_child(new_foliage)
+		
+func get_random_point_in_ellipse(cx:int,cy:int,a:int,b:int) -> Vector2:
+	#var rng:RandomNumberGenerator = RandomNumberGenerator.new()
+	var t:float = 2.0 * PI * randf()              # random angle
+	var r:float = sqrt(randf())                   # area-correct radial distribution
+	var x:float = cx + a * r * cos(t)
+	var y:float = cy + b * r * sin(t)
+	return Vector2(x, y)
+
+	
+	
+	
+	
+	
+	
 	
 	
 func remove_selection_circle() -> void:
@@ -142,4 +156,6 @@ func _process(_delta:float) -> void:
 	current_speed  = lerp(current_speed,  target_speed,  lerpspeed)
 	%Selection_Circle.material.set_shader_parameter("radius", current_radius)
 	%Selection_Circle.material.set_shader_parameter("speed", current_speed)
-	
+	var color:Vector3 =  Overseer.players_colors[Overseer.selected_player_index]
+	var color_2:Vector4 = Vector4(color.x,color.y,color.z,0.5)
+	%Selection_Circle.material.set_shader_parameter("color", color_2)

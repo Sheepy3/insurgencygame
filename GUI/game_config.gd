@@ -3,7 +3,7 @@ var map_generator:PackedScene = preload("res://MapStuff/generated_map.tscn")
 var size:int = 1
 func _ready() -> void:
 	show()
-	#_start_map_gen() #hardcoded disabling config menu
+	_start_map_gen() #hardcoded disabling config menu
  
 
 
