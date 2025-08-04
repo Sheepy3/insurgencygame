@@ -40,7 +40,7 @@ shader_parameter/intensity = 0.2
 shader_parameter/saturation = 1.0
 shader_parameter/value = 1.0
 
-[node name="Map_Node" type="Node2D"]
+[node name="Map_Node" type="Node2D" groups=["MapNode"]]
 script = ExtResource("1_8ofst")
 
 [node name="Selection_Circle" type="Sprite2D" parent="."]
