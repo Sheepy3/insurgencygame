@@ -1,5 +1,7 @@
 extends Node
 var testdot:PackedScene = preload("res://MapStuff/Map_Node.tscn")
+var testdot2:PackedScene = preload("res://MapStuff/Map_node/Foliage.tscn")
+
 #@export var s:int
 @export var size:int 
 
@@ -7,6 +9,9 @@ func _ready() -> void:
 	var sum_points:Array
 	var centers := hex_centers(size, 280)  # e.g. N=1 ring, s= center to vertex distance
 	for i in range(centers.size()):
+		var new_dot:Node = testdot2.instantiate()
+		new_dot.position = centers[i]
+		get_parent().add_child(new_dot)
 		var v:Vector2 = centers[i]
 		#var new_hex:Node = testhex.instantiate()
 		#new_hex.position = v
@@ -43,12 +48,12 @@ func _ready() -> void:
 		new_dot.set_owner(get_parent())
 	var the_nodes:Dictionary
 	for key: Node in get_parent().get_children():
-		if key is Node2D and key is not Camera2D and key is not Sprite2D:
+		if key.is_in_group("MapNode"):
 			#var base:Node = find_child("3")
 			#print(base.position.distance_squared_to(key.position))
 			var connections:Array
 			for value:Node in get_parent().get_children():
-				if value is Node2D and value is not Camera2D and value is not Sprite2D:
+				if value.is_in_group("MapNode"):
 					if key.position.distance_squared_to(value.position) < 130000 and key.position.distance_squared_to(value.position) != 0:
 						connections.append(int(value.name))
 			the_nodes[str(key.name)] = connections

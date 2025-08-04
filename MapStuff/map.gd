@@ -14,7 +14,7 @@ func _initialize(size:int) -> void:
 	$UI.show()
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
-		if child is Node2D and child is not Camera2D and child is not Sprite2D:
+		if child.is_in_group("MapNode"):
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
 			for Astars: int in Overseer.player_list.size():
@@ -23,8 +23,9 @@ func _initialize(size:int) -> void:
 			num+=1
 			
 	var generated_paths:Array
+	print(Overseer.The_nodes)
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
-		if child is Node2D and child is not Camera2D and child is not Sprite2D:
+		if child.is_in_group("MapNode"):
 			for value:int in Overseer.The_nodes[child.name]: 
 				var constructed_name:String = child.name+"-"+str(value) #constructs name from node of origin and node it connects to 
 				var reversed_constructed_name:String = str(value)+"-"+child.name
