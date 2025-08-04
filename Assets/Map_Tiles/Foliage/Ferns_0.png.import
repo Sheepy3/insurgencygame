@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxnmdi6fpd6g0"
-path="res://.godot/imported/Intelligence_Text.png-e43b8a51395bec8f5e6f4620b8fcd0d0.ctex"
+uid="uid://2okcojo8otgj"
+path="res://.godot/imported/Ferns_0.png-e61a136c5eff1fc6e5072972d10fb5eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Infastructure/Intelligence_Text.png"
-dest_files=["res://.godot/imported/Intelligence_Text.png-e43b8a51395bec8f5e6f4620b8fcd0d0.ctex"]
+source_file="res://Assets/Map_Tiles/Foliage/Ferns_0.png"
+dest_files=["res://.godot/imported/Ferns_0.png-e61a136c5eff1fc6e5072972d10fb5eb.ctex"]
 
 [params]
 
