@@ -1,16 +1,15 @@
 extends CanvasLayer
 signal The_action(action: String)
+var Store_action: String = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Error_Message.hide()
-	#show()
 	Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.cycle_players()
 	_phase_switch_ui()
-	pass # Replace with function body.
-
+	%Support_store_window.hide()
 
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:
@@ -31,7 +30,7 @@ func _on_influence_button_pressed() -> void:
 func _on_intelligence_network_button_pressed() -> void:
 	The_action.emit("Intelligence") #transmits signal that Intelligence button has been pressed
 	find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
-	
+
 #Activiates whe the "Logistics" button is pressed
 func _on_logistics_network_button_pressed() -> void:
 	The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
@@ -39,11 +38,11 @@ func _on_logistics_network_button_pressed() -> void:
 
 func _on_player_switch_button_pressed() -> void:
 	Overseer.cycle_players()
-	pass # Replace with function body.
-	
+
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
-	
+	update_Player_Info()
+
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
 		0:
@@ -60,9 +59,7 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Collect Resources"
 
 func _on_phase_button_pressed() -> void:
-	
 	Overseer.cycle_phases()
-
 
 func action_error(error_message:String) -> void:
 	$Error_Message.text = error_message
@@ -71,3 +68,54 @@ func action_error(error_message:String) -> void:
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
+
+func _on_open_market_button_pressed() -> void:
+	$Open_Market_Button.hide()
+	%Support_store_window.show()
+
+func _on_buy_button_pressed() -> void:
+	Store_action = "Buy"
+
+func _on_sell_button_pressed() -> void:
+	Store_action = "Sell"
+
+func _on_manpower_button_pressed() -> void:
+	if Store_action == "Buy":
+		Overseer.player_list[Overseer.selected_player_index].Man_power += 1
+		Overseer.player_list[Overseer.selected_player_index].Money -= 5
+		Store_action = ""
+	elif Store_action == "Sell":
+		Overseer.player_list[Overseer.selected_player_index].Man_power -= 1
+		Overseer.player_list[Overseer.selected_player_index].Money += 5
+		Store_action = ""
+	else: 
+		pass
+	update_Player_Info()
+
+func _on_weapons_button_pressed() -> void:
+	if Store_action == "Buy":
+		Overseer.player_list[Overseer.selected_player_index].Weapons += 1
+		Overseer.player_list[Overseer.selected_player_index].Money -= 3
+		Store_action = ""
+	elif Store_action == "Sell":
+		Overseer.player_list[Overseer.selected_player_index].Weapons -= 1
+		Overseer.player_list[Overseer.selected_player_index].Money += 3
+		Store_action = ""
+	else:
+		pass
+	update_Player_Info()
+
+func update_Player_Info() -> void:
+	$Player_Info/HBoxContainer/Guns.text = str(Overseer.player_list[Overseer.selected_player_index].Weapons)
+	$Player_Info/HBoxContainer/Money.text = str(Overseer.player_list[Overseer.selected_player_index].Money)
+	$Player_Info/HBoxContainer/Population.text = str(Overseer.player_list[Overseer.selected_player_index].Man_power)
+
+func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+	%Support_store_window.position = Vector2(975,36)
+
+func _on_support_store_window_close_requested() -> void:
+	%Support_store_window.hide()
+	$Open_Market_Button.show()
+
+func _on_support_store_window_window_input(event: InputEvent) -> void:
+	$Store_bounds.global_position = %Support_store_window.position

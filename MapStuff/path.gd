@@ -38,7 +38,7 @@ func _on_node_path_area_2d_input_event(_viewport: Node, _event: InputEvent, _sha
 func add_intel_network() -> void:
 	%Intelligence_Network.show()
 	%Intelligence_Network.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
-	%Intelligence_Network/Intelligence_Text.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
+	%Intelligence_Text.material.set_shader_parameter("tint_color", Overseer.players_colors[Overseer.selected_player_index])
 	pass
 
 func add_logistics_network() -> void:

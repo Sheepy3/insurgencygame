@@ -41,6 +41,7 @@ func cycle_players() -> void:
 		current_player = player_list[selected_player_index].Player_name
 		change_player.emit()
 
+
 func cycle_phases() -> void:
 	if current_phase < COLLECT:
 		current_phase+=1
