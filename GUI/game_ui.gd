@@ -10,7 +10,6 @@ func _ready() -> void:
 	Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
-	pass # Replace with function body.
 
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:
@@ -111,6 +110,12 @@ func update_Player_Info() -> void:
 	$Player_Info/HBoxContainer/Money.text = str(Overseer.player_list[Overseer.selected_player_index].Money)
 	$Player_Info/HBoxContainer/Population.text = str(Overseer.player_list[Overseer.selected_player_index].Man_power)
 
-func _on_window_close_requested() -> void:
+func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+	%Support_store_window.position = Vector2(975,36)
+
+func _on_support_store_window_close_requested() -> void:
 	%Support_store_window.hide()
 	$Open_Market_Button.show()
+
+func _on_support_store_window_window_input(event: InputEvent) -> void:
+	$Store_bounds.global_position = %Support_store_window.position
