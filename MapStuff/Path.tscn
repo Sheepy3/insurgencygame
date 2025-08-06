@@ -4,10 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://deb74x05nkhkh" path="res://Assets/Path_2.png" id="2_twyoa"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="3_twyoa"]
 [ext_resource type="Texture2D" uid="uid://dsnku4l10cxlf" path="res://Assets/Infastructure/Blank_Network.png" id="4_lw2ce"]
-[ext_resource type="Shader" path="res://Assets/Shaders/Scrolling.gdshader" id="5_pka5v"]
+[ext_resource type="Shader" uid="uid://g4sywj1bk4px" path="res://Assets/Shaders/Scrolling.gdshader" id="5_pka5v"]
 [ext_resource type="Texture2D" uid="uid://dxnmdi6fpd6g0" path="res://Assets/Infastructure/Intelligence_Text.png" id="6_3mjvh"]
 [ext_resource type="Texture2D" uid="uid://cjwe66tmvmwjr" path="res://Assets/Infastructure/Logistics_text.png" id="7_pka5v"]
-[ext_resource type="Shader" path="res://Assets/Shaders/mask.gdshader" id="8_f2bj7"]
+[ext_resource type="Shader" uid="uid://dwn1s3xdbui1p" path="res://Assets/Shaders/mask.gdshader" id="8_f2bj7"]
+
 [ext_resource type="Texture2D" uid="uid://drgvjknpbfisx" path="res://Assets/lightmask.png" id="10_58pqk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nxxog"]

@@ -20,10 +20,12 @@ script = ExtResource("1_x8p7o")
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")
+position = Vector2(0, -32)
 texture = ExtResource("3_rsuyw")
 
 [node name="I_sprite" type="Sprite2D" parent="."]
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")
+position = Vector2(0, -32)
 texture = ExtResource("4_gfa1p")
