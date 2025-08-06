@@ -4,13 +4,22 @@ signal A_node_clicked(Name: String)
 var Has_building: bool = false
 var building:Resource
 @export var node_owner:String
-
+@export var node_RPU: Resource
 func _ready() -> void:
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	#$Building.hide() 
 	_randomize_sprites()
 	if get_parent().name != "root":
 		get_parent().update_label.connect(_update_label)
+	for hexes:Node in get_parent().get_children():
+		if hexes.is_in_group("RPU_Token"):
+			if hexes.position.distance_squared_to(position) < 80000:
+				node_RPU.RPU += hexes.rpu.RPU
+				node_RPU.Population += hexes.rpu.Population
+			else:
+				pass
+				#print(hexes.position.distance_squared_to(position))
+		
 
 func _update_label()-> void:
 	$Label.text = name
@@ -19,7 +28,7 @@ func _update_label()-> void:
 func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
-		get_parent().find_child("Dynamic_Clicked").text = "Node " + $Label.text #Dispalys 
+		print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
 		A_node_clicked.emit(name)
 
 var unit_list:Array 

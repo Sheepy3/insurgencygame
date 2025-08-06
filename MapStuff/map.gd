@@ -4,7 +4,7 @@ var path:PackedScene = preload("res://MapStuff/Path.tscn")
 var Last_action: String = ""
 enum{FIGHTER,INFLUENCE}
 enum{BASE}
-
+var Current_node: Node
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -23,7 +23,6 @@ func _initialize(size:int) -> void:
 			num+=1
 			
 	var generated_paths:Array
-	print(Overseer.The_nodes)
 	for child: Node in get_children(): #STAGE 2: GENERATING PATHS
 		if child.is_in_group("MapNode"):
 			for value:int in Overseer.The_nodes[child.name]: 
@@ -57,13 +56,18 @@ func _initialize(size:int) -> void:
 func Update_action(action: String = "") ->void:
 	Last_action = action
 
-var Current_node: Node
-
 func Check_node_action(Name: String) ->void:
+	
+	
 	if Current_node:
 		Current_node.remove_selection_circle()
 	Current_node = find_child(Name)
 	Current_node.add_selection_circle()
+	
+	$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
+	$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
+	$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
+	
 	if Last_action == "Base":
 		#currently you can place bases on top of other bases.
 		if Current_node.Has_building:
