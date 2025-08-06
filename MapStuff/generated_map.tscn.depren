@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://be27vkuxot7vb"]
+
+[ext_resource type="Script" uid="uid://ccweafq0vrqot" path="res://MapStuff/generated_map.gd" id="1_ylfxa"]
+
+[node name="Map_Generator" type="Node"]
+script = ExtResource("1_ylfxa")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.2, 0.2)

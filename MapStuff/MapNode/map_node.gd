@@ -99,7 +99,6 @@ func _randomize_sprites() -> void:
 	preload("res://Assets/Map_Tiles/Base/node_split_base_3.png"),
 	preload("res://Assets/Map_Tiles/Base/node_split_base_4.png")
 	]
-	
 	var random_index:int = randi() % top_array.size()
 	var selected_sprite:Texture= top_array[random_index]
 	$Node_top.texture = selected_sprite
@@ -108,7 +107,7 @@ func _randomize_sprites() -> void:
 	$Node_Body.texture = selected_sprite
 	
 	var count:int = randi_range(1, 5)   
-	var foliage:PackedScene = preload("res://MapStuff/Map_node/Foliage.tscn")
+	var foliage:PackedScene = preload("res://MapStuff/MapNode/Foliage.tscn")
 	#var center:Vector2 = position
 	for i in range(count):
 		var new_foliage:Node2D = foliage.instantiate()

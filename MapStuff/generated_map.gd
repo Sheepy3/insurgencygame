@@ -1,7 +1,6 @@
 extends Node
-var testdot:PackedScene = preload("res://MapStuff/Map_Node.tscn")
-var testdot2:PackedScene = preload("res://MapStuff/Map_node/Foliage.tscn")
-
+var testdot:PackedScene = preload("res://MapStuff/MapNode/Map_Node.tscn")
+var testdot2:PackedScene = preload("res://MapStuff/RPU_token.tscn")
 #@export var s:int
 @export var size:int 
 
