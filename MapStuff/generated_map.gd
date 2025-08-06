@@ -8,9 +8,10 @@ func _ready() -> void:
 	var sum_points:Array
 	var centers := hex_centers(size, 280)  # e.g. N=1 ring, s= center to vertex distance
 	for i in range(centers.size()):
-		var new_dot:Node = testdot2.instantiate()
-		new_dot.position = centers[i]
-		get_parent().add_child(new_dot)
+		var new_rpu_token:Node = testdot2.instantiate()
+		new_rpu_token.position = centers[i]
+		new_rpu_token.name = "RPU_"+str(i)
+		get_parent().add_child(new_rpu_token)
 		var v:Vector2 = centers[i]
 		#var new_hex:Node = testhex.instantiate()
 		#new_hex.position = v
@@ -48,6 +49,7 @@ func _ready() -> void:
 	var the_nodes:Dictionary
 	for key: Node in get_parent().get_children():
 		if key.is_in_group("MapNode"):
+			#print(key.name)
 			#var base:Node = find_child("3")
 			#print(base.position.distance_squared_to(key.position))
 			var connections:Array

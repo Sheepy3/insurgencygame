@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://cxejesper0f6a"]
+[gd_scene load_steps=16 format=3 uid="uid://cxejesper0f6a"]
 
 [ext_resource type="Script" uid="uid://cbv2liai04byg" path="res://MapStuff/MapNode/map_node.gd" id="1_fy51g"]
+[ext_resource type="Script" uid="uid://ohc2vm1xpygt" path="res://Resources/RPU.gd" id="2_37fhs"]
 [ext_resource type="Shader" uid="uid://b1071omvr7wad" path="res://Assets/Shaders/Selection_Ring.gdshader" id="2_e7yn8"]
 [ext_resource type="Texture2D" uid="uid://cx7js6akki8pu" path="res://Assets/Map_Tiles/Selection_Ring_Base.png" id="3_b6hur"]
 [ext_resource type="Texture2D" uid="uid://1cn52mej0hu" path="res://Assets/node_new_shadow.png" id="4_awa7p"]
@@ -9,6 +10,13 @@
 [ext_resource type="FontFile" uid="uid://jeu6ag8vn6v7" path="res://GUI/Bitrimus.ttf" id="7_v784y"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="8_ilofq"]
 [ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="9_h2trs"]
+
+[sub_resource type="Resource" id="Resource_s3ctu"]
+resource_local_to_scene = true
+script = ExtResource("2_37fhs")
+Population = 0
+RPU = 0
+metadata/_custom_type_script = "uid://ohc2vm1xpygt"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lhgp5"]
 resource_local_to_scene = true
@@ -42,6 +50,7 @@ shader_parameter/value = 1.0
 
 [node name="Map_Node" type="Node2D" groups=["MapNode"]]
 script = ExtResource("1_fy51g")
+node_RPU = SubResource("Resource_s3ctu")
 
 [node name="Selection_Circle" type="Sprite2D" parent="."]
 unique_name_in_owner = true

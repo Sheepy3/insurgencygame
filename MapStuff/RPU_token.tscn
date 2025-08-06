@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://6737bs0lavon" path="res://MapStuff/rpu_token.gd" id="2_2djxv"]
 [ext_resource type="Resource" uid="uid://c6fjgpu1d3p5b" path="res://Resources/Preset/RPU_Default.tres" id="3_qtkgu"]
 
-[node name="Sprite2D" type="Sprite2D"]
+[node name="Sprite2D" type="Sprite2D" groups=["RPU_Token"]]
 texture = ExtResource("1_lyvsd")
 script = ExtResource("2_2djxv")
 rpu = ExtResource("3_qtkgu")
