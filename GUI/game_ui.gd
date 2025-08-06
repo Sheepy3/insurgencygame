@@ -1,15 +1,15 @@
 extends CanvasLayer
 signal The_action(action: String)
+var Store_action: String = ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Error_Message.hide()
-	#show()
 	Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.cycle_players()
 	_phase_switch_ui()
-	$Store_Container.hide()
+	%Support_store_window.hide()
 	pass # Replace with function body.
 
 #Activiates whe the "Place Base" button is pressed
@@ -39,8 +39,7 @@ func _on_logistics_network_button_pressed() -> void:
 
 func _on_player_switch_button_pressed() -> void:
 	Overseer.cycle_players()
-	pass # Replace with function body.
-	
+
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
 	update_Player_Info()
@@ -72,30 +71,46 @@ func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
 
 func _on_open_market_button_pressed() -> void:
-	$Store_Container.show()
 	$Open_Market_Button.hide()
-
-func _on_close_button_pressed() -> void:
-	$Store_Container.hide()
-	$Open_Market_Button.show()
+	%Support_store_window.show()
 
 func _on_buy_button_pressed() -> void:
-	print("I BUY BUTTON PROPERLY")
-	pass # Replace with function body.
+	Store_action = "Buy"
 
 func _on_sell_button_pressed() -> void:
-	print("I SELL BUTTON PROPERLY")
-	pass # Replace with function body.
+	Store_action = "Sell"
 
 func _on_manpower_button_pressed() -> void:
-	print("I MANPOWER BUTTON PROPERLY")
-	pass # Replace with function body.
+	if Store_action == "Buy":
+		Overseer.player_list[Overseer.selected_player_index].Man_power += 1
+		Overseer.player_list[Overseer.selected_player_index].Money -= 5
+		Store_action = ""
+	elif Store_action == "Sell":
+		Overseer.player_list[Overseer.selected_player_index].Man_power -= 1
+		Overseer.player_list[Overseer.selected_player_index].Money += 5
+		Store_action = ""
+	else: 
+		pass
+	update_Player_Info()
 
 func _on_weapons_button_pressed() -> void:
-	print("I WEAPONS BUTTON PROPERLY")
-	pass # Replace with function body.
+	if Store_action == "Buy":
+		Overseer.player_list[Overseer.selected_player_index].Weapons += 1
+		Overseer.player_list[Overseer.selected_player_index].Money -= 3
+		Store_action = ""
+	elif Store_action == "Sell":
+		Overseer.player_list[Overseer.selected_player_index].Weapons -= 1
+		Overseer.player_list[Overseer.selected_player_index].Money += 3
+		Store_action = ""
+	else:
+		pass
+	update_Player_Info()
 
 func update_Player_Info() -> void:
 	$Player_Info/HBoxContainer/Guns.text = str(Overseer.player_list[Overseer.selected_player_index].Weapons)
 	$Player_Info/HBoxContainer/Money.text = str(Overseer.player_list[Overseer.selected_player_index].Money)
 	$Player_Info/HBoxContainer/Population.text = str(Overseer.player_list[Overseer.selected_player_index].Man_power)
+
+func _on_window_close_requested() -> void:
+	%Support_store_window.hide()
+	$Open_Market_Button.show()
