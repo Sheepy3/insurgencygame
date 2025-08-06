@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bqfwal5a0mu2o"]
 
-[ext_resource type="Script" uid="uid://hwpk3c1nxtmh" path="res://MapStuff/Map_node/foliage.gd" id="1_pr60g"]
+[ext_resource type="Script" uid="uid://hwpk3c1nxtmh" path="res://MapStuff/MapNode/foliage.gd" id="1_pr60g"]
 [ext_resource type="Texture2D" uid="uid://bpisuh5t86ram" path="res://Assets/Map_Tiles/Foliage/Ferns_2.png" id="2_txcib"]
 
 [node name="Node2D" type="Node2D"]

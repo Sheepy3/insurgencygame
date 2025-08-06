@@ -1,6 +1,6 @@
 extends CanvasLayer
 var map_generator:PackedScene = preload("res://MapStuff/generated_map.tscn")
-var size:int = 1
+var size:int = 2
 func _ready() -> void:
 	show()
 	_start_map_gen() #hardcoded disabling config menu

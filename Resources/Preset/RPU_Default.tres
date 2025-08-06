@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="RPU" load_steps=2 format=3 uid="uid://c6fjgpu1d3p5b"]
+
+[ext_resource type="Script" uid="uid://ohc2vm1xpygt" path="res://Resources/RPU.gd" id="1_l0txx"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_l0txx")
+population = 0
+RPU = 0
+metadata/_custom_type_script = "uid://ohc2vm1xpygt"
