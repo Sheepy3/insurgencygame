@@ -10,6 +10,9 @@ func _ready() -> void:
 	Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
+	for Players: Resource in Overseer.player_list:
+		Players.Money += 20
+		Players.Man_power += 10
 
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:
@@ -80,29 +83,32 @@ func _on_sell_button_pressed() -> void:
 	Store_action = "Sell"
 
 func _on_manpower_button_pressed() -> void:
-	if Store_action == "Buy":
-		Overseer.player_list[Overseer.selected_player_index].Man_power += 1
-		Overseer.player_list[Overseer.selected_player_index].Money -= 5
+	var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
+	if Store_action == "Buy" and Player_resource.Money >= 5:
+		Player_resource.Man_power += 1
+		Player_resource.Money -= 5
 		Store_action = ""
-	elif Store_action == "Sell":
-		Overseer.player_list[Overseer.selected_player_index].Man_power -= 1
-		Overseer.player_list[Overseer.selected_player_index].Money += 5
+	elif Store_action == "Sell" and Player_resource.Man_power >= 1:
+		Player_resource.Man_power -= 1
+		Player_resource.Money += 5
 		Store_action = ""
 	else: 
-		pass
+		action_error("You do not have enough resources to complete this transaction!")
 	update_Player_Info()
 
 func _on_weapons_button_pressed() -> void:
-	if Store_action == "Buy":
-		Overseer.player_list[Overseer.selected_player_index].Weapons += 1
-		Overseer.player_list[Overseer.selected_player_index].Money -= 3
+	var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
+	if Store_action == "Buy" and Player_resource.Money >= 3:
+		print("moneyt")
+		Player_resource.Weapons += 1
+		Player_resource.Money -= 3
 		Store_action = ""
-	elif Store_action == "Sell":
-		Overseer.player_list[Overseer.selected_player_index].Weapons -= 1
-		Overseer.player_list[Overseer.selected_player_index].Money += 3
+	elif Store_action == "Sell" and Player_resource.Weapons >= 1:
+		Player_resource.Weapons -= 1
+		Player_resource.Money += 3
 		Store_action = ""
 	else:
-		pass
+		action_error("You do not have enough resources to complete this transaction!")
 	update_Player_Info()
 
 func update_Player_Info() -> void:

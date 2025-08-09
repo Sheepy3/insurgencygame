@@ -69,7 +69,7 @@ func Check_node_action(Name: String) ->void:
 			$UI.action_error("there is already a base on this node!")
 		elif Overseer.player_list[Overseer.selected_player_index].base_list.size() > 0:
 			if Base_possible(Current_node.name) == true:
-				print("You have placed a base on node " + Name)
+				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].Player_name, BASE)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
@@ -77,7 +77,7 @@ func Check_node_action(Name: String) ->void:
 			else:
 				$UI.action_error("You do not have the conditions to place a Base!")
 		elif Overseer.player_list[Overseer.selected_player_index].base_list.size() == 0:
-			print("You have placed a base on node " + Name)
+			#print("You have placed a base on node " + Name)
 			Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].Player_name, BASE)
 			Current_node.Has_building = true
 			find_child("Dynamic_Action").text = "None"
@@ -87,14 +87,14 @@ func Check_node_action(Name: String) ->void:
 		if not Current_node.Has_building:
 			$UI.action_error("Fighters must be placed at your own base")
 		elif  Current_node.node_owner == Overseer.current_player:
-			print("You have placed a Fighter at a base on node " + Name)
+			#print("You have placed a Fighter at a base on node " + Name)
 			Current_node.add_unit(Overseer.current_player,FIGHTER)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
 
 	if Last_action == "Influence":
 		if Influence_possible(Current_node.name) == true:
-			print("You have placed a Influence on node " + Name)
+			#print("You have placed a Influence on node " + Name)
 			Current_node.add_unit("current_player",INFLUENCE)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
@@ -108,7 +108,7 @@ func Check_path_action(Name: String) -> void:
 		if Current_path.Has_intel:
 			$UI.action_error("there is already an Intelligence network on this path!")
 		elif Intell_possible(Current_path.name) == true:
-			print("You have placed a Intelligence network on path " + Name)
+			#print("You have placed a Intelligence network on path " + Name)
 			Current_path.add_intel_network()
 			find_child("Dynamic_Action").text = "None"
 			Current_path.Has_intel = true
@@ -121,7 +121,7 @@ func Check_path_action(Name: String) -> void:
 		if Current_path.Has_logs:
 			$UI.action_error("there is already an Logistics network on this path!")
 		elif Logs_possible(Current_path.name) == true:
-			print("You have placed a Logistics Network on path " + Name)
+			#print("You have placed a Logistics Network on path " + Name)
 			Current_path.add_logistics_network()
 			find_child("Dynamic_Action").text = "None"
 			Current_path.Has_logs = true
