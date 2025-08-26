@@ -216,7 +216,7 @@ layout_mode = 2
 [node name="Pop_Label" type="Label" parent="Node Info/VBoxContainer/HBoxContainer4"]
 texture_filter = 1
 layout_mode = 2
-text = " RPU:"
+text = " Population:"
 label_settings = ExtResource("2_3qqlp")
 
 [node name="Dynamic_Pop" type="Label" parent="Node Info/VBoxContainer/HBoxContainer4"]
