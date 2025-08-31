@@ -5,7 +5,6 @@ signal A_path_clicked(Name: String)
 @export var Has_logs: bool = false 
 @export var networks:Array
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Node_Path_Area2D.set_pickable(true) #sets-up the clickable area for the path nodes

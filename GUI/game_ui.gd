@@ -10,6 +10,7 @@ func _ready() -> void:
 	Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
+	#Need to remove below later
 	for Players: Resource in Overseer.player_list:
 		Players.Money += 20
 		Players.Man_power += 10
@@ -53,13 +54,12 @@ func _phase_switch_ui() -> void:
 		1:
 			$Current_Phase.text = "Purchase Units & Infrastructure"
 		2:
-			$Current_Phase.text = "Place Infrastructure"
+			$Current_Phase.text = "Place Military Units & Infrastructure"
 		3:
 			$Current_Phase.text = "Move Units"
 		4:
-			$Current_Phase.text = "Place Military Units & Infrastructure"
-		5:
 			$Current_Phase.text = "Collect Resources"
+			Overseer.Phase_cycle += 1
 
 func _on_phase_button_pressed() -> void:
 	Overseer.cycle_phases()
