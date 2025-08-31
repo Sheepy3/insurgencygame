@@ -99,7 +99,6 @@ func _on_manpower_button_pressed() -> void:
 func _on_weapons_button_pressed() -> void:
 	var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
 	if Store_action == "Buy" and Player_resource.Money >= 3:
-		print("moneyt")
 		Player_resource.Weapons += 1
 		Player_resource.Money -= 3
 		Store_action = ""
