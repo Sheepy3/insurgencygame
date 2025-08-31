@@ -9,12 +9,13 @@ var player_list:Array
 var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
 var selected_player_index:int = -1
 var current_player:String
-var Logistics_map:AStar2D = AStar2D.new()
-var Intelligence_map:AStar2D = AStar2D.new()
 var Logistics_array:Array 
 var Intelligence_array:Array
+var The_nodes:Dictionary
+var Phase_cycle:int = 0
+var Desired_cycle: int = 3
 
-enum {MAINTENENCE, PURCHASE, PLACE_INFRA, UNIT_MOVEMENT,PLACE_MILITARY, COLLECT}
+enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
 var current_phase:int = MAINTENENCE
 
 signal change_player
@@ -41,17 +42,17 @@ func cycle_players() -> void:
 		current_player = player_list[selected_player_index].Player_name
 		change_player.emit()
 
-
 func cycle_phases() -> void:
-	if current_phase < COLLECT:
-		current_phase+=1
+	if Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
+		current_phase = 0
 		change_phase.emit()
-	else:
-		current_phase = MAINTENENCE
+	elif current_phase == COLLECT and Phase_cycle % Desired_cycle != 0:
+		current_phase = 1
+		change_phase.emit()
+	elif current_phase < COLLECT:
+		current_phase+=1
 		change_phase.emit()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	populate_player_list(2)
-
-var The_nodes:Dictionary
