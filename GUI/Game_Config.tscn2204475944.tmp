@@ -1,0 +1,142 @@
+[gd_scene load_steps=5 format=3 uid="uid://qt1ubvjmkebw"]
+
+[ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="1_8cj6o"]
+[ext_resource type="Script" uid="uid://b28exbrfutx15" path="res://GUI/game_config.gd" id="1_rixy8"]
+[ext_resource type="Script" uid="uid://cws7jorypdutt" path="res://HelperScripts/Networking/multiplayer_client.gd" id="2_ers11"]
+[ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="2_qer0v"]
+
+[node name="GameConfig" type="CanvasLayer"]
+script = ExtResource("1_rixy8")
+
+[node name="Client" type="Node" parent="."]
+script = ExtResource("2_ers11")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -263.0
+offset_top = -158.0
+offset_right = 337.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel"]
+layout_mode = 0
+offset_right = 90.0
+offset_bottom = 22.3333
+text = " Game setup"
+label_settings = ExtResource("1_8cj6o")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -40.5
+offset_right = 48.0
+offset_bottom = 40.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Map Size"
+label_settings = ExtResource("1_8cj6o")
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_qer0v")
+item_count = 4
+popup/item_0/text = "Tiny (2)"
+popup/item_0/id = 0
+popup/item_1/text = "Small (2-3)"
+popup/item_1/id = 1
+popup/item_2/text = "Normal (4)"
+popup/item_2/id = 2
+popup/item_3/text = "Large (6)"
+popup/item_3/id = 3
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = ExtResource("2_qer0v")
+text = "Start Game"
+
+[node name="Networking_Panel" type="Panel" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 78.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="IP" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ENTER IP"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="Room" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Enter Room Code"
+
+[node name="MenuBar" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+item_count = 6
+popup/item_0/text = "Red"
+popup/item_0/id = 0
+popup/item_1/text = "Yellow"
+popup/item_1/id = 1
+popup/item_2/text = "Orange"
+popup/item_2/id = 3
+popup/item_3/text = "Green"
+popup/item_3/id = 2
+popup/item_4/text = "Blue"
+popup/item_4/id = 3
+popup/item_5/text = "Purple"
+popup/item_5/id = 4
+
+[node name="Player_Panel" type="Panel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_join_button_pressed"]
