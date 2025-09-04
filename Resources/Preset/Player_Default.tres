@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Player" load_steps=2 format=3 uid="uid://sunbxupwsbfn"]
 
-[ext_resource type="Script" uid="uid://o5p3edbfro4t" path="res://Resources/Player.gd" id="1_ar0c6"]
+[ext_resource type="Script" uid="uid://cm8qyf2dudsns" path="res://Resources/Player.gd" id="1_ar0c6"]
 
 [resource]
 script = ExtResource("1_ar0c6")
@@ -8,8 +8,7 @@ Player_ID = 0
 Player_name = "Player"
 color = Vector3(0, 0, 0)
 base_list = []
-Wepons = 0
+Weapons = 0
 Money = 0
 Man_power = 0
 Victory_points = 0
-metadata/_custom_type_script = "uid://o5p3edbfro4t"

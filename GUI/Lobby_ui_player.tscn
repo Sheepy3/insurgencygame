@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bvt5epggbaljn"]
+
+[ext_resource type="Script" uid="uid://bo5gcx1vh7y2s" path="res://GUI/lobby_ui_player.gd" id="1_hgb1o"]
+[ext_resource type="Resource" uid="uid://sunbxupwsbfn" path="res://Resources/Preset/Player_Default.tres" id="2_k0g1e"]
+[ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_ogna1"]
+
+[node name="lobby_player" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hgb1o")
+player_resource = ExtResource("2_k0g1e")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 167.0
+offset_bottom = 26.0
+
+[node name="Label" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "Player name"
+label_settings = ExtResource("2_ogna1")
