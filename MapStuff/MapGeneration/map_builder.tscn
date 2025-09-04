@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2snlsfd0fnws"]
+
+[ext_resource type="Script" uid="uid://gsvky57gsep5" path="res://MapStuff/MapGeneration/map_builder.gd" id="1_drll6"]
+
+[node name="MapBuilder" type="Node"]
+script = ExtResource("1_drll6")
