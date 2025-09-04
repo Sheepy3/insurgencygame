@@ -9,7 +9,7 @@ var Current_node: Node
 func _ready() -> void:
 	pass
 
-func _initialize(size:int) -> void:
+func initialize(size:int) -> void:
 	$UI.The_action.connect(Update_action)
 	$UI.show()
 	var num: int = 1 #iterator for name

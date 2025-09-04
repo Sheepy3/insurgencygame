@@ -1,17 +1,18 @@
 extends Node
-var testdot:PackedScene = preload("res://MapStuff/MapNode/Map_Node.tscn")
-var testdot2:PackedScene = preload("res://MapStuff/RPU_token.tscn")
+
 #@export var s:int
 @export var size:int 
 
 func _ready() -> void:
+	
+	var node_data:Dictionary
+	var hex_data:Dictionary
+	
 	var sum_points:Array
 	var centers := hex_centers(size, 280)  # e.g. N=1 ring, s= center to vertex distance
 	for i in range(centers.size()):
-		var new_rpu_token:Node = testdot2.instantiate()
-		new_rpu_token.position = centers[i]
-		new_rpu_token.name = "RPU_"+str(i)
-		get_parent().add_child(new_rpu_token)
+		
+		hex_data[str(i)] = centers[i]
 		var v:Vector2 = centers[i]
 		#var new_hex:Node = testhex.instantiate()
 		#new_hex.position = v
@@ -39,27 +40,15 @@ func _ready() -> void:
 			return false
 		return a.x < b.x        # same row → left-to-right
 	)
+	
+	
 	for o in range(sum_points_pruned.size()):
-		var new_dot:Node = testdot.instantiate()
-		new_dot.name = str((o+1))
-		new_dot.position = sum_points_pruned[o]
-		new_dot.find_child("Label").text = str(o+1)
-		get_parent().add_child(new_dot)
-		new_dot.set_owner(get_parent())
-	var the_nodes:Dictionary
-	for key: Node in get_parent().get_children():
-		if key.is_in_group("MapNode"):
-			#print(key.name)
-			#var base:Node = find_child("3")
-			#print(base.position.distance_squared_to(key.position))
-			var connections:Array
-			for value:Node in get_parent().get_children():
-				if value.is_in_group("MapNode"):
-					if key.position.distance_squared_to(value.position) < 130000 and key.position.distance_squared_to(value.position) != 0:
-						connections.append(int(value.name))
-			the_nodes[str(key.name)] = connections
-	Overseer.The_nodes = the_nodes
-	get_parent()._initialize(size)
+		node_data[str((o+1))] = sum_points_pruned[o]
+
+	print(hex_data)
+	print(node_data)
+	get_parent().find_child("MapBuilder").build_map(node_data,hex_data,size)
+	#get_parent()._initialize(size)
 
 
 #generates virtual hexagons 

@@ -1,5 +1,5 @@
 extends CanvasLayer
-var map_generator:PackedScene = preload("res://MapStuff/generated_map.tscn")
+var map_generator:PackedScene = preload("res://MapStuff/MapGeneration/map_generator.tscn")
 var size:int = 2
 @onready var client:Node = $Client
 
