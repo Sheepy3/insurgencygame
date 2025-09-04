@@ -43,7 +43,6 @@ func _ready() -> void:
 
 #generates virtual hexagons 
 func hex_centers(n: int, s: float) -> Array:
-	#var s:float = 2.0 * R / sqrt(3.0) 
 	var coords: Array = []
 	# Loop axial coords q,r_axial such that distance <= n
 	for q in range(-n, n + 1):
@@ -58,9 +57,7 @@ func hex_centers(n: int, s: float) -> Array:
 
 func vertices(origin:Vector2, s:int) -> Array:
 	var h:float = s*sqrt(3) / 2
-	#print(a)
 	var vertices:Array = []
-	
 	vertices.append(origin+Vector2((-s/2),h))
 	vertices.append(origin+Vector2((s/2),h))
 	vertices.append(origin+Vector2(s,0))
