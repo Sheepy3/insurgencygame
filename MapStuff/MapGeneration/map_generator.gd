@@ -1,32 +1,27 @@
 extends Node
 
-#@export var s:int
 @export var size:int 
 
 func _ready() -> void:
 	
 	var node_data:Dictionary
-	var hex_data:Dictionary
-	
+	var hex_data:Dictionary	
 	var sum_points:Array
+	var sum_points_pruned:Array
+	
 	var centers := hex_centers(size, 280)  # e.g. N=1 ring, s= center to vertex distance
+	
 	for i in range(centers.size()):
-		
 		hex_data[str(i)] = centers[i]
 		var v:Vector2 = centers[i]
-		#var new_hex:Node = testhex.instantiate()
-		#new_hex.position = v
-		#add_child(new_hex)
 		var points := vertices(v,280)
 		sum_points.append_array(points)
 		
-	var sum_points_pruned:Array
 	for point:Vector2 in sum_points:
 		var V:Vector2 = Vector2(
 				round(point.x), # converts all x coordinates to integers so they aren't weird anymore
 				round(point.y) # this removes error in the y-axis by resetting the y point to an integer and then re-multiplying by h.
 			)
-		
 		var unique:bool = true
 		for q:Vector2 in sum_points_pruned:
 			if V in sum_points_pruned:
@@ -41,15 +36,10 @@ func _ready() -> void:
 		return a.x < b.x        # same row → left-to-right
 	)
 	
-	
 	for o in range(sum_points_pruned.size()):
 		node_data[str((o+1))] = sum_points_pruned[o]
-
-	print(hex_data)
-	print(node_data)
+		
 	get_parent().find_child("MapBuilder").build_map(node_data,hex_data,size)
-	#get_parent()._initialize(size)
-
 
 #generates virtual hexagons 
 func hex_centers(n: int, s: float) -> Array:
