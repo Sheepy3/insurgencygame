@@ -1,4 +1,4 @@
-extends Control
+extends PanelContainer
 
 @export var player_resource:Player
 
@@ -16,4 +16,7 @@ func _update_color() -> void:
 	print(colorvector.x)
 	var color:Color = Color(colorvector.x,colorvector.y,colorvector.z,1)
 	
-	$PanelContainer/Label.label_settings.font_color = color
+	$Label.label_settings.font_color = color
+
+func _update_text(text:String) -> void:
+	$Label.text = text
