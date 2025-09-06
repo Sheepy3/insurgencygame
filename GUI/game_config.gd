@@ -32,3 +32,4 @@ func _on_join_button_pressed() -> void:
 
 func _lobby_joined(lobby:String) -> void:
 	print(lobby)
+	%Room_Code.text = lobby
