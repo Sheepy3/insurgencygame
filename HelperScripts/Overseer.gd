@@ -21,6 +21,7 @@ var current_phase:int = MAINTENENCE
 
 signal change_player
 signal change_phase
+signal player_resources_updated
 
 func populate_player_list(Game_Size:int)-> void:
 	for x:int in range(Game_Size):
@@ -67,6 +68,7 @@ func Resources_to_rpc() -> void:
 		for Players:Resource in player_list:
 			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points]
 		Rpc_to_resources.rpc(Player_rpc_info)
+		player_resources_updated.emit()
 
 @rpc("authority","call_remote")
 func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
@@ -83,4 +85,5 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		Player_resource.Man_power = Values[6]
 		Player_resource.Man_power = Values[7]
 		player_list.append(Player_resource)
+		player_resources_updated.emit()
 	print(str(multiplayer.get_unique_id()) + str(player_list))
