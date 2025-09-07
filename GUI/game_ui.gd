@@ -7,7 +7,7 @@ func _ready() -> void:
 	$Error_Message.hide()
 	Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
-	Overseer.cycle_players()
+	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
 	#Need to remove below later

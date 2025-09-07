@@ -13,7 +13,8 @@ var Logistics_array:Array
 var Intelligence_array:Array
 var The_nodes:Dictionary
 var Phase_cycle:int = 0
-var Desired_cycle: int = 3
+var Desired_cycle:int = 3
+
 
 enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
 var current_phase:int = MAINTENENCE
@@ -55,4 +56,31 @@ func cycle_phases() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	populate_player_list(2)
+	pass
+	#populate_player_list(2)
+	#Pull_player_info()
+
+@rpc("any_peer","call_local")
+func Resources_to_rpc() -> void:
+	var Player_rpc_info:Dictionary
+	if multiplayer.is_server():
+		for Players:Resource in player_list:
+			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points]
+		Rpc_to_resources.rpc(Player_rpc_info)
+
+@rpc("authority","call_remote")
+func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
+	player_list = []
+	for Keys:String in Player_rpc_info.keys():
+		var Player_resource:Resource = Player.new()
+		var Values:Array = Player_rpc_info[Keys]
+		Player_resource.Player_ID = Values[0]
+		Player_resource.Player_name = Values[1]
+		Player_resource.color = Values[2]
+		Player_resource.base_list = Values[3]
+		Player_resource.Weapons = Values[4]
+		Player_resource.Money = Values[5]
+		Player_resource.Man_power = Values[6]
+		Player_resource.Man_power = Values[7]
+		player_list.append(Player_resource)
+	print(str(multiplayer.get_unique_id()) + str(player_list))
