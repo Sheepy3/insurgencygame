@@ -116,7 +116,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Enter Room Code"
 
-[node name="MenuBar" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Color_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 item_count = 6
@@ -125,13 +126,13 @@ popup/item_0/id = 0
 popup/item_1/text = "Yellow"
 popup/item_1/id = 1
 popup/item_2/text = "Orange"
-popup/item_2/id = 3
+popup/item_2/id = 2
 popup/item_3/text = "Green"
-popup/item_3/id = 2
+popup/item_3/id = 3
 popup/item_4/text = "Blue"
-popup/item_4/id = 3
+popup/item_4/id = 4
 popup/item_5/text = "Purple"
-popup/item_5/id = 4
+popup/item_5/id = 5
 
 [node name="Roomcode" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
 unique_name_in_owner = true
@@ -151,3 +152,4 @@ layout_mode = 2
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer/Button" to="." method="_on_join_button_pressed"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Color_select" to="." method="_on_color_select_item_selected"]
