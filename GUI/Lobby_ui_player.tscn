@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvt5epggbaljn"]
+[gd_scene load_steps=4 format=3 uid="uid://bvt5epggbaljn"]
 
 [ext_resource type="Script" uid="uid://bo5gcx1vh7y2s" path="res://GUI/lobby_ui_player.gd" id="1_hgb1o"]
-[ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_ogna1"]
+[ext_resource type="FontFile" uid="uid://jeu6ag8vn6v7" path="res://GUI/Bitrimus.ttf" id="2_ogna1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ogna1"]
+resource_local_to_scene = true
+font = ExtResource("2_ogna1")
+font_size = 24
+outline_size = 9
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Lobby_UI_Player" type="PanelContainer"]
 offset_right = 167.0
@@ -11,4 +18,4 @@ script = ExtResource("1_hgb1o")
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
 text = "Player name"
-label_settings = ExtResource("2_ogna1")
+label_settings = SubResource("LabelSettings_ogna1")

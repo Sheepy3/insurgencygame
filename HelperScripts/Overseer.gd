@@ -86,4 +86,3 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		Player_resource.Man_power = Values[7]
 		player_list.append(Player_resource)
 		player_resources_updated.emit()
-	print(str(multiplayer.get_unique_id()) + str(player_list))

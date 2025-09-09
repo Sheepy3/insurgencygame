@@ -4,11 +4,11 @@ extends PanelContainer
 
 
 func _ready() -> void:
-	pass
-	
+	$Label.label_settings.duplicate()
+
 func _update_player_resource() -> void:
 	pass
-	
+
 func update_color(colorvector:Vector3) -> void:
 	#var colorvector:Vector3 = player_resource.color
 	#print(colorvector.x)
@@ -16,5 +16,4 @@ func update_color(colorvector:Vector3) -> void:
 	$Label.label_settings.font_color = color
 
 func update_text(text:String) -> void:
-	$Label.text = text
-	
+	$Label.text = " "+text
