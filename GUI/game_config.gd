@@ -10,6 +10,8 @@ func _ready() -> void:
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
 	show()
+	$Error_Message.hide()
+	%Color_select.disabled = true
 	#_start_map_gen() #hardcoded disabling config menu
  
 func _on_button_pressed() -> void:
@@ -34,6 +36,7 @@ func _lobby_joined(lobby:String) -> void:
 	%Roomcode.text = lobby
 	Add_player_resource(1)
 
+
 func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
 		var Player_resource:Resource = Player.new()
@@ -50,6 +53,7 @@ func Remove_player_resource(ID:int) -> void:
 				Overseer.Resources_to_rpc()
 
 func _render_players() -> void:
+	%Color_select.disabled = false
 	for existing_child:Node in %Player_list_container.get_children():
 		%Player_list_container.remove_child(existing_child)
 		existing_child.queue_free()
@@ -86,6 +90,23 @@ func Update_player_color(ID:int,Color_ID:int) -> void:
 				for Sub_player:Resource in Overseer.player_list:
 					if Sub_player.color == Selected_color:
 						picked = true
+						color_pick_failed.rpc(ID)
 				if picked == false:
 					player.color = Selected_color
 					Overseer.Resources_to_rpc()
+
+@rpc("any_peer","call_local")
+func color_pick_failed(ID:int) -> void:
+	if multiplayer.get_unique_id() == ID:
+		action_error("this color has been selected!")
+		%Color_select.select(-1)
+
+
+func action_error(error_message:String) -> void:
+	$Error_Message.text = error_message
+	$Error_Message.show()
+	$Error_timer.start()
+
+
+func _on_error_timer_timeout() -> void:
+	$Error_Message.hide()

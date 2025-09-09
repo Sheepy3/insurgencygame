@@ -16,4 +16,4 @@ func update_color(colorvector:Vector3) -> void:
 	$Label.label_settings.font_color = color
 
 func update_text(text:String) -> void:
-	$Label.text = text
+	$Label.text = " "+text
