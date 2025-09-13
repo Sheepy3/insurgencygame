@@ -16,7 +16,7 @@ uniform vec3  tint_color  : source_color       = vec3(1.0, 0.0, 0.0);
 uniform float tint_mix    : hint_range(0,1)    = 0.5;   // 0 = original, 1 = pure tint
 uniform float saturation  : hint_range(0, 3)   = 1.0;   // 1 = unchanged
 uniform float value       : hint_range(0, 3)   = 1.0;   // brightness‑scale
-
+uniform float opacity : hint_range(0,1) = 1.0;         // global opacity control
 /* Helper that returns a 4×4 saturation‑adjustment matrix */
 mat4 saturation_matrix(float s){
     vec3 lum = vec3(0.3086, 0.6094, 0.0820);      // NTSC luma weights
@@ -56,5 +56,5 @@ void fragment () {
     vec3 sat    = (saturation_matrix(saturation) * tinted).rgb;    // saturation
     sat *= value;                                                  // brightness
 
-    COLOR = vec4(sat, col.a);   // keep original alpha
+    COLOR = vec4(sat, col.a*opacity);   // keep original alpha
 }

@@ -2,6 +2,8 @@ extends Camera2D
 #@export var zoom_factor:float = 0.1
 var zoom_level:int
 var camera_speed:int
+
+signal clouds(visibility:bool)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var bounds:int = 1000
@@ -27,14 +29,19 @@ func _process(delta: float) -> void:
 	var dir:int = 0
 	if Input.is_action_just_pressed("Scroll_up"):
 		dir = 1
+		clouds.emit(false)
 	if Input.is_action_just_pressed("Scroll_down"):
+		if zoom_level == 1:
+			clouds.emit(true)
 		dir = -1
 	zoom_level += dir
 	zoom_level = clamp(zoom_level,0,2)
 	match zoom_level:
 		0:
 			zoom=lerp(zoom,Vector2(0.25,0.25),0.5)
+			
 		1:
 			zoom= lerp(zoom,Vector2(0.5,0.5),0.5)
+			
 		2: 
 			zoom= lerp(zoom,Vector2(1,1),0.5)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=12 format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://b1tuchwv3fqge" path="res://Assets/Icons/gun.png" id="5_tsku8"]
 [ext_resource type="Texture2D" uid="uid://d4msh6it7b2ww" path="res://Assets/Icons/money.png" id="6_pqiix"]
 [ext_resource type="Texture2D" uid="uid://cfe673ge4s23i" path="res://Assets/Icons/population.png" id="7_sw8an"]
+[ext_resource type="Shader" uid="uid://g4sywj1bk4px" path="res://Assets/Shaders/Scrolling.gdshader" id="8_sw8an"]
+[ext_resource type="Texture2D" uid="uid://cgat3dbfw3tkj" path="res://Assets/Clouds.webp" id="9_sw8an"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
 font = ExtResource("4_w20xb")
@@ -14,6 +16,21 @@ font_size = 32
 font_color = Color(1, 0, 0, 1)
 outline_size = 9
 outline_color = Color(0.251859, 0, 0.0484084, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n388q"]
+shader = ExtResource("8_sw8an")
+shader_parameter/texture_to_scroll = ExtResource("9_sw8an")
+shader_parameter/pixel_speed = 20.0
+shader_parameter/angle_degrees = 45.0
+shader_parameter/sprite_width_px = 1296.0
+shader_parameter/repeat_x = 1.0
+shader_parameter/repeat_y = 1.0
+shader_parameter/row_offset = 1.0
+shader_parameter/tint_color = Color(1, 0, 0, 1)
+shader_parameter/tint_mix = 0.0
+shader_parameter/saturation = 0.0
+shader_parameter/value = 1.0
+shader_parameter/opacity = 0.1
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_2if7r")
@@ -239,10 +256,16 @@ scale = Vector2(0.949999, 1)
 enable_node_path = NodePath("../../Support_store_window")
 
 [node name="Open_Market_Button" type="Button" parent="."]
-offset_left = 1064.0
-offset_top = 280.0
-offset_right = 1126.0
-offset_bottom = 307.0
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -62.0
+offset_top = -13.5
+offset_bottom = 13.5
+grow_horizontal = 0
+grow_vertical = 2
 theme = ExtResource("3_fbkqq")
 text = "Market"
 
@@ -304,6 +327,28 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
+
+[node name="Clouds" type="TextureRect" parent="."]
+unique_name_in_owner = true
+z_index = -3
+texture_filter = 1
+material = SubResource("ShaderMaterial_n388q")
+custom_minimum_size = Vector2(0, 2)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1296.0
+offset_top = -648.0
+offset_right = 1296.13
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+texture = ExtResource("9_sw8an")
+stretch_mode = 1
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Base_Button" to="." method="_on_base_button_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Fighter_Button" to="." method="_on_fighter_button_pressed"]

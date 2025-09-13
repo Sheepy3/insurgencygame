@@ -17,5 +17,5 @@ script = ExtResource("1_hgb1o")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-text = "Player name"
+text = " Player name"
 label_settings = SubResource("LabelSettings_ogna1")

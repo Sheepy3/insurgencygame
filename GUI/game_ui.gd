@@ -7,6 +7,7 @@ func _ready() -> void:
 	$Error_Message.hide()
 	Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
+	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
@@ -124,3 +125,17 @@ func _on_support_store_window_close_requested() -> void:
 
 func _on_support_store_window_window_input(event: InputEvent) -> void:
 	$Store_bounds.global_position = %Support_store_window.position
+
+func _toggle_clouds(visibility:bool) -> void:
+	if visibility == true:
+		#%Clouds.show()
+		cloud_fade_in_target = 0.1
+	else:
+		#%Clouds.hide()
+		cloud_fade_in_target = 0
+	pass
+var cloud_fade_in:float
+var cloud_fade_in_target:float
+func _process(delta: float) -> void:
+	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
+	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
