@@ -33,7 +33,9 @@ func _on_join_button_pressed() -> void:
 	#Add_player_resource(1)
 
 func _lobby_joined(lobby:String) -> void:
-	%Roomcode.text = lobby
+	%Room.text = lobby
+	%Room.editable = false
+	%Join_Button.disabled = true
 	Add_player_resource(1)
 
 
@@ -110,3 +112,11 @@ func action_error(error_message:String) -> void:
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
+
+
+func _on_room_text_changed() -> void:
+	if %Room.text == "":
+		%Join_Button.text = "Create lobby"
+	else:
+		%Join_Button.text = "Join lobby" 
+	pass # Replace with function body.
