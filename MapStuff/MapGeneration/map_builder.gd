@@ -44,5 +44,5 @@ func build_map(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int) 
 @rpc("authority","call_remote")	
 func Recieve_map_data(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int)	-> void:
 	build_map(node_data,hex_data,size,RPU_Seed)
-	
+	get_parent().find_child("GameConfig").hide()
 	
