@@ -86,3 +86,11 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		Player_resource.Man_power = Values[7]
 		player_list.append(Player_resource)
 		player_resources_updated.emit()
+
+@rpc("any_peer","call_local")
+func Request_data() -> void:
+	pass
+
+@rpc("authority","call_remote")
+func Update_date() -> void:
+	pass

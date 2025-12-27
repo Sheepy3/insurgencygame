@@ -37,6 +37,7 @@ shader_parameter/tint_color = Color(1, 0, 0, 1)
 shader_parameter/tint_mix = 0.5
 shader_parameter/saturation = 1.0
 shader_parameter/value = 1.0
+shader_parameter/opacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_f2bj7"]
 resource_local_to_scene = true
@@ -60,11 +61,12 @@ shader_parameter/tint_color = Color(1, 0, 0, 1)
 shader_parameter/tint_mix = 0.5
 shader_parameter/saturation = 1.0
 shader_parameter/value = 1.0
+shader_parameter/opacity = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6ohwi"]
 shader = ExtResource("8_f2bj7")
 
-[node name="Path_Node" type="Node2D"]
+[node name="Path_Node" type="Node2D" groups=["PathNode"]]
 texture_filter = 1
 script = ExtResource("1_j4goj")
 

@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func _on_start_button_pressed() -> void:
 	_start_map_gen()
-	Overseer.cycle_players()
+	#Overseer.cycle_players()
 
 func _start_map_gen() -> void:
 	var spawn_map_generator:Node = map_generator.instantiate()
