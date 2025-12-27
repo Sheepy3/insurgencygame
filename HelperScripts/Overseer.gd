@@ -33,16 +33,16 @@ signal player_resources_updated
 		#Logistics_array.append(Logistics_map)
 		#Intelligence_array.append(Intelligence_map)
 
-func cycle_players() -> void:
-	var playerquant:int = player_list.size()-1
-	if selected_player_index < playerquant:
-		selected_player_index +=1
-		current_player = player_list[selected_player_index].Player_name
-		change_player.emit()
-	else:
-		selected_player_index = 0
-		current_player = player_list[selected_player_index].Player_name
-		change_player.emit()
+#func cycle_players() -> void:
+	#var playerquant:int = player_list.size()-1
+	#if selected_player_index < playerquant:
+		#selected_player_index +=1
+		#current_player = player_list[selected_player_index].Player_name
+		#change_player.emit()
+	#else:
+		#selected_player_index = 0
+		#current_player = player_list[selected_player_index].Player_name
+		#change_player.emit()
 
 func cycle_phases() -> void:
 	if Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
