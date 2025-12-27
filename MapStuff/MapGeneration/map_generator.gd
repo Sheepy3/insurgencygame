@@ -39,7 +39,8 @@ func _ready() -> void:
 	for o in range(sum_points_pruned.size()):
 		node_data[str((o+1))] = sum_points_pruned[o]
 		
-	get_parent().find_child("MapBuilder").build_map(node_data,hex_data,size)
+	var RPU_Seed: int = int(Time.get_unix_time_from_system())
+	get_parent().find_child("MapBuilder").build_map(node_data,hex_data,size,RPU_Seed)
 
 #generates virtual hexagons 
 func hex_centers(n: int, s: float) -> Array:

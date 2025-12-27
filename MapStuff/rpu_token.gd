@@ -1,9 +1,9 @@
 extends Sprite2D
 @export var rpu:Resource
-
+var RPU_array:Array
 
 func _ready() -> void:
-	var RPU_array:Array = [
+	RPU_array = [
 	preload("res://Assets/RPU_Tokens/0_1.png"),
 	preload("res://Assets/RPU_Tokens/0_2.png"),
 	preload("res://Assets/RPU_Tokens/0_3.png"),
@@ -11,7 +11,12 @@ func _ready() -> void:
 	preload("res://Assets/RPU_Tokens/1_2.png"),
 	preload("res://Assets/RPU_Tokens/1_3.png"),
 	]
-	var random_index:int = randi() % RPU_array.size()
+
+
+func randomize(generation_seed:int, index:int) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = generation_seed + index
+	var random_index := rng.randi_range(0, RPU_array.size() - 1)
 	match random_index:
 		0:
 			rpu.RPU = 1
