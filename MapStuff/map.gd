@@ -17,9 +17,12 @@ func initialize(size:int) -> void:
 		if child.is_in_group("MapNode"):
 			child.name = str(num) #name all nodes
 			child.A_node_clicked.connect(Check_node_action)
-			for Astars: int in Overseer.player_list.size():
-				Overseer.Logistics_array[Astars].add_point(num,child.position,0)
-				Overseer.Intelligence_array[Astars].add_point(num,child.position,0)
+			for keys:int in Overseer.The_networks:
+				var networks_array:Array = Overseer.The_networks[keys]
+				var logistics_network:AStar2D = networks_array[0] 
+				var intelligence_network:AStar2D = networks_array[1]
+				logistics_network.add_point(num,child.position,0)
+				intelligence_network.add_point(num,child.position,0)
 			num+=1
 			
 	var generated_paths:Array
