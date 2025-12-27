@@ -13,8 +13,8 @@ func _ready() -> void:
 	$Error_Message.hide()
 	%Color_select.disabled = true
 	#_start_map_gen() #hardcoded disabling config menu
- 
-func _on_button_pressed() -> void:
+
+func _on_start_button_pressed() -> void:
 	_start_map_gen()
 	Overseer.cycle_players()
 
@@ -120,6 +120,9 @@ func _on_error_timer_timeout() -> void:
 func _on_room_text_changed() -> void:
 	if %Room.text == "":
 		%Join_Button.text = "Create lobby"
+		%StartButton.set_disabled(false)
+		%OptionButton.set_disabled(false)
 	else:
 		%Join_Button.text = "Join lobby" 
-	pass # Replace with function body.
+		%StartButton.set_disabled(true)
+		%OptionButton.set_disabled(true)
