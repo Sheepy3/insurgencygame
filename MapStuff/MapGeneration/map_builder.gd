@@ -2,13 +2,16 @@ extends Node
 var map_node_scene:PackedScene = preload("res://MapStuff/MapNode/Map_Node.tscn")
 var RPU_token_scene:PackedScene = preload("res://MapStuff/RPU_token.tscn")
 
-func build_map(node_data:Dictionary,hex_data:Dictionary,size:int) -> void:
+func build_map(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int) -> void:
+	var idx:int = 0
 	for key:String in hex_data.keys():
 		var new_rpu_token:Node = RPU_token_scene.instantiate()		
 		new_rpu_token.position = hex_data[key]
 		new_rpu_token.name = "RPU_"+str(key)
 		get_parent().add_child(new_rpu_token)
 		new_rpu_token.set_owner(get_parent())
+		new_rpu_token.randomize(RPU_Seed,idx)
+		idx+=1
 
 	for key:String in node_data.keys():
 		var new_dot:Node = map_node_scene.instantiate()
@@ -33,5 +36,13 @@ func build_map(node_data:Dictionary,hex_data:Dictionary,size:int) -> void:
 	
 	
 	get_parent().initialize(size)
+	if multiplayer.is_server():
+		Recieve_map_data.rpc(node_data,hex_data,size,RPU_Seed)
+
+#func Transmit_map_data(node_data:Dictionary,hex_data:Dictionary,size:int) -> void:
 	
+@rpc("authority","call_remote")	
+func Recieve_map_data(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int)	-> void:
+	build_map(node_data,hex_data,size,RPU_Seed)
+	get_parent().find_child("GameConfig").hide()
 	
