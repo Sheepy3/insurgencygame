@@ -45,6 +45,7 @@ func Add_player_resource(ID:int) -> void:
 		var Player_resource:Resource = Player.new()
 		Player_resource.Player_ID = ID
 		Overseer.player_list.append(Player_resource)
+		print(Overseer.player_list.size())
 		Overseer.Resources_to_rpc()
 		var Logistics_map:AStar2D = AStar2D.new()
 		var Intelligence_map:AStar2D = AStar2D.new()
@@ -81,17 +82,17 @@ func Update_player_color(ID:int,Color_ID:int) -> void:
 			if player.Player_ID == ID: 
 				match Color_ID:
 					0:
-						Selected_color = Vector3(223, 0, 81)
+						Selected_color = Vector3(223, 0, 81)/255
 					1:
-						Selected_color = Vector3(186, 165, 0)
+						Selected_color = Vector3(186, 165, 0)/255
 					2:
-						Selected_color = Vector3(235, 136, 41)
+						Selected_color = Vector3(235, 136, 41)/255
 					3:
-						Selected_color = Vector3(46, 197, 0)
+						Selected_color = Vector3(46, 197, 0)/255
 					4:
-						Selected_color = Vector3(88, 167, 255)
+						Selected_color = Vector3(88, 167, 255)/255
 					5:
-						Selected_color = Vector3(207, 118, 255)
+						Selected_color = Vector3(207, 118, 255)/255
 				var picked:bool = false
 				for Sub_player:Resource in Overseer.player_list:
 					if Sub_player.color == Selected_color:

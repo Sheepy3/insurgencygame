@@ -7,7 +7,7 @@ extends Node
 var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var player_list:Array
 var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
-var selected_player_index:int = -1
+#var selected_player_index:int = -1
 var current_player:String
 #var Logistics_array:Array 
 #var Intelligence_array:Array
@@ -99,6 +99,11 @@ func Identify_player() -> Resource:
 	var Server_known_player:int = multiplayer.get_unique_id()
 	var Current_player:Resource
 	for Player_Resources:Resource in player_list:
+		#print("________________________")
+		#print(Player_Resources.Player_ID)
+		#print(Player_Resources.color)
+		#print("________________________")
 		if Player_Resources.Player_ID == Server_known_player:
 			Current_player = Player_Resources
+	#print(Current_player)
 	return Current_player
