@@ -12,7 +12,6 @@ func _update_player_resource() -> void:
 func update_color(colorvector:Vector3) -> void:
 	#var colorvector:Vector3 = player_resource.color
 	#print(colorvector.x)
-	print(colorvector)
 	var color:Color = Color(colorvector.x,colorvector.y,colorvector.z,1)
 	$Label.label_settings.font_color = color
 

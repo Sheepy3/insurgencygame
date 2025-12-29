@@ -27,7 +27,6 @@ func _start_map_gen() -> void:
 func _on_option_button_item_selected(index: int) -> void:
 	size = index
 	pass # Replace with function body.
-	print()
 
 func _on_join_button_pressed() -> void:
 	client.start(%IP.text, %Room.text, true)
