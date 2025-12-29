@@ -5,6 +5,7 @@ var Has_building: bool = false
 var building:Resource
 @export var node_owner:String
 @export var node_RPU: Resource
+
 func _ready() -> void:
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	#$Building.hide() 
@@ -41,10 +42,11 @@ enum{FIGHTER,INFLUENCE}
 
 func add_building(player:String, _type:int) -> void:
 	building = base_resource.duplicate(true)
-	node_owner = Overseer.player_list[Overseer.selected_player_index].Player_name
-	var color:Vector3 = Overseer.players_colors[Overseer.selected_player_index]
+	node_owner = Overseer.Identify_player().Player_name #player_list[Overseer.selected_player_index].Player_name
+	var color:Vector3 = Overseer.Identify_player().color #players_colors[Overseer.selected_player_index]
 	building.location = int(name)
-	Overseer.player_list[Overseer.selected_player_index].base_list.append(building) #adds building to the base list
+	#Overseer.player_list[Overseer.selected_player_index]
+	Overseer.Identify_player().base_list.append(building) #adds building to the base list
 
 	%Building.material.set_shader_parameter("tint_color", color)
 	%Building.material.set_shader_parameter("saturation", 0.4)
@@ -55,12 +57,12 @@ func add_unit(player:String, type:int) -> void:
 	if type == FIGHTER:
 		unique_unit = fighter_resource.duplicate(true)
 		unique_unit.player = player
-		unique_unit.color = Overseer.players_colors[Overseer.selected_player_index]
+		unique_unit.color = Overseer.Identify_player().color #players_colors[Overseer.selected_player_index]
 		
 	else:
 		unique_unit = influence_resource.duplicate(true)
 		unique_unit.player = player
-		unique_unit.color = Overseer.players_colors[Overseer.selected_player_index]
+		unique_unit.color = Overseer.Identify_player().color #players_colors[Overseer.selected_player_index]
 		
 
 	unit_list.append(unique_unit)
@@ -164,6 +166,6 @@ func _process(_delta:float) -> void:
 	current_speed  = lerp(current_speed,  target_speed,  lerpspeed)
 	%Selection_Circle.material.set_shader_parameter("radius", current_radius)
 	%Selection_Circle.material.set_shader_parameter("speed", current_speed)
-	var color:Vector3 =  Overseer.players_colors[Overseer.selected_player_index]
+	var color:Vector3 = get_parent().Current_player.color 
 	var color_2:Vector4 = Vector4(color.x,color.y,color.z,0.5)
 	%Selection_Circle.material.set_shader_parameter("color", color_2)

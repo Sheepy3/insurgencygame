@@ -7,7 +7,7 @@ extends Node
 var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var player_list:Array
 var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
-var selected_player_index:int = -1
+#var selected_player_index:int = -1
 var current_player:String
 #var Logistics_array:Array 
 #var Intelligence_array:Array
@@ -33,16 +33,16 @@ signal player_resources_updated
 		#Logistics_array.append(Logistics_map)
 		#Intelligence_array.append(Intelligence_map)
 
-func cycle_players() -> void:
-	var playerquant:int = player_list.size()-1
-	if selected_player_index < playerquant:
-		selected_player_index +=1
-		current_player = player_list[selected_player_index].Player_name
-		change_player.emit()
-	else:
-		selected_player_index = 0
-		current_player = player_list[selected_player_index].Player_name
-		change_player.emit()
+#func cycle_players() -> void:
+	#var playerquant:int = player_list.size()-1
+	#if selected_player_index < playerquant:
+		#selected_player_index +=1
+		#current_player = player_list[selected_player_index].Player_name
+		#change_player.emit()
+	#else:
+		#selected_player_index = 0
+		#current_player = player_list[selected_player_index].Player_name
+		#change_player.emit()
 
 func cycle_phases() -> void:
 	if Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
@@ -86,3 +86,19 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		Player_resource.Man_power = Values[7]
 		player_list.append(Player_resource)
 		player_resources_updated.emit()
+
+@rpc("any_peer","call_local")
+func Request_data() -> void:
+	pass
+
+@rpc("authority","call_remote")
+func Update_date() -> void:
+	pass
+	
+func Identify_player() -> Resource:
+	var Server_known_player:int = multiplayer.get_unique_id()
+	var Current_player:Resource
+	for Player_Resources:Resource in player_list:
+		if Player_Resources.Player_ID == Server_known_player:
+			Current_player = Player_Resources
+	return Current_player

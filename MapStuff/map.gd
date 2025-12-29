@@ -5,11 +5,14 @@ var Last_action: String = ""
 enum{FIGHTER,INFLUENCE}
 enum{BASE}
 var Current_node: Node
+var Current_player:Resource
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
 
 func initialize(size:int) -> void:
+	Current_player = Overseer.Identify_player()
 	$UI.The_action.connect(Update_action)
 	$UI.show()
 	var num: int = 1 #iterator for name
@@ -59,9 +62,12 @@ func initialize(size:int) -> void:
 func Update_action(action: String = "") ->void:
 	Last_action = action
 
+@rpc("any_peer","call_local")
 func Check_node_action(Name: String) ->void:
-	
-	
+	var Current_player:Resource = Overseer.Identify_player()
+	print("________________________________")
+	print("This is the current playes ID: "+ str(Current_player.Player_ID))
+	print("________________________________")
 	if Current_node:
 		Current_node.remove_selection_circle()
 	Current_node = find_child(Name)
@@ -75,18 +81,18 @@ func Check_node_action(Name: String) ->void:
 		#currently you can place bases on top of other bases.
 		if Current_node.Has_building:
 			$UI.action_error("there is already a base on this node!")
-		elif Overseer.player_list[Overseer.selected_player_index].base_list.size() > 0:
+		elif Current_player.base_list.size() > 0:
 			if Base_possible(Current_node.name) == true:
 				#print("You have placed a base on node " + Name)
-				Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].Player_name, BASE)
+				Current_node.add_building(Current_player.Player_name, BASE)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 			else:
 				$UI.action_error("You do not have the conditions to place a Base!")
-		elif Overseer.player_list[Overseer.selected_player_index].base_list.size() == 0:
+		elif Current_player.base_list.size() == 0:
 			#print("You have placed a base on node " + Name)
-			Current_node.add_building(Overseer.player_list[Overseer.selected_player_index].Player_name, BASE)
+			Current_node.add_building(Current_player.Player_name, BASE)
 			Current_node.Has_building = true
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
@@ -94,9 +100,9 @@ func Check_node_action(Name: String) ->void:
 	if Last_action == "Fighter":
 		if not Current_node.Has_building:
 			$UI.action_error("Fighters must be placed at your own base")
-		elif  Current_node.node_owner == Overseer.current_player:
+		elif  Current_node.node_owner == Current_player.Player_name:
 			#print("You have placed a Fighter at a base on node " + Name)
-			Current_node.add_unit(Overseer.current_player,FIGHTER)
+			Current_node.add_unit(Current_player.Player_name,FIGHTER)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
 
