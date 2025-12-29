@@ -6,7 +6,6 @@ var building:Resource
 @export var node_owner:String
 @export var node_RPU: Resource
 
-
 func _ready() -> void:
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	#$Building.hide() 
@@ -167,6 +166,6 @@ func _process(_delta:float) -> void:
 	current_speed  = lerp(current_speed,  target_speed,  lerpspeed)
 	%Selection_Circle.material.set_shader_parameter("radius", current_radius)
 	%Selection_Circle.material.set_shader_parameter("speed", current_speed)
-	var color:Vector3 = Overseer.Identify_player().color
+	var color:Vector3 = get_parent().Current_player.color 
 	var color_2:Vector4 = Vector4(color.x,color.y,color.z,0.5)
 	%Selection_Circle.material.set_shader_parameter("color", color_2)

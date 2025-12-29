@@ -5,11 +5,14 @@ var Last_action: String = ""
 enum{FIGHTER,INFLUENCE}
 enum{BASE}
 var Current_node: Node
+var Current_player:Resource
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
 
 func initialize(size:int) -> void:
+	Current_player = Overseer.Identify_player()
 	$UI.The_action.connect(Update_action)
 	$UI.show()
 	var num: int = 1 #iterator for name
