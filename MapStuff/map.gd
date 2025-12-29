@@ -60,59 +60,57 @@ func Update_action(action: String = "") ->void:
 	Last_action = action
 
 @rpc("any_peer","call_local")
-func Check_node_action(Name: String,Player_ID:int = 1) ->void:
-	if multiplayer.is_server():
-		var Current_player:Resource
-		for Player_Resources:Resource in Overseer.player_list:
-			if Player_Resources.Player_ID == Player_ID:
-				Current_player = Player_Resources
-
-		if Current_node:
-			Current_node.remove_selection_circle()
-		Current_node = find_child(Name)
-		Current_node.add_selection_circle()
-		
-		$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
-		$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
-		$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
-		
-		if Last_action == "Base":
-			#currently you can place bases on top of other bases.
-			if Current_node.Has_building:
-				$UI.action_error("there is already a base on this node!")
-			elif Current_player.base_list.size() > 0:
-				if Base_possible(Current_node.name) == true:
-					#print("You have placed a base on node " + Name)
-					Current_node.add_building(Current_player.Player_name, BASE)
-					Current_node.Has_building = true
-					find_child("Dynamic_Action").text = "None"
-					Last_action = ""
-				else:
-					$UI.action_error("You do not have the conditions to place a Base!")
-			elif Current_player.base_list.size() == 0:
+func Check_node_action(Name: String) ->void:
+	var Current_player:Resource = Overseer.Identify_player()
+	print("________________________________")
+	print("This is the current playes ID: "+ str(Current_player.Player_ID))
+	print("________________________________")
+	if Current_node:
+		Current_node.remove_selection_circle()
+	Current_node = find_child(Name)
+	Current_node.add_selection_circle()
+	
+	$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
+	$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
+	$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
+	
+	if Last_action == "Base":
+		#currently you can place bases on top of other bases.
+		if Current_node.Has_building:
+			$UI.action_error("there is already a base on this node!")
+		elif Current_player.base_list.size() > 0:
+			if Base_possible(Current_node.name) == true:
 				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Current_player.Player_name, BASE)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
 				Last_action = ""
-
-		if Last_action == "Fighter":
-			if not Current_node.Has_building:
-				$UI.action_error("Fighters must be placed at your own base")
-			elif  Current_node.node_owner == Overseer.current_player:
-				#print("You have placed a Fighter at a base on node " + Name)
-				Current_node.add_unit(Overseer.current_player,FIGHTER)
-				find_child("Dynamic_Action").text = "None"
-				Last_action = ""
-
-		if Last_action == "Influence":
-			if Influence_possible(Current_node.name) == true:
-				#print("You have placed a Influence on node " + Name)
-				Current_node.add_unit("current_player",INFLUENCE)
-				find_child("Dynamic_Action").text = "None"
-				Last_action = ""
 			else:
-				$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
+				$UI.action_error("You do not have the conditions to place a Base!")
+		elif Current_player.base_list.size() == 0:
+			#print("You have placed a base on node " + Name)
+			Current_node.add_building(Current_player.Player_name, BASE)
+			Current_node.Has_building = true
+			find_child("Dynamic_Action").text = "None"
+			Last_action = ""
+
+	if Last_action == "Fighter":
+		if not Current_node.Has_building:
+			$UI.action_error("Fighters must be placed at your own base")
+		elif  Current_node.node_owner == Current_player.Player_name:
+			#print("You have placed a Fighter at a base on node " + Name)
+			Current_node.add_unit(Current_player.Player_name,FIGHTER)
+			find_child("Dynamic_Action").text = "None"
+			Last_action = ""
+
+	if Last_action == "Influence":
+		if Influence_possible(Current_node.name) == true:
+			#print("You have placed a Influence on node " + Name)
+			Current_node.add_unit("current_player",INFLUENCE)
+			find_child("Dynamic_Action").text = "None"
+			Last_action = ""
+		else:
+			$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
 
 func Check_path_action(Name: String) -> void:
 	var Current_path: Node = find_child(Name)

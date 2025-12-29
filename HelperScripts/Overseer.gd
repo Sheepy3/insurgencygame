@@ -94,3 +94,11 @@ func Request_data() -> void:
 @rpc("authority","call_remote")
 func Update_date() -> void:
 	pass
+	
+func Identify_player() -> Resource:
+	var Server_known_player:int = multiplayer.get_unique_id()
+	var Current_player:Resource
+	for Player_Resources:Resource in player_list:
+		if Player_Resources.Player_ID == Server_known_player:
+			Current_player = Player_Resources
+	return Current_player
