@@ -50,12 +50,12 @@ func add_building(player:String, _type:int, color:Vector3) -> void:
 	%Building.material.set_shader_parameter("saturation", 0.4)
 	%Building.show()
 
-func add_unit(player:String, type:int) -> void:
+func add_unit(player:String, type:int, color:Vector3) -> void:
 	var unique_unit:Resource
 	if type == FIGHTER:
 		unique_unit = fighter_resource.duplicate(true)
 		unique_unit.player = player
-		unique_unit.color = get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
+		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
 	else:
 		unique_unit = influence_resource.duplicate(true)

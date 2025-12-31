@@ -120,7 +120,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
 		if Placables == "Unit:" + str(x):
-			Edited_node.add_unit(Values[0],Values[2])
+			Edited_node.add_unit(Values[2],Values[0],Values[3])
 			x += 1
 
 func Identify_player() -> Resource:

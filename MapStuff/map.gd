@@ -106,16 +106,18 @@ func Check_node_action(Name: String) ->void:
 			$UI.action_error("Fighters must be placed at your own base")
 		elif  Current_node.node_owner == Current_player.Player_name:
 			#print("You have placed a Fighter at a base on node " + Name)
-			Current_node.add_unit(Current_player.Player_name,FIGHTER)
+			Current_node.add_unit(Current_player.Player_name,FIGHTER,Current_player.color)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
+			Overseer.Request_node_data(Current_player,Current_node.name)
 
 	if Last_action == "Influence":
 		if Influence_possible(Current_node.name) == true:
 			#print("You have placed a Influence on node " + Name)
-			Current_node.add_unit("current_player",INFLUENCE)
+			Current_node.add_unit(Current_player.Player_name,INFLUENCE,Current_player.color)
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
+			Overseer.Request_node_data(Current_player,Current_node.name)
 		else:
 			$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
 
