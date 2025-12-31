@@ -88,13 +88,41 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		player_resources_updated.emit()
 
 @rpc("any_peer","call_local")
-func Request_data() -> void:
-	pass
+func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
+	var New_node:Dictionary
+	if multiplayer.is_server():
+		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+		if Edited_node.Has_building == true:
+			var building:Resource = Edited_node.building
+			building.color = Requester.color
+			building.player = Requester.Player_name
+			New_node["Building"] = [building.unit_type,building.player,building.color,building.location]
+		var x:int
+		for units:Resource in Edited_node.unit_list:
+			var Unit_number:String = "Unit:" + str(x)
+			New_node[Unit_number] = [units.unit_type,units.unit_state,units.player,units.color,units.offcolor]
+			x += 1
+		print(New_node)
+		Update_node_data.rpc(Edited_node.name,New_node)
 
 @rpc("authority","call_remote")
-func Update_date() -> void:
-	pass
-	
+func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
+	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+	Edited_node.unit_list.clear()
+	for Placables:String in New_node_data.keys():
+		var Values:Array = New_node_data[Placables]
+		var x:int
+		if Placables == "Building":
+			Edited_node.add_building(Values[1],Values[0],Values[2])
+			var Updates_to_building:Resource = Edited_node.building
+			Updates_to_building.unit_type = Values[0]
+			Updates_to_building.player = Values[1]
+			Updates_to_building.color = Values[2]
+			Updates_to_building.location = Values[3]
+		if Placables == "Unit:" + str(x):
+			Edited_node.add_unit(Values[0],Values[2])
+			x += 1
+
 func Identify_player() -> Resource:
 	var Server_known_player:int = multiplayer.get_unique_id()
 	var Current_player:Resource

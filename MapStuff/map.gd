@@ -60,11 +60,12 @@ func initialize(size:int) -> void:
 			$Board.set_texture(board_texture)
 
 func Update_action(action: String = "") ->void:
+	Current_player = Overseer.Identify_player()
 	Last_action = action
 
 @rpc("any_peer","call_local")
 func Check_node_action(Name: String) ->void:
-	var Current_player:Resource = Overseer.Identify_player()
+	Current_player = Overseer.Identify_player()
 	print("________________________________")
 	print("This is the current playes ID: "+ str(Current_player.Player_ID))
 	print("________________________________")
@@ -84,18 +85,21 @@ func Check_node_action(Name: String) ->void:
 		elif Current_player.base_list.size() > 0:
 			if Base_possible(Current_node.name) == true:
 				#print("You have placed a base on node " + Name)
-				Current_node.add_building(Current_player.Player_name, BASE)
+				Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
 				Last_action = ""
+				Overseer.Request_node_data(Current_player,Current_node.name)
 			else:
 				$UI.action_error("You do not have the conditions to place a Base!")
 		elif Current_player.base_list.size() == 0:
 			#print("You have placed a base on node " + Name)
-			Current_node.add_building(Current_player.Player_name, BASE)
+			Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
 			Current_node.Has_building = true
 			find_child("Dynamic_Action").text = "None"
 			Last_action = ""
+			#print(type_string(typeof(Current_node.name)))
+			Overseer.Request_node_data(Current_player,Current_node.name)
 
 	if Last_action == "Fighter":
 		if not Current_node.Has_building:
