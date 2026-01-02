@@ -131,6 +131,7 @@ func Request_path_data(Requestor:Resource,Edited_path_name:String) -> void:
 @rpc("authority","call_remote")
 func Update_path_date(Edited_path_name:String,New_path_data:Dictionary) -> void:
 	pass
+	pass
 
 func Identify_player() -> Resource:
 	var Server_known_player:int = multiplayer.get_unique_id()
