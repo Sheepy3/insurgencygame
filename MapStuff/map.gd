@@ -129,11 +129,12 @@ func Check_path_action(Name: String) -> void:
 			$UI.action_error("there is already an Intelligence network on this path!")
 		elif Intell_possible(Current_path.name) == true:
 			#print("You have placed a Intelligence network on path " + Name)
-			Current_path.add_intel_network()
+			Current_path.add_intel_network(Current_player.color)
 			find_child("Dynamic_Action").text = "None"
 			Current_path.Has_intel = true
 			Intelligence_add_astar_path(Current_path.name)
 			Last_action = ""
+			Overseer.Request_path_data(Current_player,Current_path.name)
 		else:
 			$UI.action_error("You must place Intelligence networks next to an existing one!")
 
@@ -142,48 +143,72 @@ func Check_path_action(Name: String) -> void:
 			$UI.action_error("there is already an Logistics network on this path!")
 		elif Logs_possible(Current_path.name) == true:
 			#print("You have placed a Logistics Network on path " + Name)
-			Current_path.add_logistics_network()
+			Current_path.add_logistics_network(Current_player.color)
 			find_child("Dynamic_Action").text = "None"
 			Current_path.Has_logs = true
 			Logistics_add_astar_path(Current_path.name)
 			Last_action = ""
+			Overseer.Request_path_data(Current_player,Current_path.name)
 		else:
 			$UI.action_error("You must place Logistics Networks next to an existing one!")
 
 func Logistics_add_astar_path(Road:String) -> void:
 	var The_Roads: Array = Road.split("-")
-	Overseer.Logistics_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
+	var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
+	logs_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
+	#Overseer.Logistics_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
  
 func Intelligence_add_astar_path(Road:String)-> void:
 	var The_Roads: Array = Road.split("-")
-	Overseer.Intelligence_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
+	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
+	intel_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
+	#Overseer.Intelligence_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 
 func Base_possible(Desired:String)-> bool:
-	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
+	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
-		if Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0:
+		var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
+		var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
+		if logs_map.get_id_path(Existing,int(Desired),false).size() > 0 and intel_map.get_id_path(Existing,int(Desired),false).size() > 0:
+		#Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0:
 			return true
 	return false
 
 func Intell_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
+	print("_______________________")
+	print(Overseer.The_networks)
+	print(Overseer.The_networks[Current_player.Player_ID])
+	print(Overseer.The_networks[Current_player.Player_ID][0])
+	print("_______________________")
+	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
+	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
-		if Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+		if intel_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or intel_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+		#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
 			return true
 	return false
 
 func Logs_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
+	print("_______________________")
+	print(Overseer.The_networks)
+	print(Overseer.The_networks[Current_player.Player_ID])
+	print(Overseer.The_networks[Current_player.Player_ID][1])
+	print("_______________________")
+	var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
+	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
-		if Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+		if logs_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or logs_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+		#Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
 			return true
 	return false
 
 func Influence_possible(Desired:String)-> bool:
-	for x:Resource in Overseer.player_list[Overseer.selected_player_index].base_list:
+	for x:Resource in Current_player.base_list:
+		var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
 		var Existing:int = x.location
-		if Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0: 
+		if intel_map.get_id_path(Existing,int(Desired),false).size() > 0: 
+		#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0: 
 			return true
 	return false

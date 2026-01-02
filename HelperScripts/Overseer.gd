@@ -100,9 +100,9 @@ func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
 		var x:int
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
+			units.color = Requester.color
 			New_node[Unit_number] = [units.unit_type,units.unit_state,units.player,units.color,units.offcolor]
 			x += 1
-		print(New_node)
 		Update_node_data.rpc(Edited_node.name,New_node)
 
 @rpc("authority","call_remote")
@@ -123,6 +123,15 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Edited_node.add_unit(Values[2],Values[0],Values[3])
 			x += 1
 
+@rpc("any_peer","call_local")
+func Request_path_data(Requestor:Resource,Edited_path_name:String) -> void:
+	Update_path_date.rpc(Edited_path_name,)
+	pass
+
+@rpc("authority","call_remote")
+func Update_path_date(Edited_path_name:String,New_path_data:Dictionary) -> void:
+	pass
+
 func Identify_player() -> Resource:
 	var Server_known_player:int = multiplayer.get_unique_id()
 	var Current_player:Resource
@@ -130,3 +139,18 @@ func Identify_player() -> Resource:
 		if Player_Resources.Player_ID == Server_known_player:
 			Current_player = Player_Resources
 	return Current_player
+
+func Identify_player_paths(Pulled_map:int) -> AStar2D:
+	var Server_known_player:int = multiplayer.get_unique_id()
+	var Player_logs_map:AStar2D
+	var Player_intel_map:AStar2D
+	for IDs:int in The_networks.keys():
+		if Server_known_player == IDs:
+			var Values:Array = The_networks[IDs]
+			if Pulled_map == 0:
+				Player_intel_map = Values[0]
+				return Player_intel_map
+			elif Pulled_map == 1:
+				Player_logs_map = Values[1]
+				return Player_logs_map
+	return 
