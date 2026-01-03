@@ -35,13 +35,15 @@ func _process(delta: float) -> void:
 			clouds.emit(true)
 		dir = -1
 	zoom_level += dir
-	zoom_level = clamp(zoom_level,0,2)
+	zoom_level = clamp(zoom_level,0,3)
 	match zoom_level:
 		0:
 			zoom=lerp(zoom,Vector2(0.25,0.25),0.5)
-			
 		1:
+			zoom=lerp(zoom,Vector2(0.25,0.25),0.5)
+			
+		2:
 			zoom= lerp(zoom,Vector2(0.5,0.5),0.5)
 			
-		2: 
+		3: 
 			zoom= lerp(zoom,Vector2(1,1),0.5)

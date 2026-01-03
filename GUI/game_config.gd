@@ -37,6 +37,12 @@ func _lobby_joined(lobby:String) -> void:
 	%Room.editable = false
 	%Join_Button.disabled = true
 	Add_player_resource(1)
+	if multiplayer.is_server():
+		%StartButton.set_disabled(false)
+		%OptionButton.set_disabled(false)
+	else:
+		%StartButton.set_disabled(true)
+		%OptionButton.set_disabled(true)
 
 
 func Add_player_resource(ID:int) -> void:
@@ -128,3 +134,7 @@ func _on_room_text_changed() -> void:
 		%Join_Button.text = "Join lobby" 
 		%StartButton.set_disabled(true)
 		%OptionButton.set_disabled(true)
+
+
+func _on_join_debug_pressed() -> void:
+	client.start(%IP.text, "debug", true) # Replace with function body.
