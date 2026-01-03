@@ -12,14 +12,14 @@ func _ready() -> void:
 	pass
 
 func initialize(size:int) -> void:
-	Current_player = Overseer.Identify_player()
+	Current_player = Overseer.Identify_player(multiplayer.get_unique_id())
 	$UI.The_action.connect(Update_action)
 	$UI.show()
 	var num: int = 1 #iterator for name
 	for child: Node in get_children(): #STAGE 1: NAMING NODES
 		if child.is_in_group("MapNode"):
 			child.name = str(num) #name all nodes
-			child.A_node_clicked.connect(Check_node_action)
+			child.A_node_clicked.connect(Call_rpc_functions)
 			for keys:int in Overseer.The_networks:
 				var networks_array:Array = Overseer.The_networks[keys]
 				var logistics_network:AStar2D = networks_array[0] 
@@ -36,7 +36,7 @@ func initialize(size:int) -> void:
 				var reversed_constructed_name:String = str(value)+"-"+child.name
 				if not (generated_paths.has(reversed_constructed_name) or generated_paths.has(constructed_name)) : #check if node exists already
 					var new_path:Node = path.instantiate() #new path instance
-					new_path.A_path_clicked.connect(Check_path_action)
+					new_path.A_path_clicked.connect(Call_rpc_functions)
 					new_path.connection = find_child(str(value)).position #give new path coordinates to point to 
 					new_path.name = constructed_name #set name of new path
 					new_path.add_to_group("Paths")
@@ -60,26 +60,24 @@ func initialize(size:int) -> void:
 			$Board.set_texture(board_texture)
 
 func Update_action(action: String = "") ->void:
-	Current_player = Overseer.Identify_player()
+	#Current_player = Overseer.Identify_player(multiplayer.get_unique_id())
 	Last_action = action
 
 @rpc("any_peer","call_local")
-func Check_node_action(Name: String) ->void:
-	Current_player = Overseer.Identify_player()
-	#print("________________________________")
-	#print("This is the current playes ID: "+ str(Current_player.Player_ID))
-	#print("________________________________")
-	if Current_node:
-		Current_node.remove_selection_circle()
-	Current_node = find_child(Name)
-	Current_node.add_selection_circle()
-	
-	$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
-	$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
-	$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
-	
-	if Last_action == "Base":
-		if multiplayer.is_server():
+func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
+	if multiplayer.is_server():
+		Last_action = Action
+		Current_player = Overseer.Identify_player(Player_ID) #Overseer.Identify_player(multiplayer.get_remote_sender_id())
+		if Current_node:
+			Current_node.remove_selection_circle()
+		Current_node = find_child(Name)
+		Current_node.add_selection_circle()
+		print("This is the last action:"+ Last_action)
+		$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
+		$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
+		$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
+		if Last_action == "Base":
+			print("client:"+str(Current_player.Player_ID)+"'s last action was:"+str(Last_action))
 			#currently you can place bases on top of other bases.
 			if Current_node.Has_building:
 				$UI.action_error("there is already a base on this node!")
@@ -102,8 +100,7 @@ func Check_node_action(Name: String) ->void:
 				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_player,Current_node.name)
 
-	if Last_action == "Fighter":
-		if multiplayer.is_server():
+		if Last_action == "Fighter":
 			if not Current_node.Has_building:
 				$UI.action_error("Fighters must be placed at your own base")
 			elif  Current_node.node_owner == Current_player.Player_name:
@@ -124,11 +121,12 @@ func Check_node_action(Name: String) ->void:
 				$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
 
 @rpc("any_peer","call_local")
-func Check_path_action(Name: String) -> void:
-	var Current_path: Node = find_child(Name)
-
-	if Last_action == "Intelligence":
-		if multiplayer.is_server():
+func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
+	if multiplayer.is_server():
+		Last_action = Action
+		Current_player = Overseer.Identify_player(Player_ID)
+		var Current_path: Node = find_child(Name)
+		if Last_action == "Intelligence":
 			if Current_path.Has_intel:
 				$UI.action_error("there is already an Intelligence network on this path!")
 			elif Intell_possible(Current_path.name) == true:
@@ -142,8 +140,7 @@ func Check_path_action(Name: String) -> void:
 			else:
 				$UI.action_error("You must place Intelligence networks next to an existing one!")
 
-	if Last_action == "Logistics":
-		if multiplayer.is_server():
+		if Last_action == "Logistics":
 			if Current_path.Has_logs:
 				$UI.action_error("there is already an Logistics network on this path!")
 			elif Logs_possible(Current_path.name) == true:
@@ -162,7 +159,7 @@ func Logistics_add_astar_path(Road:String) -> void:
 	var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
 	logs_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 	#Overseer.Logistics_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
- 
+
 func Intelligence_add_astar_path(Road:String)-> void:
 	var The_Roads: Array = Road.split("-")
 	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
@@ -217,3 +214,10 @@ func Influence_possible(Desired:String)-> bool:
 		#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0: 
 			return true
 	return false
+
+func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
+	var Action:String = Last_action
+	if Tile == "Node":
+		Check_node_action.rpc(Name,Player_ID,Action)
+	else:
+		Check_path_action.rpc(Name,Player_ID,Action)

@@ -36,7 +36,7 @@ func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shap
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		#print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
-		A_node_clicked.emit(name)
+		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 
 func add_building(player:String, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)

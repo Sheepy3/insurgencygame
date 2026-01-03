@@ -167,25 +167,25 @@ func Update_path_data(New_path_data:Dictionary,The_Road:String) -> void:
 #func Update_network_data() -> void:
 	
 
-func Identify_player() -> Resource:
-	var Server_known_player:int = multiplayer.get_unique_id()
+func Identify_player(Specific_ID:int) -> Resource:
+	var Server_known_player:int = Specific_ID
 	var Current_player:Resource
 	for Player_Resources:Resource in player_list:
 		if Player_Resources.Player_ID == Server_known_player:
 			Current_player = Player_Resources
 	return Current_player
 
-func Identify_player_paths(Pulled_map:int) -> AStar2D:
-	var Server_known_player:int = multiplayer.get_unique_id()
-	var Player_logs_map:AStar2D
-	var Player_intel_map:AStar2D
-	for IDs:int in The_networks.keys():
-		if Server_known_player == IDs:
-			var Values:Array = The_networks[IDs]
-			if Pulled_map == 0:
-				Player_intel_map = Values[0]
-				return Player_intel_map
-			elif Pulled_map == 1:
-				Player_logs_map = Values[1]
-				return Player_logs_map
-	return 
+#func Identify_player_paths(Pulled_map:int) -> AStar2D:
+	#var Server_known_player:int = multiplayer.get_unique_id()
+	#var Player_logs_map:AStar2D
+	#var Player_intel_map:AStar2D
+	#for IDs:int in The_networks.keys():
+		#if Server_known_player == IDs:
+			#var Values:Array = The_networks[IDs]
+			#if Pulled_map == 0:
+				#Player_intel_map = Values[0]
+				#return Player_intel_map
+			#elif Pulled_map == 1:
+				#Player_logs_map = Values[1]
+				#return Player_logs_map
+	#return 
