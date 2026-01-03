@@ -66,9 +66,9 @@ func Update_action(action: String = "") ->void:
 @rpc("any_peer","call_local")
 func Check_node_action(Name: String) ->void:
 	Current_player = Overseer.Identify_player()
-	print("________________________________")
-	print("This is the current playes ID: "+ str(Current_player.Player_ID))
-	print("________________________________")
+	#print("________________________________")
+	#print("This is the current playes ID: "+ str(Current_player.Player_ID))
+	#print("________________________________")
 	if Current_node:
 		Current_node.remove_selection_circle()
 	Current_node = find_child(Name)
@@ -79,78 +79,83 @@ func Check_node_action(Name: String) ->void:
 	$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
 	
 	if Last_action == "Base":
-		#currently you can place bases on top of other bases.
-		if Current_node.Has_building:
-			$UI.action_error("there is already a base on this node!")
-		elif Current_player.base_list.size() > 0:
-			if Base_possible(Current_node.name) == true:
+		if multiplayer.is_server():
+			#currently you can place bases on top of other bases.
+			if Current_node.Has_building:
+				$UI.action_error("there is already a base on this node!")
+			elif Current_player.base_list.size() > 0:
+				if Base_possible(Current_node.name) == true:
+					#print("You have placed a base on node " + Name)
+					Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
+					Current_node.Has_building = true
+					find_child("Dynamic_Action").text = "None"
+					Last_action = ""
+					Overseer.Request_node_data(Current_player,Current_node.name)
+				else:
+					$UI.action_error("You do not have the conditions to place a Base!")
+			elif Current_player.base_list.size() == 0:
 				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
 				Current_node.Has_building = true
 				find_child("Dynamic_Action").text = "None"
 				Last_action = ""
+				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_player,Current_node.name)
-			else:
-				$UI.action_error("You do not have the conditions to place a Base!")
-		elif Current_player.base_list.size() == 0:
-			#print("You have placed a base on node " + Name)
-			Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
-			Current_node.Has_building = true
-			find_child("Dynamic_Action").text = "None"
-			Last_action = ""
-			#print(type_string(typeof(Current_node.name)))
-			Overseer.Request_node_data(Current_player,Current_node.name)
 
 	if Last_action == "Fighter":
-		if not Current_node.Has_building:
-			$UI.action_error("Fighters must be placed at your own base")
-		elif  Current_node.node_owner == Current_player.Player_name:
-			#print("You have placed a Fighter at a base on node " + Name)
-			Current_node.add_unit(Current_player.Player_name,FIGHTER,Current_player.color)
-			find_child("Dynamic_Action").text = "None"
-			Last_action = ""
-			Overseer.Request_node_data(Current_player,Current_node.name)
+		if multiplayer.is_server():
+			if not Current_node.Has_building:
+				$UI.action_error("Fighters must be placed at your own base")
+			elif  Current_node.node_owner == Current_player.Player_name:
+				#print("You have placed a Fighter at a base on node " + Name)
+				Current_node.add_unit(Current_player.Player_name,FIGHTER,Current_player.color)
+				find_child("Dynamic_Action").text = "None"
+				Last_action = ""
+				Overseer.Request_node_data(Current_player,Current_node.name)
 
-	if Last_action == "Influence":
-		if Influence_possible(Current_node.name) == true:
-			#print("You have placed a Influence on node " + Name)
-			Current_node.add_unit(Current_player.Player_name,INFLUENCE,Current_player.color)
-			find_child("Dynamic_Action").text = "None"
-			Last_action = ""
-			Overseer.Request_node_data(Current_player,Current_node.name)
-		else:
-			$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
+		if Last_action == "Influence":
+			if Influence_possible(Current_node.name) == true:
+				#print("You have placed a Influence on node " + Name)
+				Current_node.add_unit(Current_player.Player_name,INFLUENCE,Current_player.color)
+				find_child("Dynamic_Action").text = "None"
+				Last_action = ""
+				Overseer.Request_node_data(Current_player,Current_node.name)
+			else:
+				$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
 
+@rpc("any_peer","call_local")
 func Check_path_action(Name: String) -> void:
 	var Current_path: Node = find_child(Name)
 
 	if Last_action == "Intelligence":
-		if Current_path.Has_intel:
-			$UI.action_error("there is already an Intelligence network on this path!")
-		elif Intell_possible(Current_path.name) == true:
-			#print("You have placed a Intelligence network on path " + Name)
-			Current_path.add_intel_network(Current_player.color)
-			find_child("Dynamic_Action").text = "None"
-			Current_path.Has_intel = true
-			Intelligence_add_astar_path(Current_path.name)
-			Last_action = ""
-			Overseer.Request_path_data(Current_player,Current_path.name)
-		else:
-			$UI.action_error("You must place Intelligence networks next to an existing one!")
+		if multiplayer.is_server():
+			if Current_path.Has_intel:
+				$UI.action_error("there is already an Intelligence network on this path!")
+			elif Intell_possible(Current_path.name) == true:
+				#print("You have placed a Intelligence network on path " + Name)
+				Current_path.add_intel_network(Current_player.color)
+				find_child("Dynamic_Action").text = "None"
+				Current_path.Has_intel = true
+				Intelligence_add_astar_path(Current_path.name)
+				Last_action = ""
+				Overseer.Request_path_data(Current_player,Current_path.name)
+			else:
+				$UI.action_error("You must place Intelligence networks next to an existing one!")
 
 	if Last_action == "Logistics":
-		if Current_path.Has_logs:
-			$UI.action_error("there is already an Logistics network on this path!")
-		elif Logs_possible(Current_path.name) == true:
-			#print("You have placed a Logistics Network on path " + Name)
-			Current_path.add_logistics_network(Current_player.color)
-			find_child("Dynamic_Action").text = "None"
-			Current_path.Has_logs = true
-			Logistics_add_astar_path(Current_path.name)
-			Last_action = ""
-			Overseer.Request_path_data(Current_player,Current_path.name)
-		else:
-			$UI.action_error("You must place Logistics Networks next to an existing one!")
+		if multiplayer.is_server():
+			if Current_path.Has_logs:
+				$UI.action_error("there is already an Logistics network on this path!")
+			elif Logs_possible(Current_path.name) == true:
+				#print("You have placed a Logistics Network on path " + Name)
+				Current_path.add_logistics_network(Current_player.color)
+				find_child("Dynamic_Action").text = "None"
+				Current_path.Has_logs = true
+				Logistics_add_astar_path(Current_path.name)
+				Last_action = ""
+				Overseer.Request_path_data(Current_player,Current_path.name)
+			else:
+				$UI.action_error("You must place Logistics Networks next to an existing one!")
 
 func Logistics_add_astar_path(Road:String) -> void:
 	var The_Roads: Array = Road.split("-")
@@ -176,11 +181,11 @@ func Base_possible(Desired:String)-> bool:
 
 func Intell_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	print("_______________________")
-	print(Overseer.The_networks)
-	print(Overseer.The_networks[Current_player.Player_ID])
-	print(Overseer.The_networks[Current_player.Player_ID][0])
-	print("_______________________")
+	#print("_______________________")
+	#print(Overseer.The_networks)
+	#print(Overseer.The_networks[Current_player.Player_ID])
+	#print(Overseer.The_networks[Current_player.Player_ID][0])
+	#print("_______________________")
 	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
 	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
@@ -191,11 +196,11 @@ func Intell_possible(Desired:String)-> bool:
 
 func Logs_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	print("_______________________")
-	print(Overseer.The_networks)
-	print(Overseer.The_networks[Current_player.Player_ID])
-	print(Overseer.The_networks[Current_player.Player_ID][1])
-	print("_______________________")
+	#print("_______________________")
+	#print(Overseer.The_networks)
+	#print(Overseer.The_networks[Current_player.Player_ID])
+	#print(Overseer.The_networks[Current_player.Player_ID][1])
+	#print("_______________________")
 	var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
 	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location

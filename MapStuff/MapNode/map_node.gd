@@ -40,7 +40,7 @@ func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shap
 
 func add_building(player:String, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)
-	node_owner = get_parent().Current_player.Player_name #player_list[Overseer.selected_player_index].Player_name
+	node_owner = player #player_list[Overseer.selected_player_index].Player_name
 	#var color:Vector3 = get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 	building.location = int(name)
 	#Overseer.player_list[Overseer.selected_player_index]
@@ -60,7 +60,7 @@ func add_unit(player:String, type:int, color:Vector3) -> void:
 	else:
 		unique_unit = influence_resource.duplicate(true)
 		unique_unit.player = player
-		unique_unit.color = get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
+		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
 
 	unit_list.append(unique_unit)

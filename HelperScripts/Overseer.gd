@@ -71,8 +71,9 @@ func Resources_to_rpc() -> void:
 		player_resources_updated.emit()
 
 @rpc("authority","call_remote")
-func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
+func Rpc_to_resources(Player_rpc_info:Dictionary) -> void: #,Player_rpc_maps:Dictionary
 	player_list = []
+	The_networks = {}
 	for Keys:String in Player_rpc_info.keys():
 		var Player_resource:Resource = Player.new()
 		var Values:Array = Player_rpc_info[Keys]
@@ -100,8 +101,9 @@ func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
 		var x:int
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
-			units.color = Requester.color
-			New_node[Unit_number] = [units.unit_type,units.unit_state,units.player,units.color,units.offcolor]
+			var New_unit:Resource = units
+			New_unit.color = Requester.color
+			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_state,New_unit.player,New_unit.color,New_unit.offcolor]
 			x += 1
 		Update_node_data.rpc(Edited_node.name,New_node)
 
@@ -121,17 +123,49 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.location = Values[3]
 		if Placables == "Unit:" + str(x):
 			Edited_node.add_unit(Values[2],Values[0],Values[3])
+			#var nodes_unit_list:Array = Edited_node.unit_list
+			#nodes_unit_list[x].color = Values[3]
 			x += 1
 
 @rpc("any_peer","call_local")
-func Request_path_data(Requestor:Resource,Edited_path_name:String) -> void:
-	Update_path_date.rpc(Edited_path_name,)
-	pass
+func Request_path_data(Requester:Resource,Edited_path_name:String) -> void:
+	var The_Roads: Array = Edited_path_name.split("-")
+	var Edited_path:Node = get_parent().get_child(1).find_child(The_Roads[0]).find_child(Edited_path_name)
+	var Path_data:Dictionary 
+	#var Player_rpc_maps:Dictionary
+	if multiplayer.is_server():
+		#for players:int in The_networks.keys():
+			#var Values:Array = The_networks[players]
+			#Player_rpc_maps[players] = [Values[0],Values[1]]
+		#if Edited_path.Has_logs == true or Edited_path.Has_logs == true:
+		Path_data[Edited_path.name] = [Edited_path.connection,Edited_path.Has_intel,Edited_path.Has_logs,Requester.color]
+		Update_path_data.rpc(Path_data,The_Roads[0])
 
 @rpc("authority","call_remote")
-func Update_path_date(Edited_path_name:String,New_path_data:Dictionary) -> void:
-	pass
-	pass
+func Update_path_data(New_path_data:Dictionary,The_Road:String) -> void:
+	The_networks = {}
+	var path_keys:Array = New_path_data.keys()
+	#for players:int in New_Network_data.keys():
+		#var Values:Array = New_Network_data[players]
+		#The_networks[players] = [Values[0],Values[1]]
+	var Edited_path:Node = get_parent().get_child(1).find_child(The_Road).find_child(path_keys[0])
+	for keys:String in New_path_data.keys():
+		var Values:Array = New_path_data[keys]
+		Edited_path.connection = Values[0]
+		Edited_path.Has_intel = Values[1]
+		Edited_path.Has_logs = Values[2]
+		if Values[1] == true:
+			Edited_path.add_intel_network(Values[3])
+		if Values[2] == true:
+			Edited_path.add_logistics_network(Values[3])
+
+#@rpc("any_peer","call_local")
+#func Request_network_data() -> void: 
+	
+
+#@rpc("authority","call_remote")
+#func Update_network_data() -> void:
+	
 
 func Identify_player() -> Resource:
 	var Server_known_player:int = multiplayer.get_unique_id()
