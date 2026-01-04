@@ -73,30 +73,82 @@ func Resources_to_rpc() -> void:
 @rpc("authority","call_remote")
 func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 	player_list = []
+	The_networks = {}
 	for Keys:String in Player_rpc_info.keys():
-		var Player_resource:Resource = Player.new()
+		var New_player_resource:Resource = Player.new()
 		var Values:Array = Player_rpc_info[Keys]
-		Player_resource.Player_ID = Values[0]
-		Player_resource.Player_name = Values[1]
-		Player_resource.color = Values[2]
-		Player_resource.base_list = Values[3]
-		Player_resource.Weapons = Values[4]
-		Player_resource.Money = Values[5]
-		Player_resource.Man_power = Values[6]
-		Player_resource.Man_power = Values[7]
-		player_list.append(Player_resource)
+		New_player_resource.Player_ID = Values[0]
+		New_player_resource.Player_name = Values[1]
+		New_player_resource.color = Values[2]
+		New_player_resource.base_list = Values[3]
+		New_player_resource.Weapons = Values[4]
+		New_player_resource.Money = Values[5]
+		New_player_resource.Man_power = Values[6]
+		New_player_resource.Victory_points = Values[7]
+		player_list.append(New_player_resource)
 		player_resources_updated.emit()
 
 @rpc("any_peer","call_local")
-func Request_data() -> void:
-	pass
+func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
+	var New_node:Dictionary
+	if multiplayer.is_server():
+		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+		if Edited_node.Has_building == true:
+			var building:Resource = Edited_node.building
+			New_node["Building"] = [building.unit_type,building.player,building.color,building.location]
+		var x:int = 0
+		for units:Resource in Edited_node.unit_list:
+			var Unit_number:String = "Unit:" + str(x)
+			var New_unit:Resource = units
+			New_unit.color = Requester.color
+			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_state,New_unit.player,New_unit.color,New_unit.offcolor]
+			x += 1
+		Update_node_data.rpc(Edited_node.name,New_node)
 
 @rpc("authority","call_remote")
-func Update_date() -> void:
-	pass
-	
-func Identify_player() -> Resource:
-	var Server_known_player:int = multiplayer.get_unique_id()
+func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
+	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+	Edited_node.unit_list.clear()
+	var x:int = 0
+	for Placables:String in New_node_data.keys():
+		var Values:Array = New_node_data[Placables]
+		if Placables == "Building":
+			Edited_node.add_building(Values[1],Values[0],Values[2])
+			var Updates_to_building:Resource = Edited_node.building
+			Updates_to_building.unit_type = Values[0]
+			Updates_to_building.player = Values[1]
+			Updates_to_building.color = Values[2]
+			Updates_to_building.location = Values[3]
+		if Placables == "Unit:" + str(x):
+			Edited_node.add_unit(Values[2],Values[0],Values[3])
+			x += 1
+
+@rpc("any_peer","call_local")
+func Request_path_data(Requester:Resource,Edited_path_name:String) -> void:
+	var The_Roads: Array = Edited_path_name.split("-")
+	var Edited_path:Node = get_parent().get_child(1).find_child(The_Roads[0]).find_child(Edited_path_name)
+	var Path_data:Dictionary 
+	if multiplayer.is_server():
+		Path_data[Edited_path.name] = [Edited_path.connection,Edited_path.Has_intel,Edited_path.Has_logs,Requester.color]
+		Update_path_data.rpc(Path_data,The_Roads[0])
+
+@rpc("authority","call_remote")
+func Update_path_data(New_path_data:Dictionary,The_Road:String) -> void:
+	The_networks = {}
+	var path_keys:Array = New_path_data.keys()
+	var Edited_path:Node = get_parent().get_child(1).find_child(The_Road).find_child(path_keys[0])
+	for keys:String in New_path_data.keys():
+		var Values:Array = New_path_data[keys]
+		Edited_path.connection = Values[0]
+		Edited_path.Has_intel = Values[1]
+		Edited_path.Has_logs = Values[2]
+		if Values[1] == true:
+			Edited_path.add_intel_network(Values[3])
+		if Values[2] == true:
+			Edited_path.add_logistics_network(Values[3])
+
+func Identify_player(Specific_ID:int) -> Resource:
+	var Server_known_player:int = Specific_ID
 	var Current_player:Resource
 	for Player_Resources:Resource in player_list:
 		if Player_Resources.Player_ID == Server_known_player:

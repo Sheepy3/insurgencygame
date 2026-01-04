@@ -5,6 +5,12 @@ var Has_building: bool = false
 var building:Resource
 @export var node_owner:String
 @export var node_RPU: Resource
+var unit_list:Array 
+var fighter_resource:Resource=load("res://Resources/Preset/Fighter.tres")
+var influence_resource:Resource=load("res://Resources/Preset/Influence.tres")
+var base_resource:Resource=load("res://Resources/Preset/Miliary_Base.tres")
+var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
+enum{FIGHTER,INFLUENCE}
 
 func _ready() -> void:
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
@@ -29,40 +35,33 @@ func _update_label()-> void:
 func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
 	if Input.is_action_just_pressed("Mouse_left_click"): 
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
-		print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
-		A_node_clicked.emit(name)
+		#print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
+		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 
-var unit_list:Array 
-var fighter_resource:Resource=load("res://Resources/Preset/Fighter.tres")
-var influence_resource:Resource=load("res://Resources/Preset/Influence.tres")
-var base_resource:Resource=load("res://Resources/Preset/Miliary_Base.tres")
-
-var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
-enum{FIGHTER,INFLUENCE}
-
-func add_building(player:String, _type:int) -> void:
+func add_building(player:String, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)
-	node_owner = Overseer.Identify_player().Player_name #player_list[Overseer.selected_player_index].Player_name
-	var color:Vector3 = Overseer.Identify_player().color #players_colors[Overseer.selected_player_index]
+	node_owner = player #player_list[Overseer.selected_player_index].Player_name
+	#var color:Vector3 = get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 	building.location = int(name)
+	building.color = color
 	#Overseer.player_list[Overseer.selected_player_index]
-	Overseer.Identify_player().base_list.append(building) #adds building to the base list
+	get_parent().Current_player.base_list.append(building) #adds building to the base list
 
 	%Building.material.set_shader_parameter("tint_color", color)
 	%Building.material.set_shader_parameter("saturation", 0.4)
 	%Building.show()
 
-func add_unit(player:String, type:int) -> void:
+func add_unit(player:String, type:int, color:Vector3) -> void:
 	var unique_unit:Resource
 	if type == FIGHTER:
 		unique_unit = fighter_resource.duplicate(true)
 		unique_unit.player = player
-		unique_unit.color = Overseer.Identify_player().color #players_colors[Overseer.selected_player_index]
+		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
 	else:
 		unique_unit = influence_resource.duplicate(true)
 		unique_unit.player = player
-		unique_unit.color = Overseer.Identify_player().color #players_colors[Overseer.selected_player_index]
+		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
 
 	unit_list.append(unique_unit)

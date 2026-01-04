@@ -51,10 +51,10 @@ func Add_player_resource(ID:int) -> void:
 		Player_resource.Player_ID = ID
 		Overseer.player_list.append(Player_resource)
 		print(Overseer.player_list.size())
-		Overseer.Resources_to_rpc()
 		var Logistics_map:AStar2D = AStar2D.new()
 		var Intelligence_map:AStar2D = AStar2D.new()
 		Overseer.The_networks[ID] = [Intelligence_map,Logistics_map]
+		Overseer.Resources_to_rpc()
 		#Overseer.Player_rpc_info["Player " +str(ID)] = [Overseer.Player_resource.Player_ID,Overseer.Player_resource.Player_name,Overseer.Player_resource.color,Overseer.Player_resource.base_list,Overseer.Player_resource.Weapons,Overseer.Player_resource.Money,Overseer.Player_resource.Man_power,Overseer.Player_resource.Victory_points]
 
 func Remove_player_resource(ID:int) -> void: 
@@ -62,6 +62,7 @@ func Remove_player_resource(ID:int) -> void:
 		for existing_player:Resource in Overseer.player_list: 
 			if existing_player.Player_ID == ID:
 				Overseer.player_list.remove_at(Overseer.player_list.find(existing_player))
+				Overseer.The_networks.erase(ID)
 				Overseer.Resources_to_rpc()
 
 func _render_players() -> void:
