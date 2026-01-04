@@ -43,6 +43,7 @@ func add_building(player:String, _type:int, color:Vector3) -> void:
 	node_owner = player #player_list[Overseer.selected_player_index].Player_name
 	#var color:Vector3 = get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 	building.location = int(name)
+	building.color = color
 	#Overseer.player_list[Overseer.selected_player_index]
 	get_parent().Current_player.base_list.append(building) #adds building to the base list
 

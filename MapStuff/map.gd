@@ -72,21 +72,18 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 			Current_node.remove_selection_circle()
 		Current_node = find_child(Name)
 		Current_node.add_selection_circle()
-		print("This is the last action:"+ Last_action)
 		$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
 		$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
 		$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
 		if Last_action == "Base":
-			print("client:"+str(Current_player.Player_ID)+"'s last action was:"+str(Last_action))
 			#currently you can place bases on top of other bases.
 			if Current_node.Has_building:
 				$UI.action_error("there is already a base on this node!")
 			elif Current_player.base_list.size() > 0:
 				if Base_possible(Current_node.name) == true:
-					#print("You have placed a base on node " + Name)
 					Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
 					Current_node.Has_building = true
-					find_child("Dynamic_Action").text = "None"
+					#find_child("Dynamic_Action").text = "None"
 					Last_action = ""
 					Overseer.Request_node_data(Current_player,Current_node.name)
 				else:
@@ -95,18 +92,19 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
 				Current_node.Has_building = true
-				find_child("Dynamic_Action").text = "None"
+				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_player,Current_node.name)
+	
 
 		if Last_action == "Fighter":
-			if not Current_node.Has_building:
+			if Fighter_possible(Current_node.name) == false:
 				$UI.action_error("Fighters must be placed at your own base")
-			elif  Current_node.node_owner == Current_player.Player_name:
+			elif  Fighter_possible(Current_node.name) == true:
 				#print("You have placed a Fighter at a base on node " + Name)
 				Current_node.add_unit(Current_player.Player_name,FIGHTER,Current_player.color)
-				find_child("Dynamic_Action").text = "None"
+				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
 
@@ -114,7 +112,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 			if Influence_possible(Current_node.name) == true:
 				#print("You have placed a Influence on node " + Name)
 				Current_node.add_unit(Current_player.Player_name,INFLUENCE,Current_player.color)
-				find_child("Dynamic_Action").text = "None"
+				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
 			else:
@@ -132,7 +130,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 			elif Intell_possible(Current_path.name) == true:
 				#print("You have placed a Intelligence network on path " + Name)
 				Current_path.add_intel_network(Current_player.color)
-				find_child("Dynamic_Action").text = "None"
+				#find_child("Dynamic_Action").text = "None"
 				Current_path.Has_intel = true
 				Intelligence_add_astar_path(Current_path.name)
 				Last_action = ""
@@ -146,7 +144,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 			elif Logs_possible(Current_path.name) == true:
 				#print("You have placed a Logistics Network on path " + Name)
 				Current_path.add_logistics_network(Current_player.color)
-				find_child("Dynamic_Action").text = "None"
+				#find_child("Dynamic_Action").text = "None"
 				Current_path.Has_logs = true
 				Logistics_add_astar_path(Current_path.name)
 				Last_action = ""
@@ -167,6 +165,8 @@ func Intelligence_add_astar_path(Road:String)-> void:
 	#Overseer.Intelligence_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 
 func Base_possible(Desired:String)-> bool:
+	if Current_node.Has_building == true:
+		return false
 	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
 		var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
@@ -178,11 +178,6 @@ func Base_possible(Desired:String)-> bool:
 
 func Intell_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	#print("_______________________")
-	#print(Overseer.The_networks)
-	#print(Overseer.The_networks[Current_player.Player_ID])
-	#print(Overseer.The_networks[Current_player.Player_ID][0])
-	#print("_______________________")
 	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
 	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
@@ -193,11 +188,6 @@ func Intell_possible(Desired:String)-> bool:
 
 func Logs_possible(Desired:String)-> bool:
 	var The_Roads: Array = Desired.split("-")
-	#print("_______________________")
-	#print(Overseer.The_networks)
-	#print(Overseer.The_networks[Current_player.Player_ID])
-	#print(Overseer.The_networks[Current_player.Player_ID][1])
-	#print("_______________________")
 	var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
 	for x:Resource in Current_player.base_list:
 		var Existing:int = x.location
@@ -215,9 +205,19 @@ func Influence_possible(Desired:String)-> bool:
 			return true
 	return false
 
+func Fighter_possible(Node_name:String) -> bool:
+	var Targeted_node:Node = find_child(Node_name)
+	if Targeted_node.Has_building && Targeted_node.building.color == Current_player.color:
+		return true
+	return false
+
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	var Action:String = Last_action
 	if Tile == "Node":
 		Check_node_action.rpc(Name,Player_ID,Action)
+		Last_action = ""
+		find_child("Dynamic_Action").text = "None"
 	else:
 		Check_path_action.rpc(Name,Player_ID,Action)
+		Last_action = ""
+		find_child("Dynamic_Action").text = "None"
