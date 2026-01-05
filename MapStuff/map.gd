@@ -61,6 +61,7 @@ func initialize(size:int) -> void:
 
 func Update_action(action: String = "") ->void:
 	#Current_player = Overseer.Identify_player(multiplayer.get_unique_id())
+	print(str(multiplayer.get_unique_id()) + action)
 	Last_action = action
 
 @rpc("any_peer","call_local")
@@ -68,13 +69,10 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 	if multiplayer.is_server():
 		Last_action = Action
 		Current_player = Overseer.Identify_player(Player_ID) #Overseer.Identify_player(multiplayer.get_remote_sender_id())
-		if Current_node:
-			Current_node.remove_selection_circle()
+		#if Current_node:
+		#	Current_node.remove_selection_circle()
 		Current_node = find_child(Name)
-		Current_node.add_selection_circle()
-		$UI.find_child("Dynamic_Clicked").text = "Node " + Name #probably should be replaced with function call on UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
-		$UI.find_child("Dynamic_RPU").text = str(Current_node.node_RPU.RPU)
-		$UI.find_child("Dynamic_Pop").text = str(Current_node.node_RPU.Population)
+		#Current_node.add_selection_circle()
 		if Last_action == "Base":
 			#currently you can place bases on top of other bases.
 			if Current_node.Has_building:
@@ -213,11 +211,20 @@ func Fighter_possible(Node_name:String) -> bool:
 
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	var Action:String = Last_action
-	if Tile == "Node":
-		Check_node_action.rpc(Name,Player_ID,Action)
-		Last_action = ""
-		find_child("Dynamic_Action").text = "None"
+	if Current_node:
+		Current_node.remove_selection_circle()
+	if !Action && Tile == "Node":
+		#$UI.select_node(Tile)
+		Current_node = find_child(Name)
+		Current_node.add_selection_circle()
+		#print(Current_node)
 	else:
-		Check_path_action.rpc(Name,Player_ID,Action)
-		Last_action = ""
-		find_child("Dynamic_Action").text = "None"
+		Current_node = null
+		if Tile == "Node":
+			Check_node_action.rpc(Name,Player_ID,Action)
+			Last_action = ""
+			find_child("Dynamic_Action").text = "None"
+		else:
+			Check_path_action.rpc(Name,Player_ID,Action)
+			Last_action = ""
+			find_child("Dynamic_Action").text = "None"

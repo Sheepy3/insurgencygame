@@ -1,7 +1,7 @@
 extends CanvasLayer
 signal The_action(action: String)
 var Store_action: String = ""
-
+var last_clicked_node:String = ""
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Error_Message.hide()
@@ -139,3 +139,7 @@ var cloud_fade_in_target:float
 func _process(delta: float) -> void:
 	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
 	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
+
+func select_node(tile:String) -> void:
+	last_clicked_node = tile
+	pass
