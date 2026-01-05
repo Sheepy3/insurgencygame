@@ -65,7 +65,6 @@ func initialize(size:int) -> void:
 
 func Update_action(action: String = "") ->void:
 	#Current_player = Overseer.Identify_player(multiplayer.get_unique_id())
-	print(str(multiplayer.get_unique_id()) + action)
 	Last_action = action
 
 @rpc("any_peer","call_local")
