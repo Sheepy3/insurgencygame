@@ -69,7 +69,6 @@ func add_unit(player:String, type:int, color:Vector3) -> void:
 	var unit_visual := unit_scene.instantiate()
 	unit_visual.Unit_Data = unique_unit
 	%Units.add_child(unit_visual)
-	#print("added child")
 	_reorder_units()
 
 func _reorder_units() -> void:

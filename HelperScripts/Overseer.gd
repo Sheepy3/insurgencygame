@@ -4,7 +4,7 @@ extends Node
 #when networking is added, and the "current player" thing doesnt work if players take turns at the same time. 
 
 #var players:Array = ["Player 1", "Player 2"] #currently hardcoded, would be procedurally generated based on playercount
-var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
+#var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var player_list:Array
 var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
 #var selected_player_index:int = -1
@@ -100,7 +100,6 @@ func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
 			var New_unit:Resource = units
-			New_unit.color = Requester.color
 			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_state,New_unit.player,New_unit.color,New_unit.offcolor]
 			x += 1
 		Update_node_data.rpc(Edited_node.name,New_node)
@@ -108,7 +107,10 @@ func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
 @rpc("authority","call_remote")
 func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+	var Present_unit_list:Array = get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
+	for existing_units:Node in Present_unit_list:
+		existing_units.free()
 	var x:int = 0
 	for Placables:String in New_node_data.keys():
 		var Values:Array = New_node_data[Placables]
@@ -119,7 +121,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.player = Values[1]
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
-		if Placables == "Unit:" + str(x):
+		elif Placables == "Unit:" + str(x):
 			Edited_node.add_unit(Values[2],Values[0],Values[3])
 			x += 1
 
