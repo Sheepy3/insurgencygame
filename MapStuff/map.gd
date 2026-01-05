@@ -218,7 +218,6 @@ func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	if Current_node:
 		Current_node.remove_selection_circle()
 	if !Action && Tile == "Node":
-		#$UI.select_node(Tile)
 		Current_node = find_child(Name)
 		Current_node.add_selection_circle()
 		#print(Current_node)
