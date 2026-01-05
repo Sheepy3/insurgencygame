@@ -6,7 +6,6 @@ func _ready() -> void:
 
 
 func update_visual() ->void:
-	print(passed_light_color)
 	var converted:Color = Color(passed_light_color.x, passed_light_color.y, passed_light_color.z, 1)
 	$Light_1.light_color = converted
 	$Light_2.light_color = converted
