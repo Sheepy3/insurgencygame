@@ -10,6 +10,7 @@ var fighter_resource:Resource=load("res://Resources/Preset/Fighter.tres")
 var influence_resource:Resource=load("res://Resources/Preset/Influence.tres")
 var base_resource:Resource=load("res://Resources/Preset/Miliary_Base.tres")
 var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
+var flare_scene:PackedScene = load("res://GUI/Arrow/Arrow.tscn")
 enum{FIGHTER,INFLUENCE}
 
 func _ready() -> void:
@@ -144,6 +145,15 @@ func add_selection_circle() -> void:
 	target_radius = 0.25
 	target_speed  = 1.0
 	lerpspeed=0.3
+
+@rpc("any_peer","call_local")
+func flare(player_ID:int) -> void:
+	var player_resource:Player = Overseer.Identify_player(player_ID)
+	var instanced_flare:= flare_scene.instantiate()
+	instanced_flare.position.y-= 130
+	instanced_flare.light_color = player_resource.color
+	add_child(instanced_flare)
+	
 
 var lerpspeed:float = 0.5
 var current_radius:  float = 0.0

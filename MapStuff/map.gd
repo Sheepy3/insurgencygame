@@ -11,6 +11,10 @@ var Current_player:Resource
 func _ready() -> void:
 	pass
 
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("Flare") && Current_node.is_in_group("MapNode"):
+		Current_node.flare.rpc(multiplayer.get_unique_id())
+
 func initialize(size:int) -> void:
 	Current_player = Overseer.Identify_player(multiplayer.get_unique_id())
 	$UI.The_action.connect(Update_action)
