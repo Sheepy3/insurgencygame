@@ -20,6 +20,7 @@ enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
 var current_phase:int = MAINTENENCE
 
 signal change_player
+signal game_started
 signal change_phase
 signal player_resources_updated
 
@@ -86,7 +87,7 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		New_player_resource.Man_power = Values[6]
 		New_player_resource.Victory_points = Values[7]
 		player_list.append(New_player_resource)
-		player_resources_updated.emit()
+	player_resources_updated.emit()
 
 @rpc("any_peer","call_local")
 func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:

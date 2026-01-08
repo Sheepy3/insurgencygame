@@ -36,6 +36,7 @@ func build_map(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int) 
 	
 	
 	get_parent().initialize(size)
+	Overseer.game_started.emit()
 	if multiplayer.is_server():
 		Recieve_map_data.rpc(node_data,hex_data,size,RPU_Seed)
 

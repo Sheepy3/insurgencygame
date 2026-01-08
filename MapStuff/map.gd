@@ -87,6 +87,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 					#find_child("Dynamic_Action").text = "None"
 					Last_action = ""
 					Overseer.Request_node_data(Current_player,Current_node.name)
+					Overseer.Resources_to_rpc()
 				else:
 					$UI.action_error("You do not have the conditions to place a Base!")
 			elif Current_player.base_list.size() == 0:
@@ -97,7 +98,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				Last_action = ""
 				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_player,Current_node.name)
-	
+				Overseer.Resources_to_rpc()
 
 		if Last_action == "Fighter":
 			if Fighter_possible(Current_node.name) == false:
@@ -108,6 +109,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
+				Overseer.Resources_to_rpc()
 
 		if Last_action == "Influence":
 			if Influence_possible(Current_node.name) == true:
@@ -116,6 +118,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
+				Overseer.Resources_to_rpc()
 			else:
 				$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
 
@@ -136,6 +139,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 				Intelligence_add_astar_path(Current_path.name)
 				Last_action = ""
 				Overseer.Request_path_data(Current_player,Current_path.name)
+				Overseer.Resources_to_rpc()
 			else:
 				$UI.action_error("You must place Intelligence networks next to an existing one!")
 
@@ -150,6 +154,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 				Logistics_add_astar_path(Current_path.name)
 				Last_action = ""
 				Overseer.Request_path_data(Current_player,Current_path.name)
+				Overseer.Resources_to_rpc()
 			else:
 				$UI.action_error("You must place Logistics Networks next to an existing one!")
 
