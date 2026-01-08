@@ -2,7 +2,7 @@ extends CanvasLayer
 signal The_action(action: String)
 var Store_action: String = ""
 var last_clicked_node:String = ""
-var Unique_player:Resource 
+var Unique_player_ID:int 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -10,12 +10,10 @@ func _ready() -> void:
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.game_started.connect(connect_update_UI)
-	#Overseer.player_resources_updated.connect(update_Player_Info)
 	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
-	#Need to remove below later
 
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:
@@ -86,35 +84,13 @@ func _on_sell_button_pressed() -> void:
 	Store_action = "Sell"
 
 func _on_manpower_button_pressed() -> void:
-	Weapons_action.rpc(Unique_player.Player_ID)
-	#var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
-	#if Store_action == "Buy" and Player_resource.Money >= 5:
-		#Player_resource.Man_power += 1
-		#Player_resource.Money -= 5
-		#Store_action = ""
-	#elif Store_action == "Sell" and Player_resource.Man_power >= 1:
-		#Player_resource.Man_power -= 1
-		#Player_resource.Money += 5
-		#Store_action = ""
-	#else: 
-		#action_error("You do not have enough resources to complete this transaction!")
+	Manpower_action.rpc(Unique_player_ID,Store_action)
 
 func _on_weapons_button_pressed() -> void:
-	Manpower_action.rpc(Unique_player.Player_ID)
-	#var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
-	#if Store_action == "Buy" and Player_resource.Money >= 3:
-		#Player_resource.Weapons += 1
-		#Player_resource.Money -= 3
-		#Store_action = ""
-	#elif Store_action == "Sell" and Player_resource.Weapons >= 1:
-		#Player_resource.Weapons -= 1
-		#Player_resource.Money += 3
-		#Store_action = ""
-	#else:
-		#action_error("You do not have enough resources to complete this transaction!")
+	Weapons_action.rpc(Unique_player_ID,Store_action)
 
 func update_Player_Info() -> void:
-	var player:Resource = Unique_player #Overseer.Identify_player(multiplayer.get_unique_id())
+	var player:Resource = Overseer.Identify_player(Unique_player_ID) #Overseer.Identify_player(multiplayer.get_unique_id())
 	$Player_Info/HBoxContainer/Guns.text = str(player.Weapons)
 	$Player_Info/HBoxContainer/Money.text = str(player.Money)
 	$Player_Info/HBoxContainer/Population.text = str(player.Man_power)
@@ -149,8 +125,9 @@ func select_node(tile:String) -> void:
 	pass
 
 @rpc("any_peer","call_local")
-func Manpower_action(Player_ID:int)-> void:
+func Manpower_action(Player_ID:int,action:String)-> void:
 	if multiplayer.is_server():
+		Store_action = action
 		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
 		if Store_action == "Buy" and Player_resource.Money >= 5:
 			Player_resource.Man_power += 1
@@ -166,8 +143,9 @@ func Manpower_action(Player_ID:int)-> void:
 			action_error("You do not have enough resources to complete this transaction!")
 
 @rpc("any_peer","call_local")
-func Weapons_action(Player_ID:int)-> void:
+func Weapons_action(Player_ID:int,action:String)-> void:
 	if multiplayer.is_server():
+		Store_action = action
 		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
 		if Store_action == "Buy" and Player_resource.Money >= 3:
 			Player_resource.Weapons += 1
@@ -184,4 +162,4 @@ func Weapons_action(Player_ID:int)-> void:
 
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
-	Unique_player = Overseer.Identify_player(multiplayer.get_unique_id())
+	Unique_player_ID = multiplayer.get_unique_id()
