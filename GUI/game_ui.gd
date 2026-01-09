@@ -181,7 +181,9 @@ func Check_market_open(Player_ID:int) -> void:
 			Edge_nodes.append(keys)
 	print("These are the edge nodes: "+str(Edge_nodes)+"\n")
 	for keys:String in Overseer.The_nodes.keys():
+		
 		var Values:Array = Overseer.The_nodes[keys] 
+		Winner = 0
 		for Connections:String in Edge_nodes:
 			if Values.has(int(Connections)):
 				Winner +=1
@@ -189,7 +191,7 @@ func Check_market_open(Player_ID:int) -> void:
 				if Winner == 2 && (Is_edge):
 					#print("Node: "+keys+" in Edge nodes: "+str(Is_edge)+" "+str(Edge_nodes)+"\n")
 					Corner_node.append(keys)
-					Winner = 0
+					
 				if Winner == 2:
 					if !Is_edge:
 						Corner_node_two.append(keys)
