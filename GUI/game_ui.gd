@@ -6,6 +6,8 @@ var Unique_player_ID:int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	#Check_market_open(2)
+	$Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
@@ -94,6 +96,7 @@ func update_Player_Info() -> void:
 	$Player_Info/HBoxContainer/Guns.text = str(player.Weapons)
 	$Player_Info/HBoxContainer/Money.text = str(player.Money)
 	$Player_Info/HBoxContainer/Population.text = str(player.Man_power)
+	$Player_Info/HBoxContainer/VictoryPoints.text = str(player.Victory_points)
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	%Support_store_window.position = Vector2(975,36)
@@ -163,3 +166,44 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Unique_player_ID = multiplayer.get_unique_id()
+	Check_market_open(2)
+
+func Check_market_open(Player_ID:int) -> void:
+	var Edge_nodes:Array
+	var Corner_node:Array 
+	var Corner_node_two:Array
+	var Winner:int
+	for keys:String in Overseer.The_nodes.keys():
+		var Values:Array = Overseer.The_nodes[keys]
+		#print(Overseer.The_nodes[str(Values[0])].size())
+		if Values.size() == 2:
+			pass#print("Node "+keys+" is a corner node and is connected to: "+str(Values)+"\n")
+			Edge_nodes.append(keys)
+	print("These are the edge nodes: "+str(Edge_nodes)+"\n")
+	for keys:String in Overseer.The_nodes.keys():
+		var Values:Array = Overseer.The_nodes[keys] 
+		for Connections:String in Edge_nodes:
+			if Values.has(int(Connections)):
+				Winner +=1
+				var Is_edge:bool = Edge_nodes.has(keys)
+				if Winner == 2 && (Is_edge):
+					#print("Node: "+keys+" in Edge nodes: "+str(Is_edge)+" "+str(Edge_nodes)+"\n")
+					Corner_node.append(keys)
+					Winner = 0
+				if Winner == 2:
+					if !Is_edge:
+						Corner_node_two.append(keys)
+						Winner = 0
+				#print(Winner)
+	print("These are the corner nodes: "+str(Corner_node)+"\n")
+	print("These are the corner nodes that SHOULDN'T BE CORNER NODES: "+str(Corner_node_two))
+
+		#if :
+			#print("Node "+keys+" is a corner (exception version) node and is connected to: "+str(Values)+"\n")
+	#for nodes:Node in get_parent().get_children():
+		#if nodes is Node2D:
+			#print(find_children())
+			#for paths:Node in nodes.get_children():
+				#if paths is Node2D:
+					#if paths.name.begins_with(nodes.name):
+						#print("Node "+nodes.name+"'s paths:\n"+paths.name+"\n")
