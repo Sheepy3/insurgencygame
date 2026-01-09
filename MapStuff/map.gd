@@ -12,7 +12,7 @@ func _ready() -> void:
 	pass
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("Flare") && Current_node.is_in_group("MapNode"):
+	if Input.is_action_just_pressed("Flare") && Current_node && Current_node.is_in_group("MapNode"):
 		Current_node.flare.rpc(multiplayer.get_unique_id())
 
 func initialize(size:int) -> void:
