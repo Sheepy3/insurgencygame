@@ -33,7 +33,7 @@ func _update_label()-> void:
 
 # Detects when Node is clicked on by mouse
 func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_pressed("Mouse_left_click"): 
+	if Input.is_action_just_released("Mouse_left_click"): 
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		#print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
 		get_parent().find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.

@@ -1,0 +1,21 @@
+extends PanelContainer
+var FighterSprite:Texture2D = preload("res://Assets/Military/soldier.png")
+var InfluenceSprite:Texture2D = preload("res://Assets/Military/binoculars.png")
+
+
+enum unit_type {
+	Fighter,
+	Influence,
+}
+
+func set_color(color:Vector3) -> void:
+	%TextureRect.material.set_shader_parameter("tint_color", color)
+	%TextureRect.material.set_shader_parameter("saturation", 0.7)
+	pass
+	
+func set_type(type:int) -> void:
+	if type == unit_type.Fighter:
+		%TextureRect.texture = FighterSprite
+	else:
+		%TextureRect.texture = InfluenceSprite
+	pass

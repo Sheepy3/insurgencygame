@@ -147,5 +147,11 @@ func select_node(tile:String) -> void:
 	
 	
 func update_node_unit_list(units:Array) -> void:
+	for children:Node in %Unit_Display.get_children():
+		children.queue_free()
 	for unit:Resource in units:
-		print(unit.player_ID)
+		if unit.player_ID == multiplayer.get_unique_id():
+			var new_unit_display:Control = UI_Unit_Scene.instantiate()
+			new_unit_display.set_color(unit.color)
+			new_unit_display.set_type(unit.unit_type)
+			%Unit_Display.add_child(new_unit_display)
