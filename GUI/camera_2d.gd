@@ -5,6 +5,19 @@ var camera_speed:int
 
 signal clouds(visibility:bool)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+
+func _unhandled_input(event: InputEvent) -> void:
+	var dir:int = 0
+	if event.is_action_pressed("Scroll_up"):
+		dir = 1
+		clouds.emit(false)
+	if event.is_action_pressed("Scroll_down"):
+		if zoom_level == 1:
+			clouds.emit(true)
+		dir = -1
+	zoom_level += dir
+	zoom_level = clamp(zoom_level,0,3)
+	
 func _process(delta: float) -> void:
 	var bounds:int = 1000
 	var move_vector:Vector2
@@ -26,16 +39,7 @@ func _process(delta: float) -> void:
 		if not position.x > bounds:
 			move_vector.x=1
 	position += move_vector*camera_speed*delta
-	var dir:int = 0
-	if Input.is_action_just_pressed("Scroll_up"):
-		dir = 1
-		clouds.emit(false)
-	if Input.is_action_just_pressed("Scroll_down"):
-		if zoom_level == 1:
-			clouds.emit(true)
-		dir = -1
-	zoom_level += dir
-	zoom_level = clamp(zoom_level,0,3)
+
 	match zoom_level:
 		0:
 			zoom=lerp(zoom,Vector2(0.25,0.25),0.5)
