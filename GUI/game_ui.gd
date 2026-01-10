@@ -2,6 +2,7 @@ extends CanvasLayer
 signal The_action(action: String)
 var Store_action: String = ""
 var last_clicked_node:String = ""
+var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Error_Message.hide()
@@ -143,3 +144,8 @@ func _process(delta: float) -> void:
 func select_node(tile:String) -> void:
 	last_clicked_node = tile
 	pass
+	
+	
+func update_node_unit_list(units:Array) -> void:
+	for unit:Resource in units:
+		print(unit.player_ID)

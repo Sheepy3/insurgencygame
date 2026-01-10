@@ -100,7 +100,7 @@ func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
 			var New_unit:Resource = units
-			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_state,New_unit.player,New_unit.color,New_unit.offcolor]
+			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_state,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			x += 1
 		Update_node_data.rpc(Edited_node.name,New_node)
 
