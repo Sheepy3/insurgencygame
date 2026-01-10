@@ -7,7 +7,6 @@ var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#Check_market_open(2)
 	$Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
@@ -166,27 +165,8 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
+	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Unique_player_ID = multiplayer.get_unique_id()
-	Check_market_open(2)
-
-func Check_market_open(Player_ID:int) -> void:
-	var Edge_nodes:Array
-	var Corner_node:Array 
-	var Winner:int
-	for keys:String in Overseer.The_nodes.keys():
-		var Values:Array = Overseer.The_nodes[keys]
-		if Values.size() == 2:
-			Edge_nodes.append(keys)
-	for keys:String in Overseer.The_nodes.keys():
-		var Values:Array = Overseer.The_nodes[keys] 
-		Winner = 0
-		for Connections:String in Edge_nodes:
-			if Values.has(int(Connections)):
-				Winner +=1
-				if Winner == 2 && !Edge_nodes.has(keys):
-					Corner_node.append(keys)
-					Winner = 0
-	print("These are the corner nodes: "+str(Corner_node)+"\n")
 
 func update_node_unit_list(units:Array) -> void:
 	for children:Node in %Unit_Display.get_children():
@@ -197,3 +177,17 @@ func update_node_unit_list(units:Array) -> void:
 			new_unit_display.set_color(unit.color)
 			new_unit_display.set_type(unit.unit_type)
 			%Unit_Display.add_child(new_unit_display)
+
+func Check_store_unlocked() -> void:
+	var Meets_condition:int
+	for corners:String in Overseer.The_support_nodes:
+		var checked_node:Node2D = get_parent().find_child(corners)
+		for unit:Resource in checked_node.unit_list:
+			if unit.player_ID == Unique_player_ID && unit.unit_type == 1:
+				Meets_condition +=1
+		if checked_node.Has_building && checked_node.building.player_ID == Unique_player_ID:
+			Meets_condition += 1
+	if Meets_condition >= 1:
+		$Open_Market_Button.set_disabled(false)
+	else:
+		$Open_Market_Button.set_disabled(true)

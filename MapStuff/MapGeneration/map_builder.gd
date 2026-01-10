@@ -39,6 +39,7 @@ func build_map(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int) 
 	Overseer.player_resources_updated.emit()
 	if multiplayer.is_server():
 		Recieve_map_data.rpc(node_data,hex_data,size,RPU_Seed)
+	Find_map_corner_nodes()
 
 #func Transmit_map_data(node_data:Dictionary,hex_data:Dictionary,size:int) -> void:
 	
@@ -46,4 +47,23 @@ func build_map(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int) 
 func Recieve_map_data(node_data:Dictionary,hex_data:Dictionary,size:int, RPU_Seed:int)	-> void:
 	build_map(node_data,hex_data,size,RPU_Seed)
 	get_parent().find_child("GameConfig").hide()
-	
+
+func Find_map_corner_nodes() -> void:
+	var Edge_nodes:Array
+	var Corner_nodes:Array 
+	var Winner:int
+	for keys:String in Overseer.The_nodes.keys():
+		var Values:Array = Overseer.The_nodes[keys]
+		if Values.size() == 2:
+			Edge_nodes.append(keys)
+	for keys:String in Overseer.The_nodes.keys():
+		var Values:Array = Overseer.The_nodes[keys] 
+		Winner = 0
+		for Connections:String in Edge_nodes:
+			if Values.has(int(Connections)):
+				Winner +=1
+				if Winner == 2 && !Edge_nodes.has(keys):
+					Corner_nodes.append(keys)
+					Winner = 0
+	Overseer.The_support_nodes.append_array(Edge_nodes)
+	Overseer.The_support_nodes.append_array(Corner_nodes)

@@ -13,6 +13,7 @@ var current_player:String
 #var Intelligence_array:Array
 var The_networks:Dictionary
 var The_nodes:Dictionary
+var The_support_nodes:Array
 var Phase_cycle:int = 0
 var Desired_cycle:int = 3
 
@@ -96,7 +97,7 @@ func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
 		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 		if Edited_node.Has_building == true:
 			var building:Resource = Edited_node.building
-			New_node["Building"] = [building.unit_type,building.player,building.color,building.location]
+			New_node["Building"] = [building.unit_type,building.player_ID,building.color,building.location]
 		var x:int = 0
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
@@ -119,7 +120,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Edited_node.add_building(Values[1],Values[0],Values[2])
 			var Updates_to_building:Resource = Edited_node.building
 			Updates_to_building.unit_type = Values[0]
-			Updates_to_building.player = Values[1]
+			Updates_to_building.player_ID = Values[1]
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
 		elif Placables == "Unit:" + str(x):
