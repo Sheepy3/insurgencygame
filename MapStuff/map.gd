@@ -75,29 +75,26 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		#if Current_node:
 		#	Current_node.remove_selection_circle()
 		Current_node = find_child(Name)
-		#Current_node.add_selection_circle()
 		if Last_action == "Base":
-			#currently you can place bases on top of other bases.
 			if Current_node.Has_building:
 				$UI.action_error("there is already a base on this node!")
 			elif Current_player.base_list.size() > 0:
 				if Base_possible(Current_node.name) == true:
-					Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
-					Current_node.Has_building = true
+					Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
 					Last_action = ""
 					Overseer.Request_node_data(Current_player,Current_node.name)
+					Overseer.Resources_to_rpc()
 				else:
 					$UI.action_error("You do not have the conditions to place a Base!")
 			elif Current_player.base_list.size() == 0:
 				#print("You have placed a base on node " + Name)
-				Current_node.add_building(Current_player.Player_name, BASE, Current_player.color)
-				Current_node.Has_building = true
+				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_player,Current_node.name)
-	
+				Overseer.Resources_to_rpc()
 
 		if Last_action == "Fighter":
 			if Fighter_possible(Current_node.name) == false:
@@ -108,6 +105,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
+				Overseer.Resources_to_rpc()
 
 		if Last_action == "Influence":
 			if Influence_possible(Current_node.name) == true:
@@ -116,6 +114,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
+				Overseer.Resources_to_rpc()
 			else:
 				$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
 
@@ -136,6 +135,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 				Intelligence_add_astar_path(Current_path.name)
 				Last_action = ""
 				Overseer.Request_path_data(Current_player,Current_path.name)
+				Overseer.Resources_to_rpc()
 			else:
 				$UI.action_error("You must place Intelligence networks next to an existing one!")
 
@@ -150,6 +150,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 				Logistics_add_astar_path(Current_path.name)
 				Last_action = ""
 				Overseer.Request_path_data(Current_player,Current_path.name)
+				Overseer.Resources_to_rpc()
 			else:
 				$UI.action_error("You must place Logistics Networks next to an existing one!")
 

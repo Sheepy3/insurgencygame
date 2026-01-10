@@ -2,20 +2,20 @@ extends CanvasLayer
 signal The_action(action: String)
 var Store_action: String = ""
 var last_clicked_node:String = ""
+var Unique_player_ID:int 
 var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
-	Overseer.change_player.connect(_player_switch_ui)
+	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
+	Overseer.game_started.connect(connect_update_UI)
 	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
-	#Need to remove below later
-	for Players: Resource in Overseer.player_list:
-		Players.Money += 20
-		Players.Man_power += 10
 
 #Activiates whe the "Place Base" button is pressed
 func _on_base_button_pressed() -> void:
@@ -43,11 +43,12 @@ func _on_logistics_network_button_pressed() -> void:
 	find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
 
 func _on_player_switch_button_pressed() -> void:
-	Overseer.cycle_players()
+	pass
+	#Overseer.cycle_players()
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
-	update_Player_Info()
+	#update_Player_Info()
 
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
@@ -85,37 +86,17 @@ func _on_sell_button_pressed() -> void:
 	Store_action = "Sell"
 
 func _on_manpower_button_pressed() -> void:
-	var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
-	if Store_action == "Buy" and Player_resource.Money >= 5:
-		Player_resource.Man_power += 1
-		Player_resource.Money -= 5
-		Store_action = ""
-	elif Store_action == "Sell" and Player_resource.Man_power >= 1:
-		Player_resource.Man_power -= 1
-		Player_resource.Money += 5
-		Store_action = ""
-	else: 
-		action_error("You do not have enough resources to complete this transaction!")
-	update_Player_Info()
+	Manpower_action.rpc(Unique_player_ID,Store_action)
 
 func _on_weapons_button_pressed() -> void:
-	var Player_resource: Resource = Overseer.player_list[Overseer.selected_player_index]
-	if Store_action == "Buy" and Player_resource.Money >= 3:
-		Player_resource.Weapons += 1
-		Player_resource.Money -= 3
-		Store_action = ""
-	elif Store_action == "Sell" and Player_resource.Weapons >= 1:
-		Player_resource.Weapons -= 1
-		Player_resource.Money += 3
-		Store_action = ""
-	else:
-		action_error("You do not have enough resources to complete this transaction!")
-	update_Player_Info()
+	Weapons_action.rpc(Unique_player_ID,Store_action)
 
 func update_Player_Info() -> void:
-	$Player_Info/HBoxContainer/Guns.text = str(Overseer.player_list[Overseer.selected_player_index].Weapons)
-	$Player_Info/HBoxContainer/Money.text = str(Overseer.player_list[Overseer.selected_player_index].Money)
-	$Player_Info/HBoxContainer/Population.text = str(Overseer.player_list[Overseer.selected_player_index].Man_power)
+	var player:Resource = Overseer.Identify_player(Unique_player_ID) #Overseer.Identify_player(multiplayer.get_unique_id())
+	$Player_Info/HBoxContainer/Guns.text = str(player.Weapons)
+	$Player_Info/HBoxContainer/Money.text = str(player.Money)
+	$Player_Info/HBoxContainer/Population.text = str(player.Man_power)
+	$Player_Info/HBoxContainer/VictoryPoints.text = str(player.Victory_points)
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	%Support_store_window.position = Vector2(975,36)
@@ -137,6 +118,7 @@ func _toggle_clouds(visibility:bool) -> void:
 	pass
 var cloud_fade_in:float
 var cloud_fade_in_target:float
+
 func _process(delta: float) -> void:
 	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
 	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
@@ -144,8 +126,48 @@ func _process(delta: float) -> void:
 func select_node(tile:String) -> void:
 	last_clicked_node = tile
 	pass
-	
-	
+
+@rpc("any_peer","call_local")
+func Manpower_action(Player_ID:int,action:String)-> void:
+	if multiplayer.is_server():
+		Store_action = action
+		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
+		if Store_action == "Buy" and Player_resource.Money >= 5:
+			Player_resource.Man_power += 1
+			Player_resource.Money -= 5
+			Store_action = ""
+			Overseer.Resources_to_rpc()
+		elif Store_action == "Sell" and Player_resource.Man_power >= 1:
+			Player_resource.Man_power -= 1
+			Player_resource.Money += 5
+			Store_action = ""
+			Overseer.Resources_to_rpc()
+		else: 
+			action_error("You do not have enough resources to complete this transaction!")
+
+@rpc("any_peer","call_local")
+func Weapons_action(Player_ID:int,action:String)-> void:
+	if multiplayer.is_server():
+		Store_action = action
+		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
+		if Store_action == "Buy" and Player_resource.Money >= 3:
+			Player_resource.Weapons += 1
+			Player_resource.Money -= 3
+			Store_action = ""
+			Overseer.Resources_to_rpc()
+		elif Store_action == "Sell" and Player_resource.Weapons >= 1:
+			Player_resource.Weapons -= 1
+			Player_resource.Money += 3
+			Store_action = ""
+			Overseer.Resources_to_rpc()
+		else:
+			action_error("You do not have enough resources to complete this transaction!")
+
+func connect_update_UI() -> void:
+	Overseer.player_resources_updated.connect(update_Player_Info)
+	Overseer.player_resources_updated.connect(Check_store_unlocked)
+	Unique_player_ID = multiplayer.get_unique_id()
+
 func update_node_unit_list(units:Array) -> void:
 	for children:Node in %Unit_Display.get_children():
 		children.queue_free()
@@ -155,3 +177,17 @@ func update_node_unit_list(units:Array) -> void:
 			new_unit_display.set_color(unit.color)
 			new_unit_display.set_type(unit.unit_type)
 			%Unit_Display.add_child(new_unit_display)
+
+func Check_store_unlocked() -> void:
+	var Meets_condition:int
+	for corners:String in Overseer.The_support_nodes:
+		var checked_node:Node2D = get_parent().find_child(corners)
+		for unit:Resource in checked_node.unit_list:
+			if unit.player_ID == Unique_player_ID && unit.unit_type == 1:
+				Meets_condition +=1
+		if checked_node.Has_building && checked_node.building.player_ID == Unique_player_ID:
+			Meets_condition += 1
+	if Meets_condition >= 1:
+		$Open_Market_Button.set_disabled(false)
+	else:
+		$Open_Market_Button.set_disabled(true)
