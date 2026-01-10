@@ -43,20 +43,18 @@ func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shap
 		
 		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 
-func add_building(player_ID:int, _type:int, color:Vector3) -> void:
+func add_building(player:String, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)
-	node_owner = str(player_ID) #player_list[Overseer.selected_player_index].Player_name
+	node_owner = player #player_list[Overseer.selected_player_index].Player_name
 	#var color:Vector3 = get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 	building.location = int(name)
 	building.color = color
-	building.player_ID = player_ID
 	#Overseer.player_list[Overseer.selected_player_index]
 	get_parent().Current_player.base_list.append(building) #adds building to the base list
 
 	%Building.material.set_shader_parameter("tint_color", color)
 	%Building.material.set_shader_parameter("saturation", 0.4)
 	%Building.show()
-	Has_building = true
 
 func add_unit(player:int, type:int, color:Vector3) -> void:
 	var unique_unit:Resource
