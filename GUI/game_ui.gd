@@ -3,6 +3,7 @@ signal The_action(action: String)
 var Store_action: String = ""
 var last_clicked_node:String = ""
 var Unique_player_ID:int 
+var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -171,41 +172,28 @@ func connect_update_UI() -> void:
 func Check_market_open(Player_ID:int) -> void:
 	var Edge_nodes:Array
 	var Corner_node:Array 
-	var Corner_node_two:Array
 	var Winner:int
 	for keys:String in Overseer.The_nodes.keys():
 		var Values:Array = Overseer.The_nodes[keys]
-		#print(Overseer.The_nodes[str(Values[0])].size())
 		if Values.size() == 2:
-			pass#print("Node "+keys+" is a corner node and is connected to: "+str(Values)+"\n")
 			Edge_nodes.append(keys)
-	print("These are the edge nodes: "+str(Edge_nodes)+"\n")
 	for keys:String in Overseer.The_nodes.keys():
-		
 		var Values:Array = Overseer.The_nodes[keys] 
 		Winner = 0
 		for Connections:String in Edge_nodes:
 			if Values.has(int(Connections)):
 				Winner +=1
-				var Is_edge:bool = Edge_nodes.has(keys)
-				if Winner == 2 && (Is_edge):
-					#print("Node: "+keys+" in Edge nodes: "+str(Is_edge)+" "+str(Edge_nodes)+"\n")
+				if Winner == 2 && !Edge_nodes.has(keys):
 					Corner_node.append(keys)
-					
-				if Winner == 2:
-					if !Is_edge:
-						Corner_node_two.append(keys)
-						Winner = 0
-				#print(Winner)
+					Winner = 0
 	print("These are the corner nodes: "+str(Corner_node)+"\n")
-	print("These are the corner nodes that SHOULDN'T BE CORNER NODES: "+str(Corner_node_two))
 
-		#if :
-			#print("Node "+keys+" is a corner (exception version) node and is connected to: "+str(Values)+"\n")
-	#for nodes:Node in get_parent().get_children():
-		#if nodes is Node2D:
-			#print(find_children())
-			#for paths:Node in nodes.get_children():
-				#if paths is Node2D:
-					#if paths.name.begins_with(nodes.name):
-						#print("Node "+nodes.name+"'s paths:\n"+paths.name+"\n")
+func update_node_unit_list(units:Array) -> void:
+	for children:Node in %Unit_Display.get_children():
+		children.queue_free()
+	for unit:Resource in units:
+		if unit.player_ID == multiplayer.get_unique_id():
+			var new_unit_display:Control = UI_Unit_Scene.instantiate()
+			new_unit_display.set_color(unit.color)
+			new_unit_display.set_type(unit.unit_type)
+			%Unit_Display.add_child(new_unit_display)

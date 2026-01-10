@@ -12,7 +12,7 @@ func _ready() -> void:
 	pass
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("Flare") && Current_node.is_in_group("MapNode"):
+	if Input.is_action_just_pressed("Flare") && Current_node && Current_node.is_in_group("MapNode"):
 		Current_node.flare.rpc(multiplayer.get_unique_id())
 
 func initialize(size:int) -> void:
@@ -105,7 +105,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				$UI.action_error("Fighters must be placed at your own base")
 			elif  Fighter_possible(Current_node.name) == true:
 				#print("You have placed a Fighter at a base on node " + Name)
-				Current_node.add_unit(Current_player.Player_name,FIGHTER,Current_player.color)
+				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
@@ -114,7 +114,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		if Last_action == "Influence":
 			if Influence_possible(Current_node.name) == true:
 				#print("You have placed a Influence on node " + Name)
-				Current_node.add_unit(Current_player.Player_name,INFLUENCE,Current_player.color)
+				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Overseer.Request_node_data(Current_player,Current_node.name)
