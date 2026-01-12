@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=18 format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
@@ -10,6 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://c44kr7mbhn52e" path="res://Assets/Icons/Trophy.png" id="8_n388q"]
 [ext_resource type="Shader" uid="uid://g4sywj1bk4px" path="res://Assets/Shaders/Scrolling.gdshader" id="8_sw8an"]
 [ext_resource type="Texture2D" uid="uid://cgat3dbfw3tkj" path="res://Assets/Clouds.webp" id="9_sw8an"]
+[ext_resource type="Texture2D" uid="uid://b2errj0riq702" path="res://Assets/Military/soldier.png" id="9_yb2yk"]
+[ext_resource type="Texture2D" uid="uid://hu7nw3o7h36q" path="res://Assets/Military/binoculars.png" id="10_82g8w"]
+[ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="11_0wnlq"]
+[ext_resource type="Texture2D" uid="uid://boiqc3l35gmff" path="res://Assets/Icons/IntelNetwork.png" id="12_yb2yk"]
+[ext_resource type="Texture2D" uid="uid://c1xq20thy12to" path="res://Assets/Icons/LogiNetwork.png" id="13_82g8w"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
 font = ExtResource("4_w20xb")
@@ -63,30 +68,30 @@ label_settings = ExtResource("2_3qqlp")
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Place Base"
+text = "Purchase Base"
 
 [node name="Fighter_Button" type="Button" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
-text = "Fighter"
+text = "Purchase Fighter"
 
 [node name="Influence_Button" type="Button" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Influence"
+text = "Purchase Influence"
 
 [node name="Intelligence_Network_Button" type="Button" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
-text = "Intelligence"
+text = "Purchase Intelligence"
 
 [node name="Logistics_Network_Button" type="Button" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
-text = "Logistics"
+text = "Purchase Logistics"
 
 [node name="PanelContainer2" type="PanelContainer" parent="."]
 anchors_preset = 3
@@ -124,9 +129,10 @@ label_settings = ExtResource("2_3qqlp")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -25.5
-offset_right = 25.5
-offset_bottom = 23.0
+offset_left = -56.5
+offset_top = 42.0
+offset_right = 56.5
+offset_bottom = 65.0
 grow_horizontal = 2
 text = "CURRENT PHASE"
 label_settings = ExtResource("2_3qqlp")
@@ -152,7 +158,7 @@ horizontal_alignment = 1
 wait_time = 3.0
 
 [node name="Player_Info" type="PanelContainer" parent="."]
-offset_right = 115.0
+offset_right = 530.0
 offset_bottom = 40.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player_Info"]
@@ -166,6 +172,7 @@ expand_mode = 2
 [node name="Guns" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="TextureRect2" type="TextureRect" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
@@ -175,6 +182,7 @@ expand_mode = 2
 [node name="Money" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="TextureRect3" type="TextureRect" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
@@ -184,6 +192,7 @@ expand_mode = 2
 [node name="Population" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="TextureRect4" type="TextureRect" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
@@ -193,6 +202,100 @@ expand_mode = 2
 [node name="VictoryPoints" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="Spacer" type="Control" parent="Player_Info/HBoxContainer"]
+custom_minimum_size = Vector2(14.05, 0)
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="Player_Info/HBoxContainer"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+
+[node name="TextureRect5" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 18.0
+offset_right = 58.0
+offset_bottom = 40.0
+texture = ExtResource("9_yb2yk")
+expand_mode = 2
+
+[node name="Fighter_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 10.0
+offset_right = 71.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect6" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 75.0
+offset_right = 115.0
+offset_bottom = 40.0
+texture = ExtResource("10_82g8w")
+expand_mode = 2
+
+[node name="Influence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 119.0
+offset_top = 10.0
+offset_right = 128.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect7" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 132.0
+offset_right = 172.0
+offset_bottom = 40.0
+texture = ExtResource("11_0wnlq")
+expand_mode = 2
+
+[node name="Base_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 10.0
+offset_right = 185.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect8" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 189.0
+offset_right = 229.0
+offset_bottom = 40.0
+texture = ExtResource("12_yb2yk")
+expand_mode = 2
+
+[node name="Intelligence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 233.0
+offset_top = 10.0
+offset_right = 242.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect9" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 246.0
+offset_right = 286.0
+offset_bottom = 40.0
+texture = ExtResource("13_82g8w")
+expand_mode = 2
+
+[node name="Logistics_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 10.0
+offset_right = 299.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="Support_store_window" type="Window" parent="."]
 unique_name_in_owner = true
