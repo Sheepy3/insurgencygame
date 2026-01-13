@@ -8,3 +8,4 @@ class_name Player
 @export var Money:int = 0
 @export var Man_power:int = 0
 @export var Victory_points:int = 0
+@export var Player_storage:Dictionary = {"Units":[],"Buildings":[],"Networks":[]}

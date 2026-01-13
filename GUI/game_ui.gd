@@ -16,35 +16,67 @@ func _ready() -> void:
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
-
-#Activiates whe the "Place Base" button is pressed
-func _on_base_button_pressed() -> void:
-	The_action.emit("Base") #transmits signal that Base button has been pressed
-	find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
-
-#Activiates whe the "Figher" button is pressed
-func _on_fighter_button_pressed() -> void:
-	The_action.emit("Fighter") #transmits signal that Fighter button has been pressed
-	find_child("Dynamic_Action").text = "Fighter placing" #Updates "Dynamic" UI with current action (placing Figher)
-
-#Activiates whe the "Influence" button is pressed
-func _on_influence_button_pressed() -> void:
-	The_action.emit("Influence") #transmits signal that Base button has been pressed
-	find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
-
-#Activiates whe the "Intelligence" button is pressed
-func _on_intelligence_network_button_pressed() -> void:
-	The_action.emit("Intelligence") #transmits signal that Intelligence button has been pressed
-	find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
-
-#Activiates whe the "Logistics" button is pressed
-func _on_logistics_network_button_pressed() -> void:
-	The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
-	find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+	for boxes:HBoxContainer in $Action_Container/VBoxContainer.get_children(true):
+		for UI_elements:Control in boxes.get_children(true):
+			if UI_elements is Button:
+				#if UI_elements.name.ends_with("Place_Button"):
+				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name))
 
 func _on_player_switch_button_pressed() -> void:
 	pass
 	#Overseer.cycle_players()
+
+func Check_container_action(Button_name:String) -> void:
+	match Button_name:
+		"Base_Buy_Button":
+			The_action.emit("Base") #transmits signal that Base button has been pressed
+			#The_action.emit("Base_buying")
+			print("\nI am am the Base buy button")
+			find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
+		
+		"Base_Place_Button":
+			The_action.emit("Base_placing")
+			print("\nI am am the Base place button")
+		
+		"Fighter_Buy_Button":
+			The_action.emit("Fighter") #transmits signal that Fighter button has been pressed
+			#The_action.emit("Fighter_buying")
+			print("\nI am am the Fighter buy button")
+			find_child("Dynamic_Action").text = "Fighter placing" #Updates "Dynamic" UI with current action (placing Figher)
+		
+		"Fighter_Place_Button":
+			The_action.emit("Fighter_placing")
+			print("\nI am am the Fighter place button")
+		
+		"Influence_Buy_Button":
+			The_action.emit("Influence") #transmits signal that Base button has been pressed
+			#The_action.emit("Influence_buying")
+			print("\nI am am the Influence buy button")
+			find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
+		
+		"Influence_Place_Button":
+			The_action.emit("Influence_placing")
+			print("\nI am am the Influence place button")
+		
+		"Intelligence_Network_Buy_Button":
+			The_action.emit("Intelligence") #transmits signal that Intelligence button has been pressed
+			#The_action.emit("Intel_buying")
+			print("\nI am am the Intel buy button")
+			find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
+		
+		"Intelligence_Network_Place_Button":
+			The_action.emit("Intel_placing")
+			print("\nI am am the Intel place button")
+		
+		"Logistics_Network_Buy_Button":
+			The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
+			#The_action.emit("Logs_buying")
+			print("\nI am am the Logs buy button")
+			find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+		
+		"Logistics_Network_Place_Button":
+			The_action.emit("Logs_placing")
+			print("\nI am am the Logs place button")
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
@@ -78,6 +110,14 @@ func _on_error_timer_timeout() -> void:
 func _on_open_market_button_pressed() -> void:
 	$Open_Market_Button.hide()
 	%Support_store_window.show()
+	#!!! Reminder !!! The portion below is added for testing purposes
+	# Should be depricated when testing is finished
+	if multiplayer.is_server():
+		for players:Resource in Overseer.player_list:
+			players.Weapons += 30
+			players.Money += 30
+			players.Man_power += 30
+		Overseer.Resources_to_rpc.rpc()
 
 func _on_buy_button_pressed() -> void:
 	Store_action = "Buy"
@@ -92,7 +132,7 @@ func _on_weapons_button_pressed() -> void:
 	Weapons_action.rpc(Unique_player_ID,Store_action)
 
 func update_Player_Info() -> void:
-	var player:Resource = Overseer.Identify_player(Unique_player_ID) #Overseer.Identify_player(multiplayer.get_unique_id())
+	var player:Resource = Overseer.Identify_player(Unique_player_ID)
 	$Player_Info/HBoxContainer/Guns.text = str(player.Weapons)
 	$Player_Info/HBoxContainer/Money.text = str(player.Money)
 	$Player_Info/HBoxContainer/Population.text = str(player.Man_power)
@@ -106,7 +146,7 @@ func _on_support_store_window_close_requested() -> void:
 	$Open_Market_Button.show()
 
 func _on_support_store_window_window_input(event: InputEvent) -> void:
-	$Store_bounds.global_position = %Support_store_window.position
+	$Store_bounds.global_position = %Support_store_window.position 
 
 func _toggle_clouds(visibility:bool) -> void:
 	if visibility == true:
