@@ -16,7 +16,7 @@ var The_nodes:Dictionary
 var The_support_nodes:Array
 var Phase_cycle:int = 0
 var Desired_cycle:int = 3
-
+ 
 enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
 var current_phase:int = MAINTENENCE
 

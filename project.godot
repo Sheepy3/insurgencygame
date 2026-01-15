@@ -29,6 +29,10 @@ window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/snap/snap_2d_vertices_to_pixel=false
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/script_splitter/plugin.cfg")
+
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true

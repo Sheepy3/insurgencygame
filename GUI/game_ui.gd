@@ -29,54 +29,39 @@ func _on_player_switch_button_pressed() -> void:
 func Check_container_action(Button_name:String) -> void:
 	match Button_name:
 		"Base_Buy_Button":
-			The_action.emit("Base") #transmits signal that Base button has been pressed
-			#The_action.emit("Base_buying")
-			print("\nI am am the Base buy button")
-			find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
+			check_buy_action.rpc("Buy_Base",Unique_player_ID)
 		
 		"Base_Place_Button":
 			The_action.emit("Base_placing")
-			print("\nI am am the Base place button")
+			find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
 		
 		"Fighter_Buy_Button":
-			The_action.emit("Fighter") #transmits signal that Fighter button has been pressed
-			#The_action.emit("Fighter_buying")
-			print("\nI am am the Fighter buy button")
-			find_child("Dynamic_Action").text = "Fighter placing" #Updates "Dynamic" UI with current action (placing Figher)
+			check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
 		
 		"Fighter_Place_Button":
 			The_action.emit("Fighter_placing")
-			print("\nI am am the Fighter place button")
+			find_child("Dynamic_Action").text = "Fighter placing" #Updates "Dynamic" UI with current action (placing Figher)
 		
 		"Influence_Buy_Button":
-			The_action.emit("Influence") #transmits signal that Base button has been pressed
-			#The_action.emit("Influence_buying")
-			print("\nI am am the Influence buy button")
-			find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
+			check_buy_action.rpc("Buy_Influence",Unique_player_ID)
 		
 		"Influence_Place_Button":
 			The_action.emit("Influence_placing")
-			print("\nI am am the Influence place button")
+			find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
 		
 		"Intelligence_Network_Buy_Button":
-			The_action.emit("Intelligence") #transmits signal that Intelligence button has been pressed
-			#The_action.emit("Intel_buying")
-			print("\nI am am the Intel buy button")
-			find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
+			check_buy_action.rpc("Buy_Intel",Unique_player_ID)
 		
 		"Intelligence_Network_Place_Button":
 			The_action.emit("Intel_placing")
-			print("\nI am am the Intel place button")
+			find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
 		
 		"Logistics_Network_Buy_Button":
-			The_action.emit("Logistics") #transmits signal that Logistics button has been pressed
-			#The_action.emit("Logs_buying")
-			print("\nI am am the Logs buy button")
-			find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+			check_buy_action.rpc("Buy_Logs",Unique_player_ID)
 		
 		"Logistics_Network_Place_Button":
 			The_action.emit("Logs_placing")
-			print("\nI am am the Logs place button")
+			find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
@@ -137,6 +122,11 @@ func update_Player_Info() -> void:
 	$Player_Info/HBoxContainer/Money.text = str(player.Money)
 	$Player_Info/HBoxContainer/Population.text = str(player.Man_power)
 	$Player_Info/HBoxContainer/VictoryPoints.text = str(player.Victory_points)
+	$Player_Info/HBoxContainer/Spacer2/Base_count.text = str(player.Player_storage["Military_Base"])
+	$Player_Info/HBoxContainer/Spacer2/Fighter_count.text = str(player.Player_storage["Fighter"])
+	$Player_Info/HBoxContainer/Spacer2/Influence_count.text = str(player.Player_storage["Influence"])
+	$Player_Info/HBoxContainer/Spacer2/Intelligence_count.text = str(player.Player_storage["Intelligence"])
+	$Player_Info/HBoxContainer/Spacer2/Logistics_count.text = str(player.Player_storage["Logistics"])
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	%Support_store_window.position = Vector2(975,36)
@@ -234,3 +224,56 @@ func Check_store_unlocked() -> void:
 		$Open_Market_Button.set_disabled(false)
 	else:
 		$Open_Market_Button.set_disabled(true)
+
+@rpc("any_peer","call_local")
+func check_buy_action(Buyable:String,Player_ID:int) -> void:
+	if multiplayer.is_server():
+		var Current_player:Resource = Overseer.Identify_player(Player_ID)
+		match Buyable:
+			"Buy_Base":
+				if Current_player.Man_power >= 10 && Current_player.Money >= 30:
+					Current_player.Man_power -= 10 
+					Current_player.Money -= 30
+					Current_player.Player_storage["Military_Base"] += 1
+					Overseer.Resources_to_rpc()
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
+			"Buy_Fighter":
+				if Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5:
+					Current_player.Man_power -= 5 
+					Current_player.Money -= 10 
+					Current_player.Weapons -= 5
+					Current_player.Player_storage["Fighter"] += 1
+					Overseer.Resources_to_rpc()
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
+			"Buy_Influence":
+				if Current_player.Man_power >= 5 && Current_player.Money >= 15:
+					Current_player.Man_power -= 5 
+					Current_player.Money -= 15
+					Current_player.Player_storage["Influence"] += 1
+					Overseer.Resources_to_rpc()
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
+			"Buy_Intel":
+				if Current_player.Man_power >= 1 && Current_player.Money >= 10:
+					Current_player.Man_power -= 1 
+					Current_player.Money -= 10
+					Current_player.Player_storage["Intelligence"] += 1
+					Overseer.Resources_to_rpc()
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
+			"Buy_Logs":
+				if Current_player.Man_power >= 1 && Current_player.Money >= 5:
+					Current_player.Man_power -= 1 
+					Current_player.Money -= 5
+					Current_player.Player_storage["Logistics"] += 1
+					Overseer.Resources_to_rpc()
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
+		

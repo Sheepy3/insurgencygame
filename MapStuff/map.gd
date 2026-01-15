@@ -71,11 +71,10 @@ func Update_action(action: String = "") ->void:
 func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 	if multiplayer.is_server():
 		Last_action = Action
-		Current_player = Overseer.Identify_player(Player_ID) #Overseer.Identify_player(multiplayer.get_remote_sender_id())
+		Current_player = Overseer.Identify_player(Player_ID)
 		#if Current_node:
-		#	Current_node.remove_selection_circle()
 		Current_node = find_child(Name)
-		if Last_action == "Base":
+		if Last_action == "Base_placing":
 			if Current_node.Has_building:
 				$UI.action_error("there is already a base on this node!")
 			elif Current_player.base_list.size() > 0:
@@ -96,7 +95,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				Overseer.Request_node_data(Current_player,Current_node.name)
 				Overseer.Resources_to_rpc()
 
-		if Last_action == "Fighter":
+		if Last_action == "Fighter_placing":
 			if Fighter_possible(Current_node.name) == false:
 				$UI.action_error("Fighters must be placed at your own base")
 			elif  Fighter_possible(Current_node.name) == true:
@@ -107,7 +106,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				Overseer.Request_node_data(Current_player,Current_node.name)
 				Overseer.Resources_to_rpc()
 
-		if Last_action == "Influence":
+		if Last_action == "Influence_placing":
 			if Influence_possible(Current_node.name) == true:
 				#print("You have placed a Influence on node " + Name)
 				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
@@ -124,7 +123,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 		Last_action = Action
 		Current_player = Overseer.Identify_player(Player_ID)
 		var Current_path: Node = find_child(Name)
-		if Last_action == "Intelligence":
+		if Last_action == "Intel_placing":
 			if Current_path.Has_intel:
 				$UI.action_error("there is already an Intelligence network on this path!")
 			elif Intell_possible(Current_path.name) == true:
@@ -139,7 +138,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 			else:
 				$UI.action_error("You must place Intelligence networks next to an existing one!")
 
-		if Last_action == "Logistics":
+		if Last_action == "Logs_placing":
 			if Current_path.Has_logs:
 				$UI.action_error("there is already an Logistics network on this path!")
 			elif Logs_possible(Current_path.name) == true:
