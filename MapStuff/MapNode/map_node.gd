@@ -41,7 +41,7 @@ func _on_map_node_area_2d_input_event(_viewport: Node, event: InputEvent, _shape
 		get_parent().find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
 		get_parent().find_child("Dynamic_RPU").text = str(node_RPU.RPU)
 		get_parent().find_child("Dynamic_Pop").text = str(node_RPU.Population)
-		get_parent().find_child("UI").update_node_unit_list(unit_list)
+		get_parent().find_child("UI").update_node_unit_list(unit_list, name)
 		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 
 func add_building(player_ID:int, _type:int, color:Vector3) -> void:

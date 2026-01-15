@@ -75,6 +75,16 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		#if Current_node:
 		#	Current_node.remove_selection_circle()
 		Current_node = find_child(Name)
+		if Last_action.begins_with("Moving_Fighter"):
+			var origin_number: String = Last_action.right(5) #this is an absurd hack to get origin node. I am not changing it 
+			print("moving fighter to " + Name + "from: " + origin_number)
+			Move_fighter_possible(Name)
+		else:
+			print(Last_action + "rip")
+		if Last_action.begins_with("Moving_Influence"):
+			print("moving influence to " + Name)
+			Move_influence_possible(Name)
+			
 		if Last_action == "Base":
 			if Current_node.Has_building:
 				$UI.action_error("there is already a base on this node!")
@@ -212,6 +222,11 @@ func Fighter_possible(Node_name:String) -> bool:
 	if Targeted_node.Has_building && Targeted_node.building.color == Current_player.color:
 		return true
 	return false
+
+func Move_fighter_possible(Node_name:String) -> void:
+	pass
+func Move_influence_possible(Node_name:String) -> void:
+	pass
 
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	var Action:String = Last_action

@@ -123,10 +123,6 @@ func _process(delta: float) -> void:
 	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
 	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
 
-func select_node(tile:String) -> void:
-	last_clicked_node = tile
-	pass
-
 @rpc("any_peer","call_local")
 func Manpower_action(Player_ID:int,action:String)-> void:
 	if multiplayer.is_server():
@@ -168,19 +164,24 @@ func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Unique_player_ID = multiplayer.get_unique_id()
 
-func update_node_unit_list(units:Array) -> void:
+func update_node_unit_list(units:Array, map_node:StringName) -> void:
 	reset_node_unit_list()
+	last_clicked_node = map_node
+	print(last_clicked_node)
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
-			new_unit_display.set_color(unit.color)
-			new_unit_display.set_type(unit.unit_type)
-			new_unit_display.Move_button.connect()
+			new_unit_display.Unit_Resource = unit
+			new_unit_display.Move_button.connect(move_unit)
 			%Unit_Display.add_child(new_unit_display)
-			
 
-#func move_unit
-
+func move_unit(resource:Resource) -> void:
+	var formatted_node_name: String = "%05d" % int(last_clicked_node) # Outputs: "00005"
+		
+	if resource.unit_type == 0:
+		The_action.emit("Moving_Fighter_"+formatted_node_name)
+	else:
+		The_action.emit("Moving_Influence_"+formatted_node_name)
 
 func reset_node_unit_list() -> void:
 	for children:Node in %Unit_Display.get_children():
