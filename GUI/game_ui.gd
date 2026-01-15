@@ -175,7 +175,12 @@ func update_node_unit_list(units:Array) -> void:
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
 			new_unit_display.set_color(unit.color)
 			new_unit_display.set_type(unit.unit_type)
+			new_unit_display.Move_button.connect()
 			%Unit_Display.add_child(new_unit_display)
+			
+
+#func move_unit
+
 
 func reset_node_unit_list() -> void:
 	for children:Node in %Unit_Display.get_children():

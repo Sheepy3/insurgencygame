@@ -220,7 +220,8 @@ func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	if !Action && Tile == "Node":
 		Current_node = find_child(Name)
 		Current_node.add_selection_circle()
-		#print(Current_node)
+		#print(str(Current_node)+" Clicked on by"+str(multiplayer.get_unique_id()))
+		
 	else:
 		Current_node = null
 		if Tile == "Node":

@@ -2,6 +2,7 @@ extends Node2D
 @export var Unit_Data:Resource
 enum{FIGHTER,INFLUENCE}
 
+
 func test() ->void:
 	print("hi")
 
