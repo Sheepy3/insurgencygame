@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=18 format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
@@ -10,6 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://c44kr7mbhn52e" path="res://Assets/Icons/Trophy.png" id="8_n388q"]
 [ext_resource type="Shader" uid="uid://g4sywj1bk4px" path="res://Assets/Shaders/Scrolling.gdshader" id="8_sw8an"]
 [ext_resource type="Texture2D" uid="uid://cgat3dbfw3tkj" path="res://Assets/Clouds.webp" id="9_sw8an"]
+[ext_resource type="Texture2D" uid="uid://b2errj0riq702" path="res://Assets/Military/soldier.png" id="9_yb2yk"]
+[ext_resource type="Texture2D" uid="uid://hu7nw3o7h36q" path="res://Assets/Military/binoculars.png" id="10_82g8w"]
+[ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="11_0wnlq"]
+[ext_resource type="Texture2D" uid="uid://boiqc3l35gmff" path="res://Assets/Icons/IntelNetwork.png" id="12_yb2yk"]
+[ext_resource type="Texture2D" uid="uid://c1xq20thy12to" path="res://Assets/Icons/LogiNetwork.png" id="13_82g8w"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
 font = ExtResource("4_w20xb")
@@ -59,74 +64,117 @@ size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Base_Button" type="Button" parent="Action_Container/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Base_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Base"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Place Base"
+text = "Purchase"
 
-[node name="Fighter_Button" type="Button" parent="Action_Container/VBoxContainer"]
+[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Fighter_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Fighter"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
-text = "Fighter"
+text = "Purchase"
 
-[node name="Influence_Button" type="Button" parent="Action_Container/VBoxContainer"]
+[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Influence_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Influence"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Influence"
+text = "Purchase"
 
-[node name="Intelligence_Network_Button" type="Button" parent="Action_Container/VBoxContainer"]
+[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
+size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Intelligence_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
 text = "Intelligence"
-
-[node name="Logistics_Network_Button" type="Button" parent="Action_Container/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_fbkqq")
-text = "Logistics"
-
-[node name="PanelContainer2" type="PanelContainer" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -103.0
-offset_top = -40.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer2"]
-layout_mode = 2
-
-[node name="Phase_Button" type="Button" parent="PanelContainer2/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_fbkqq")
-text = "NEXT PHASE"
-
-[node name="HSplitContainer" type="HSplitContainer" parent="PanelContainer2/VBoxContainer"]
-layout_mode = 2
-
-[node name="Player_Switch_Button" type="Button" parent="PanelContainer2/VBoxContainer/HSplitContainer"]
-layout_mode = 2
-theme = ExtResource("3_fbkqq")
-text = "Cycle Player:"
-
-[node name="Dynamic_Player" type="Label" parent="PanelContainer2/VBoxContainer/HSplitContainer"]
-layout_mode = 2
-text = "[Current Player]"
 label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "Purchase"
+
+[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Dynamic_Action" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+text = "Logistics"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "Purchase"
+
+[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "Place"
 
 [node name="Current_Phase" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -25.5
-offset_right = 25.5
-offset_bottom = 23.0
+offset_left = -56.5
+offset_top = 42.0
+offset_right = 56.5
+offset_bottom = 65.0
 grow_horizontal = 2
 text = "CURRENT PHASE"
 label_settings = ExtResource("2_3qqlp")
@@ -152,7 +200,7 @@ horizontal_alignment = 1
 wait_time = 3.0
 
 [node name="Player_Info" type="PanelContainer" parent="."]
-offset_right = 115.0
+offset_right = 530.0
 offset_bottom = 40.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Player_Info"]
@@ -166,6 +214,7 @@ expand_mode = 2
 [node name="Guns" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="TextureRect2" type="TextureRect" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
@@ -175,6 +224,7 @@ expand_mode = 2
 [node name="Money" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="TextureRect3" type="TextureRect" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
@@ -184,6 +234,7 @@ expand_mode = 2
 [node name="Population" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="TextureRect4" type="TextureRect" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
@@ -193,6 +244,100 @@ expand_mode = 2
 [node name="VictoryPoints" type="Label" parent="Player_Info/HBoxContainer"]
 layout_mode = 2
 text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="Spacer" type="Control" parent="Player_Info/HBoxContainer"]
+custom_minimum_size = Vector2(14.05, 0)
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="Player_Info/HBoxContainer"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+
+[node name="TextureRect5" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 18.0
+offset_right = 58.0
+offset_bottom = 40.0
+texture = ExtResource("9_yb2yk")
+expand_mode = 2
+
+[node name="Fighter_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 10.0
+offset_right = 71.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect6" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 75.0
+offset_right = 115.0
+offset_bottom = 40.0
+texture = ExtResource("10_82g8w")
+expand_mode = 2
+
+[node name="Influence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 119.0
+offset_top = 10.0
+offset_right = 128.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect7" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 132.0
+offset_right = 172.0
+offset_bottom = 40.0
+texture = ExtResource("11_0wnlq")
+expand_mode = 2
+
+[node name="Base_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 176.0
+offset_top = 10.0
+offset_right = 185.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect8" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 189.0
+offset_right = 229.0
+offset_bottom = 40.0
+texture = ExtResource("12_yb2yk")
+expand_mode = 2
+
+[node name="Intelligence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 233.0
+offset_top = 10.0
+offset_right = 242.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+
+[node name="TextureRect9" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 246.0
+offset_right = 286.0
+offset_bottom = 40.0
+texture = ExtResource("13_82g8w")
+expand_mode = 2
+
+[node name="Logistics_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 10.0
+offset_right = 299.0
+offset_bottom = 29.0
+text = "0"
+label_settings = ExtResource("2_3qqlp")
 
 [node name="Support_store_window" type="Window" parent="."]
 unique_name_in_owner = true
@@ -372,13 +517,6 @@ mouse_filter = 2
 texture = ExtResource("9_sw8an")
 stretch_mode = 1
 
-[connection signal="pressed" from="Action_Container/VBoxContainer/Base_Button" to="." method="_on_base_button_pressed"]
-[connection signal="pressed" from="Action_Container/VBoxContainer/Fighter_Button" to="." method="_on_fighter_button_pressed"]
-[connection signal="pressed" from="Action_Container/VBoxContainer/Influence_Button" to="." method="_on_influence_button_pressed"]
-[connection signal="pressed" from="Action_Container/VBoxContainer/Intelligence_Network_Button" to="." method="_on_intelligence_network_button_pressed"]
-[connection signal="pressed" from="Action_Container/VBoxContainer/Logistics_Network_Button" to="." method="_on_logistics_network_button_pressed"]
-[connection signal="pressed" from="PanelContainer2/VBoxContainer/Phase_Button" to="." method="_on_phase_button_pressed"]
-[connection signal="pressed" from="PanelContainer2/VBoxContainer/HSplitContainer/Player_Switch_Button" to="." method="_on_player_switch_button_pressed"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
 [connection signal="close_requested" from="Support_store_window" to="." method="_on_support_store_window_close_requested"]
 [connection signal="window_input" from="Support_store_window" to="." method="_on_support_store_window_window_input"]

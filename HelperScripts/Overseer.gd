@@ -13,13 +13,15 @@ var current_player:String
 #var Intelligence_array:Array
 var The_networks:Dictionary
 var The_nodes:Dictionary
+var The_support_nodes:Array
 var Phase_cycle:int = 0
 var Desired_cycle:int = 3
-
+ 
 enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
 var current_phase:int = MAINTENENCE
 
 signal change_player
+signal game_started
 signal change_phase
 signal player_resources_updated
 
@@ -66,7 +68,7 @@ func Resources_to_rpc() -> void:
 	var Player_rpc_info:Dictionary
 	if multiplayer.is_server():
 		for Players:Resource in player_list:
-			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points]
+			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points,Players.Player_storage]
 		Rpc_to_resources.rpc(Player_rpc_info)
 		player_resources_updated.emit()
 
@@ -85,17 +87,18 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		New_player_resource.Money = Values[5]
 		New_player_resource.Man_power = Values[6]
 		New_player_resource.Victory_points = Values[7]
+		New_player_resource.Player_storage = Values[8]
 		player_list.append(New_player_resource)
-		player_resources_updated.emit()
+	player_resources_updated.emit()
 
 @rpc("any_peer","call_local")
-func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
+func Request_node_data(Edited_node_name:String) -> void:
 	var New_node:Dictionary
 	if multiplayer.is_server():
 		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 		if Edited_node.Has_building == true:
 			var building:Resource = Edited_node.building
-			New_node["Building"] = [building.unit_type,building.player,building.color,building.location]
+			New_node["Building"] = [building.unit_type,building.player_ID,building.color,building.location]
 		var x:int = 0
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
@@ -118,7 +121,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Edited_node.add_building(Values[1],Values[0],Values[2])
 			var Updates_to_building:Resource = Edited_node.building
 			Updates_to_building.unit_type = Values[0]
-			Updates_to_building.player = Values[1]
+			Updates_to_building.player_ID = Values[1]
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
 		elif Placables == "Unit:" + str(x):
