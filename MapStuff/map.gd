@@ -87,14 +87,14 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 					Overseer.Resources_to_rpc()
 				else:
 					$UI.action_error("You do not have the conditions to place a Base!")
-			#elif Current_player.base_list.size() == 0:
-				##print("You have placed a base on node " + Name)
-				#Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
-				##find_child("Dynamic_Action").text = "None"
-				#Last_action = ""
-				##print(type_string(typeof(Current_node.name)))
-				#Overseer.Request_node_data(Current_node.name)
-				#Overseer.Resources_to_rpc()
+			elif Current_player.base_list.size() == 0:
+				#print("You have placed a base on node " + Name)
+				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
+				#find_child("Dynamic_Action").text = "None"
+				Last_action = ""
+				#print(type_string(typeof(Current_node.name)))
+				Overseer.Request_node_data(Current_node.name)
+				Overseer.Resources_to_rpc()
 		elif Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
 			$UI.action_error("You do not have any Military Bases to place!")
 
