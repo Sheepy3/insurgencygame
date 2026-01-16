@@ -92,7 +92,7 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 	player_resources_updated.emit()
 
 @rpc("any_peer","call_local")
-func Request_node_data(Requester:Resource,Edited_node_name:String) -> void:
+func Request_node_data(Edited_node_name:String) -> void:
 	var New_node:Dictionary
 	if multiplayer.is_server():
 		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
