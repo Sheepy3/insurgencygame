@@ -28,7 +28,7 @@ func _ready() -> void:
 		%Logistics_Network/Logistics_Text.set_flip_v(true)
 		%Logistics_Network/Logistics_Text.set_flip_h(true)
 
-func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_idx: int) -> void:
+func _on_node_path_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_idx: int) -> void:
 	if event is InputEventMouseButton \
 	and event.button_index == MOUSE_BUTTON_LEFT \
 	and not event.pressed:

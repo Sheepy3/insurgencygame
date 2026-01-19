@@ -217,8 +217,6 @@ func move_unit_function(unit_resource:Resource) -> void:
 		var packed_string:String = "move_influence_"+packed_number
 		The_action.emit(packed_string)
 	pass
-	
-
 
 func reset_node_unit_list() -> void:
 	for children:Node in %Unit_Display.get_children():
