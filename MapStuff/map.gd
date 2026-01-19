@@ -77,14 +77,29 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		
 		if Last_action.begins_with("move_fighter_"):
 			var unpacked_node:int = int(Last_action.right(5))
+			
 			print("moving fighter from " + Name + " to" + str(unpacked_node))
-			Fighter_movement_possible(int(Name),unpacked_node)
+			if Fighter_movement_possible(int(Name),unpacked_node):
+				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
+				var prev_node:Node = find_child(str(unpacked_node))
+				prev_node.remove_unit(Current_player.Player_ID,FIGHTER)
+				Overseer.Request_node_data(Current_node.name)
+				Overseer.Request_node_data(prev_node.name)
+				Overseer.Resources_to_rpc()
+			else:
+				print("not possible?")
 		
 		if Last_action.begins_with("move_influence_"):
 			var unpacked_node:int = int(Last_action.right(5))
 			print("moving influence from " + Name + " to" + str(unpacked_node))
-			Influence_movement_possible(int(Name),unpacked_node)
-			
+			if Influence_movement_possible(int(Name),unpacked_node):
+				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
+				var prev_node:Node = find_child(str(unpacked_node))
+				prev_node.remove_unit(Current_player.Player_ID,INFLUENCE)
+				Overseer.Request_node_data(Current_node.name)
+				Overseer.Request_node_data(prev_node.name)
+				Overseer.Resources_to_rpc()
+		
 		if Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
 			if Current_node.Has_building:
 				$UI.action_error("There is already a base on this node!")
@@ -239,7 +254,7 @@ func Fighter_possible(Node_name:String) -> bool:
 		return true
 	return false
 
-func Fighter_movement_possible(from:int, to:int) -> void:
+func Fighter_movement_possible(from:int, to:int) -> bool:
 	var logs_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][1]
 	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
 	
@@ -249,18 +264,21 @@ func Fighter_movement_possible(from:int, to:int) -> void:
 	
 	if (logs_pathfind > 0) and (logs_pathfind <= 3) and (intel_pathfind > 0) and (intel_pathfind <= 3):
 		print("you can move here!")
+		return true
 	else:
-		pass ## TODO: THROW ERROR
+		## TODO: THROW ERROR
+		return false
 	
 
-func Influence_movement_possible(from:int, to:int) -> void:
+func Influence_movement_possible(from:int, to:int) -> bool:
 	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
 	var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
 	
 	
 	if (intel_pathfind > 0) and (intel_pathfind <= 2):
 		print("can move here!")
-		pass
+		return true
+	return false
 
 
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:

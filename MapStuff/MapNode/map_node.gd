@@ -72,12 +72,24 @@ func add_unit(player:int, type:int, color:Vector3) -> void:
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
 
-	unit_list.append(unique_unit)
+	unit_list.append(unique_unit) # ADD UNIT DATA
 	
-	var unit_visual := unit_scene.instantiate()
+	var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
 	unit_visual.Unit_Data = unique_unit
 	%Units.add_child(unit_visual)
 	_reorder_units()
+
+func remove_unit(player:int,type:int) -> void: ## TODO: HANDLE RECONSTITUTABLE UNITS (THIS DOES NOT CARE ABOUT UNIT STATE, CURRENTLY ONLY TYPE AND PLAYER)
+	for unit:Resource in unit_list: # DELETE UNIT DATA
+		if (unit.player_ID == player) and (unit.unit_type == type):
+			unit_list.erase(unit) 
+			break
+	for unit:Node in %Units.get_children(): # DELETE UNIT VISUAL
+		if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type):
+			unit.queue_free()
+			break
+	_reorder_units()
+
 
 func _reorder_units() -> void:
 	var nodes:Array = %Units.get_children()
