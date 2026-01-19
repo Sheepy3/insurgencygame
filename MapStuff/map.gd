@@ -74,6 +74,15 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		Current_player = Overseer.Identify_player(Player_ID)
 		#if Current_node:
 		Current_node = find_child(Name)
+		
+		if Last_action.begins_with("move_fighter_"):
+			var unpacked_node:int = int(Last_action.right(5))
+			print("moving fighter from " + Name + " to" + str(unpacked_node))
+		
+		if Last_action.begins_with("move_influence_"):
+			var unpacked_node:int = int(Last_action.right(5))
+			print("moving influence from " + Name + " to" + str(unpacked_node))
+		
 		if Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
 			if Current_node.Has_building:
 				$UI.action_error("There is already a base on this node!")
