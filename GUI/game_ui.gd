@@ -84,10 +84,12 @@ func _phase_switch_ui() -> void:
 func _on_phase_button_pressed() -> void:
 	Overseer.cycle_phases()
 
-func action_error(error_message:String) -> void:
-	$Error_Message.text = error_message
-	$Error_Message.show()
-	$Error_timer.start()
+@rpc("authority","call_local")
+func action_error(error_message:String, player_ID:int) -> void:
+	if multiplayer.get_unique_id() == player_ID: 
+		$Error_Message.text = error_message
+		$Error_Message.show()
+		$Error_timer.start()
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
@@ -170,7 +172,7 @@ func Manpower_action(Player_ID:int,action:String)-> void:
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else: 
-			action_error("You do not have enough resources to complete this transaction!")
+			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
 
 @rpc("any_peer","call_local")
 func Weapons_action(Player_ID:int,action:String)-> void:
@@ -188,7 +190,7 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else:
-			action_error("You do not have enough resources to complete this transaction!")
+			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
 
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
@@ -248,7 +250,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Military_Base"] += 1
 					Overseer.Resources_to_rpc()
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Fighter":
 				if Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5:
@@ -258,7 +260,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Fighter"] += 1
 					Overseer.Resources_to_rpc()
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Influence":
 				if Current_player.Man_power >= 5 && Current_player.Money >= 15:
@@ -267,7 +269,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Influence"] += 1
 					Overseer.Resources_to_rpc()
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Intel":
 				if Current_player.Man_power >= 1 && Current_player.Money >= 10:
@@ -276,7 +278,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Intelligence"] += 1
 					Overseer.Resources_to_rpc()
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Logs":
 				if Current_player.Man_power >= 1 && Current_player.Money >= 5:
@@ -285,6 +287,6 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Logistics"] += 1
 					Overseer.Resources_to_rpc()
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 		

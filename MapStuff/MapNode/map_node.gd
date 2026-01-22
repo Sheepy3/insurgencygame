@@ -162,7 +162,6 @@ func add_selection_circle() -> void:
 	target_radius = 0.25
 	target_speed  = 1.0
 	lerpspeed=0.3
-	_reorder_units()
 
 @rpc("any_peer","call_local")
 func flare(player_ID:int) -> void:
