@@ -202,21 +202,21 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
 			new_unit_display.unit_resource = unit
+			new_unit_display.source_node = mapnode
 			new_unit_display.move_unit.connect(move_unit_function)
 			#new_unit_display.set_color(unit.color)
 			#new_unit_display.set_type(unit.unit_type)
 			%Unit_Display.add_child(new_unit_display)
 
-func move_unit_function(unit_resource:Resource) -> void:
-	print("move unit from " + last_clicked_node)
-	var packed_number:String = "%05d" % int(last_clicked_node)
+func move_unit_function(unit_resource:Resource, source_node:String) -> void:
+	print("move unit from " + source_node)
+	var packed_number:String = "%05d" % int(source_node)
 	if unit_resource.unit_type == 0:
 		var packed_string:String = "move_fighter_"+packed_number
 		The_action.emit(packed_string)
 	else:
 		var packed_string:String = "move_influence_"+packed_number
 		The_action.emit(packed_string)
-	pass
 
 func reset_node_unit_list() -> void:
 	for children:Node in %Unit_Display.get_children():
