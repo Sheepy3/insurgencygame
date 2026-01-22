@@ -202,7 +202,7 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
 			new_unit_display.unit_resource = unit
-			new_unit_display.source_node = mapnode
+			new_unit_display.source_node = str(mapnode)
 			new_unit_display.move_unit.connect(move_unit_function)
 			#new_unit_display.set_color(unit.color)
 			#new_unit_display.set_type(unit.unit_type)
