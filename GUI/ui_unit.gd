@@ -2,7 +2,8 @@ extends PanelContainer
 var FighterSprite:Texture2D = preload("res://Assets/Military/soldier.png")
 var InfluenceSprite:Texture2D = preload("res://Assets/Military/binoculars.png")
 var unit_resource: Resource
-signal move_unit(unit_resource: Resource)
+var source_node: String
+signal move_unit(unit_resource: Resource, source_node: String)
 
 enum unit_type {
 	Fighter,
@@ -31,5 +32,4 @@ func _ready() -> void:
 		%TextureRect.texture = InfluenceSprite
 
 func _on_move_button_pressed() -> void:
-	move_unit.emit(unit_resource)
-	pass # Replace with function body.
+	move_unit.emit(unit_resource, source_node)

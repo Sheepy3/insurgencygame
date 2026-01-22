@@ -79,6 +79,12 @@ func add_unit(player:int, type:int, color:Vector3) -> void:
 	%Units.add_child(unit_visual)
 	_reorder_units()
 
+func has_unit(player:int, type:int) -> bool:
+	for unit:Resource in unit_list:
+		if (unit.player_ID == player) and (unit.unit_type == type):
+			return true
+	return false
+
 func remove_unit(player:int,type:int) -> void: ## TODO: HANDLE RECONSTITUTABLE UNITS (THIS DOES NOT CARE ABOUT UNIT STATE, CURRENTLY ONLY TYPE AND PLAYER)
 	for unit:Resource in unit_list: # DELETE UNIT DATA
 		if (unit.player_ID == player) and (unit.unit_type == type):
