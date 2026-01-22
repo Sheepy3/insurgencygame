@@ -231,48 +231,84 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 		var Current_player:Resource = Overseer.Identify_player(Player_ID)
 		match Buyable:
 			"Buy_Base":
-				if Current_player.Man_power >= 10 && Current_player.Money >= 30:
+				if Current_player.Man_power >= 17 && Current_player.Money >= 45 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 17
+					Current_player.Money -= 45
+					Current_player.Player_storage["Military_Base"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 10 && Current_player.Money >= 30 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 10 
 					Current_player.Money -= 30
 					Current_player.Player_storage["Military_Base"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Fighter":
-				if Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5:
+				if Current_player.Man_power >= 8 && Current_player.Money >= 15 && Current_player.Weapons >= 8 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 8 
+					Current_player.Money -= 15 
+					Current_player.Weapons -= 8
+					Current_player.Player_storage["Fighter"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5 
 					Current_player.Money -= 10 
 					Current_player.Weapons -= 5
 					Current_player.Player_storage["Fighter"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Influence":
-				if Current_player.Man_power >= 5 && Current_player.Money >= 15:
+				if Current_player.Man_power >= 8 && Current_player.Money >= 25 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 8 
+					Current_player.Money -= 25
+					Current_player.Player_storage["Influence"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 5 && Current_player.Money >= 15 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5 
 					Current_player.Money -= 15
 					Current_player.Player_storage["Influence"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Intel":
-				if Current_player.Man_power >= 1 && Current_player.Money >= 10:
+				if Current_player.Man_power >= 2 && Current_player.Money >= 15 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 2 
+					Current_player.Money -= 15
+					Current_player.Player_storage["Intelligence"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 1 && Current_player.Money >= 10 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
 					Current_player.Money -= 10
 					Current_player.Player_storage["Intelligence"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Logs":
-				if Current_player.Man_power >= 1 && Current_player.Money >= 5:
+				if Current_player.Man_power >= 2 && Current_player.Money >= 10 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 2 
+					Current_player.Money -= 10
+					Current_player.Player_storage["Logistics"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 1 && Current_player.Money >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
 					Current_player.Money -= 5
 					Current_player.Player_storage["Logistics"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
