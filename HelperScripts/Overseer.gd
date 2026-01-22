@@ -68,7 +68,7 @@ func Resources_to_rpc() -> void:
 	var Player_rpc_info:Dictionary
 	if multiplayer.is_server():
 		for Players:Resource in player_list:
-			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points,Players.Player_storage]
+			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.Player_faction,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points,Players.Player_storage]
 		Rpc_to_resources.rpc(Player_rpc_info)
 		player_resources_updated.emit()
 
@@ -81,13 +81,14 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		var Values:Array = Player_rpc_info[Keys]
 		New_player_resource.Player_ID = Values[0]
 		New_player_resource.Player_name = Values[1]
-		New_player_resource.color = Values[2]
-		New_player_resource.base_list = Values[3]
-		New_player_resource.Weapons = Values[4]
-		New_player_resource.Money = Values[5]
-		New_player_resource.Man_power = Values[6]
-		New_player_resource.Victory_points = Values[7]
-		New_player_resource.Player_storage = Values[8]
+		New_player_resource.Player_faction = Values[2]
+		New_player_resource.color = Values[3]
+		New_player_resource.base_list = Values[4]
+		New_player_resource.Weapons = Values[5]
+		New_player_resource.Money = Values[6]
+		New_player_resource.Man_power = Values[7]
+		New_player_resource.Victory_points = Values[8]
+		New_player_resource.Player_storage = Values[9]
 		player_list.append(New_player_resource)
 	player_resources_updated.emit()
 
