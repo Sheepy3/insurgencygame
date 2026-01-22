@@ -87,8 +87,10 @@ func remove_unit(player:int,type:int) -> void: ## TODO: HANDLE RECONSTITUTABLE U
 	for unit:Node in %Units.get_children(): # DELETE UNIT VISUAL
 		if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type):
 			unit.queue_free()
+			await unit.tree_exited
+			_reorder_units()
 			break
-	_reorder_units()
+
 
 
 func _reorder_units() -> void:
@@ -160,6 +162,7 @@ func add_selection_circle() -> void:
 	target_radius = 0.25
 	target_speed  = 1.0
 	lerpspeed=0.3
+	_reorder_units()
 
 @rpc("any_peer","call_local")
 func flare(player_ID:int) -> void:

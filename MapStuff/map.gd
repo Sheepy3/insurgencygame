@@ -263,7 +263,6 @@ func Fighter_movement_possible(from:int, to:int) -> bool:
 	
 	
 	if (logs_pathfind > 0) and (logs_pathfind <= 3) and (intel_pathfind > 0) and (intel_pathfind <= 3):
-		print("you can move here!")
 		return true
 	else:
 		## TODO: THROW ERROR
