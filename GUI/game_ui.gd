@@ -28,6 +28,9 @@ func _on_player_switch_button_pressed() -> void:
 
 func Check_container_action(Button_name:String) -> void:
 	match Button_name:
+		"Wepons_Buy_Button":
+			check_buy_action.rpc("Buy_Wepons",Unique_player_ID)
+		
 		"Base_Buy_Button":
 			check_buy_action.rpc("Buy_Base",Unique_player_ID)
 		
@@ -230,6 +233,20 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 	if multiplayer.is_server():
 		var Current_player:Resource = Overseer.Identify_player(Player_ID)
 		match Buyable:
+			"Buy_Wepons":
+				if Current_player.Money >= 8 && Current_player.Player_faction == 1:
+					Current_player.Money -= 8
+					Current_player.Weapons += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Money >= 5 && Current_player.Player_faction == 0:
+					Current_player.Money -= 5
+					Current_player.Weapons += 1
+					Overseer.Resources_to_rpc()
+				
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
 			"Buy_Base":
 				if Current_player.Man_power >= 17 && Current_player.Money >= 45 && Current_player.Player_faction == 1:
 					Current_player.Man_power -= 17

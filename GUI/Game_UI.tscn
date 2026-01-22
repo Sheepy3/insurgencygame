@@ -64,6 +64,21 @@ size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
+[node name="HBoxContainer7" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Wepons_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "$5 -> Wepons   "
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Wepons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Purchase"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 
