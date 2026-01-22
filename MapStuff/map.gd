@@ -78,28 +78,39 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		if Last_action.begins_with("move_fighter_"):
 			var unpacked_node:int = int(Last_action.right(5))
 			
-			print("moving fighter from " + Name + " to" + str(unpacked_node))
-			if Fighter_movement_possible(int(Name),unpacked_node):
-				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
-				var prev_node:Node = find_child(str(unpacked_node))
-				prev_node.remove_unit(Current_player.Player_ID,FIGHTER)
-				Overseer.Request_node_data(Current_node.name)
-				Overseer.Request_node_data(prev_node.name)
-				Overseer.Resources_to_rpc()
+			print("moving fighter from " + str(unpacked_node) + " to " + Name)
+			var source_node:Node = find_child(str(unpacked_node))
+			if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
+				if Fighter_movement_possible(int(Name),unpacked_node):
+					Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
+					source_node.remove_unit(Current_player.Player_ID,FIGHTER)
+					Overseer.Request_node_data(Current_node.name)
+					Overseer.Request_node_data(source_node.name)
+					Overseer.Resources_to_rpc()
+				else:
+					$UI.action_error("You cannot move a fighter to that node!")
+					print("Fighter movement not possible from " + str(unpacked_node) + " to " + Name)
 			else:
-				print("not possible?")
+				$UI.action_error("No fighter found at source node!")
+				print("No fighter found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
 		
 		if Last_action.begins_with("move_influence_"):
 			var unpacked_node:int = int(Last_action.right(5))
-			print("moving influence from " + Name + " to" + str(unpacked_node))
-			if Influence_movement_possible(int(Name),unpacked_node):
-				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
-				var prev_node:Node = find_child(str(unpacked_node))
-				prev_node.remove_unit(Current_player.Player_ID,INFLUENCE)
-				Overseer.Request_node_data(Current_node.name)
-				Overseer.Request_node_data(prev_node.name)
-				Overseer.Resources_to_rpc()
-		
+			print("moving influence from " + str(unpacked_node) + " to " + Name)
+			var source_node:Node = find_child(str(unpacked_node))
+			if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
+				if Influence_movement_possible(int(Name),unpacked_node):
+					Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
+					source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
+					Overseer.Request_node_data(Current_node.name)
+					Overseer.Request_node_data(source_node.name)
+					Overseer.Resources_to_rpc()
+				else:
+					$UI.action_error("You cannot move influence to that node!")
+					print("Influence movement not possible from " + str(unpacked_node) + " to " + Name)
+			else:
+				$UI.action_error("No influence found at source node!")
+				print("No influence found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
 		if Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
 			if Current_node.Has_building:
 				$UI.action_error("There is already a base on this node!")
