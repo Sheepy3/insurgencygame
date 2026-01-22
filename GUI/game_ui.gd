@@ -28,8 +28,8 @@ func _on_player_switch_button_pressed() -> void:
 
 func Check_container_action(Button_name:String) -> void:
 	match Button_name:
-		"Wepons_Buy_Button":
-			check_buy_action.rpc("Buy_Wepons",Unique_player_ID)
+		"Weapons_Buy_Button":
+			check_buy_action.rpc("Buy_Weapons",Unique_player_ID)
 		
 		"Base_Buy_Button":
 			check_buy_action.rpc("Buy_Base",Unique_player_ID)
@@ -200,6 +200,8 @@ func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Unique_player_ID = multiplayer.get_unique_id()
+	if Overseer.Identify_player(Unique_player_ID).Player_faction == 1:
+		$Action_Container/VBoxContainer/HBoxContainer7/Weapons_Label.text = "$8 -> Weapons  "
 
 func update_node_unit_list(units:Array) -> void:
 	reset_node_unit_list()
@@ -233,7 +235,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 	if multiplayer.is_server():
 		var Current_player:Resource = Overseer.Identify_player(Player_ID)
 		match Buyable:
-			"Buy_Wepons":
+			"Buy_Weapons":
 				if Current_player.Money >= 8 && Current_player.Player_faction == 1:
 					Current_player.Money -= 8
 					Current_player.Weapons += 1

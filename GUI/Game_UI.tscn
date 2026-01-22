@@ -67,9 +67,9 @@ label_settings = ExtResource("2_3qqlp")
 [node name="HBoxContainer7" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 
-[node name="Wepons_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+[node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer7"]
 layout_mode = 2
-text = "$5 -> Wepons   "
+text = "$5 -> Weapons  "
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
