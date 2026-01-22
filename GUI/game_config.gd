@@ -16,7 +16,19 @@ func _ready() -> void:
 	#_start_map_gen() #hardcoded disabling config menu
 
 func _on_start_button_pressed() -> void:
+	for Players:Resource in Overseer.player_list:
+		if Players.Player_faction == 1:
+			Players.Player_storage["Military_Base"] = 2
+			Players.Player_storage["Influence"] = 2
+			Players.Player_storage["Intelligence"] = 3
+			Players.Player_storage["Logistics"] = 3
+		else:
+			Players.Player_storage["Military_Base"] = 1
+			Players.Player_storage["Influence"] = 1
+			Players.Player_storage["Intelligence"] = 2
+			Players.Player_storage["Logistics"] = 2
 	_start_map_gen()
+	Overseer.Resources_to_rpc()
 	#Overseer.cycle_players()
 
 func _start_map_gen() -> void:
