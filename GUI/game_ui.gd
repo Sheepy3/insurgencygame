@@ -16,11 +16,13 @@ func _ready() -> void:
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
+	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
 	for boxes:HBoxContainer in $Action_Container/VBoxContainer.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
 				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name,"Pressed"))
 				if UI_elements.name.contains("Buy"):
+					print(UI_elements.name)
 					UI_elements.mouse_entered.connect(Check_container_action.bind(UI_elements.name,"Hover"))
 
 func _on_player_switch_button_pressed() -> void:
@@ -33,13 +35,13 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			if Action == "Pressed":
 				check_buy_action.rpc("Buy_Weapons",Unique_player_ID)
 			elif Action == "Hover":
-				pass
+				print("You are on the " + Button_name +"!")
 		
 		"Base_Buy_Button":
 			if Action == "Pressed":
 				check_buy_action.rpc("Buy_Base",Unique_player_ID)
 			elif Action == "Hover":
-				pass
+				print("You are on the " + Button_name +"!")
 		
 		"Base_Place_Button":
 			The_action.emit("Base_placing")
@@ -49,7 +51,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			if Action == "Pressed":
 				check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
 			elif Action == "Hover":
-				pass
+				print("You are on the " + Button_name +"!")
 		
 		"Fighter_Place_Button":
 			The_action.emit("Fighter_placing")
@@ -59,7 +61,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			if Action == "Pressed":
 				check_buy_action.rpc("Buy_Influence",Unique_player_ID)
 			elif Action == "Hover":
-				pass
+				print("You are on the " + Button_name +"!")
 		
 		"Influence_Place_Button":
 			The_action.emit("Influence_placing")
@@ -69,7 +71,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			if Action == "Pressed":
 				check_buy_action.rpc("Buy_Intel",Unique_player_ID)
 			elif Action == "Hover":
-				pass
+				print("You are on the " + Button_name +"!")
 		
 		"Intelligence_Network_Place_Button":
 			The_action.emit("Intel_placing")
@@ -84,6 +86,15 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 		"Logistics_Network_Place_Button":
 			The_action.emit("Logs_placing")
 			find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+			
+		"Close_UI_Button":
+			$Action_Container.visible = !$Action_Container.visible
+			if $Action_Container.visible:
+				$Close_UI_Button.position = Vector2(232,64)
+				$Close_UI_Button.text = "<"
+			else:
+				$Close_UI_Button.position = Vector2(0,64)
+				$Close_UI_Button.text = ">"
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player

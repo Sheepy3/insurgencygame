@@ -82,7 +82,7 @@ text = "$5 -> Weapons  "
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Wepons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer7"]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
