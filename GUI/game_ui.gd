@@ -19,48 +19,67 @@ func _ready() -> void:
 	for boxes:HBoxContainer in $Action_Container/VBoxContainer.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
-				#if UI_elements.name.ends_with("Place_Button"):
-				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name))
+				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name,"Pressed"))
+				if UI_elements.name.contains("Buy"):
+					UI_elements.mouse_entered.connect(Check_container_action.bind(UI_elements.name,"Hover"))
 
 func _on_player_switch_button_pressed() -> void:
 	pass
 	#Overseer.cycle_players()
 
-func Check_container_action(Button_name:String) -> void:
+func Check_container_action(Button_name:String,Action:String) -> void:
 	match Button_name:
 		"Weapons_Buy_Button":
-			check_buy_action.rpc("Buy_Weapons",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Weapons",Unique_player_ID)
+			elif Action == "Hover":
+				pass
 		
 		"Base_Buy_Button":
-			check_buy_action.rpc("Buy_Base",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Base",Unique_player_ID)
+			elif Action == "Hover":
+				pass
 		
 		"Base_Place_Button":
 			The_action.emit("Base_placing")
 			find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
 		
 		"Fighter_Buy_Button":
-			check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
+			elif Action == "Hover":
+				pass
 		
 		"Fighter_Place_Button":
 			The_action.emit("Fighter_placing")
 			find_child("Dynamic_Action").text = "Fighter placing" #Updates "Dynamic" UI with current action (placing Figher)
 		
 		"Influence_Buy_Button":
-			check_buy_action.rpc("Buy_Influence",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Influence",Unique_player_ID)
+			elif Action == "Hover":
+				pass
 		
 		"Influence_Place_Button":
 			The_action.emit("Influence_placing")
 			find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
 		
 		"Intelligence_Network_Buy_Button":
-			check_buy_action.rpc("Buy_Intel",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Intel",Unique_player_ID)
+			elif Action == "Hover":
+				pass
 		
 		"Intelligence_Network_Place_Button":
 			The_action.emit("Intel_placing")
 			find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
 		
 		"Logistics_Network_Buy_Button":
-			check_buy_action.rpc("Buy_Logs",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Logs",Unique_player_ID)
+			elif Action == "Hover":
+				print("You are on the " + Button_name +"!")
 		
 		"Logistics_Network_Place_Button":
 			The_action.emit("Logs_placing")

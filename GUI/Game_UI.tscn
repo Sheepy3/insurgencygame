@@ -1,8 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=19 format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="3_fbkqq"]
+[ext_resource type="Texture2D" uid="uid://deus23167nre8" path="res://Deprecated/node_new.png" id="4_82g8w"]
 [ext_resource type="FontFile" uid="uid://jeu6ag8vn6v7" path="res://GUI/Bitrimus.ttf" id="4_w20xb"]
 [ext_resource type="Texture2D" uid="uid://b1tuchwv3fqge" path="res://Assets/Icons/gun.png" id="5_tsku8"]
 [ext_resource type="Texture2D" uid="uid://d4msh6it7b2ww" path="res://Assets/Icons/money.png" id="6_pqiix"]
@@ -41,10 +42,18 @@ shader_parameter/opacity = 0.1
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_2if7r")
 
+[node name="Close_UI_Button" type="Button" parent="."]
+layout_direction = 4
+offset_left = 232.0
+offset_top = 64.0
+offset_right = 267.0
+offset_bottom = 122.0
+text = "<"
+
 [node name="Action_Container" type="PanelContainer" parent="."]
 offset_top = 64.0
-offset_right = 110.0
-offset_bottom = 247.0
+offset_right = 232.0
+offset_bottom = 269.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Action_Container"]
 layout_mode = 2
@@ -181,6 +190,71 @@ text = "Purchase"
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
+
+[node name="HBoxContainer10" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer10"]
+layout_mode = 2
+text = "text"
+label_settings = ExtResource("2_3qqlp")
+horizontal_alignment = 1
+
+[node name="HBoxContainer9" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer9"]
+layout_mode = 2
+texture = ExtResource("4_82g8w")
+expand_mode = 2
+
+[node name="HBoxContainer8" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="TextureRect" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("5_tsku8")
+expand_mode = 2
+
+[node name="Guns_Cost" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="TextureRect2" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("6_pqiix")
+expand_mode = 2
+
+[node name="Money_Cost" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="TextureRect3" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("7_sw8an")
+expand_mode = 2
+
+[node name="Population_Cost" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
 
 [node name="Current_Phase" type="Label" parent="."]
 anchors_preset = 5
