@@ -54,6 +54,9 @@ offset_top = 64.0
 offset_right = 232.0
 offset_bottom = 269.0
 
+[node name="Purchase_preview_timer" type="Timer" parent="Action_Container"]
+wait_time = 4.5
+
 [node name="VBoxContainer" type="VBoxContainer" parent="Action_Container"]
 layout_mode = 2
 
@@ -605,6 +608,7 @@ mouse_filter = 2
 texture = ExtResource("9_sw8an")
 stretch_mode = 1
 
+[connection signal="timeout" from="Action_Container/Purchase_preview_timer" to="." method="_on_purchase_preview_timer_timeout"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
 [connection signal="close_requested" from="Support_store_window" to="." method="_on_support_store_window_close_requested"]
 [connection signal="window_input" from="Support_store_window" to="." method="_on_support_store_window_window_input"]

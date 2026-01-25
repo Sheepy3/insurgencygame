@@ -443,4 +443,11 @@ func Display_purchase_info(Item_name:String) -> void:
 				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
 				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
 			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[4])
+	
+	$Action_Container/Purchase_preview_timer.start()
 	$Action_Container/VBoxContainer/Purchase_Hover_Text/Item_Name.text = Item_name
+
+func _on_purchase_preview_timer_timeout() -> void:
+	$Action_Container/VBoxContainer/Purchase_Hover_Text.hide()
+	$Action_Container/VBoxContainer/Purchase_Hover_Image.hide()
+	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
