@@ -22,8 +22,9 @@ func _ready() -> void:
 			if UI_elements is Button:
 				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name,"Pressed"))
 				if UI_elements.name.contains("Buy"):
-					print(UI_elements.name)
 					UI_elements.mouse_entered.connect(Check_container_action.bind(UI_elements.name,"Hover"))
+			#elif UI_elements is TextureRect or boxes.get_children().size() <= 1:
+				#boxes.hide()
 
 func _on_player_switch_button_pressed() -> void:
 	pass
@@ -36,12 +37,14 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				check_buy_action.rpc("Buy_Weapons",Unique_player_ID)
 			elif Action == "Hover":
 				print("You are on the " + Button_name +"!")
+				Display_purchase_info("Weapons")
 		
 		"Base_Buy_Button":
 			if Action == "Pressed":
 				check_buy_action.rpc("Buy_Base",Unique_player_ID)
 			elif Action == "Hover":
 				print("You are on the " + Button_name +"!")
+				Display_purchase_info("Military Base")
 		
 		"Base_Place_Button":
 			The_action.emit("Base_placing")
@@ -52,6 +55,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
 			elif Action == "Hover":
 				print("You are on the " + Button_name +"!")
+				Display_purchase_info("Fighter")
 		
 		"Fighter_Place_Button":
 			The_action.emit("Fighter_placing")
@@ -62,6 +66,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				check_buy_action.rpc("Buy_Influence",Unique_player_ID)
 			elif Action == "Hover":
 				print("You are on the " + Button_name +"!")
+				Display_purchase_info("Influence")
 		
 		"Influence_Place_Button":
 			The_action.emit("Influence_placing")
@@ -72,6 +77,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				check_buy_action.rpc("Buy_Intel",Unique_player_ID)
 			elif Action == "Hover":
 				print("You are on the " + Button_name +"!")
+				Display_purchase_info("Intelligence Network")
 		
 		"Intelligence_Network_Place_Button":
 			The_action.emit("Intel_placing")
@@ -82,6 +88,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				check_buy_action.rpc("Buy_Logs",Unique_player_ID)
 			elif Action == "Hover":
 				print("You are on the " + Button_name +"!")
+				Display_purchase_info("Logistics Network")
 		
 		"Logistics_Network_Place_Button":
 			The_action.emit("Logs_placing")
@@ -230,8 +237,6 @@ func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Unique_player_ID = multiplayer.get_unique_id()
-	if Overseer.Identify_player(Unique_player_ID).Player_faction == 1:
-		$Action_Container/VBoxContainer/HBoxContainer7/Weapons_Label.text = "$8 -> Weapons  "
 
 func update_node_unit_list(units:Array) -> void:
 	reset_node_unit_list()
@@ -360,5 +365,85 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
-			
+
+func Display_purchase_info(Item_name:String) -> void:
+	var Faction:int = Overseer.Identify_player(Unique_player_ID).Player_faction
+	for Elements:Control in $Action_Container/VBoxContainer/Purchase_Hover_Price.get_children():
+		Elements.hide()
+	if Item_name == "Weapons":
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
+	elif Item_name == "Fighter":
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.show()
+	else:
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
+	match Item_name:
+		"Weapons":
+			if Faction == 1:
+				print("I am the State!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "8"
+			elif Faction == 0:
+				print("I am an Insurgent!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
 		
+		"Military Base":
+			if Faction == 1:
+				print("I am the State!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "45"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "17"
+			elif Faction == 0:
+				print("I am an Insurgent!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "30"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "10"
+		
+		"Fighter":
+			if Faction == 1:
+				print("I am the State!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text =  "15"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "8"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.text = "8"
+			elif Faction == 0:
+				print("I am an Insurgent!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "10"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "5"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.text = "5"
+		
+		"Influence":
+			if Faction == 1:
+				print("I am the State!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "25"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "8"
+			elif Faction == 0:
+				print("I am an Insurgent!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "15"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "5"
+		
+		"Intelligence Network":
+			if Faction == 1:
+				print("I am the State!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "15"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "2"
+			elif Faction == 0:
+				print("I am an Insurgent!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "10"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
+		
+		"Logistics Network":
+			if Faction == 1:
+				print("I am the State!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "10"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "2"
+			elif Faction == 0:
+				print("I am an Insurgent!")
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
+	
+	$Action_Container/VBoxContainer/Purchase_Hover_Text/Item_Name.text = Item_name

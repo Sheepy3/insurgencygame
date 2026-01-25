@@ -78,7 +78,7 @@ layout_mode = 2
 
 [node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer7"]
 layout_mode = 2
-text = "$5 -> Weapons  "
+text = "Weapons  "
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
@@ -86,7 +86,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
@@ -101,7 +101,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -123,7 +123,7 @@ layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -145,7 +145,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
@@ -165,7 +165,7 @@ vertical_alignment = 1
 [node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
@@ -184,72 +184,72 @@ vertical_alignment = 1
 [node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="HBoxContainer10" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Purchase_Hover_Text" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer10"]
+[node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Text"]
 layout_mode = 2
 text = "text"
 label_settings = ExtResource("2_3qqlp")
 horizontal_alignment = 1
 
-[node name="HBoxContainer9" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Purchase_Hover_Image" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer9"]
+[node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Image"]
 layout_mode = 2
 texture = ExtResource("4_82g8w")
 expand_mode = 2
 
-[node name="HBoxContainer8" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Purchase_Hover_Price" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="TextureRect" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer8"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-texture = ExtResource("5_tsku8")
-expand_mode = 2
-
-[node name="Guns_Cost" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer8"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-text = "0"
-label_settings = ExtResource("2_3qqlp")
-vertical_alignment = 1
-
-[node name="TextureRect2" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer8"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-texture = ExtResource("6_pqiix")
-expand_mode = 2
-
-[node name="Money_Cost" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer8"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-text = "0"
-label_settings = ExtResource("2_3qqlp")
-vertical_alignment = 1
-
-[node name="TextureRect3" type="TextureRect" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+[node name="Population_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 texture = ExtResource("7_sw8an")
 expand_mode = 2
 
-[node name="Population_Cost" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer8"]
+[node name="Population_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Money_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("6_pqiix")
+expand_mode = 2
+
+[node name="Money_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Guns_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("5_tsku8")
+expand_mode = 2
+
+[node name="Guns_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "0"
@@ -432,7 +432,7 @@ label_settings = ExtResource("2_3qqlp")
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Support Market"
-position = Vector2i(975, 36)
+position = Vector2i(916, 36)
 size = Vector2i(165, 100)
 min_size = Vector2i(165, 100)
 max_size = Vector2i(165, 100)
