@@ -1,9 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene load_steps=18 format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="3_fbkqq"]
-[ext_resource type="Texture2D" uid="uid://deus23167nre8" path="res://Deprecated/node_new.png" id="4_82g8w"]
 [ext_resource type="FontFile" uid="uid://jeu6ag8vn6v7" path="res://GUI/Bitrimus.ttf" id="4_w20xb"]
 [ext_resource type="Texture2D" uid="uid://b1tuchwv3fqge" path="res://Assets/Icons/gun.png" id="5_tsku8"]
 [ext_resource type="Texture2D" uid="uid://d4msh6it7b2ww" path="res://Assets/Icons/money.png" id="6_pqiix"]
@@ -197,6 +196,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Text"]
+visible = false
 layout_mode = 2
 text = "text"
 label_settings = ExtResource("2_3qqlp")
@@ -210,7 +210,6 @@ size_flags_vertical = 4
 
 [node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Image"]
 layout_mode = 2
-texture = ExtResource("4_82g8w")
 expand_mode = 2
 
 [node name="Purchase_Hover_Price" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
