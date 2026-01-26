@@ -4,6 +4,13 @@ var Store_action: String = ""
 var last_clicked_node:String = ""
 var Unique_player_ID:int 
 var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
+var Preview_placables:Array = [
+	preload("res://Assets/Icons/gun.png"),
+	preload("res://Assets/Military/Tent.png"),
+	preload("res://Assets/Military/soldier.png"),
+	preload("res://Assets/Military/binoculars.png"),
+	preload("res://Assets/Infastructure/Blank_Network.png"),
+]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,52 +23,86 @@ func _ready() -> void:
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
+	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
 	for boxes:HBoxContainer in $Action_Container/VBoxContainer.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
-				#if UI_elements.name.ends_with("Place_Button"):
-				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name))
+				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name,"Pressed"))
+				if UI_elements.name.contains("Buy"):
+					UI_elements.mouse_entered.connect(Check_container_action.bind(UI_elements.name,"Hover"))
+			elif UI_elements is TextureRect or boxes.get_children().size() <= 1:
+				boxes.hide()
 
 func _on_player_switch_button_pressed() -> void:
 	pass
 	#Overseer.cycle_players()
 
-func Check_container_action(Button_name:String) -> void:
+func Check_container_action(Button_name:String,Action:String) -> void:
 	match Button_name:
+		"Weapons_Buy_Button":
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Weapons",Unique_player_ID)
+			elif Action == "Hover":
+				Display_purchase_info("Weapons")
+		
 		"Base_Buy_Button":
-			check_buy_action.rpc("Buy_Base",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Base",Unique_player_ID)
+			elif Action == "Hover":
+				Display_purchase_info("Military Base")
 		
 		"Base_Place_Button":
 			The_action.emit("Base_placing")
 			find_child("Dynamic_Action").text = "Base placing" #Updates "Dynamic" UI with current action (building a base)
 		
 		"Fighter_Buy_Button":
-			check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Fighter",Unique_player_ID)
+			elif Action == "Hover":
+				Display_purchase_info("Fighter")
 		
 		"Fighter_Place_Button":
 			The_action.emit("Fighter_placing")
 			find_child("Dynamic_Action").text = "Fighter placing" #Updates "Dynamic" UI with current action (placing Figher)
 		
 		"Influence_Buy_Button":
-			check_buy_action.rpc("Buy_Influence",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Influence",Unique_player_ID)
+			elif Action == "Hover":
+				Display_purchase_info("Influence")
 		
 		"Influence_Place_Button":
 			The_action.emit("Influence_placing")
 			find_child("Dynamic_Action").text = "Influence placing" #Updates "Dynamic" UI with current action (placing Influence)
 		
 		"Intelligence_Network_Buy_Button":
-			check_buy_action.rpc("Buy_Intel",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Intel",Unique_player_ID)
+			elif Action == "Hover":
+				Display_purchase_info("Intelligence Network")
 		
 		"Intelligence_Network_Place_Button":
 			The_action.emit("Intel_placing")
-			find_child("Dynamic_Action").text = "Intelligence Network placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
+			find_child("Dynamic_Action").text = "Intelligence placing" #Updates "Dynamic" UI with current action (placing Intelligence Network)
 		
 		"Logistics_Network_Buy_Button":
-			check_buy_action.rpc("Buy_Logs",Unique_player_ID)
+			if Action == "Pressed":
+				check_buy_action.rpc("Buy_Logs",Unique_player_ID)
+			elif Action == "Hover":
+				Display_purchase_info("Logistics Network")
 		
 		"Logistics_Network_Place_Button":
 			The_action.emit("Logs_placing")
-			find_child("Dynamic_Action").text = "Logistics Network placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+			find_child("Dynamic_Action").text = "Logistics placing" #Updates "Dynamic" UI with current action (placing Logistics Network)
+			
+		"Close_UI_Button":
+			$Action_Container.visible = !$Action_Container.visible
+			if $Action_Container.visible:
+				$Close_UI_Button.position = Vector2(232,64)
+				$Close_UI_Button.text = "<"
+			else:
+				$Close_UI_Button.position = Vector2(0,64)
+				$Close_UI_Button.text = ">"
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
@@ -230,50 +271,183 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 	if multiplayer.is_server():
 		var Current_player:Resource = Overseer.Identify_player(Player_ID)
 		match Buyable:
+			"Buy_Weapons":
+				if Current_player.Money >= 8 && Current_player.Player_faction == 1:
+					Current_player.Money -= 8
+					Current_player.Weapons += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Money >= 5 && Current_player.Player_faction == 0:
+					Current_player.Money -= 5
+					Current_player.Weapons += 1
+					Overseer.Resources_to_rpc()
+				
+				else:
+					action_error("You do not have enough resoucres to buy this!")
+			
 			"Buy_Base":
-				if Current_player.Man_power >= 10 && Current_player.Money >= 30:
+				if Current_player.Man_power >= 17 && Current_player.Money >= 45 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 17
+					Current_player.Money -= 45
+					Current_player.Player_storage["Military_Base"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 10 && Current_player.Money >= 30 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 10 
 					Current_player.Money -= 30
 					Current_player.Player_storage["Military_Base"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Fighter":
-				if Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5:
+				if Current_player.Man_power >= 8 && Current_player.Money >= 15 && Current_player.Weapons >= 8 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 8 
+					Current_player.Money -= 15 
+					Current_player.Weapons -= 8
+					Current_player.Player_storage["Fighter"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5 
 					Current_player.Money -= 10 
 					Current_player.Weapons -= 5
 					Current_player.Player_storage["Fighter"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Influence":
-				if Current_player.Man_power >= 5 && Current_player.Money >= 15:
+				if Current_player.Man_power >= 8 && Current_player.Money >= 25 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 8 
+					Current_player.Money -= 25
+					Current_player.Player_storage["Influence"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 5 && Current_player.Money >= 15 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5 
 					Current_player.Money -= 15
 					Current_player.Player_storage["Influence"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Intel":
-				if Current_player.Man_power >= 1 && Current_player.Money >= 10:
+				if Current_player.Man_power >= 2 && Current_player.Money >= 15 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 2 
+					Current_player.Money -= 15
+					Current_player.Player_storage["Intelligence"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 1 && Current_player.Money >= 10 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
 					Current_player.Money -= 10
 					Current_player.Player_storage["Intelligence"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
 			
 			"Buy_Logs":
-				if Current_player.Man_power >= 1 && Current_player.Money >= 5:
+				if Current_player.Man_power >= 2 && Current_player.Money >= 10 && Current_player.Player_faction == 1:
+					Current_player.Man_power -= 2 
+					Current_player.Money -= 10
+					Current_player.Player_storage["Logistics"] += 1
+					Overseer.Resources_to_rpc()
+				
+				elif Current_player.Man_power >= 1 && Current_player.Money >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
 					Current_player.Money -= 5
 					Current_player.Player_storage["Logistics"] += 1
 					Overseer.Resources_to_rpc()
+				
 				else:
 					action_error("You do not have enough resoucres to buy this!")
-			
+
+func Display_purchase_info(Item_name:String) -> void:
+	$Action_Container/VBoxContainer/Purchase_Hover_Text.show()
+	$Action_Container/VBoxContainer/Purchase_Hover_Image.show()
+	$Action_Container/VBoxContainer/Purchase_Hover_Price.show()
+	var Faction:int = Overseer.Identify_player(Unique_player_ID).Player_faction
+	for Elements:Control in $Action_Container/VBoxContainer/Purchase_Hover_Price.get_children():
+		Elements.hide()
+	if Item_name == "Weapons":
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
+	elif Item_name == "Fighter":
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.show()
+	else:
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
+		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
+	match Item_name:
+		"Weapons":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "8"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[0])
 		
+		"Military Base":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "45"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "17"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "30"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "10"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[1])
+		
+		"Fighter":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text =  "15"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "8"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.text = "8"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "10"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "5"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.text = "5"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[2])
+		
+		"Influence":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "25"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "8"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "15"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "5"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[3])
+		
+		"Intelligence Network":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "15"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "2"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "10"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[4])
+		
+		"Logistics Network":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "10"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "2"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[4])
+	
+	$Action_Container/Purchase_preview_timer.start()
+	$Action_Container/VBoxContainer/Purchase_Hover_Text/Item_Name.text = Item_name
+
+func _on_purchase_preview_timer_timeout() -> void:
+	$Action_Container/VBoxContainer/Purchase_Hover_Text.hide()
+	$Action_Container/VBoxContainer/Purchase_Hover_Image.hide()
+	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()

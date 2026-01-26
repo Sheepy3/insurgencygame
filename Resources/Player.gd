@@ -2,6 +2,7 @@ extends Resource
 class_name Player
 @export var Player_ID:int
 @export var Player_name:String = ""
+@export_enum("Insurgent","State") var Player_faction:int
 @export var color:Vector3 = Vector3(255, 255, 255)
 @export var base_list:Array = []
 @export var Weapons:int = 0 
