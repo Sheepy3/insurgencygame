@@ -281,7 +281,7 @@ func Fighter_movement_possible(from:int, to:int, Player_ID:int) -> bool:
 	
 
 func Influence_movement_possible(from:int, to:int, Player_ID:int) -> bool:
-	var intel_map:AStar2D = Overseer.The_networks[Current_player.Player_ID][0]
+	var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
 	var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
 	
 	if (intel_pathfind <= 2):
