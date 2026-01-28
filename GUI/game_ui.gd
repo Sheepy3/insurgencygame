@@ -289,4 +289,3 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
-		
