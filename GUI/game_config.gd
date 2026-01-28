@@ -12,10 +12,23 @@ func _ready() -> void:
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
+	%Faction_select.disabled = true
 	#_start_map_gen() #hardcoded disabling config menu
 
 func _on_start_button_pressed() -> void:
+	for Players:Resource in Overseer.player_list:
+		if Players.Player_faction == 1:
+			Players.Player_storage["Military_Base"] = 2
+			Players.Player_storage["Influence"] = 2
+			Players.Player_storage["Intelligence"] = 3
+			Players.Player_storage["Logistics"] = 3
+		else:
+			Players.Player_storage["Military_Base"] = 1
+			Players.Player_storage["Influence"] = 1
+			Players.Player_storage["Intelligence"] = 2
+			Players.Player_storage["Logistics"] = 2
 	_start_map_gen()
+	Overseer.Resources_to_rpc()
 	#Overseer.cycle_players()
 
 func _start_map_gen() -> void:
@@ -69,6 +82,7 @@ func Remove_player_resource(ID:int) -> void:
 
 func _render_players() -> void:
 	%Color_select.disabled = false
+	%Faction_select.disabled = false
 	for existing_child:Node in %Player_list_container.get_children():
 		%Player_list_container.remove_child(existing_child)
 		existing_child.queue_free()
@@ -116,7 +130,6 @@ func color_pick_failed(ID:int) -> void:
 		action_error("this color has been selected!")
 		%Color_select.select(-1)
 
-
 func action_error(error_message:String) -> void:
 	$Error_Message.text = error_message
 	$Error_Message.show()
@@ -144,3 +157,13 @@ func _on_join_debug_pressed() -> void:
 
 func _on_join_debug_2_pressed() -> void:
 	client.start(%IP.text, "debug2", true) # Replace with function body.
+func _on_faction_select_item_selected(index: int) -> void:
+	Update_player_faction.rpc(multiplayer.get_unique_id(),index)
+
+@rpc("any_peer","call_local")
+func Update_player_faction(ID:int,Faction_ID:int) -> void:
+	if multiplayer.is_server():
+		for player:Resource in Overseer.player_list:
+			if player.Player_ID == ID: 
+				player.Player_faction = Faction_ID
+		Overseer.Resources_to_rpc()

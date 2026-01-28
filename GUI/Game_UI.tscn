@@ -41,10 +41,21 @@ shader_parameter/opacity = 0.1
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_2if7r")
 
+[node name="Close_UI_Button" type="Button" parent="."]
+layout_direction = 4
+offset_left = 232.0
+offset_top = 64.0
+offset_right = 267.0
+offset_bottom = 122.0
+text = "<"
+
 [node name="Action_Container" type="PanelContainer" parent="."]
 offset_top = 64.0
-offset_right = 110.0
-offset_bottom = 247.0
+offset_right = 232.0
+offset_bottom = 269.0
+
+[node name="Purchase_preview_timer" type="Timer" parent="Action_Container"]
+wait_time = 4.5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Action_Container"]
 layout_mode = 2
@@ -64,6 +75,21 @@ size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
+[node name="HBoxContainer7" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+
+[node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+text = "Weapons  "
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 
@@ -77,7 +103,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
@@ -99,7 +125,7 @@ layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
@@ -121,7 +147,7 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer4"]
 layout_mode = 2
@@ -141,7 +167,7 @@ vertical_alignment = 1
 [node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
 layout_mode = 2
@@ -160,12 +186,77 @@ vertical_alignment = 1
 [node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
-text = "Purchase"
+text = "Buy"
 
 [node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
+
+[node name="Purchase_Hover_Text" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Text"]
+visible = false
+layout_mode = 2
+text = "text"
+label_settings = ExtResource("2_3qqlp")
+horizontal_alignment = 1
+
+[node name="Purchase_Hover_Image" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Image"]
+layout_mode = 2
+expand_mode = 2
+
+[node name="Purchase_Hover_Price" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Population_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("7_sw8an")
+expand_mode = 2
+
+[node name="Population_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Money_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("6_pqiix")
+expand_mode = 2
+
+[node name="Money_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
+
+[node name="Guns_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+texture = ExtResource("5_tsku8")
+expand_mode = 2
+
+[node name="Guns_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "0"
+label_settings = ExtResource("2_3qqlp")
+vertical_alignment = 1
 
 [node name="Current_Phase" type="Label" parent="."]
 anchors_preset = 5
@@ -343,7 +434,7 @@ label_settings = ExtResource("2_3qqlp")
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Support Market"
-position = Vector2i(975, 36)
+position = Vector2i(916, 36)
 size = Vector2i(165, 100)
 min_size = Vector2i(165, 100)
 max_size = Vector2i(165, 100)
@@ -517,6 +608,7 @@ mouse_filter = 2
 texture = ExtResource("9_sw8an")
 stretch_mode = 1
 
+[connection signal="timeout" from="Action_Container/Purchase_preview_timer" to="." method="_on_purchase_preview_timer_timeout"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
 [connection signal="close_requested" from="Support_store_window" to="." method="_on_support_store_window_close_requested"]
 [connection signal="window_input" from="Support_store_window" to="." method="_on_support_store_window_window_input"]
