@@ -296,7 +296,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Overseer.Resources_to_rpc()
 				
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Unique_player_ID)
 			
 			"Buy_Base":
 				if Current_player.Man_power >= 17 && Current_player.Money >= 45 && Current_player.Player_faction == 1:

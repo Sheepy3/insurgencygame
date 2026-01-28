@@ -111,24 +111,25 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		if Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
 			if Current_node.Has_building:
 				display_action_error("There is already a base on this node!",Player_ID)
-			elif Current_player.base_list.size() > 0:
-				if Base_possible(Current_node.name) == true:
-					Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
-					#find_child("Dynamic_Action").text = "None"
-					Last_action = ""
-					Current_player.Player_storage["Military_Base"] -= 1
-					Overseer.Request_node_data(Current_node.name)
-					Overseer.Resources_to_rpc()
-				else:
-					display_action_error("You do not have the conditions to place a Base!",Player_ID)
-			elif Current_player.base_list.size() == 0:
+			#elif Current_player.base_list.size() > 0:
+			elif Base_possible(Current_node.name) == true:
+				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
+				#find_child("Dynamic_Action").text = "None"
+				Last_action = ""
+				Current_player.Player_storage["Military_Base"] -= 1
+				Overseer.Request_node_data(Current_node.name)
+				Overseer.Resources_to_rpc()
+			elif Current_player.base_list.size() == 0 && Current_player.Player_storage["Military_Base"] >= 1:
 				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
+				Current_player.Player_storage["Military_Base"] -= 1
 				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
+			else:
+				display_action_error("You do not have the conditions to place a Base!",Player_ID)
 		elif Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
 			display_action_error("You do not have any Military Bases to place!",Player_ID)
 
