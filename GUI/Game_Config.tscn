@@ -173,9 +173,17 @@ visible = false
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 
-[node name="Join_Debug" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="Join_Debug" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Join Debug lobby"
+
+[node name="Join_Debug2" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Join Debug lobby 2"
 
 [node name="Join_Button" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
 unique_name_in_owner = true
@@ -214,6 +222,8 @@ wait_time = 3.0
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="text_changed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Room" to="." method="_on_room_text_changed"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Color_select" to="." method="_on_color_select_item_selected"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2/Join_Debug" to="." method="_on_join_debug_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2/Join_Debug2" to="." method="_on_join_debug_2_pressed"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Faction_select" to="." method="_on_faction_select_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Join_Debug" to="." method="_on_join_debug_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Join_Button" to="." method="_on_join_button_pressed"]

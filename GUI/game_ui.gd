@@ -125,10 +125,12 @@ func _phase_switch_ui() -> void:
 func _on_phase_button_pressed() -> void:
 	Overseer.cycle_phases()
 
-func action_error(error_message:String) -> void:
-	$Error_Message.text = error_message
-	$Error_Message.show()
-	$Error_timer.start()
+@rpc("authority","call_local")
+func action_error(error_message:String, player_ID:int) -> void:
+	if multiplayer.get_unique_id() == player_ID: 
+		$Error_Message.text = error_message
+		$Error_Message.show()
+		$Error_timer.start()
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
@@ -194,9 +196,6 @@ func _process(delta: float) -> void:
 	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
 	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
 
-func select_node(tile:String) -> void:
-	last_clicked_node = tile
-	pass
 
 @rpc("any_peer","call_local")
 func Manpower_action(Player_ID:int,action:String)-> void:
@@ -214,7 +213,7 @@ func Manpower_action(Player_ID:int,action:String)-> void:
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else: 
-			action_error("You do not have enough resources to complete this transaction!")
+			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
 
 @rpc("any_peer","call_local")
 func Weapons_action(Player_ID:int,action:String)-> void:
@@ -232,21 +231,35 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else:
-			action_error("You do not have enough resources to complete this transaction!")
+			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
 
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Unique_player_ID = multiplayer.get_unique_id()
 
-func update_node_unit_list(units:Array) -> void:
+func update_node_unit_list(units:Array, mapnode:StringName) -> void:
+	last_clicked_node = mapnode
 	reset_node_unit_list()
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
-			new_unit_display.set_color(unit.color)
-			new_unit_display.set_type(unit.unit_type)
+			new_unit_display.unit_resource = unit
+			new_unit_display.source_node = str(mapnode)
+			new_unit_display.move_unit.connect(move_unit_function)
+			#new_unit_display.set_color(unit.color)
+			#new_unit_display.set_type(unit.unit_type)
 			%Unit_Display.add_child(new_unit_display)
+
+func move_unit_function(unit_resource:Resource, source_node:String) -> void:
+	print("move unit from " + source_node)
+	var packed_number:String = "%05d" % int(source_node)
+	if unit_resource.unit_type == 0:
+		var packed_string:String = "move_fighter_"+packed_number
+		The_action.emit(packed_string)
+	else:
+		var packed_string:String = "move_influence_"+packed_number
+		The_action.emit(packed_string)
 
 func reset_node_unit_list() -> void:
 	for children:Node in %Unit_Display.get_children():
@@ -299,7 +312,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Overseer.Resources_to_rpc()
 				
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Fighter":
 				if Current_player.Man_power >= 8 && Current_player.Money >= 15 && Current_player.Weapons >= 8 && Current_player.Player_faction == 1:
@@ -317,7 +330,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Overseer.Resources_to_rpc()
 				
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Influence":
 				if Current_player.Man_power >= 8 && Current_player.Money >= 25 && Current_player.Player_faction == 1:
@@ -333,7 +346,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Overseer.Resources_to_rpc()
 				
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Intel":
 				if Current_player.Man_power >= 2 && Current_player.Money >= 15 && Current_player.Player_faction == 1:
@@ -349,7 +362,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Overseer.Resources_to_rpc()
 				
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 			
 			"Buy_Logs":
 				if Current_player.Man_power >= 2 && Current_player.Money >= 10 && Current_player.Player_faction == 1:
@@ -365,7 +378,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Overseer.Resources_to_rpc()
 				
 				else:
-					action_error("You do not have enough resoucres to buy this!")
+					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
 
 func Display_purchase_info(Item_name:String) -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Text.show()

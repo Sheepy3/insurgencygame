@@ -32,15 +32,16 @@ func _update_label()-> void:
 	$Label.text = name
 
 # Detects when Node is clicked on by mouse
-func _on_map_node_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_released("Mouse_left_click"): 
+func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_idx: int) -> void:
+	if event is InputEventMouseButton \
+	and event.button_index == MOUSE_BUTTON_LEFT \
+	and not event.pressed:
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		#print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
 		get_parent().find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
 		get_parent().find_child("Dynamic_RPU").text = str(node_RPU.RPU)
 		get_parent().find_child("Dynamic_Pop").text = str(node_RPU.Population)
-		get_parent().find_child("UI").update_node_unit_list(unit_list)
-		
+		get_parent().find_child("UI").update_node_unit_list(unit_list,name)
 		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 
 func add_building(player_ID:int, _type:int, color:Vector3) -> void:
@@ -71,12 +72,32 @@ func add_unit(player:int, type:int, color:Vector3) -> void:
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
 
-	unit_list.append(unique_unit)
+	unit_list.append(unique_unit) # ADD UNIT DATA
 	
-	var unit_visual := unit_scene.instantiate()
+	var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
 	unit_visual.Unit_Data = unique_unit
 	%Units.add_child(unit_visual)
 	_reorder_units()
+
+func has_unit(player:int, type:int) -> bool:
+	for unit:Resource in unit_list:
+		if (unit.player_ID == player) and (unit.unit_type == type):
+			return true
+	return false
+
+func remove_unit(player:int,type:int) -> void: ## TODO: HANDLE RECONSTITUTABLE UNITS (THIS DOES NOT CARE ABOUT UNIT STATE, CURRENTLY ONLY TYPE AND PLAYER)
+	for unit:Resource in unit_list: # DELETE UNIT DATA
+		if (unit.player_ID == player) and (unit.unit_type == type):
+			unit_list.erase(unit) 
+			break
+	for unit:Node in %Units.get_children(): # DELETE UNIT VISUAL
+		if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type):
+			unit.queue_free()
+			await unit.tree_exited
+			_reorder_units()
+			break
+
+
 
 func _reorder_units() -> void:
 	var nodes:Array = %Units.get_children()

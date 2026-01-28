@@ -154,6 +154,9 @@ func _on_room_text_changed() -> void:
 func _on_join_debug_pressed() -> void:
 	client.start(%IP.text, "debug", true) # Replace with function body.
 
+
+func _on_join_debug_2_pressed() -> void:
+	client.start(%IP.text, "debug2", true) # Replace with function body.
 func _on_faction_select_item_selected(index: int) -> void:
 	Update_player_faction.rpc(multiplayer.get_unique_id(),index)
 

@@ -74,9 +74,43 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		Current_player = Overseer.Identify_player(Player_ID)
 		#if Current_node:
 		Current_node = find_child(Name)
+		
+		if Last_action.begins_with("move_fighter_"):
+			var unpacked_node:int = int(Last_action.right(5))
+			
+			print("moving fighter from " + str(unpacked_node) + " to " + Name)
+			var source_node:Node = find_child(str(unpacked_node))
+			if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
+				if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
+					Last_action = ""
+					Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
+					source_node.remove_unit(Current_player.Player_ID,FIGHTER)
+					Overseer.Request_node_data(Current_node.name)
+					Overseer.Request_node_data(source_node.name)
+					Overseer.Resources_to_rpc()
+			else:
+				display_action_error("No fighter found at source node!",Player_ID)
+				print("No fighter found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
+		
+		if Last_action.begins_with("move_influence_"):
+			var unpacked_node:int = int(Last_action.right(5))
+			print("moving influence from " + str(unpacked_node) + " to " + Name)
+			var source_node:Node = find_child(str(unpacked_node))
+			if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
+				if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
+					Last_action = ""
+					Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
+					source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
+					Overseer.Request_node_data(Current_node.name)
+					Overseer.Request_node_data(source_node.name)
+					Overseer.Resources_to_rpc()
+			else:
+				display_action_error("No influence found at source node!",Player_ID)
+				print("No influence found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
+
 		if Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
 			if Current_node.Has_building:
-				$UI.action_error("There is already a base on this node!")
+				display_action_error("There is already a base on this node!",Player_ID)
 			elif Current_player.base_list.size() > 0:
 				if Base_possible(Current_node.name) == true:
 					Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
@@ -86,7 +120,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 					Overseer.Request_node_data(Current_node.name)
 					Overseer.Resources_to_rpc()
 				else:
-					$UI.action_error("You do not have the conditions to place a Base!")
+					display_action_error("You do not have the conditions to place a Base!",Player_ID)
 			elif Current_player.base_list.size() == 0:
 				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
@@ -96,11 +130,11 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
 		elif Last_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
-			$UI.action_error("You do not have any Military Bases to place!")
+			display_action_error("You do not have any Military Bases to place!",Player_ID)
 
 		if Last_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] >= 1:
 			if Fighter_possible(Current_node.name) == false:
-				$UI.action_error("Fighters must be placed at your own base!")
+				display_action_error("Fighters must be placed at your own base!",Player_ID)
 			elif  Fighter_possible(Current_node.name) == true:
 				#print("You have placed a Fighter at a base on node " + Name)
 				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
@@ -110,7 +144,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
 		elif Last_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] < 1:
-			$UI.action_error("You do not have any Fighter units to place!")
+			display_action_error("You do not have any Fighter units to place!",Player_ID)
 
 		if Last_action == "Influence_placing" && Current_player.Player_storage["Influence"] >= 1:
 			if Influence_possible(Current_node.name) == true:
@@ -122,9 +156,9 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
 			else:
-				$UI.action_error("Influence must be placed on a node connected to a base by Intelligence networks!")
+				display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)
 		elif Last_action == "Influence_placing" && Current_player.Player_storage["Influence"] < 1:
-			$UI.action_error("You do not have any Influence units to place!")
+			display_action_error("You do not have any Influence units to place!",Player_ID)
 
 @rpc("any_peer","call_local")
 func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
@@ -134,7 +168,7 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 		var Current_path: Node = find_child(Name)
 		if Last_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] >= 1:
 			if Current_path.Has_intel:
-				$UI.action_error("There is already an Intelligence Network on this path!")
+				display_action_error("There is already an Intelligence Network on this path!",Player_ID)
 			elif Intell_possible(Current_path.name) == true:
 				#print("You have placed a Intelligence network on path " + Name)
 				Current_path.add_intel_network(Current_player.color)
@@ -146,13 +180,13 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 				Overseer.Request_path_data(Current_player,Current_path.name)
 				Overseer.Resources_to_rpc()
 			else:
-				$UI.action_error("You must place Intelligence Networks next to an existing one!")
+				display_action_error("You must place Intelligence Networks next to an existing one!",Player_ID)
 		elif Last_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] < 1:
-			$UI.action_error("You do not have any Intelligence Networks to place!")
+			display_action_error("You do not have any Intelligence Networks to place!",Player_ID)
 
 		if Last_action == "Logs_placing" && Current_player.Player_storage["Logistics"] >= 1:
 			if Current_path.Has_logs:
-				$UI.action_error("There is already an Logistics Network on this path!")
+				display_action_error("There is already an Logistics Network on this path!",Player_ID)
 			elif Logs_possible(Current_path.name) == true:
 				#print("You have placed a Logistics Network on path " + Name)
 				Current_path.add_logistics_network(Current_player.color)
@@ -164,9 +198,9 @@ func Check_path_action(Name: String,Player_ID:int,Action:String) -> void:
 				Overseer.Request_path_data(Current_player,Current_path.name)
 				Overseer.Resources_to_rpc()
 			else:
-				$UI.action_error("You must place Logistics Networks next to an existing one!")
+				display_action_error("You must place Logistics Networks next to an existing one!",Player_ID)
 		elif Last_action == "Logs_placing" && Current_player.Player_storage["Logistics"] < 1:
-			$UI.action_error("You do not have any Logistics Networks to place!")
+			display_action_error("You do not have any Logistics Networks to place!",Player_ID)
 
 func Logistics_add_astar_path(Road:String) -> void:
 	var The_Roads: Array = Road.split("-")
@@ -228,21 +262,56 @@ func Fighter_possible(Node_name:String) -> bool:
 		return true
 	return false
 
+func Fighter_movement_possible(from:int, to:int, Player_ID:int) -> bool:
+	var logs_map:AStar2D = Overseer.The_networks[Player_ID][1]
+	var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
+	
+	var logs_pathfind:int = logs_map.get_id_path(from,to,false).size()
+	var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
+	
+	if (intel_pathfind <= 3) and (logs_pathfind <= 3):
+		if  (intel_pathfind > 0) and (logs_pathfind > 0):
+			return true
+		else:
+			display_action_error("Fighters can only move to nodes connected by logi. and intel networks!", Player_ID)
+			return false
+	else:
+		display_action_error("Fighters can only move 2 nodes!", Player_ID)
+		return false
+	
+
+func Influence_movement_possible(from:int, to:int, Player_ID:int) -> bool:
+	var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
+	var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
+	
+	if (intel_pathfind <= 2):
+		if  (intel_pathfind > 0):
+			return true
+		else:
+			display_action_error("Influence can only move to nodes connected by intel networks!", Player_ID)
+			return false
+	else:
+		display_action_error("Influence can only move 1 node!", Player_ID)
+		return false
+	
+
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
-	var Action:String = Last_action
 	if Current_node:
 		Current_node.remove_selection_circle()
-	if !Action && Tile == "Node":
+	if !Last_action && Tile == "Node":
 		Current_node = find_child(Name)
 		Current_node.add_selection_circle()
-		#print(Current_node)
 	else:
 		Current_node = null
 		if Tile == "Node":
-			Check_node_action.rpc(Name,Player_ID,Action)
+			Check_node_action.rpc(Name,Player_ID,Last_action)
 			Last_action = ""
 			find_child("Dynamic_Action").text = "None"
 		else:
-			Check_path_action.rpc(Name,Player_ID,Action)
+			Check_path_action.rpc(Name,Player_ID,Last_action)
 			Last_action = ""
 			find_child("Dynamic_Action").text = "None"
+
+func display_action_error(the_error:String, Player_ID:int) -> void:
+	$UI.action_error.rpc(the_error,Player_ID)
+	Last_action = ""

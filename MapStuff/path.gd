@@ -28,8 +28,10 @@ func _ready() -> void:
 		%Logistics_Network/Logistics_Text.set_flip_v(true)
 		%Logistics_Network/Logistics_Text.set_flip_h(true)
 
-func _on_node_path_area_2d_input_event(_viewport: Node, _event: InputEvent, _shape_idx: int) -> void:
-	if Input.is_action_just_pressed("Mouse_left_click"): 
+func _on_node_path_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_idx: int) -> void:
+	if event is InputEventMouseButton \
+	and event.button_index == MOUSE_BUTTON_LEFT \
+	and not event.pressed:
 		print("you have clicked on Path " + name)
 		find_parent("Map_parent").find_child("Dynamic_Clicked").text = "Path " + name
 		A_path_clicked.emit(name,multiplayer.get_unique_id(),"Path")
