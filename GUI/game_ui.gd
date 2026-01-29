@@ -9,7 +9,8 @@ var Preview_placables:Array = [
 	preload("res://Assets/Military/Tent.png"),
 	preload("res://Assets/Military/soldier.png"),
 	preload("res://Assets/Military/binoculars.png"),
-	preload("res://Assets/Infastructure/Blank_Network.png"),
+	preload("res://Assets/Icons/IntelNetwork.png"),
+	preload("res://Assets/Icons/LogiNetwork.png")
 ]
 
 # Called when the node enters the scene tree for the first time.
@@ -24,7 +25,7 @@ func _ready() -> void:
 	_phase_switch_ui()
 	%Support_store_window.hide()
 	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
-	for boxes:HBoxContainer in $Action_Container/VBoxContainer.get_children(true):
+	for boxes:VBoxContainer in %HBox_Buy_Placeables.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
 				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name,"Pressed"))
@@ -455,7 +456,7 @@ func Display_purchase_info(Item_name:String) -> void:
 			elif Faction == 0:
 				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
 				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
-			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[4])
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[5])
 	
 	$Action_Container/Purchase_preview_timer.start()
 	$Action_Container/VBoxContainer/Purchase_Hover_Text/Item_Name.text = Item_name
