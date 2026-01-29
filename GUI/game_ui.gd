@@ -31,8 +31,9 @@ func _ready() -> void:
 				UI_elements.pressed.connect(Check_container_action.bind(UI_elements.name,"Pressed"))
 				if UI_elements.name.contains("Buy"):
 					UI_elements.mouse_entered.connect(Check_container_action.bind(UI_elements.name,"Hover"))
-			elif UI_elements is TextureRect or boxes.get_children().size() <= 1:
-				boxes.hide()
+	for Price_elements:Control in $Action_Container/VBoxContainer.get_children(true):
+		if Price_elements.name.contains("Hover"):
+			Price_elements.hide()
 
 func _on_player_switch_button_pressed() -> void:
 	pass
