@@ -13,7 +13,6 @@ func _ready() -> void:
 	$Error_Message.hide()
 	%Color_select.disabled = true
 	%Faction_select.disabled = true
-	#_start_map_gen() #hardcoded disabling config menu
 
 func _on_start_button_pressed() -> void:
 	for Players:Resource in Overseer.player_list:
@@ -43,7 +42,6 @@ func _on_option_button_item_selected(index: int) -> void:
 
 func _on_join_button_pressed() -> void:
 	client.start(%IP.text, %Room.text, true)
-	#Add_player_resource(1)
 
 func _lobby_joined(lobby:String) -> void:
 	%Room.text = lobby
@@ -51,12 +49,11 @@ func _lobby_joined(lobby:String) -> void:
 	%Join_Button.disabled = true
 	Add_player_resource(1)
 	if multiplayer.is_server():
-		%StartButton.set_disabled(false)
 		%OptionButton.set_disabled(false)
 	else:
 		%StartButton.set_disabled(true)
 		%OptionButton.set_disabled(true)
-
+	%ReadyButton.set_disabled(false)
 
 func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
@@ -86,13 +83,26 @@ func _render_players() -> void:
 	for existing_child:Node in %Player_list_container.get_children():
 		%Player_list_container.remove_child(existing_child)
 		existing_child.queue_free()
+	var ready_players:int = 0
 	for player:Resource in Overseer.player_list:
 		var new_player_scene:Node = UI_player.instantiate()
 		new_player_scene.update_text(str(player.Player_ID))
 		if player.color:
 			new_player_scene.update_color(player.color.normalized())
+		if player.Ready:
+			if player.Ready == true:
+				new_player_scene.update_ready("[Ready]")
+				ready_players+=1 #count readied players
+			else:
+				new_player_scene.update_ready("[Not Ready]")
 		%Player_list_container.add_child(new_player_scene)
-
+	
+	#check if all players are ready
+	if (ready_players == Overseer.player_list.size() && multiplayer.is_server()):
+		%StartButton.set_disabled(false)
+	else:
+		%StartButton.set_disabled(true)
+		
 func _on_color_select_item_selected(index: int) -> void:
 	Update_player_color.rpc(multiplayer.get_unique_id(),index)
 
@@ -135,10 +145,8 @@ func action_error(error_message:String) -> void:
 	$Error_Message.show()
 	$Error_timer.start()
 
-
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
-
 
 func _on_room_text_changed() -> void:
 	if %Room.text == "":
@@ -150,13 +158,11 @@ func _on_room_text_changed() -> void:
 		%StartButton.set_disabled(true)
 		%OptionButton.set_disabled(true)
 
-
 func _on_join_debug_pressed() -> void:
-	client.start(%IP.text, "debug", true) # Replace with function body.
-
+	client.start(%IP.text, "debug", true) 
 
 func _on_join_debug_2_pressed() -> void:
-	client.start(%IP.text, "debug2", true) # Replace with function body.
+	client.start(%IP.text, "debug2", true) 
 func _on_faction_select_item_selected(index: int) -> void:
 	Update_player_faction.rpc(multiplayer.get_unique_id(),index)
 
@@ -167,3 +173,26 @@ func Update_player_faction(ID:int,Faction_ID:int) -> void:
 			if player.Player_ID == ID: 
 				player.Player_faction = Faction_ID
 		Overseer.Resources_to_rpc()
+
+@rpc("any_peer","call_local")
+func Update_player_ready(ID:int,updated_ready:bool) -> void:
+	if multiplayer.is_server():
+		for player:Resource in Overseer.player_list:
+			if player.Player_ID == ID: 
+				player.Ready = updated_ready
+		Overseer.Resources_to_rpc()
+
+func _on_ready_button_pressed() -> void:
+	if %ReadyButton.text == "Ready":
+		%ReadyButton.text = "Not Ready"
+		Update_player_ready.rpc(multiplayer.get_unique_id(),false)
+	else:
+		print("hi")
+		var client_player:Resource = Overseer.Identify_player(multiplayer.get_unique_id())
+		if client_player.color == Vector3(255, 255, 255):
+			action_error("You still need to select a color!")
+		elif client_player.Player_faction == -1:
+			action_error("You still need to select a faction!")
+		else:
+			%ReadyButton.text = "Ready"
+			Update_player_ready.rpc(multiplayer.get_unique_id(),true)
