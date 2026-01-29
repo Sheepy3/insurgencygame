@@ -60,135 +60,140 @@ wait_time = 4.5
 [node name="VBoxContainer" type="VBoxContainer" parent="Action_Container"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Hbox_Action_Label" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
 layout_mode = 2
 
-[node name="Action_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer"]
+[node name="Action_Label" type="Label" parent="Action_Container/VBoxContainer/Hbox_Action_Label"]
 layout_mode = 2
 text = " Action:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_Action" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer"]
+[node name="Dynamic_Action" type="Label" parent="Action_Container/VBoxContainer/Hbox_Action_Label"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="HBoxContainer7" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="HBox_Buy_Placeables" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer7"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables"]
+layout_mode = 2
+
+[node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Weapons  "
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer7"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
-layout_mode = 2
-
-[node name="Base_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer2"]
+[node name="Base_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Base"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Place"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
-layout_mode = 2
-
-[node name="Fighter_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer3"]
+[node name="Fighter_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Fighter"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_vertical = 4
-size_flags_stretch_ratio = 0.0
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_vertical = 4
-size_flags_stretch_ratio = 0.0
-theme = ExtResource("3_fbkqq")
-text = "Place"
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
-layout_mode = 2
-
-[node name="Influence_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer4"]
+[node name="Influence_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Influence"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer4"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Place"
-
-[node name="HBoxContainer5" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
-layout_mode = 2
-
-[node name="Intelligence_Label" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer5"]
+[node name="Intelligence_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Intelligence"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
-layout_mode = 2
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer5"]
-layout_mode = 2
-theme = ExtResource("3_fbkqq")
-text = "Place"
-
-[node name="HBoxContainer6" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
-layout_mode = 2
-
-[node name="Dynamic_Action" type="Label" parent="Action_Container/VBoxContainer/HBoxContainer6"]
+[node name="Logistics_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Logistics"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables"]
+layout_mode = 2
+
+[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBoxContainer6"]
+[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+
+[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.0
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "Place"
+
+[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
