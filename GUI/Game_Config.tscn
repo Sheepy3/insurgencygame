@@ -71,6 +71,7 @@ label_settings = ExtResource("1_8cj6o")
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_qer0v")
+disabled = true
 item_count = 4
 popup/item_0/text = "Tiny (2)"
 popup/item_0/id = 0
@@ -91,7 +92,17 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme = ExtResource("2_qer0v")
+disabled = true
 text = "Start Game"
+
+[node name="ReadyButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = ExtResource("2_qer0v")
+disabled = true
+text = "Not Ready"
 
 [node name="Networking_Panel" type="Panel" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -220,11 +231,11 @@ wait_time = 3.0
 
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/ReadyButton" to="." method="_on_ready_button_pressed"]
 [connection signal="text_changed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Room" to="." method="_on_room_text_changed"]
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Color_select" to="." method="_on_color_select_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Faction_select" to="." method="_on_faction_select_item_selected"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2/Join_Debug" to="." method="_on_join_debug_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2/Join_Debug2" to="." method="_on_join_debug_2_pressed"]
-[connection signal="item_selected" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Faction_select" to="." method="_on_faction_select_item_selected"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Join_Debug" to="." method="_on_join_debug_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/Join_Button" to="." method="_on_join_button_pressed"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]

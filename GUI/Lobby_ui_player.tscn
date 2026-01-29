@@ -15,7 +15,17 @@ offset_right = 167.0
 offset_bottom = 26.0
 script = ExtResource("1_hgb1o")
 
-[node name="Label" type="Label" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = " Player name"
+label_settings = SubResource("LabelSettings_ogna1")
+
+[node name="ReadyLabel" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "[Not Ready]"
 label_settings = SubResource("LabelSettings_ogna1")
