@@ -59,6 +59,7 @@ func cycle_phases() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Create_unique_ID()
 	pass
 	#populate_player_list(2)
 	#Pull_player_info()
@@ -161,3 +162,17 @@ func Identify_player(Specific_ID:int) -> Resource:
 		if Player_Resources.Player_ID == Server_known_player:
 			Current_player = Player_Resources
 	return Current_player
+
+func Create_unique_ID() -> String: 
+	var hex_values:Array = [0,1,2,3,4,5,6,7,8,9,"a","b","c","d","e","f"]
+	var random_hex_string:String
+	for i:int in range(0,36):
+		if i == 8 or i == 13 or i == 18 or i == 23:
+			random_hex_string += "-"
+		elif i == 14:
+			random_hex_string +=str(hex_values[4])
+		elif i == 19:
+			random_hex_string +=str(hex_values[randi_range(8,11)])
+		else:
+			random_hex_string +=str(hex_values[randi_range(0,15)])
+	return random_hex_string
