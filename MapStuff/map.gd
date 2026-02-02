@@ -70,6 +70,7 @@ func Update_action(action: String = "") ->void:
 @rpc("any_peer","call_local")
 func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 	if multiplayer.is_server():
+		var new_unit_UUID:String
 		Last_action = Action
 		Current_player = Overseer.Identify_player(Player_ID)
 		#if Current_node:
@@ -83,7 +84,8 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 			if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
 				if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
 					Last_action = ""
-					Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
+					new_unit_UUID = Overseer.Create_unique_ID()
+					Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 					source_node.remove_unit(Current_player.Player_ID,FIGHTER)
 					Overseer.Request_node_data(Current_node.name)
 					Overseer.Request_node_data(source_node.name)
@@ -99,7 +101,8 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 			if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
 				if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
 					Last_action = ""
-					Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
+					new_unit_UUID = Overseer.Create_unique_ID()
+					Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 					source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
 					Overseer.Request_node_data(Current_node.name)
 					Overseer.Request_node_data(source_node.name)
@@ -138,7 +141,8 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 				display_action_error("Fighters must be placed at your own base!",Player_ID)
 			elif  Fighter_possible(Current_node.name) == true:
 				#print("You have placed a Fighter at a base on node " + Name)
-				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color)
+				new_unit_UUID = Overseer.Create_unique_ID()
+				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Current_player.Player_storage["Fighter"] -= 1
@@ -150,7 +154,8 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		if Last_action == "Influence_placing" && Current_player.Player_storage["Influence"] >= 1:
 			if Influence_possible(Current_node.name) == true:
 				#print("You have placed a Influence on node " + Name)
-				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color)
+				new_unit_UUID = Overseer.Create_unique_ID()
+				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 				#find_child("Dynamic_Action").text = "None"
 				Last_action = ""
 				Current_player.Player_storage["Influence"] -= 1

@@ -59,7 +59,7 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	%Building.show()
 	Has_building = true
 
-func add_unit(player:int, type:int, color:Vector3) -> void:
+func add_unit(player:int, type:int, color:Vector3, UUID:String) -> void:
 	var unique_unit:Resource
 	if type == FIGHTER:
 		unique_unit = fighter_resource.duplicate(true)
@@ -71,7 +71,7 @@ func add_unit(player:int, type:int, color:Vector3) -> void:
 		unique_unit.player_ID = player
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 		
-
+	unique_unit.unit_UUID = UUID
 	unit_list.append(unique_unit) # ADD UNIT DATA
 	
 	var unit_visual := unit_scene.instantiate() #GENERATE VISUAL

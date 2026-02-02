@@ -106,7 +106,7 @@ func Request_node_data(Edited_node_name:String) -> void:
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
 			var New_unit:Resource = units
-			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_state,New_unit.player_ID,New_unit.color,New_unit.offcolor]
+			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.unit_state,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			x += 1
 		Update_node_data.rpc(Edited_node.name,New_node)
 
@@ -128,7 +128,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
 		elif Placables == "Unit:" + str(x):
-			Edited_node.add_unit(Values[2],Values[0],Values[3])
+			Edited_node.add_unit(Values[3],Values[0],Values[4],Values[1])
 			x += 1
 
 @rpc("any_peer","call_local")
