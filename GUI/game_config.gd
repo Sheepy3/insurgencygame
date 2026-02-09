@@ -95,6 +95,12 @@ func _render_players() -> void:
 				ready_players+=1 #count readied players
 			else:
 				new_player_scene.update_ready("[Not Ready]")
+		if player.Player_faction == 0:
+			new_player_scene.update_faction_text("Insurgent")
+		elif player.Player_faction == 1:
+			new_player_scene.update_faction_text("State")
+		else:
+			new_player_scene.update_faction_text("NONE")
 		%Player_list_container.add_child(new_player_scene)
 	
 	#check if all players are ready

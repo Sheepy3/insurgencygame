@@ -16,9 +16,13 @@ func update_color(colorvector:Vector3) -> void:
 	var color:Color = Color(colorvector.x,colorvector.y,colorvector.z,1)
 	%Label.label_settings.font_color = color
 	%ReadyLabel.label_settings.font_color = color
+	%FactionLabel.label_settings.font_color = color
 	
 func update_text(text:String) -> void:
 	%Label.text = " "+text
 
 func update_ready(text:String) -> void:
 	%ReadyLabel.text = " "+text
+
+func update_faction_text(text:String) -> void:
+	%FactionLabel.text = " "+text
