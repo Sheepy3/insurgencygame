@@ -11,9 +11,12 @@ var influence_resource:Resource=load("res://Resources/Preset/Influence.tres")
 var base_resource:Resource=load("res://Resources/Preset/Miliary_Base.tres")
 var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 var flare_scene:PackedScene = load("res://GUI/Arrow/Arrow.tscn")
+var Player_color:Vector3
 enum{FIGHTER,INFLUENCE}
 
+
 func _ready() -> void:
+	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	_randomize_sprites()
 	if get_parent().name != "root":
@@ -190,6 +193,6 @@ func _process(_delta:float) -> void:
 	current_speed  = lerp(current_speed,  target_speed,  lerpspeed)
 	%Selection_Circle.material.set_shader_parameter("radius", current_radius)
 	%Selection_Circle.material.set_shader_parameter("speed", current_speed)
-	var color:Vector3 = get_parent().Current_player.color 
+	var color:Vector3 = Player_color #get_parent().Current_player.color 
 	var color_2:Vector4 = Vector4(color.x,color.y,color.z,0.5)
 	%Selection_Circle.material.set_shader_parameter("color", color_2)
