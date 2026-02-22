@@ -55,7 +55,8 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	building.color = color
 	building.player_ID = player_ID
 	#Overseer.player_list[Overseer.selected_player_index]
-	get_parent().Current_player.base_list.append(building) #adds building to the base list
+	#get_parent().Current_player.base_list.append(building) #adds building to the base list
+	Overseer.Identify_player(player_ID).base_list.append(building) #adds building to the base list
 
 	%Building.material.set_shader_parameter("tint_color", color)
 	%Building.material.set_shader_parameter("saturation", 0.4)
