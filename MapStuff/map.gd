@@ -62,7 +62,6 @@ func initialize(size:int) -> void:
 			$Board.set_texture(board_texture)
 
 func Update_action(action: String = "") ->void:
-	#Current_player = Overseer.Identify_player(multiplayer.get_unique_id())
 	Last_action = action
 
 @rpc("any_peer","call_local")
@@ -71,7 +70,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 		var new_unit_UUID:String
 		var Current_player:Resource
 		Current_player = Overseer.Identify_player(Player_ID)
-		print("This is player "+str(Current_player.Player_ID)+"'s action...")
 		#if Current_node:
 		Current_node = find_child(Name)
 		
@@ -81,7 +79,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 			var source_node:Node = find_child(str(unpacked_node))
 			if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
 				if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
-					#Last_action = ""
 					new_unit_UUID = Overseer.Create_unique_ID()
 					Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 					source_node.remove_unit(Current_player.Player_ID,FIGHTER)
@@ -98,7 +95,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 			var source_node:Node = find_child(str(unpacked_node))
 			if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
 				if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
-					#Last_action = ""
 					new_unit_UUID = Overseer.Create_unique_ID()
 					Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 					source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
@@ -116,7 +112,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 			elif Base_possible(Current_node.name,Current_player) == true:
 				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
-				#Last_action = ""
 				Current_player.Player_storage["Military_Base"] -= 1
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
@@ -124,7 +119,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				#print("You have placed a base on node " + Name)
 				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
-				#Last_action = ""
 				Current_player.Player_storage["Military_Base"] -= 1
 				#print(type_string(typeof(Current_node.name)))
 				Overseer.Request_node_data(Current_node.name)
@@ -142,7 +136,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				new_unit_UUID = Overseer.Create_unique_ID()
 				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 				#find_child("Dynamic_Action").text = "None"
-				#Last_action = ""
 				Current_player.Player_storage["Fighter"] -= 1
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
@@ -155,7 +148,6 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				new_unit_UUID = Overseer.Create_unique_ID()
 				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 				#find_child("Dynamic_Action").text = "None"
-				#Last_action = ""
 				Current_player.Player_storage["Influence"] -= 1
 				Overseer.Request_node_data(Current_node.name)
 				Overseer.Resources_to_rpc()
@@ -179,7 +171,6 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 				#find_child("Dynamic_Action").text = "None"
 				Current_path.Has_intel = true
 				Intelligence_add_astar_path(Current_path.name,Current_player)
-				#Last_action = ""
 				Current_player.Player_storage["Intelligence"] -= 1
 				Overseer.Request_path_data(Current_player,Current_path.name)
 				Overseer.Resources_to_rpc()
@@ -197,7 +188,6 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 				#find_child("Dynamic_Action").text = "None"
 				Current_path.Has_logs = true
 				Logistics_add_astar_path(Current_path.name,Current_player)
-				#Last_action = ""
 				Current_player.Player_storage["Logistics"] -= 1
 				Overseer.Request_path_data(Current_player,Current_path.name)
 				Overseer.Resources_to_rpc()
