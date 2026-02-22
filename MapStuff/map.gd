@@ -72,6 +72,7 @@ func Check_node_action(Name: String,Player_ID:int,Action:String) ->void:
 		var Current_player:Resource
 		Last_action = Action
 		Current_player = Overseer.Identify_player(Player_ID)
+		print("This is player "+str(Current_player.Player_ID)+"'s action...")
 		#if Current_node:
 		Current_node = find_child(Name)
 		
