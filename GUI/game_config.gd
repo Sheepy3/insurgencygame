@@ -99,8 +99,6 @@ func _render_players() -> void:
 			new_player_scene.update_faction_text("Insurgent")
 		elif player.Player_faction == 1:
 			new_player_scene.update_faction_text("State")
-		else:
-			new_player_scene.update_faction_text("NONE")
 		%Player_list_container.add_child(new_player_scene)
 	
 	#check if all players are ready
@@ -169,6 +167,7 @@ func _on_join_debug_pressed() -> void:
 
 func _on_join_debug_2_pressed() -> void:
 	client.start(%IP.text, "debug2", true) 
+
 func _on_faction_select_item_selected(index: int) -> void:
 	Update_player_faction.rpc(multiplayer.get_unique_id(),index)
 
