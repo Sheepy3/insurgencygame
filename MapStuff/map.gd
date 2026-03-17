@@ -69,9 +69,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 	if multiplayer.is_server(): 
 		var new_unit_UUID:String
 		var Current_player:Resource
+		var Checked_node:Node = find_child(Name)
 		Current_player = Overseer.Identify_player(Player_ID)
 		#if Current_node:
-		Current_node = find_child(Name)
+		#Current_node = find_child(Name)
 		
 		if Executing_action.begins_with("move_fighter_"):
 			var unpacked_node:int = int(Executing_action.right(5))
@@ -80,9 +81,9 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 			if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
 				if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
 					new_unit_UUID = Overseer.Create_unique_ID()
-					Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
+					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 					source_node.remove_unit(Current_player.Player_ID,FIGHTER)
-					Overseer.Request_node_data(Current_node.name)
+					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Request_node_data(source_node.name)
 					Overseer.Resources_to_rpc()
 			else:
@@ -96,9 +97,9 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 			if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
 				if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
 					new_unit_UUID = Overseer.Create_unique_ID()
-					Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
+					Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 					source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
-					Overseer.Request_node_data(Current_node.name)
+					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Request_node_data(source_node.name)
 					Overseer.Resources_to_rpc()
 			else:
@@ -106,22 +107,22 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				print("No influence found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
 
 		if Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
-			if Current_node.Has_building:
+			if Checked_node.Has_building:
 				display_action_error("There is already a base on this node!",Player_ID)
 			#elif Current_player.base_list.size() > 0:
-			elif Base_possible(Current_node.name,Current_player) == true:
-				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
+			elif Base_possible(Checked_node.name,Current_player,Checked_node) == true:
+				Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
 				Current_player.Player_storage["Military_Base"] -= 1
-				Overseer.Request_node_data(Current_node.name)
+				Overseer.Request_node_data(Checked_node.name)
 				Overseer.Resources_to_rpc()
 			elif Current_player.base_list.size() == 0 && Current_player.Player_storage["Military_Base"] >= 1:
 				#print("You have placed a base on node " + Name)
-				Current_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
+				Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 				#find_child("Dynamic_Action").text = "None"
 				Current_player.Player_storage["Military_Base"] -= 1
 				#print(type_string(typeof(Current_node.name)))
-				Overseer.Request_node_data(Current_node.name)
+				Overseer.Request_node_data(Checked_node.name)
 				Overseer.Resources_to_rpc()
 			else:
 				display_action_error("You do not have the conditions to place a Base!",Player_ID)
@@ -129,27 +130,27 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 			display_action_error("You do not have any Military Bases to place!",Player_ID)
 
 		if Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] >= 1:
-			if Fighter_possible(Current_node.name,Current_player) == false:
+			if Fighter_possible(Checked_node.name,Current_player) == false:
 				display_action_error("Fighters must be placed at your own base!",Player_ID)
-			elif  Fighter_possible(Current_node.name,Current_player) == true:
+			elif  Fighter_possible(Checked_node.name,Current_player) == true:
 				#print("You have placed a Fighter at a base on node " + Name)
 				new_unit_UUID = Overseer.Create_unique_ID()
-				Current_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
+				Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 				#find_child("Dynamic_Action").text = "None"
 				Current_player.Player_storage["Fighter"] -= 1
-				Overseer.Request_node_data(Current_node.name)
+				Overseer.Request_node_data(Checked_node.name)
 				Overseer.Resources_to_rpc()
 		elif Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] < 1:
 			display_action_error("You do not have any Fighter units to place!",Player_ID)
 
 		if Executing_action == "Influence_placing" && Current_player.Player_storage["Influence"] >= 1:
-			if Influence_possible(Current_node.name,Current_player) == true:
+			if Influence_possible(Checked_node.name,Current_player) == true:
 				#print("You have placed a Influence on node " + Name)
 				new_unit_UUID = Overseer.Create_unique_ID()
-				Current_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
+				Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 				#find_child("Dynamic_Action").text = "None"
 				Current_player.Player_storage["Influence"] -= 1
-				Overseer.Request_node_data(Current_node.name)
+				Overseer.Request_node_data(Checked_node.name)
 				Overseer.Resources_to_rpc()
 			else:
 				display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)
@@ -208,8 +209,8 @@ func Intelligence_add_astar_path(Road:String,Checked_player:Resource)-> void:
 	intel_map.connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 	#Overseer.Intelligence_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 
-func Base_possible(Desired:String,Checked_player:Resource)-> bool:
-	if Current_node.Has_building == true:
+func Base_possible(Desired:String,Checked_player:Resource,Checked_node:Node)-> bool:
+	if Checked_node.Has_building == true:
 		return false
 	else:
 		for x:Resource in Checked_player.base_list:
