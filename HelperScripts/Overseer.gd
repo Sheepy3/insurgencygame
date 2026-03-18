@@ -24,6 +24,7 @@ signal change_player
 signal game_started
 signal change_phase
 signal player_resources_updated
+signal Initialization_player_color
 
 #func populate_player_list(Game_Size:int)-> void:
 	#for x:int in range(Game_Size):
@@ -72,6 +73,7 @@ func Resources_to_rpc() -> void:
 			Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.Player_faction,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points,Players.Player_storage, Players.Ready]
 		Rpc_to_resources.rpc(Player_rpc_info)
 		player_resources_updated.emit()
+		Initialization_player_color.emit()
 
 @rpc("authority","call_remote")
 func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
@@ -93,6 +95,7 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 		New_player_resource.Ready = Values[10]
 		player_list.append(New_player_resource)
 	player_resources_updated.emit()
+	Initialization_player_color.emit()
 
 @rpc("any_peer","call_local")
 func Request_node_data(Edited_node_name:String) -> void:
@@ -127,6 +130,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.player_ID = Values[1]
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
+			print("This is player: " + str(multiplayer.get_unique_id()) + "" + str(Edited_node.building.resource_scene_unique_id()))
 		elif Placables == "Unit:" + str(x):
 			Edited_node.add_unit(Values[3],Values[0],Values[4],Values[1])
 			x += 1

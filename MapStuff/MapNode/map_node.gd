@@ -16,7 +16,7 @@ enum{FIGHTER,INFLUENCE}
 
 
 func _ready() -> void:
-	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
+	Overseer.Initialization_player_color.connect(Set_player_color)
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	_randomize_sprites()
 	if get_parent().name != "root":
@@ -29,7 +29,10 @@ func _ready() -> void:
 			else:
 				pass
 				#print(hexes.position.distance_squared_to(position))
-		
+				
+func Set_player_color() -> void:
+	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
+	Overseer.Initialization_player_color.disconnect(Set_player_color) 
 
 func _update_label()-> void:
 	$Label.text = name
@@ -56,7 +59,8 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	building.player_ID = player_ID
 	#Overseer.player_list[Overseer.selected_player_index]
 	#get_parent().Current_player.base_list.append(building) #adds building to the base list
-	Overseer.Identify_player(player_ID).base_list.append(building) #adds building to the base list
+	if multiplayer.is_server():
+		Overseer.Identify_player(player_ID).base_list.append(building) #adds building to the base list
 
 	%Building.material.set_shader_parameter("tint_color", color)
 	%Building.material.set_shader_parameter("saturation", 0.4)

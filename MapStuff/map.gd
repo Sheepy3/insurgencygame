@@ -66,136 +66,144 @@ func Update_action(action: String = "") ->void:
 
 @rpc("any_peer","call_local")
 func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->void:
+	 #= multiplayer.get_unique_id()
 	if multiplayer.is_server(): 
+		var True_ID:int = multiplayer.get_remote_sender_id()
 		var new_unit_UUID:String
 		var Current_player:Resource
 		var Checked_node:Node = find_child(Name)
 		Current_player = Overseer.Identify_player(Player_ID)
 		#if Current_node:
 		#Current_node = find_child(Name)
-		
-		if Executing_action.begins_with("move_fighter_"):
-			var unpacked_node:int = int(Executing_action.right(5))
-			print("moving fighter from " + str(unpacked_node) + " to " + Name)
-			var source_node:Node = find_child(str(unpacked_node))
-			if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
-				if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
+		if True_ID != Player_ID:
+			print("You hacker!")
+		else:
+			if Executing_action.begins_with("move_fighter_"):
+				var unpacked_node:int = int(Executing_action.right(5))
+				print("moving fighter from " + str(unpacked_node) + " to " + Name)
+				var source_node:Node = find_child(str(unpacked_node))
+				if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
+					if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
+						new_unit_UUID = Overseer.Create_unique_ID()
+						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
+						source_node.remove_unit(Current_player.Player_ID,FIGHTER)
+						Overseer.Request_node_data(Checked_node.name)
+						Overseer.Request_node_data(source_node.name)
+						Overseer.Resources_to_rpc()
+				else:
+					display_action_error("No fighter found at source node!",Player_ID)
+					print("No fighter found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
+			
+			if Executing_action.begins_with("move_influence_"):
+				var unpacked_node:int = int(Executing_action.right(5))
+				print("moving influence from " + str(unpacked_node) + " to " + Name)
+				var source_node:Node = find_child(str(unpacked_node))
+				if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
+					if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
+						new_unit_UUID = Overseer.Create_unique_ID()
+						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
+						source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
+						Overseer.Request_node_data(Checked_node.name)
+						Overseer.Request_node_data(source_node.name)
+						Overseer.Resources_to_rpc()
+				else:
+					display_action_error("No influence found at source node!",Player_ID)
+					print("No influence found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
+
+			if Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
+				if Checked_node.Has_building:
+					display_action_error("There is already a base on this node!",Player_ID)
+				#elif Current_player.base_list.size() > 0:
+				elif Base_possible(Checked_node.name,Current_player,Checked_node) == true:
+					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
+					#find_child("Dynamic_Action").text = "None"
+					Current_player.Player_storage["Military_Base"] -= 1
+					Overseer.Request_node_data(Checked_node.name)
+					Overseer.Resources_to_rpc()
+				elif Current_player.base_list.size() == 0 && Current_player.Player_storage["Military_Base"] >= 1:
+					#print("You have placed a base on node " + Name)
+					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
+					#find_child("Dynamic_Action").text = "None"
+					Current_player.Player_storage["Military_Base"] -= 1
+					#print(type_string(typeof(Current_node.name)))
+					Overseer.Request_node_data(Checked_node.name)
+					Overseer.Resources_to_rpc()
+				else:
+					display_action_error("You do not have the conditions to place a Base!",Player_ID)
+			elif Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
+				display_action_error("You do not have any Military Bases to place!",Player_ID)
+
+			if Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] >= 1:
+				if Fighter_possible(Checked_node.name,Current_player) == false:
+					display_action_error("Fighters must be placed at your own base!",Player_ID)
+				elif  Fighter_possible(Checked_node.name,Current_player) == true:
+					#print("You have placed a Fighter at a base on node " + Name)
 					new_unit_UUID = Overseer.Create_unique_ID()
 					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
-					source_node.remove_unit(Current_player.Player_ID,FIGHTER)
+					#find_child("Dynamic_Action").text = "None"
+					Current_player.Player_storage["Fighter"] -= 1
 					Overseer.Request_node_data(Checked_node.name)
-					Overseer.Request_node_data(source_node.name)
 					Overseer.Resources_to_rpc()
-			else:
-				display_action_error("No fighter found at source node!",Player_ID)
-				print("No fighter found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
-		
-		if Executing_action.begins_with("move_influence_"):
-			var unpacked_node:int = int(Executing_action.right(5))
-			print("moving influence from " + str(unpacked_node) + " to " + Name)
-			var source_node:Node = find_child(str(unpacked_node))
-			if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
-				if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
+			elif Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] < 1:
+				display_action_error("You do not have any Fighter units to place!",Player_ID)
+
+			if Executing_action == "Influence_placing" && Current_player.Player_storage["Influence"] >= 1:
+				if Influence_possible(Checked_node.name,Current_player) == true:
+					#print("You have placed a Influence on node " + Name)
 					new_unit_UUID = Overseer.Create_unique_ID()
 					Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
-					source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
+					#find_child("Dynamic_Action").text = "None"
+					Current_player.Player_storage["Influence"] -= 1
 					Overseer.Request_node_data(Checked_node.name)
-					Overseer.Request_node_data(source_node.name)
 					Overseer.Resources_to_rpc()
-			else:
-				display_action_error("No influence found at source node!",Player_ID)
-				print("No influence found at node " + str(unpacked_node) + " for player " + str(Current_player.Player_ID))
-
-		if Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] >= 1:
-			if Checked_node.Has_building:
-				display_action_error("There is already a base on this node!",Player_ID)
-			#elif Current_player.base_list.size() > 0:
-			elif Base_possible(Checked_node.name,Current_player,Checked_node) == true:
-				Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
-				#find_child("Dynamic_Action").text = "None"
-				Current_player.Player_storage["Military_Base"] -= 1
-				Overseer.Request_node_data(Checked_node.name)
-				Overseer.Resources_to_rpc()
-			elif Current_player.base_list.size() == 0 && Current_player.Player_storage["Military_Base"] >= 1:
-				#print("You have placed a base on node " + Name)
-				Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
-				#find_child("Dynamic_Action").text = "None"
-				Current_player.Player_storage["Military_Base"] -= 1
-				#print(type_string(typeof(Current_node.name)))
-				Overseer.Request_node_data(Checked_node.name)
-				Overseer.Resources_to_rpc()
-			else:
-				display_action_error("You do not have the conditions to place a Base!",Player_ID)
-		elif Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
-			display_action_error("You do not have any Military Bases to place!",Player_ID)
-
-		if Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] >= 1:
-			if Fighter_possible(Checked_node.name,Current_player) == false:
-				display_action_error("Fighters must be placed at your own base!",Player_ID)
-			elif  Fighter_possible(Checked_node.name,Current_player) == true:
-				#print("You have placed a Fighter at a base on node " + Name)
-				new_unit_UUID = Overseer.Create_unique_ID()
-				Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
-				#find_child("Dynamic_Action").text = "None"
-				Current_player.Player_storage["Fighter"] -= 1
-				Overseer.Request_node_data(Checked_node.name)
-				Overseer.Resources_to_rpc()
-		elif Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] < 1:
-			display_action_error("You do not have any Fighter units to place!",Player_ID)
-
-		if Executing_action == "Influence_placing" && Current_player.Player_storage["Influence"] >= 1:
-			if Influence_possible(Checked_node.name,Current_player) == true:
-				#print("You have placed a Influence on node " + Name)
-				new_unit_UUID = Overseer.Create_unique_ID()
-				Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
-				#find_child("Dynamic_Action").text = "None"
-				Current_player.Player_storage["Influence"] -= 1
-				Overseer.Request_node_data(Checked_node.name)
-				Overseer.Resources_to_rpc()
-			else:
-				display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)
-		elif Executing_action == "Influence_placing" && Current_player.Player_storage["Influence"] < 1:
-			display_action_error("You do not have any Influence units to place!",Player_ID)
+				else:
+					display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)
+			elif Executing_action == "Influence_placing" && Current_player.Player_storage["Influence"] < 1:
+				display_action_error("You do not have any Influence units to place!",Player_ID)
 
 @rpc("any_peer","call_local")
 func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> void:
 	if multiplayer.is_server():
-		var Current_player:Resource
-		Current_player = Overseer.Identify_player(Player_ID)
-		var Current_path: Node = find_child(Name)
-		if Executing_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] >= 1:
-			if Current_path.Has_intel:
-				display_action_error("There is already an Intelligence Network on this path!",Player_ID)
-			elif Intell_possible(Current_path.name,Current_player) == true:
-				#print("You have placed a Intelligence network on path " + Name)
-				Current_path.add_intel_network(Current_player.color)
-				#find_child("Dynamic_Action").text = "None"
-				Current_path.Has_intel = true
-				Intelligence_add_astar_path(Current_path.name,Current_player)
-				Current_player.Player_storage["Intelligence"] -= 1
-				Overseer.Request_path_data(Current_player,Current_path.name)
-				Overseer.Resources_to_rpc()
-			else:
-				display_action_error("You must place Intelligence Networks next to an existing one!",Player_ID)
-		elif Executing_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] < 1:
-			display_action_error("You do not have any Intelligence Networks to place!",Player_ID)
+		var True_ID: int = multiplayer.get_remote_sender_id()
+		if True_ID != Player_ID:
+			print("You hacker!")
+		else:
+			var Current_player:Resource
+			Current_player = Overseer.Identify_player(Player_ID)
+			var Current_path: Node = find_child(Name)
+			if Executing_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] >= 1:
+				if Current_path.Has_intel:
+					display_action_error("There is already an Intelligence Network on this path!",Player_ID)
+				elif Intell_possible(Current_path.name,Current_player) == true:
+					#print("You have placed a Intelligence network on path " + Name)
+					Current_path.add_intel_network(Current_player.color)
+					#find_child("Dynamic_Action").text = "None"
+					Current_path.Has_intel = true
+					Intelligence_add_astar_path(Current_path.name,Current_player)
+					Current_player.Player_storage["Intelligence"] -= 1
+					Overseer.Request_path_data(Current_player,Current_path.name)
+					Overseer.Resources_to_rpc()
+				else:
+					display_action_error("You must place Intelligence Networks next to an existing one!",Player_ID)
+			elif Executing_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] < 1:
+				display_action_error("You do not have any Intelligence Networks to place!",Player_ID)
 
-		if Executing_action == "Logs_placing" && Current_player.Player_storage["Logistics"] >= 1:
-			if Current_path.Has_logs:
-				display_action_error("There is already an Logistics Network on this path!",Player_ID)
-			elif Logs_possible(Current_path.name,Current_player) == true:
-				#print("You have placed a Logistics Network on path " + Name)
-				Current_path.add_logistics_network(Current_player.color)
-				#find_child("Dynamic_Action").text = "None"
-				Current_path.Has_logs = true
-				Logistics_add_astar_path(Current_path.name,Current_player)
-				Current_player.Player_storage["Logistics"] -= 1
-				Overseer.Request_path_data(Current_player,Current_path.name)
-				Overseer.Resources_to_rpc()
-			else:
-				display_action_error("You must place Logistics Networks next to an existing one!",Player_ID)
-		elif Executing_action == "Logs_placing" && Current_player.Player_storage["Logistics"] < 1:
-			display_action_error("You do not have any Logistics Networks to place!",Player_ID)
+			if Executing_action == "Logs_placing" && Current_player.Player_storage["Logistics"] >= 1:
+				if Current_path.Has_logs:
+					display_action_error("There is already an Logistics Network on this path!",Player_ID)
+				elif Logs_possible(Current_path.name,Current_player) == true:
+					#print("You have placed a Logistics Network on path " + Name)
+					Current_path.add_logistics_network(Current_player.color)
+					#find_child("Dynamic_Action").text = "None"
+					Current_path.Has_logs = true
+					Logistics_add_astar_path(Current_path.name,Current_player)
+					Current_player.Player_storage["Logistics"] -= 1
+					Overseer.Request_path_data(Current_player,Current_path.name)
+					Overseer.Resources_to_rpc()
+				else:
+					display_action_error("You must place Logistics Networks next to an existing one!",Player_ID)
+			elif Executing_action == "Logs_placing" && Current_player.Player_storage["Logistics"] < 1:
+				display_action_error("You do not have any Logistics Networks to place!",Player_ID)
 
 func Logistics_add_astar_path(Road:String,Checked_player:Resource) -> void:
 	var The_Roads: Array = Road.split("-")
