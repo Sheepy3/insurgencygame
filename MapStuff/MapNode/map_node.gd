@@ -38,12 +38,13 @@ func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_i
 	and not event.pressed:
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		#print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
-		get_parent().find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
-		get_parent().find_child("Dynamic_RPU").text = str(node_RPU.RPU)
-		get_parent().find_child("Dynamic_Pop").text = str(node_RPU.Population)
-		get_parent().find_child("UI").update_node_unit_list(unit_list,name)
-		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
+		var parent_node:Node  = get_parent()
+		parent_node.find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
+		parent_node.find_child("Dynamic_RPU").text = str(node_RPU.RPU)
+		parent_node.find_child("Dynamic_Pop").text = str(node_RPU.Population)
+		parent_node.find_child("UI").update_node_unit_list(unit_list,name)
 
+		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)
 	node_owner = str(player_ID) #player_list[Overseer.selected_player_index].Player_name

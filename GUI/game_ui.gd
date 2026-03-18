@@ -243,15 +243,22 @@ func connect_update_UI() -> void:
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
 	reset_node_unit_list()
+	var player_unit_count:int = 0
+	var enemy_unit_count:int = 0	
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
 			new_unit_display.unit_resource = unit
 			new_unit_display.source_node = str(mapnode)
 			new_unit_display.move_unit.connect(move_unit_function)
-			#new_unit_display.set_color(unit.color)
-			#new_unit_display.set_type(unit.unit_type)
 			%Unit_Display.add_child(new_unit_display)
+			player_unit_count+=1
+		else:
+			enemy_unit_count+=1
+	if player_unit_count > 0 and enemy_unit_count > 0:
+		%Attack_Button.disabled = false
+	else:
+		%Attack_Button.disabled = true
 
 func move_unit_function(unit_resource:Resource, source_node:String) -> void:
 	print("move unit from " + source_node)
@@ -466,3 +473,8 @@ func _on_purchase_preview_timer_timeout() -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Text.hide()
 	$Action_Container/VBoxContainer/Purchase_Hover_Image.hide()
 	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
+
+
+func _on_attack_button_pressed() -> void:
+	var map_node:Node =get_parent().find_child(last_clicked_node)
+	print(map_node.unit_list)

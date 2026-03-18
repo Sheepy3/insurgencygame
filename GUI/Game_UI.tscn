@@ -543,10 +543,19 @@ label_settings = ExtResource("2_3qqlp")
 
 [node name="Dynamic_Clicked" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
+
+[node name="Control" type="Control" parent="Node_Info/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+
+[node name="Attack_Button" type="Button" parent="Node_Info/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+disabled = true
+text = "Attack"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Node_Info/VBoxContainer"]
 layout_mode = 2
@@ -626,3 +635,4 @@ stretch_mode = 1
 [connection signal="screen_exited" from="Store_bounds/Bottom_left" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Bottom_right" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="pressed" from="Open_Market_Button" to="." method="_on_open_market_button_pressed"]
+[connection signal="pressed" from="Node_Info/VBoxContainer/HBoxContainer2/Attack_Button" to="." method="_on_attack_button_pressed"]
