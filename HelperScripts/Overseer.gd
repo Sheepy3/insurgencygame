@@ -130,7 +130,6 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.player_ID = Values[1]
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
-			print("This is player: " + str(multiplayer.get_unique_id()) + "" + str(Edited_node.building.resource_scene_unique_id()))
 		elif Placables == "Unit:" + str(x):
 			Edited_node.add_unit(Values[3],Values[0],Values[4],Values[1])
 			x += 1
