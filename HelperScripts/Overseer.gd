@@ -179,3 +179,11 @@ func Create_unique_ID() -> String:
 		else:
 			random_hex_string +=str(hex_values[randi_range(0,15)])
 	return random_hex_string
+
+@rpc("any_peer","call_local")
+func Update_player_ready(ID:int,updated_ready:bool) -> void:
+	if multiplayer.is_server():
+		for player:Resource in Overseer.player_list:
+			if player.Player_ID == ID: 
+				player.Ready = updated_ready
+		Overseer.Resources_to_rpc()
