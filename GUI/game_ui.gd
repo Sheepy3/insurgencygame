@@ -466,3 +466,11 @@ func _on_purchase_preview_timer_timeout() -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Text.hide()
 	$Action_Container/VBoxContainer/Purchase_Hover_Image.hide()
 	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
+
+func _on_next_phase_button_toggled(toggled_on: bool) -> void:
+	Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
+	print("This is the current toggel state: "+str(toggled_on))
+	if toggled_on:
+		$Next_Phase_Button.text = "YES!"
+	else:
+		$Next_Phase_Button.text = "NO!"
