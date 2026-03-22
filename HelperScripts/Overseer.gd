@@ -188,27 +188,15 @@ func Update_player_ready(ID:int,updated_ready:bool) -> void:
 		if The_nodes.size() > 0:
 			Check_phase_status()
 
-
-## TODO: 1. Wire up the function so that it is to change phases when all players are "ready" to change [In Progress...]
-##       2. Create it so that when the server changes phases then translats that to all other existing players [In Progress...]
-
-
 func Check_phase_status() -> void:
 	var ready_players:int = 0
 	for player:Resource in player_list:
 		if player.Ready == true:
 			ready_players +=1
 	if (ready_players == Overseer.player_list.size()):
-		print("Enough Players to change Phases!")
 		cycle_phases()
 		for players:Resource in player_list:
 			players.Ready = false
-	else:
-		print("Not enough players to change Phases!\n These are the players who are not ready:")
-		for existing_players:Resource in player_list:
-			if existing_players.Ready == false:
-				print("Player --> "+str(existing_players.Player_ID))
-		#pass
 
 @rpc("authority","call_remote")
 func Sync_player_phases(New_phase:int) -> void:

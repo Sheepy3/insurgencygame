@@ -123,6 +123,7 @@ func _phase_switch_ui() -> void:
 		4:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
+	$Next_Phase_Button.set_pressed_no_signal(false)
 
 func _on_phase_button_pressed() -> void:
 	Overseer.cycle_phases()
