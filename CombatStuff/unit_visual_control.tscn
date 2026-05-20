@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dd25cr7c1twap"]
+
+[ext_resource type="Script" uid="uid://dx1bbweila78" path="res://CombatStuff/unit_visual_control.gd" id="1_db6p4"]
+[ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="2_64n1p"]
+[ext_resource type="Texture2D" uid="uid://b2errj0riq702" path="res://Assets/Military/soldier.png" id="3_1y7gq"]
+[ext_resource type="Texture2D" uid="uid://hu7nw3o7h36q" path="res://Assets/Military/binoculars.png" id="4_3v6c5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n0eri"]
+resource_local_to_scene = true
+shader = ExtResource("2_64n1p")
+shader_parameter/tint_color = Color(1, 0.439216, 0.423529, 1)
+shader_parameter/intensity = 0.2
+shader_parameter/saturation = 13.135
+shader_parameter/value = 1.0
+
+[node name="Node2D" type="Control" unique_id=878224973]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_db6p4")
+
+[node name="F_sprite" type="TextureRect" parent="." unique_id=620187893]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_n0eri")
+layout_mode = 0
+offset_top = -32.0
+offset_bottom = -32.0
+pivot_offset = Vector2(32, 32)
+texture = ExtResource("3_1y7gq")
+
+[node name="I_sprite" type="TextureRect" parent="." unique_id=731631187]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_n0eri")
+layout_mode = 0
+offset_top = -32.0
+offset_bottom = -32.0
+pivot_offset = Vector2(32, 32)
+texture = ExtResource("4_3v6c5")

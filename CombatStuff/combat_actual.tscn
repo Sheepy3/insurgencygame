@@ -14,6 +14,7 @@ grow_vertical = 2
 script = ExtResource("1_ipkl3")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1408932210]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -43,6 +44,7 @@ theme = ExtResource("1_456j5")
 text = "Manpower:"
 
 [node name="Weapons_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Weapons_label_and_count" unique_id=395428820]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
@@ -82,6 +84,7 @@ theme = ExtResource("1_456j5")
 text = "Manpower:"
 
 [node name="Manpower_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Manpower_label_and_count" unique_id=810146534]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
@@ -149,13 +152,20 @@ layout_mode = 2
 texture = ExtResource("3_qsta1")
 stretch_mode = 4
 
-[node name="Unit_spawn_2" type="Node2D" parent="." unique_id=2062190646]
+[node name="Unit_spawn_2" type="Control" parent="." unique_id=1552240817]
+unique_name_in_owner = true
 z_index = 6
-position = Vector2(682, 336)
+anchors_preset = 0
+offset_left = 682.0
+offset_top = 336.0
+offset_right = 682.0
+offset_bottom = 336.0
 
-[node name="Unit_spawn_1" type="Node2D" parent="." unique_id=1154085844]
+[node name="Unit_spawn_1" type="Control" parent="." unique_id=1206338287]
+unique_name_in_owner = true
 z_index = 6
-position = Vector2(323, 340)
+layout_mode = 1
+anchors_preset = 0
 
 [connection signal="value_changed" from="PanelContainer/HBoxContainer/VBoxContainer/Weapons_slider" to="." method="_on_weapons_slider_value_changed"]
 [connection signal="value_changed" from="PanelContainer/HBoxContainer/VBoxContainer/Money_slider" to="." method="_on_money_slider_value_changed"]
