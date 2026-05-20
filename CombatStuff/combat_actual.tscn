@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://b755b2gx4g0n8"]
+
+[ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="1_456j5"]
+[ext_resource type="Script" uid="uid://fklv048uap5u" path="res://CombatStuff/combat_actual.gd" id="1_ipkl3"]
+[ext_resource type="Texture2D" uid="uid://dldsn1upkphyw" path="res://Assets/Combat_screen.webp" id="3_qsta1"]
+
+[node name="Control" type="Control" unique_id=1693427844]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ipkl3")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1408932210]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer" unique_id=1668183708]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/HBoxContainer" unique_id=1532267729]
+layout_mode = 2
+
+[node name="Weapons_label_and_count" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=494698509]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Weapons_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Weapons_label_and_count" unique_id=1571693529]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Manpower:"
+
+[node name="Weapons_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Weapons_label_and_count" unique_id=395428820]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "0"
+
+[node name="Weapons_slider" type="HSlider" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=242508244]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 0.0
+
+[node name="Money_label_and_count" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=1934741973]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Money_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Money_label_and_count" unique_id=736871737]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Money:"
+
+[node name="Money_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Money_label_and_count" unique_id=2118019317]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "0"
+
+[node name="Money_slider" type="HSlider" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=1653777222]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 0.0
+
+[node name="Manpower_label_and_count" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=506519391]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Manpower_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Manpower_label_and_count" unique_id=955959326]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Manpower:"
+
+[node name="Manpower_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Manpower_label_and_count" unique_id=810146534]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "0"
+
+[node name="Manpower_slider" type="HSlider" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=984991593]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 0.0
+
+[node name="Control" type="Control" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=755908570]
+layout_mode = 2
+
+[node name="Manpower_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=889003638]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Your opponent has:"
+
+[node name="Opposition_Manpower_label_and_count" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=29203397]
+layout_mode = 2
+
+[node name="Opposition_Manpower_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Opposition_Manpower_label_and_count" unique_id=1563898541]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Manpower:"
+
+[node name="Opposition_Manpower_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Opposition_Manpower_label_and_count" unique_id=1909682759]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "0"
+
+[node name="Opposition_Money_label_and_count" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=990037662]
+layout_mode = 2
+
+[node name="Opposition_Money_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Opposition_Money_label_and_count" unique_id=892955197]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Money:"
+
+[node name="Opposition_Money_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Opposition_Money_label_and_count" unique_id=575373257]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "0"
+
+[node name="Opposition_Weapons_label_and_count" type="HBoxContainer" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=1210096565]
+layout_mode = 2
+
+[node name="Opposition_Weapons_label" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Opposition_Weapons_label_and_count" unique_id=2134878677]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Weapons:"
+
+[node name="Opposition_Weapons_count" type="Label" parent="PanelContainer/HBoxContainer/VBoxContainer/Opposition_Weapons_label_and_count" unique_id=1516176381]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "0"
+
+[node name="Ready_Button" type="Button" parent="PanelContainer/HBoxContainer/VBoxContainer" unique_id=64292299]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_456j5")
+text = "Not Ready"
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer" unique_id=1284746358]
+layout_mode = 2
+texture = ExtResource("3_qsta1")
+stretch_mode = 4
+
+[node name="Unit_spawn_2" type="Node2D" parent="." unique_id=2062190646]
+z_index = 6
+position = Vector2(682, 336)
+
+[node name="Unit_spawn_1" type="Node2D" parent="." unique_id=1154085844]
+z_index = 6
+position = Vector2(323, 340)
+
+[connection signal="value_changed" from="PanelContainer/HBoxContainer/VBoxContainer/Weapons_slider" to="." method="_on_weapons_slider_value_changed"]
+[connection signal="value_changed" from="PanelContainer/HBoxContainer/VBoxContainer/Money_slider" to="." method="_on_money_slider_value_changed"]
+[connection signal="value_changed" from="PanelContainer/HBoxContainer/VBoxContainer/Manpower_slider" to="." method="_on_manpower_slider_value_changed"]
+[connection signal="pressed" from="PanelContainer/HBoxContainer/VBoxContainer/Ready_Button" to="." method="_on_ready_button_pressed"]

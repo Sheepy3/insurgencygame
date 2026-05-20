@@ -1,85 +1,110 @@
-[gd_scene load_steps=3 format=3 uid="uid://mugxmvhhce6q"]
+[gd_scene format=3 uid="uid://mugxmvhhce6q"]
 
 [ext_resource type="Script" uid="uid://c0inoq0jl3cml" path="res://CombatStuff/combat.gd" id="1_ggta0"]
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="2_equra"]
 
-[node name="Pre_Combat" type="Control"]
+[node name="Pre_Combat" type="Control" unique_id=1707448737]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_ggta0")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1209831109]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -108.0
+offset_top = -75.0
+offset_right = 108.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=489688491]
 layout_mode = 2
+size_flags_vertical = 0
 
-[node name="Label" type="Label" parent="PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=898578282]
 layout_mode = 2
 theme = ExtResource("2_equra")
 text = "Select units to attack with:"
 
-[node name="Control" type="Control" parent="PanelContainer/VBoxContainer"]
+[node name="Control" type="Control" parent="PanelContainer/VBoxContainer" unique_id=88630372]
 custom_minimum_size = Vector2(0, 10.88)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="Fighter_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=673175667]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Fighter_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Fighter_label" type="Label" parent="PanelContainer/VBoxContainer/Fighter_label_and_count" unique_id=91317908]
 layout_mode = 2
 theme = ExtResource("2_equra")
 text = "Fighter:"
 
-[node name="Fighter_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Fighter_count" type="Label" parent="PanelContainer/VBoxContainer/Fighter_label_and_count" unique_id=1262369677]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_equra")
 text = "0"
 
-[node name="Fighter_slider" type="HSlider" parent="PanelContainer/VBoxContainer"]
+[node name="Fighter_slider" type="HSlider" parent="PanelContainer/VBoxContainer" unique_id=2034694739]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="Influence_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=388009700]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Influence_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+[node name="Influence_label" type="Label" parent="PanelContainer/VBoxContainer/Influence_label_and_count" unique_id=1571550215]
 layout_mode = 2
 theme = ExtResource("2_equra")
 text = "Influence:"
 
-[node name="Influence_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer2"]
+[node name="Influence_count" type="Label" parent="PanelContainer/VBoxContainer/Influence_label_and_count" unique_id=1304833314]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_equra")
 text = "0"
 
-[node name="Influence_slider" type="HSlider" parent="PanelContainer/VBoxContainer"]
+[node name="Influence_slider" type="HSlider" parent="PanelContainer/VBoxContainer" unique_id=2128617342]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.0
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+[node name="Control2" type="Control" parent="PanelContainer/VBoxContainer" unique_id=494008205]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="Initialize" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer3"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1858613475]
+layout_mode = 2
+
+[node name="Initialize" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer3" unique_id=300126485]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_equra")
 text = "INITIALIZE"
 
-[node name="Cancel" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer3"]
+[node name="Cancel" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer3" unique_id=621460686]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_equra")
 text = "CANCEL"
+
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/Fighter_slider" to="." method="_on_fighter_slider_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/Influence_slider" to="." method="_on_influence_slider_value_changed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer3/Initialize" to="." method="_on_initialize_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer3/Cancel" to="." method="_on_cancel_pressed"]

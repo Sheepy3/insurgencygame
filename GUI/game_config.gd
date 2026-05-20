@@ -13,6 +13,7 @@ func _ready() -> void:
 	$Error_Message.hide()
 	%Color_select.disabled = true
 	%Faction_select.disabled = true
+	
 
 func _on_start_button_pressed() -> void:
 	for Players:Resource in Overseer.player_list:
