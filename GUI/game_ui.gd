@@ -35,9 +35,10 @@ func _ready() -> void:
 		if Price_elements.name.contains("Hover"):
 			Price_elements.hide()
 
-func _on_player_switch_button_pressed() -> void:
-	pass
-	#Overseer.cycle_players()
+## TODO: Depricate function as it's button has been depricated
+#func _on_player_switch_button_pressed() -> void:
+	#pass
+	##Overseer.cycle_players()
 
 func Check_container_action(Button_name:String,Action:String) -> void:
 	match Button_name:
@@ -108,7 +109,6 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
-	#update_Player_Info()
 
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
@@ -124,9 +124,9 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
 	$Next_Phase_Button.set_pressed_no_signal(false)
-
-func _on_phase_button_pressed() -> void:
-	Overseer.cycle_phases()
+	$Next_Phase_Button.text = "NEXT PHASE???"
+	if multiplayer.is_server():
+		$Next_Phase_Button.text = "NEXT PHASE???"
 
 @rpc("authority","call_local")
 func action_error(error_message:String, player_ID:int) -> void:
@@ -469,9 +469,8 @@ func _on_purchase_preview_timer_timeout() -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
 
 func _on_next_phase_button_toggled(toggled_on: bool) -> void:
-	Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
-	print("This is the current toggel state: "+str(toggled_on))
 	if toggled_on:
 		$Next_Phase_Button.text = "YES!"
 	else:
 		$Next_Phase_Button.text = "NO!"
+	Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)

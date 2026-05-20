@@ -17,14 +17,13 @@ var The_support_nodes:Array
 var Phase_cycle:int = 0 # of phases passed or # of times you have reached Purchase again (still kinda deciding)
 var Desired_cycle:int = 3 # of phases before matnince or # of "PURCHASE" phases reached before matnince (will occur on turn of number)
  
-enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
+enum {MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, PLACE_MILITARY, COLLECT}
 var current_phase:int = MAINTENENCE
 
-signal change_player
+signal change_player # Signal may be depricated due to lack of use
 signal game_started
 signal change_phase
 signal player_resources_updated
-
 #func populate_player_list(Game_Size:int)-> void:
 	#for x:int in range(Game_Size):
 		#player_list.append(Player_resource.duplicate(true))
@@ -56,7 +55,7 @@ func cycle_phases() -> void:
 	elif current_phase < COLLECT:
 		current_phase+=1
 		change_phase.emit()
-	Sync_player_phases.rpc(current_phase)
+	Sync_player_phases.rpc(current_phase,Phase_cycle)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -199,6 +198,7 @@ func Check_phase_status() -> void:
 			players.Ready = false
 
 @rpc("authority","call_remote")
-func Sync_player_phases(New_phase:int) -> void:
+func Sync_player_phases(New_phase:int,New_phase_cycle:int) -> void:
 	current_phase = New_phase
+	Phase_cycle = New_phase_cycle
 	change_phase.emit()
