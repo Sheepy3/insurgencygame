@@ -26,6 +26,7 @@ func recolor() -> void:
 		
 	if Unit_Data.disrupted:
 		$F_sprite.material.set_shader_parameter("saturation", 0.25)
+		position += Vector2(0,20)
 		if $F_sprite.flip_h:
 			$F_sprite.rotation = 90
 			$I_sprite.rotation = 90
@@ -33,5 +34,6 @@ func recolor() -> void:
 			$F_sprite.rotation = -90
 			$I_sprite.rotation = -90
 	else:
+		position = Vector2(0,0)
 		$F_sprite.rotation = 0
-		$I_sprite.rotation = -90
+		$I_sprite.rotation = 0

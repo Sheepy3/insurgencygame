@@ -12,7 +12,7 @@ func _ready() -> void:
 		var unit1 := Unit.new()
 		unit1.unit_type = 0 # Fighter
 		unit1.unit_UUID = str(Time.get_unix_time_from_system()) + "_p1_" + str(i)
-		unit1.disrupted = true
+		unit1.disrupted = false
 		unit1.player_ID = 1
 		unit1.color = Vector3(1,0,0)
 		unit1.offcolor = false
