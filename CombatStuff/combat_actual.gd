@@ -1,39 +1,38 @@
 extends Control
 var unit_scene:PackedScene = load("res://CombatStuff/unit_visual_control.tscn")
-
+enum player_type {COMBATANT,SPECTATOR} 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_on_window_resized)
 	_on_window_resized()
 	set_counts(5,5,5)
 	var player1_units: Array[Unit] = []
 	var player2_units: Array[Unit] = []
-
-	for i in range(5):
-		var unit1 := Unit.new()
-		unit1.unit_type = 0 # Fighter
-		unit1.unit_UUID = str(Time.get_unix_time_from_system()) + "_p1_" + str(i)
-		unit1.disrupted = false
-		unit1.player_ID = 1
-		unit1.color = Vector3(1,0,0)
-		unit1.offcolor = false
-		player1_units.append(unit1)
-
-		var unit2 := Unit.new()
-		unit2.unit_type = 0 # Fighter
-		unit2.unit_UUID = str(Time.get_unix_time_from_system()) + "_p2_" + str(i)
-		unit2.disrupted = true
-		unit2.player_ID = 2
-		unit2.color = Vector3(0,0,1)
-		unit2.offcolor = false
-		player2_units.append(unit2)
+	#for i in range(5):
+		#var unit1 := Unit.new()
+		#unit1.unit_type = 0 # Fighter
+		#unit1.unit_UUID = str(Time.get_unix_time_from_system()) + "_p1_" + str(i)
+		#unit1.disrupted = false
+		#unit1.player_ID = 1
+		#unit1.color = Vector3(1,0,0)
+		#unit1.offcolor = false
+		#player1_units.append(unit1)
+#
+		#var unit2 := Unit.new()
+		#unit2.unit_type = 0 # Fighter
+		#unit2.unit_UUID = str(Time.get_unix_time_from_system()) + "_p2_" + str(i)
+		#unit2.disrupted = true
+		#unit2.player_ID = 2
+		#unit2.color = Vector3(0,0,1)
+		#unit2.offcolor = false
+		#player2_units.append(unit2)
 	
 	_display_allies(player1_units)
 	_display_opposition(player2_units)
 
 
 func _on_window_resized() -> void:
-	%Unit_spawn_1.position = %PanelContainer.position + Vector2(220,40)
-	%Unit_spawn_2.position = %PanelContainer.position + Vector2(100,100)
+	%Unit_spawn_1.position = %PanelContainer.position + Vector2(290,65)
+	%Unit_spawn_2.position = %PanelContainer.position + Vector2(170,125)
 	print("hi")
 	pass
 
@@ -41,7 +40,9 @@ func _display_allies(allies:Array) -> void:
 	var offsetX:int = 0
 	var offsetY:int = 0
 	var count:int = allies.size()
-	var spacing:int = 200/count
+	var spacing:int
+	if count > 0:
+		spacing = 200/count
 	var i:int = 0
 	for ally:Resource in allies:
 		var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
@@ -64,7 +65,9 @@ func _display_opposition(opps:Array) -> void:
 	var offsetX:int = opposition_offset
 	var offsetY:int = 0
 	var count:int = opps.size()
-	var spacing:int = 200/count
+	var spacing:int
+	if count > 0:
+		spacing = 200/count
 	var i:int = 0
 	for opp:Resource in opps:
 		var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
@@ -104,6 +107,12 @@ func set_counts(weapons_max: int, money_max:int, manpower_max:int) -> void:
 		%Manpower_label_and_count.show()
 		%Manpower_slider.show()
 
+func switch_player_type(type: int) -> void:
+	
+	if type == player_type.COMBATANT:
+		%Config_Sidebar.show()
+	elif type == player_type.SPECTATOR:
+		%Config_Sidebar.hide()
 
 
 func _on_weapons_slider_value_changed(value: int) -> void:

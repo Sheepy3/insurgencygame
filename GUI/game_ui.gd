@@ -478,7 +478,38 @@ func _on_purchase_preview_timer_timeout() -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
 
 @rpc("any_peer","call_local")
-func request_combat_ui(map_node_path:NodePath) -> void:
+func request_pre_combat_ui(map_node_path:NodePath) -> void:
+	if multiplayer.is_server():
+		var player_id:int = multiplayer.get_remote_sender_id()
+		var map_node:Node = get_node(map_node_path)
+		print(map_node.unit_list)
+		var fighter_count:int = 0
+		var influence_count:int = 0 
+		var players_involved:Array
+		for unit:Resource in map_node.unit_list:
+			if unit.player_ID != player_id and not players_involved.has(unit.player_ID):
+				players_involved.append(unit.player_ID)
+			if unit.player_ID == player_id:
+				if unit.unit_type == 0:
+					fighter_count +=1
+				else:
+					influence_count +=1
+		display_pre_combat.rpc(player_id, fighter_count, influence_count,players_involved)
+
+@rpc("authority", "call_local")
+func display_pre_combat(id:int, fighter_count:int, influence_count:int,players_involved:Array) -> void:
+	if multiplayer.get_unique_id() == id:
+		$Pre_Combat.set_counts(fighter_count, influence_count,players_involved)
+		hide_ui()
+		hidden_ui_nodes.erase($Pre_Combat)
+		$Pre_Combat.show()
+
+
+func _on_attack_button_pressed() -> void:
+	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
+	request_pre_combat_ui.rpc(map_node)
+
+func _request_actual_combat(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
 		var player_id:int = multiplayer.get_remote_sender_id()
 		var map_node:Node = get_node(map_node_path)
@@ -493,17 +524,10 @@ func request_combat_ui(map_node_path:NodePath) -> void:
 					influence_count +=1
 		display_pre_combat.rpc(player_id, fighter_count, influence_count,)
 
-func _on_attack_button_pressed() -> void:
-	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
-	request_combat_ui.rpc(map_node)
 
-@rpc("authority", "call_local")
-func display_pre_combat(id:int, fighter_count:int, influence_count:int) -> void:
-	if multiplayer.get_unique_id() == id:
-		$Pre_Combat.set_counts(fighter_count, influence_count)
-		hide_ui()
-		hidden_ui_nodes.erase($Pre_Combat)
-		$Pre_Combat.show()
+func _on_precombat_initialize() -> void:
+	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
+	
 
 
 func hide_ui() -> void:
@@ -518,11 +542,9 @@ func show_ui() -> void:
 		node.visible = true
 	hidden_ui_nodes.clear()
 
-func _on_precombat_initialize() -> void:
-	print("initialize")
+	
 
 
 func _on_precombat_cancel() -> void:
-	print("hi")
 	show_ui()
 	$Pre_Combat.hide()

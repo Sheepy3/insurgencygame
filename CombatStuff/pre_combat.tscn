@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://mugxmvhhce6q"]
 
-[ext_resource type="Script" uid="uid://c0inoq0jl3cml" path="res://CombatStuff/combat.gd" id="1_ggta0"]
+[ext_resource type="Script" uid="uid://c0inoq0jl3cml" path="res://CombatStuff/pre_combat.gd" id="1_ggta0"]
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="2_equra"]
 
 [node name="Pre_Combat" type="Control" unique_id=1707448737]
@@ -82,6 +82,15 @@ text = "0"
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.0
+
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer" unique_id=866736851]
+layout_mode = 2
+theme = ExtResource("2_equra")
+text = "Select player to attack:"
+
+[node name="Players_dropdown" type="OptionButton" parent="PanelContainer/VBoxContainer" unique_id=1671778751]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="Control2" type="Control" parent="PanelContainer/VBoxContainer" unique_id=494008205]
 custom_minimum_size = Vector2(0, 10)

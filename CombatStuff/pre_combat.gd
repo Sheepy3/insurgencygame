@@ -7,7 +7,7 @@ func _ready() -> void:
 	pass
 
 
-func set_counts(fighter_max: int, influence_max:int) -> void:
+func set_counts(fighter_max: int, influence_max:int, players_available:Array) -> void:
 	%Fighter_slider.max_value = fighter_max
 	%Influence_slider.max_value = influence_max
 	if fighter_max == 0:
@@ -22,8 +22,13 @@ func set_counts(fighter_max: int, influence_max:int) -> void:
 	else:
 		%Influence_label_and_count.show()
 		%Influence_slider.show()
-
-
+	for player:int in players_available:
+		var player_resource:Resource = Overseer.Identify_player(player)
+		var player_color:Vector3 = player_resource.color
+		var color_string:String = Overseer.get_player_color_name(player_color)
+		var final_string:String = str(player_resource.Player_ID) + " [" + color_string + "]"
+		%Players_dropdown.add_item(final_string)
+		
 func kill() -> void:
 	queue_free()
 
