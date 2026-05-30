@@ -19,6 +19,7 @@ func _ready() -> void:
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
+	#Overseer.change_phase.connect()
 	Overseer.game_started.connect(connect_update_UI)
 	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
 	#Overseer.cycle_players()
@@ -34,11 +35,6 @@ func _ready() -> void:
 	for Price_elements:Control in $Action_Container/VBoxContainer.get_children(true):
 		if Price_elements.name.contains("Hover"):
 			Price_elements.hide()
-
-## TODO: Depricate function as it's button has been depricated
-#func _on_player_switch_button_pressed() -> void:
-	#pass
-	##Overseer.cycle_players()
 
 func Check_container_action(Button_name:String,Action:String) -> void:
 	match Button_name:
@@ -117,16 +113,20 @@ func _phase_switch_ui() -> void:
 		1:
 			$Current_Phase.text = "Purchase Units & Infrastructure"
 		2:
-			$Current_Phase.text = "Place Military Units & Infrastructure"
+			$Current_Phase.text = "Place Influence Units & Infrastructure"
 		3:
 			$Current_Phase.text = "Move Units"
 		4:
+			$Current_Phase.text = "Combat"
+		5:
+			$Current_Phase.text = "Placce Fighter Units & Bases"
+		6:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
+		7:
+			$Current_Phase.tex = "Muster"
 	$Next_Phase_Button.set_pressed_no_signal(false)
 	$Next_Phase_Button.text = "NEXT PHASE???"
-	if multiplayer.is_server():
-		$Next_Phase_Button.text = "NEXT PHASE???"
 
 @rpc("authority","call_local")
 func action_error(error_message:String, player_ID:int) -> void:
@@ -199,7 +199,6 @@ func _process(delta: float) -> void:
 	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
 	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
 
-
 @rpc("any_peer","call_local")
 func Manpower_action(Player_ID:int,action:String)-> void:
 	if multiplayer.is_server():
@@ -252,6 +251,7 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 			new_unit_display.move_unit.connect(move_unit_function)
 			#new_unit_display.set_color(unit.color)
 			#new_unit_display.set_type(unit.unit_type)
+			new_unit_display.Check_unit_phase()
 			%Unit_Display.add_child(new_unit_display)
 
 func move_unit_function(unit_resource:Resource, source_node:String) -> void:
@@ -277,10 +277,11 @@ func Check_store_unlocked() -> void:
 				Meets_condition +=1
 		if checked_node.Has_building && checked_node.building.player_ID == Unique_player_ID:
 			Meets_condition += 1
-	if Meets_condition >= 1:
+	if Meets_condition >= 1 && Overseer.current_phase == Overseer.PURCHASE:
 		$Open_Market_Button.set_disabled(false)
 	else:
 		$Open_Market_Button.set_disabled(true)
+		$Support_store_window.hide()
 
 @rpc("any_peer","call_local")
 func check_buy_action(Buyable:String,Player_ID:int) -> void:
@@ -474,3 +475,16 @@ func _on_next_phase_button_toggled(toggled_on: bool) -> void:
 	else:
 		$Next_Phase_Button.text = "NO!"
 	Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
+
+func Name_in_the_works() -> void:
+	if Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+		for boxes:Control in %HBox_Buy_Placeables.get_children(true):
+			for UI_elements:Control in boxes:
+				if UI_elements is Button and UI_elements.name.contains("Logistics_Network_Buy_Button"):
+					UI_elements.hide()
+	#elif Overseer.current_phase == Overseer.UNIT_MOVEMENT:
+	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:

@@ -83,6 +83,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String) -> void:
 	unit_visual.Unit_Data = unique_unit
 	%Units.add_child(unit_visual)
 	_reorder_units()
+	get_parent().find_child("UI").update_node_unit_list(unit_list,name)
 
 func has_unit(player:int, type:int) -> bool:
 	for unit:Resource in unit_list:

@@ -127,37 +127,37 @@ vertical_alignment = 1
 [node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=741442794]
 layout_mode = 2
 
-[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=778075643]
+[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=778075643 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1902198732]
+[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1902198732 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1467880052]
+[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1467880052 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=984577820]
+[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=984577820 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1946652052]
+[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1946652052 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1840041959]
+[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1840041959 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
