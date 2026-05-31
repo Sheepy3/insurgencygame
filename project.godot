@@ -29,13 +29,15 @@ gdscript/warnings/untyped_declaration=2
 
 [display]
 
+window/size/viewport_width=854
+window/size/viewport_height=480
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/snap/snap_2d_vertices_to_pixel=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/script_splitter/plugin.cfg")
+enabled=PackedStringArray()
 
 [gui]
 

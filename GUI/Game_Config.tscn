@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://qt1ubvjmkebw"]
+[gd_scene format=3 uid="uid://qt1ubvjmkebw"]
 
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="1_8cj6o"]
 [ext_resource type="Script" uid="uid://b28exbrfutx15" path="res://GUI/game_config.gd" id="1_rixy8"]
@@ -13,13 +13,13 @@ font_color = Color(1, 0, 0, 1)
 outline_size = 9
 outline_color = Color(0.251859, 0, 0.0484084, 1)
 
-[node name="GameConfig" type="CanvasLayer"]
+[node name="GameConfig" type="CanvasLayer" unique_id=60784809]
 script = ExtResource("1_rixy8")
 
-[node name="Client" type="Node" parent="."]
+[node name="Client" type="Node" parent="." unique_id=1600649178]
 script = ExtResource("2_ers11")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1737059840]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -32,22 +32,22 @@ offset_bottom = 212.72998
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1125838638]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer"]
+[node name="Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1360535658]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel" unique_id=226701111]
 layout_mode = 0
 offset_right = 90.0
 offset_bottom = 22.3333
 text = " Game setup"
 label_settings = ExtResource("1_8cj6o")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Panel" unique_id=553007889]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -61,13 +61,13 @@ offset_bottom = 40.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=103377815]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Map Size"
 label_settings = ExtResource("1_8cj6o")
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=370438014]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_qer0v")
@@ -82,11 +82,11 @@ popup/item_2/id = 2
 popup/item_3/text = "Large (6)"
 popup/item_3/id = 3
 
-[node name="Spacer" type="Control" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+[node name="Spacer" type="Control" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=1701736622]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=1285593778]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -95,7 +95,7 @@ theme = ExtResource("2_qer0v")
 disabled = true
 text = "Start Game"
 
-[node name="ReadyButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer"]
+[node name="ReadyButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=2084916679]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -104,30 +104,30 @@ theme = ExtResource("2_qer0v")
 disabled = true
 text = "Not Ready"
 
-[node name="Networking_Panel" type="Panel" parent="VBoxContainer/HBoxContainer"]
+[node name="Networking_Panel" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=980179935]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel" unique_id=311019263]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 78.0
 grow_horizontal = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=1016138124]
 visible = false
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="IP" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer"]
+[node name="IP" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer" unique_id=863970397]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "ws://173.73.200.194:8911"
 
-[node name="Room" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Room" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=565201622]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
@@ -135,7 +135,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Enter Room Code"
 
-[node name="Color_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Color_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=508823087]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
@@ -157,7 +157,7 @@ popup/item_6/text = "Select a color..."
 popup/item_6/id = 6
 popup/item_6/disabled = true
 
-[node name="Faction_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Faction_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=1437201379]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
@@ -171,7 +171,7 @@ popup/item_2/text = "Select a faction..."
 popup/item_2/id = 2
 popup/item_2/disabled = true
 
-[node name="Roomcode" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Roomcode" type="TextEdit" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=702714525]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 35)
@@ -179,37 +179,37 @@ layout_mode = 2
 placeholder_text = "[Room code will appear here]"
 editable = false
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=839632490]
 visible = false
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=21276616]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 
-[node name="Join_Debug" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2"]
+[node name="Join_Debug" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2" unique_id=804230337]
 layout_mode = 2
 text = "Join Debug lobby"
 
-[node name="Join_Debug2" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2"]
+[node name="Join_Debug2" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer/HBoxContainer2" unique_id=1829687180]
 layout_mode = 2
 text = "Join Debug lobby 2"
 
-[node name="Join_Button" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer"]
+[node name="Join_Button" type="Button" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=297523483]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Create lobby"
 
-[node name="Player_Panel" type="PanelContainer" parent="VBoxContainer"]
+[node name="Player_Panel" type="PanelContainer" parent="VBoxContainer" unique_id=31924244]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Player_list_container" type="VBoxContainer" parent="VBoxContainer/Player_Panel"]
+[node name="Player_list_container" type="VBoxContainer" parent="VBoxContainer/Player_Panel" unique_id=51127021]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Error_Message" type="Label" parent="."]
+[node name="Error_Message" type="Label" parent="." unique_id=310218207]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -226,7 +226,7 @@ text = "ERROR: MILITARY UNITS CAN ONLY BE PLACED ON BASES"
 label_settings = SubResource("LabelSettings_oibmu")
 horizontal_alignment = 1
 
-[node name="Error_timer" type="Timer" parent="."]
+[node name="Error_timer" type="Timer" parent="." unique_id=1851027892]
 wait_time = 3.0
 
 [connection signal="item_selected" from="VBoxContainer/HBoxContainer/Panel/VBoxContainer/OptionButton" to="." method="_on_option_button_item_selected"]

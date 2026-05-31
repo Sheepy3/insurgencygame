@@ -16,7 +16,7 @@ var The_nodes:Dictionary
 var The_support_nodes:Array
 var Phase_cycle:int = 0
 var Desired_cycle:int = 3
- 
+var lock:bool = false
 enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
 var current_phase:int = MAINTENENCE
 
@@ -26,27 +26,37 @@ signal change_phase
 signal player_resources_updated
 signal Initialization_player_color
 
-#func populate_player_list(Game_Size:int)-> void:
-	#for x:int in range(Game_Size):
-		#player_list.append(Player_resource.duplicate(true))
-		#Player_resource.color = players_colors[x]
-		#player_list[x].Player_name = "Player " + str(x+1)
-		#var Logistics_map:AStar2D = AStar2D.new()
-		#var Intelligence_map:AStar2D = AStar2D.new()
-		#Logistics_array.append(Logistics_map)
-		#Intelligence_array.append(Intelligence_map)
+const PLAYER_COLORS := {
+	"Red": Vector3(223, 0, 81) / 255.0,
+	"Yellow": Vector3(186, 165, 0) / 255.0,
+	"Orange": Vector3(235, 136, 41) / 255.0,
+	"Green": Vector3(46, 197, 0) / 255.0,
+	"Blue": Vector3(88, 167, 255) / 255.0,
+	"Purple": Vector3(207, 118, 255) / 255.0,
+}
 
-#func cycle_players() -> void:
-	#var playerquant:int = player_list.size()-1
-	#if selected_player_index < playerquant:
-		#selected_player_index +=1
-		#current_player = player_list[selected_player_index].Player_name
-		#change_player.emit()
-	#else:
-		#selected_player_index = 0
-		#current_player = player_list[selected_player_index].Player_name
-		#change_player.emit()
+const PLAYER_COLOR_ORDER := [
+	"Red",
+	"Yellow",
+	"Orange",
+	"Green",
+	"Blue",
+	"Purple",
+]
 
+func get_player_color_by_index(index: int) -> Vector3:
+	if index < 0 or index >= PLAYER_COLOR_ORDER.size():
+		return Vector3(1, 1, 1)
+	var color_name: String = PLAYER_COLOR_ORDER[index]
+	return PLAYER_COLORS[color_name]
+
+func get_player_color_name(color: Vector3) -> String:
+	for color_name: String in PLAYER_COLORS.keys():
+		var stored_color: Vector3 = PLAYER_COLORS[color_name]
+		if stored_color.distance_to(color) < 0.001:
+			return color_name
+
+	return "Unknown"
 func cycle_phases() -> void:
 	if Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
@@ -58,12 +68,8 @@ func cycle_phases() -> void:
 		current_phase+=1
 		change_phase.emit()
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Create_unique_ID()
 	pass
-	#populate_player_list(2)
-	#Pull_player_info()
 
 @rpc("any_peer","call_local")
 func Resources_to_rpc() -> void:
@@ -109,7 +115,7 @@ func Request_node_data(Edited_node_name:String) -> void:
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
 			var New_unit:Resource = units
-			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.unit_state,New_unit.player_ID,New_unit.color,New_unit.offcolor]
+			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			x += 1
 		Update_node_data.rpc(Edited_node.name,New_node)
 

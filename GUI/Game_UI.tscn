@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bqpth4hjbjugk"]
+[gd_scene format=3 uid="uid://bqpth4hjbjugk"]
 
 [ext_resource type="Script" uid="uid://75yi1ekf0714" path="res://GUI/game_ui.gd" id="1_2if7r"]
 [ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="2_3qqlp"]
@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="11_0wnlq"]
 [ext_resource type="Texture2D" uid="uid://boiqc3l35gmff" path="res://Assets/Icons/IntelNetwork.png" id="12_yb2yk"]
 [ext_resource type="Texture2D" uid="uid://c1xq20thy12to" path="res://Assets/Icons/LogiNetwork.png" id="13_82g8w"]
+[ext_resource type="PackedScene" uid="uid://mugxmvhhce6q" path="res://CombatStuff/pre_combat.tscn" id="16_82g8w"]
+[ext_resource type="PackedScene" uid="uid://b755b2gx4g0n8" path="res://CombatStuff/combat_actual.tscn" id="17_0wnlq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
 font = ExtResource("4_w20xb")
@@ -38,10 +40,10 @@ shader_parameter/saturation = 0.0
 shader_parameter/value = 1.0
 shader_parameter/opacity = 0.1
 
-[node name="UI" type="CanvasLayer"]
+[node name="UI" type="CanvasLayer" unique_id=824751754]
 script = ExtResource("1_2if7r")
 
-[node name="Close_UI_Button" type="Button" parent="."]
+[node name="Close_UI_Button" type="Button" parent="." unique_id=848496336]
 layout_direction = 4
 offset_left = 232.0
 offset_top = 64.0
@@ -49,221 +51,221 @@ offset_right = 267.0
 offset_bottom = 122.0
 text = "<"
 
-[node name="Action_Container" type="PanelContainer" parent="."]
+[node name="Action_Container" type="PanelContainer" parent="." unique_id=2095400995]
 offset_top = 64.0
 offset_right = 232.0
-offset_bottom = 269.0
+offset_bottom = 421.0
 
-[node name="Purchase_preview_timer" type="Timer" parent="Action_Container"]
+[node name="Purchase_preview_timer" type="Timer" parent="Action_Container" unique_id=834610951]
 wait_time = 4.5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Action_Container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Action_Container" unique_id=365067497]
 layout_mode = 2
 
-[node name="Hbox_Action_Label" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Hbox_Action_Label" type="HBoxContainer" parent="Action_Container/VBoxContainer" unique_id=234380945]
 layout_mode = 2
 
-[node name="Action_Label" type="Label" parent="Action_Container/VBoxContainer/Hbox_Action_Label"]
+[node name="Action_Label" type="Label" parent="Action_Container/VBoxContainer/Hbox_Action_Label" unique_id=817686279]
 layout_mode = 2
 text = " Action:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_Action" type="Label" parent="Action_Container/VBoxContainer/Hbox_Action_Label"]
+[node name="Dynamic_Action" type="Label" parent="Action_Container/VBoxContainer/Hbox_Action_Label" unique_id=1828049241]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="HBox_Buy_Placeables" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="HBox_Buy_Placeables" type="HBoxContainer" parent="Action_Container/VBoxContainer" unique_id=137590160]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1461617657]
 layout_mode = 2
 
-[node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+[node name="Weapons_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer" unique_id=1800320462]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Weapons  "
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Base_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+[node name="Base_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer" unique_id=1539097009]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Base"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Fighter_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+[node name="Fighter_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer" unique_id=1774017716]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Fighter"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Influence_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+[node name="Influence_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer" unique_id=2115417175]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Influence"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Intelligence_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+[node name="Intelligence_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer" unique_id=1622495436]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Intelligence"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Logistics_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer"]
+[node name="Logistics_Label" type="Label" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer" unique_id=273145179]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 text = "Logistics"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1114561132]
 layout_mode = 2
 
-[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=857227100]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1628236930]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1791855036]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=349717379]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1642589049]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2"]
+[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1335015401]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1026092951]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+[node name="Control" type="Control" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1817766929]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 
-[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1234028650]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=700340699]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=556204986]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1828544941]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3"]
+[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=2065613899]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Purchase_Hover_Text" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Purchase_Hover_Text" type="HBoxContainer" parent="Action_Container/VBoxContainer" unique_id=993126059]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Text"]
+[node name="Item_Name" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Text" unique_id=851846125]
 visible = false
 layout_mode = 2
 text = "text"
 label_settings = ExtResource("2_3qqlp")
 horizontal_alignment = 1
 
-[node name="Purchase_Hover_Image" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Purchase_Hover_Image" type="HBoxContainer" parent="Action_Container/VBoxContainer" unique_id=1940555768]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Image"]
+[node name="Item_picture" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Image" unique_id=1561751820]
 layout_mode = 2
 expand_mode = 2
 
-[node name="Purchase_Hover_Price" type="HBoxContainer" parent="Action_Container/VBoxContainer"]
+[node name="Purchase_Hover_Price" type="HBoxContainer" parent="Action_Container/VBoxContainer" unique_id=1196102593]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="Population_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+[node name="Population_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price" unique_id=1058252297]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 texture = ExtResource("7_sw8an")
 expand_mode = 2
 
-[node name="Population_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+[node name="Population_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price" unique_id=100355325]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Money_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+[node name="Money_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price" unique_id=2129445131]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 texture = ExtResource("6_pqiix")
 expand_mode = 2
 
-[node name="Money_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+[node name="Money_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price" unique_id=1305117899]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Guns_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+[node name="Guns_Image" type="TextureRect" parent="Action_Container/VBoxContainer/Purchase_Hover_Price" unique_id=1854468622]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 texture = ExtResource("5_tsku8")
 expand_mode = 2
 
-[node name="Guns_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price"]
+[node name="Guns_Cost" type="Label" parent="Action_Container/VBoxContainer/Purchase_Hover_Price" unique_id=1324187496]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="Current_Phase" type="Label" parent="."]
+[node name="Current_Phase" type="Label" parent="." unique_id=300214275]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -275,7 +277,7 @@ grow_horizontal = 2
 text = "CURRENT PHASE"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Error_Message" type="Label" parent="."]
+[node name="Error_Message" type="Label" parent="." unique_id=1749347392]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -292,65 +294,65 @@ text = "ERROR: MILITARY UNITS CAN ONLY BE PLACED ON BASES"
 label_settings = SubResource("LabelSettings_c1gip")
 horizontal_alignment = 1
 
-[node name="Error_timer" type="Timer" parent="."]
+[node name="Error_timer" type="Timer" parent="." unique_id=1619178676]
 wait_time = 3.0
 
-[node name="Player_Info" type="PanelContainer" parent="."]
+[node name="Player_Info" type="PanelContainer" parent="." unique_id=1306428175]
 offset_right = 530.0
 offset_bottom = 40.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Player_Info"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Player_Info" unique_id=241141480]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Player_Info/HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=1933350601]
 layout_mode = 2
 texture = ExtResource("5_tsku8")
 expand_mode = 2
 
-[node name="Guns" type="Label" parent="Player_Info/HBoxContainer"]
+[node name="Guns" type="Label" parent="Player_Info/HBoxContainer" unique_id=185321698]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect2" type="TextureRect" parent="Player_Info/HBoxContainer"]
+[node name="TextureRect2" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=187787]
 layout_mode = 2
 texture = ExtResource("6_pqiix")
 expand_mode = 2
 
-[node name="Money" type="Label" parent="Player_Info/HBoxContainer"]
+[node name="Money" type="Label" parent="Player_Info/HBoxContainer" unique_id=1891773717]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect3" type="TextureRect" parent="Player_Info/HBoxContainer"]
+[node name="TextureRect3" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=2121623612]
 layout_mode = 2
 texture = ExtResource("7_sw8an")
 expand_mode = 2
 
-[node name="Population" type="Label" parent="Player_Info/HBoxContainer"]
+[node name="Population" type="Label" parent="Player_Info/HBoxContainer" unique_id=302881614]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect4" type="TextureRect" parent="Player_Info/HBoxContainer"]
+[node name="TextureRect4" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=30395559]
 layout_mode = 2
 texture = ExtResource("8_n388q")
 expand_mode = 2
 
-[node name="VictoryPoints" type="Label" parent="Player_Info/HBoxContainer"]
+[node name="VictoryPoints" type="Label" parent="Player_Info/HBoxContainer" unique_id=918409969]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Spacer" type="Control" parent="Player_Info/HBoxContainer"]
+[node name="Spacer" type="Control" parent="Player_Info/HBoxContainer" unique_id=1099731667]
 custom_minimum_size = Vector2(14.05, 0)
 layout_mode = 2
 
-[node name="Spacer2" type="Control" parent="Player_Info/HBoxContainer"]
+[node name="Spacer2" type="Control" parent="Player_Info/HBoxContainer" unique_id=1149095525]
 custom_minimum_size = Vector2(310, 0)
 layout_mode = 2
 
-[node name="TextureRect5" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="TextureRect5" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1256353942]
 layout_mode = 0
 offset_left = 18.0
 offset_right = 58.0
@@ -358,7 +360,7 @@ offset_bottom = 40.0
 texture = ExtResource("9_yb2yk")
 expand_mode = 2
 
-[node name="Fighter_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="Fighter_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1590725689]
 layout_mode = 0
 offset_left = 62.0
 offset_top = 10.0
@@ -367,7 +369,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect6" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="TextureRect6" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=154197470]
 layout_mode = 0
 offset_left = 75.0
 offset_right = 115.0
@@ -375,7 +377,7 @@ offset_bottom = 40.0
 texture = ExtResource("10_82g8w")
 expand_mode = 2
 
-[node name="Influence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="Influence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=396573021]
 layout_mode = 0
 offset_left = 119.0
 offset_top = 10.0
@@ -384,7 +386,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect7" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="TextureRect7" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=413583324]
 layout_mode = 0
 offset_left = 132.0
 offset_right = 172.0
@@ -392,7 +394,7 @@ offset_bottom = 40.0
 texture = ExtResource("11_0wnlq")
 expand_mode = 2
 
-[node name="Base_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="Base_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=126547056]
 layout_mode = 0
 offset_left = 176.0
 offset_top = 10.0
@@ -401,7 +403,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect8" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="TextureRect8" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1496364789]
 layout_mode = 0
 offset_left = 189.0
 offset_right = 229.0
@@ -409,7 +411,7 @@ offset_bottom = 40.0
 texture = ExtResource("12_yb2yk")
 expand_mode = 2
 
-[node name="Intelligence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="Intelligence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=334391359]
 layout_mode = 0
 offset_left = 233.0
 offset_top = 10.0
@@ -418,7 +420,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect9" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="TextureRect9" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=87142579]
 layout_mode = 0
 offset_left = 246.0
 offset_right = 286.0
@@ -426,7 +428,7 @@ offset_bottom = 40.0
 texture = ExtResource("13_82g8w")
 expand_mode = 2
 
-[node name="Logistics_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2"]
+[node name="Logistics_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1279719389]
 layout_mode = 0
 offset_left = 290.0
 offset_top = 10.0
@@ -435,7 +437,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Support_store_window" type="Window" parent="."]
+[node name="Support_store_window" type="Window" parent="." unique_id=2053279193]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Support Market"
@@ -444,70 +446,70 @@ size = Vector2i(165, 100)
 min_size = Vector2i(165, 100)
 max_size = Vector2i(165, 100)
 
-[node name="Store_Container" type="PanelContainer" parent="Support_store_window"]
+[node name="Store_Container" type="PanelContainer" parent="Support_store_window" unique_id=1107668340]
 offset_left = 16.0
 offset_right = 152.0
 offset_bottom = 110.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container" unique_id=1578131010]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer" unique_id=845546067]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer" unique_id=1402005468]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Buy_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer/VBoxContainer"]
+[node name="Buy_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=2038553878]
 layout_mode = 2
 size_flags_vertical = 6
 text = "Buy"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer" unique_id=1250662190]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Sell_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer/VBoxContainer2"]
+[node name="Sell_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=298537718]
 layout_mode = 2
 text = "Sell"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer" unique_id=667538739]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3" unique_id=1714253405]
 layout_mode = 2
 
-[node name="Weapons_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Weapons_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=2009895510]
 layout_mode = 2
 text = "Weapons ↔ $3"
 
-[node name="Manpower_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Manpower_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=147519628]
 layout_mode = 2
 text = "Man power ↔ $5"
 
-[node name="Store_bounds" type="Node2D" parent="."]
+[node name="Store_bounds" type="Node2D" parent="." unique_id=112579022]
 
-[node name="Top_left" type="VisibleOnScreenEnabler2D" parent="Store_bounds"]
+[node name="Top_left" type="VisibleOnScreenEnabler2D" parent="Store_bounds" unique_id=776959643]
 scale = Vector2(0.949999, 1)
 enable_node_path = NodePath("../../Support_store_window")
 
-[node name="Top_right" type="VisibleOnScreenEnabler2D" parent="Store_bounds"]
+[node name="Top_right" type="VisibleOnScreenEnabler2D" parent="Store_bounds" unique_id=2090187453]
 position = Vector2(165, 0)
 scale = Vector2(0.949999, 1)
 enable_node_path = NodePath("../../Support_store_window")
 
-[node name="Bottom_left" type="VisibleOnScreenEnabler2D" parent="Store_bounds"]
+[node name="Bottom_left" type="VisibleOnScreenEnabler2D" parent="Store_bounds" unique_id=1350747883]
 position = Vector2(0, 100)
 scale = Vector2(0.949999, 1)
 enable_node_path = NodePath("../../Support_store_window")
 
-[node name="Bottom_right" type="VisibleOnScreenEnabler2D" parent="Store_bounds"]
+[node name="Bottom_right" type="VisibleOnScreenEnabler2D" parent="Store_bounds" unique_id=1774803510]
 position = Vector2(165, 100)
 scale = Vector2(0.949999, 1)
 enable_node_path = NodePath("../../Support_store_window")
 
-[node name="Open_Market_Button" type="Button" parent="."]
+[node name="Open_Market_Button" type="Button" parent="." unique_id=1620508103]
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -521,7 +523,7 @@ grow_vertical = 2
 theme = ExtResource("3_fbkqq")
 text = "Market"
 
-[node name="Node_Info" type="PanelContainer" parent="."]
+[node name="Node_Info" type="PanelContainer" parent="." unique_id=918072795]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -529,68 +531,77 @@ offset_top = -195.0
 offset_right = 230.0
 grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Node_Info"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Node_Info" unique_id=980163362]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Node_Info/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=1781074634]
 layout_mode = 2
 
-[node name="Clicked_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2"]
+[node name="Clicked_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1044371669]
 texture_filter = 1
 layout_mode = 2
 text = " Clicked:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_Clicked" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2"]
+[node name="Dynamic_Clicked" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1921552710]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Node_Info/VBoxContainer"]
+[node name="Control" type="Control" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1356406328]
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 
-[node name="RPU_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer3"]
+[node name="Attack_Button" type="Button" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=271523957]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+disabled = true
+text = "Attack"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=1628682351]
+layout_mode = 2
+
+[node name="RPU_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer3" unique_id=171537813]
 texture_filter = 1
 layout_mode = 2
 text = " RPU:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_RPU" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer3"]
+[node name="Dynamic_RPU" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer3" unique_id=636634722]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="Node_Info/VBoxContainer"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=717552253]
 layout_mode = 2
 
-[node name="Pop_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer4"]
+[node name="Pop_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer4" unique_id=1594978661]
 texture_filter = 1
 layout_mode = 2
 text = " Population:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_Pop" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer4"]
+[node name="Dynamic_Pop" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer4" unique_id=169381849]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Node_Info/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Node_Info/VBoxContainer" unique_id=1254184405]
 layout_mode = 2
 mouse_filter = 0
 mouse_force_pass_scroll_events = false
 vertical_scroll_mode = 0
 
-[node name="Unit_Display" type="HBoxContainer" parent="Node_Info/VBoxContainer/ScrollContainer"]
+[node name="Unit_Display" type="HBoxContainer" parent="Node_Info/VBoxContainer/ScrollContainer" unique_id=268745545]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Clouds" type="TextureRect" parent="."]
+[node name="Clouds" type="TextureRect" parent="." unique_id=469551243]
 unique_name_in_owner = true
 visible = false
 z_index = -3
@@ -613,6 +624,14 @@ mouse_filter = 2
 texture = ExtResource("9_sw8an")
 stretch_mode = 1
 
+[node name="Pre_Combat" parent="." unique_id=1707448737 instance=ExtResource("16_82g8w")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Combat" parent="." unique_id=1693427844 instance=ExtResource("17_0wnlq")]
+unique_name_in_owner = true
+visible = false
+
 [connection signal="timeout" from="Action_Container/Purchase_preview_timer" to="." method="_on_purchase_preview_timer_timeout"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
 [connection signal="close_requested" from="Support_store_window" to="." method="_on_support_store_window_close_requested"]
@@ -626,3 +645,4 @@ stretch_mode = 1
 [connection signal="screen_exited" from="Store_bounds/Bottom_left" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Bottom_right" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="pressed" from="Open_Market_Button" to="." method="_on_open_market_button_pressed"]
+[connection signal="pressed" from="Node_Info/VBoxContainer/HBoxContainer2/Attack_Button" to="." method="_on_attack_button_pressed"]
