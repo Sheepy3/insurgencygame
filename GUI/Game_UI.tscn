@@ -169,31 +169,31 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 
-[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1314151927]
+[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1314151927 groups=["PLACE_MILITARY_PHASE_BUTTON"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1915714525]
+[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1915714525 groups=["PLACE_MILITARY_PHASE_BUTTON"]]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1153853310]
+[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1153853310 groups=["PLACE_INFRASTRUCTURE_PHASE_BUTTON"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=27424906]
+[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=27424906 groups=["PLACE_INFRASTRUCTURE_PHASE_BUTTON"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=119891609]
+[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=119891609 groups=["PLACE_INFRASTRUCTURE_PHASE_BUTTON"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"

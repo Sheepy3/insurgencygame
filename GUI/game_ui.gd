@@ -124,7 +124,7 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
 		7:
-			$Current_Phase.tex = "Muster"
+			$Current_Phase.text = "Muster forces"
 	$Next_Phase_Button.set_pressed_no_signal(false)
 	$Next_Phase_Button.text = "NEXT PHASE???"
 
@@ -238,7 +238,10 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
+	Overseer.change_phase.connect(Check_store_unlocked)
+	Overseer.change_phase.connect(Update_available_buttons)
 	Unique_player_ID = multiplayer.get_unique_id()
+	Update_available_buttons()
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
@@ -280,6 +283,8 @@ func Check_store_unlocked() -> void:
 	if Meets_condition >= 1 && Overseer.current_phase == Overseer.PURCHASE:
 		$Open_Market_Button.set_disabled(false)
 	else:
+		if !$Open_Market_Button.is_visible():
+			$Open_Market_Button.show()
 		$Open_Market_Button.set_disabled(true)
 		$Support_store_window.hide()
 
@@ -476,15 +481,19 @@ func _on_next_phase_button_toggled(toggled_on: bool) -> void:
 		$Next_Phase_Button.text = "NO!"
 	Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
 
-func Name_in_the_works() -> void:
-	if Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
-		for boxes:Control in %HBox_Buy_Placeables.get_children(true):
-			for UI_elements:Control in boxes:
-				if UI_elements is Button and UI_elements.name.contains("Logistics_Network_Buy_Button"):
-					UI_elements.hide()
-	#elif Overseer.current_phase == Overseer.UNIT_MOVEMENT:
-	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
-	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
-	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
-	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
-	#elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+func Update_available_buttons() -> void:
+	if Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		Change_available_buttons(true,false,false)
+	elif Overseer.current_phase == Overseer.PURCHASE:
+		Change_available_buttons(false,true,true)
+	elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+		Change_available_buttons(true,true,false)
+	elif Overseer.current_phase == Overseer.PLACE_MILITARY:
+		Change_available_buttons(true,false,true)
+	else:
+		Change_available_buttons(true,true,true)
+
+func Change_available_buttons(Purchase:bool, Military:bool, Infrastructure:bool) -> void:
+	get_tree().call_group("PURCHASE_PHASE_BUTTONS","set_disabled",Purchase)
+	get_tree().call_group("PLACE_MILITARY_PHASE_BUTTON","set_disabled",Military)
+	get_tree().call_group("PLACE_INFRASTRUCTURE_PHASE_BUTTON","set_disabled",Infrastructure)

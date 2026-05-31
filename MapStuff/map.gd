@@ -231,6 +231,13 @@ func Base_possible(Desired:String,Checked_player:Resource,Checked_node:Node)-> b
 					return true
 		display_action_error("You do not have the conditions to place a Base!", Checked_player.Player_ID)
 		return false
+	## NOTE: Remember that the state player can only place down their second base
+	##       when all other players have placed down their initial base and networks
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_node.Has_building == true:
+			return false
+		else:
+			return true
 	else:
 		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
 		return false

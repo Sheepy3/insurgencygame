@@ -18,7 +18,7 @@ var Phase_cycle:int = 0 # of phases passed or # of times you have reached Purcha
 var Desired_cycle:int = 3 # of phases before matnince or # of "PURCHASE" phases reached before matnince (will occur on turn of number)
  
 enum {MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, PLACE_MILITARY, COLLECT, INITIAL_DEPLOY}
-var current_phase:int = MAINTENENCE
+var current_phase:int = INITIAL_DEPLOY
 
 signal change_player # Signal may be depricated due to lack of use
 signal game_started
@@ -56,7 +56,7 @@ func cycle_phases() -> void:
 		current_phase+=1
 		change_phase.emit()
 	elif current_phase == INITIAL_DEPLOY:
-		current_phase == COLLECT
+		current_phase = COLLECT
 		change_phase.emit()
 	Sync_player_phases.rpc(current_phase,Phase_cycle)
 
