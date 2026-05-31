@@ -26,6 +26,7 @@ func _on_start_button_pressed() -> void:
 			Players.Player_storage["Influence"] = 1
 			Players.Player_storage["Intelligence"] = 2
 			Players.Player_storage["Logistics"] = 2
+		Players.Ready = false 
 	_start_map_gen()
 	Overseer.Resources_to_rpc()
 	#Overseer.cycle_players()
@@ -179,18 +180,10 @@ func Update_player_faction(ID:int,Faction_ID:int) -> void:
 				player.Player_faction = Faction_ID
 		Overseer.Resources_to_rpc()
 
-@rpc("any_peer","call_local")
-func Update_player_ready(ID:int,updated_ready:bool) -> void:
-	if multiplayer.is_server():
-		for player:Resource in Overseer.player_list:
-			if player.Player_ID == ID: 
-				player.Ready = updated_ready
-		Overseer.Resources_to_rpc()
-
 func _on_ready_button_pressed() -> void:
 	if %ReadyButton.text == "Ready":
 		%ReadyButton.text = "Not Ready"
-		Update_player_ready.rpc(multiplayer.get_unique_id(),false)
+		Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),false)
 	else:
 		print("hi")
 		var client_player:Resource = Overseer.Identify_player(multiplayer.get_unique_id())
@@ -200,4 +193,4 @@ func _on_ready_button_pressed() -> void:
 			action_error("You still need to select a faction!")
 		else:
 			%ReadyButton.text = "Ready"
-			Update_player_ready.rpc(multiplayer.get_unique_id(),true)
+			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),true)

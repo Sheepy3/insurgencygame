@@ -16,7 +16,8 @@ enum{FIGHTER,INFLUENCE}
 
 
 func _ready() -> void:
-	Overseer.Initialization_player_color.connect(Set_player_color)
+	Overseer.Resources_to_rpc()
+	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	_randomize_sprites()
 	if get_parent().name != "root":
@@ -29,10 +30,6 @@ func _ready() -> void:
 			else:
 				pass
 				#print(hexes.position.distance_squared_to(position))
-				
-func Set_player_color() -> void:
-	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
-	Overseer.Initialization_player_color.disconnect(Set_player_color) 
 
 func _update_label()-> void:
 	$Label.text = name
@@ -86,6 +83,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String) -> void:
 	unit_visual.Unit_Data = unique_unit
 	%Units.add_child(unit_visual)
 	_reorder_units()
+	get_parent().find_child("UI").update_node_unit_list(unit_list,name)
 
 func has_unit(player:int, type:int) -> bool:
 	for unit:Resource in unit_list:

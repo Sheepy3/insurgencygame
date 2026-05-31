@@ -23,7 +23,6 @@ func set_type(type:int) -> void:
 	pass
 
 
-
 func _ready() -> void: 
 	set_color(unit_resource.color)
 	if unit_resource.unit_type == unit_type.Fighter:
@@ -33,3 +32,14 @@ func _ready() -> void:
 
 func _on_move_button_pressed() -> void:
 	move_unit.emit(unit_resource, source_node)
+
+@rpc("authority","call_local")
+func Check_unit_phase()-> void:
+	print("This is the current phase: "+str(Overseer.current_phase))
+	if Overseer.current_phase == Overseer.UNIT_MOVEMENT:
+		$VBoxContainer/Move_Button.set_disabled(false)
+	elif Overseer.current_phase == Overseer.PURCHASE:
+		$VBoxContainer/Reconstitution_Button.set_disabled(false)
+	else:
+		$VBoxContainer/Move_Button.set_disabled(true)
+		$VBoxContainer/Reconstitution_Button.set_disabled(true)
