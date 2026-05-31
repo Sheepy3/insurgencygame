@@ -509,25 +509,86 @@ func _on_attack_button_pressed() -> void:
 	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
 	request_pre_combat_ui.rpc(map_node)
 
-func _request_actual_combat(map_node_path:NodePath) -> void:
+#func _request_actual_combat(map_node_path:NodePath) -> void:
+	#if multiplayer.is_server():
+		#var player_id:int = multiplayer.get_remote_sender_id()
+		#var map_node:Node = get_node(map_node_path)
+		#print(map_node.unit_list)
+		#var fighter_count:int = 0
+		#var influence_count:int = 0 
+		#for unit:Resource in map_node.unit_list:
+			#if unit.player_ID == player_id:
+				#if unit.unit_type == 0:
+					#fighter_count +=1
+				#else:
+					#influence_count +=1
+		#display_pre_combat.rpc(player_id, fighter_count, influence_count,)
+
+
+func _on_precombat_initialize(attacking_fighters:int, attacking_influence:int, target_player_id: int) -> void:
+	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
+	print(attacking_fighters)
+	print(attacking_influence)
+	print(target_player_id)
+	_request_combat.rpc(attacking_fighters,attacking_influence,target_player_id,map_node)
+
+@rpc("any_peer","call_local")
+func _request_combat(attacking_fighters:int, attacking_influence:int, target_player_id: int, map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
 		var player_id:int = multiplayer.get_remote_sender_id()
 		var map_node:Node = get_node(map_node_path)
-		print(map_node.unit_list)
-		var fighter_count:int = 0
-		var influence_count:int = 0 
+		var attacking_fighters_found:Array = []
+		var attacking_influence_found:Array = []
+		var defending_units:Array = []
 		for unit:Resource in map_node.unit_list:
 			if unit.player_ID == player_id:
 				if unit.unit_type == 0:
-					fighter_count +=1
+					attacking_fighters_found.append(unit)
 				else:
-					influence_count +=1
-		display_pre_combat.rpc(player_id, fighter_count, influence_count,)
-
-
-func _on_precombat_initialize() -> void:
-	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
+					attacking_influence_found.append(unit)
+		if attacking_fighters_found.size() < attacking_fighters || attacking_influence_found.size() < attacking_influence: #check if client is lying
+			print("bad combat request. attacking fighters: " + str(attacking_fighters) + ", but fighters found: "+ str(attacking_fighters_found.size()))
+			return
+		_initialize_combat.rpc(player_id,target_player_id,attacking_fighters, attacking_influence, map_node_path )
 	
+
+@rpc("authority", "call_local")
+func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int, attacking_influence:int, map_node_path:NodePath) -> void:
+	var map_node:Node = get_node(map_node_path)
+	var attacking_units:Array = []
+	var defending_units:Array = []
+	var attacking_fighters_collected:int = 0
+	var attacking_influence_collected:int = 0
+	for unit:Resource in map_node.unit_list:
+			if unit.player_ID == attacker_id:
+				if unit.unit_type == 0 && (attacking_fighters_collected != attacking_fighters):
+					attacking_units.append(unit)
+				elif (attacking_influence_collected != attacking_influence):
+					attacking_units.append(unit)
+			if unit.player_ID == defender_id:
+				defending_units.append(unit)
+	var attacking_player:Resource = Overseer.Identify_player(attacker_id)
+	var defending_player:Resource = Overseer.Identify_player(defender_id)
+	if multiplayer.get_unique_id() != defender_id: #attacker
+		%Combat.set_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
+		%Combat.set_opposition_counts(defending_player.Weapons,defending_player.Money,defending_player.Man_power)
+		if multiplayer.get_unique_id() != attacker_id: #spectators 
+			%Combat.switch_player_type(1)
+		else:
+			%Combat.switch_player_type(0)
+		%Combat.display_allies(attacking_units)
+		%Combat.display_opposition(defending_units)
+	else: #defender
+		%Combat.set_counts(defending_player.Weapons, defending_player.Money,defending_player.Man_power)
+		%Combat.set_opposition_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
+		%Combat.switch_player_type(0)
+		%Combat.display_allies(defending_units)
+		%Combat.display_opposition(attacking_units)
+	
+	hide_ui()
+	hidden_ui_nodes.erase(%Combat)
+	%Combat.show()
+
 
 
 func hide_ui() -> void:

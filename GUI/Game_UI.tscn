@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://boiqc3l35gmff" path="res://Assets/Icons/IntelNetwork.png" id="12_yb2yk"]
 [ext_resource type="Texture2D" uid="uid://c1xq20thy12to" path="res://Assets/Icons/LogiNetwork.png" id="13_82g8w"]
 [ext_resource type="PackedScene" uid="uid://mugxmvhhce6q" path="res://CombatStuff/pre_combat.tscn" id="16_82g8w"]
+[ext_resource type="PackedScene" uid="uid://b755b2gx4g0n8" path="res://CombatStuff/combat_actual.tscn" id="17_0wnlq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
 font = ExtResource("4_w20xb")
@@ -624,6 +625,10 @@ texture = ExtResource("9_sw8an")
 stretch_mode = 1
 
 [node name="Pre_Combat" parent="." unique_id=1707448737 instance=ExtResource("16_82g8w")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Combat" parent="." unique_id=1693427844 instance=ExtResource("17_0wnlq")]
 unique_name_in_owner = true
 visible = false
 

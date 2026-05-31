@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://fklv048uap5u" path="res://CombatStuff/combat_actual.gd" id="1_ipkl3"]
 [ext_resource type="Texture2D" uid="uid://dldsn1upkphyw" path="res://Assets/Combat_screen.webp" id="3_qsta1"]
 
-[node name="Control" type="Control" unique_id=1693427844]
+[node name="Combat" type="Control" unique_id=1693427844]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,6 +117,7 @@ theme = ExtResource("1_456j5")
 text = "Manpower:"
 
 [node name="Opposition_Manpower_count" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar/Opposition_Manpower_label_and_count" unique_id=1909682759]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
@@ -130,6 +131,7 @@ theme = ExtResource("1_456j5")
 text = "Money:"
 
 [node name="Opposition_Money_count" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar/Opposition_Money_label_and_count" unique_id=575373257]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
@@ -143,6 +145,7 @@ theme = ExtResource("1_456j5")
 text = "Weapons:"
 
 [node name="Opposition_Weapons_count" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar/Opposition_Weapons_label_and_count" unique_id=1516176381]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"

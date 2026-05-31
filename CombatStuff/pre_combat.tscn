@@ -91,6 +91,7 @@ text = "Select player to attack:"
 [node name="Players_dropdown" type="OptionButton" parent="PanelContainer/VBoxContainer" unique_id=1671778751]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("2_equra")
 
 [node name="Control2" type="Control" parent="PanelContainer/VBoxContainer" unique_id=494008205]
 custom_minimum_size = Vector2(0, 10)
