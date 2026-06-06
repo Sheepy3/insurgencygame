@@ -15,6 +15,7 @@ func _process(_delta: float) -> void:
 		Current_node.flare.rpc(multiplayer.get_unique_id())
 
 func initialize(size:int) -> void:
+	#Overseer.game_started.connect(State_second_placing) # here for the testing and vibes (remove me when I work)
 	$UI.The_action.connect(Update_action)
 	$UI.show()
 	var num: int = 1 #iterator for name
@@ -231,12 +232,16 @@ func Base_possible(Desired:String,Checked_player:Resource,Checked_node:Node)-> b
 					return true
 		display_action_error("You do not have the conditions to place a Base!", Checked_player.Player_ID)
 		return false
-	## NOTE: Remember that the state player can only place down their second base
-	##       when all other players have placed down their initial base and networks
 	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
 		if Checked_node.Has_building == true:
 			return false
 		else:
+			if Checked_player.Player_faction == 1:
+				if State_second_placing(Checked_player,"Military_Base"):
+					return true
+				else:
+					display_action_error("Non State players need to place all of their pieces first!", Checked_player.Player_ID)
+					return false
 			return true
 	else:
 		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
@@ -253,6 +258,14 @@ func Intell_possible(Desired:String,Checked_player:Resource)-> bool:
 				return true
 		display_action_error("You must place Intelligence Networks next to an existing one!", Checked_player.Player_ID)
 		return false
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_player.Player_faction == 1:
+			if State_second_placing(Checked_player,"Intelligence"):
+				return true
+			else:
+				display_action_error("Non State players need to place all of their pieces first!", Checked_player.Player_ID)
+				return false
+		return true
 	else:
 		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
 		return false
@@ -268,6 +281,14 @@ func Logs_possible(Desired:String,Checked_player:Resource)-> bool:
 				return true
 		display_action_error("You must place Logistics Networks next to an existing one!", Checked_player.Player_ID)
 		return false
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_player.Player_faction == 1:
+			if State_second_placing(Checked_player,"Logistics"):
+				return true
+			else:
+				display_action_error("Non State players need to place all of their pieces first!", Checked_player.Player_ID)
+				return false
+		return true
 	else:
 		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
 		return false
@@ -282,6 +303,14 @@ func Influence_possible(Desired:String,Checked_player:Resource)-> bool:
 				return true
 		display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!", Checked_player.Player_ID)
 		return false
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_player.Player_faction == 1:
+			if State_second_placing(Checked_player,"Influence"):
+				return true
+			else:
+				display_action_error("Non State players need to place all of their pieces first!", Checked_player.Player_ID)
+				return false
+		return true
 	else:
 		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
 		return false
@@ -334,6 +363,21 @@ func Influence_movement_possible(from:int, to:int, Player_ID:int) -> bool:
 	else:
 		display_action_error("You cant do that in this phase!", Player_ID)
 		return false
+
+func State_second_placing(State_player:Resource,Placable:String,) -> bool:
+	if State_player.Player_storage[Placable] > 1:
+		return true
+	var Non_state_players:Array
+	var count:int
+	for players:Resource in Overseer.player_list:
+		if players.Player_faction != 1:
+			Non_state_players.append(players)
+	for non_states:Resource in Non_state_players:
+		if non_states.Player_storage.values().max() == 0:
+			count += 1
+	if count == Non_state_players.size():
+		return true
+	return false
 
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	if Current_node:
