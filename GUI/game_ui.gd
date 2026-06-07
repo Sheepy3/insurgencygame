@@ -240,6 +240,7 @@ func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Overseer.change_phase.connect(Check_store_unlocked)
 	Overseer.change_phase.connect(Update_available_buttons)
+	Overseer.change_phase.connect(Overseer.Collecting_resources)
 	Unique_player_ID = multiplayer.get_unique_id()
 	Update_available_buttons()
 

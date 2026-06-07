@@ -364,7 +364,7 @@ func Influence_movement_possible(from:int, to:int, Player_ID:int) -> bool:
 		display_action_error("You cant do that in this phase!", Player_ID)
 		return false
 
-func State_second_placing(State_player:Resource,Placable:String,) -> bool:
+func State_second_placing(State_player:Resource,Placable:String) -> bool:
 	if State_player.Player_storage[Placable] > 1:
 		return true
 	var Non_state_players:Array
