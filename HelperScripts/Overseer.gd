@@ -192,25 +192,51 @@ var attacker_ready: bool = false
 var defender_ready: bool = false
 var attacking_player: int
 var defending_player: int
+var attacking_resource_allocation:Array = [0,0,0]
+var defending_resource_allocation:Array = [0,0,0]
+var attacking_units:Array
+var defending_units:Array
 
 @rpc("any_peer", "call_local")
-func request_update_toggle() -> void:
+func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 	if multiplayer.is_server():
 		var sender_id: int = multiplayer.get_remote_sender_id()
-
+		var sender:Resource = Identify_player(sender_id)
 		if sender_id == 0:
 			sender_id = multiplayer.get_unique_id()
 
-		if sender_id == attacking_player:
+		if sender.Player_ID == attacking_player:
 			attacker_ready = !attacker_ready
-			sync_ready_state.rpc(attacker_ready, defender_ready, 0)
+			attacking_resource_allocation[0] = weapons if sender.Weapons >= weapons else 0
+			attacking_resource_allocation[1] = money if sender.Money >= money else 0
+			attacking_resource_allocation[2] = manpower if sender.Man_power >= manpower else 0
 
-		elif sender_id == defending_player:
+			if defender_ready and attacker_ready:
+				compute_consequences()
+			else:
+				sync_ready_state.rpc(attacker_ready, defender_ready, 0)
+
+		elif sender.Player_ID == defending_player:
 			defender_ready = !defender_ready
-			sync_ready_state.rpc(attacker_ready, defender_ready, 1)
+			defending_resource_allocation[0] = weapons if sender.Weapons >= weapons else 0
+			defending_resource_allocation[1] = money if sender.Money >= money else 0
+			defending_resource_allocation[2] = manpower if sender.Man_power >= manpower else 0
+
+			if defender_ready and attacker_ready:
+				compute_consequences()
+			else:
+				sync_ready_state.rpc(attacker_ready, defender_ready, 1)
+			
+		print("attackers resources: " + str(attacking_resource_allocation))
+		print("defenders resources: " + str(defending_resource_allocation))
 
 @rpc("authority", "call_local")
 func sync_ready_state(new_attacker_ready: bool, new_defender_ready: bool, changed_player: int) -> void:
 	attacker_ready = new_attacker_ready
 	defender_ready = new_defender_ready
 	toggle_ready.emit(changed_player)
+
+func compute_consequences() ->void:
+	print("combat start!")
+	pass
+	

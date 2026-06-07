@@ -480,7 +480,7 @@ func _on_purchase_preview_timer_timeout() -> void:
 @rpc("any_peer","call_local")
 func request_pre_combat_ui(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
-		var player_id:int = multiplayer.get_remote_sender_id()
+		var player_id:int = multiplayer.get_remote_sender_id() # attacker ID
 		var map_node:Node = get_node(map_node_path)
 		print(map_node.unit_list)
 		var fighter_count:int = 0
@@ -530,9 +530,16 @@ func _request_combat(attacking_fighters:int, attacking_influence:int, target_pla
 					attacking_fighters_found.append(unit)
 				else:
 					attacking_influence_found.append(unit)
+			if unit.player_ID == target_player_id:
+				defending_units.append(unit)
 		if attacking_fighters_found.size() < attacking_fighters || attacking_influence_found.size() < attacking_influence: #check if client is lying
 			print("bad combat request. attacking fighters: " + str(attacking_fighters) + ", but fighters found: "+ str(attacking_fighters_found.size()))
 			return
+		
+		var final_attacking_units:Array = attacking_fighters_found.slice(0, attacking_fighters-1) + attacking_influence_found.slice(0, attacking_influence-1) 
+		Overseer.defending_units = defending_units
+		Overseer.attacking_units = final_attacking_units
+		print(final_attacking_units)
 		_initialize_combat.rpc(player_id,target_player_id,attacking_fighters, attacking_influence, map_node_path )
 	
 

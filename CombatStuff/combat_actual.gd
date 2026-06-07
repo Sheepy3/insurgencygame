@@ -151,7 +151,7 @@ func _on_manpower_slider_value_changed(value: int) -> void:
 	%Manpower_count.text = str(value)
 
 func _on_ready_button_pressed() -> void:
-	Overseer.request_update_toggle.rpc()
+	Overseer.request_update_toggle.rpc(%Weapons_slider.value,%Money_slider.value,%Manpower_slider.value)
 	if %Ready_Button.text == "Ready":
 		%Ready_Button.text = "Not Ready"
 		%Money_slider.editable = true
