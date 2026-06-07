@@ -195,22 +195,19 @@ var defending_player: int
 
 @rpc("any_peer", "call_local")
 func request_update_toggle() -> void:
-	if not multiplayer.is_server():
-		return
+	if multiplayer.is_server():
+		var sender_id: int = multiplayer.get_remote_sender_id()
 
-	var sender_id: int = multiplayer.get_remote_sender_id()
+		if sender_id == 0:
+			sender_id = multiplayer.get_unique_id()
 
-	# If the host/server pressed the button, get_remote_sender_id() is usually 0.
-	if sender_id == 0:
-		sender_id = multiplayer.get_unique_id()
+		if sender_id == attacking_player:
+			attacker_ready = !attacker_ready
+			sync_ready_state.rpc(attacker_ready, defender_ready, 0)
 
-	if sender_id == attacking_player:
-		attacker_ready = !attacker_ready
-		sync_ready_state.rpc(attacker_ready, defender_ready, 0)
-
-	elif sender_id == defending_player:
-		defender_ready = !defender_ready
-		sync_ready_state.rpc(attacker_ready, defender_ready, 1)
+		elif sender_id == defending_player:
+			defender_ready = !defender_ready
+			sync_ready_state.rpc(attacker_ready, defender_ready, 1)
 
 @rpc("authority", "call_local")
 func sync_ready_state(new_attacker_ready: bool, new_defender_ready: bool, changed_player: int) -> void:

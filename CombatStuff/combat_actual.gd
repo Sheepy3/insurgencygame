@@ -33,15 +33,13 @@ func _ready() -> void:
 	#display_opposition(player2_units)
 
 func _toggle_ready(player: int) -> void:
-	print("toggling!")
-
 	var my_id := multiplayer.get_unique_id()
 
-	# Attacker toggled; defender should see opponent status
+	# Attacker toggled, defender should see opponent status
 	if player == 0 and Overseer.defending_player == my_id:
 		%Opponent_ready_label.text = "Your opponent is ready" if Overseer.attacker_ready else "Your opponent is not ready"
 
-	# Defender toggled; attacker should see opponent status
+	# Defender toggled, attacker should see opponent status
 	elif player == 1 and Overseer.attacking_player == my_id:
 		%Opponent_ready_label.text = "Your opponent is ready" if Overseer.defender_ready else "Your opponent is not ready"
 
