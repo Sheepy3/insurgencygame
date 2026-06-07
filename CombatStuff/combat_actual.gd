@@ -5,6 +5,7 @@ var current_type:int = player_type.COMBATANT
 func _ready() -> void:
 	get_viewport().size_changed.connect(_on_window_resized)
 	_on_window_resized()
+	Overseer.toggle_ready.connect(_toggle_ready)
 	#set_counts(5,5,5)
 	#switch_player_type(player_type.SPECTATOR)
 	#var player1_units: Array[Unit] = []
@@ -31,6 +32,18 @@ func _ready() -> void:
 	#display_allies(player1_units)
 	#display_opposition(player2_units)
 
+func _toggle_ready(player: int) -> void:
+	print("toggling!")
+
+	var my_id := multiplayer.get_unique_id()
+
+	# Attacker toggled; defender should see opponent status
+	if player == 0 and Overseer.defending_player == my_id:
+		%Opponent_ready_label.text = "Your opponent is ready" if Overseer.attacker_ready else "Your opponent is not ready"
+
+	# Defender toggled; attacker should see opponent status
+	elif player == 1 and Overseer.attacking_player == my_id:
+		%Opponent_ready_label.text = "Your opponent is ready" if Overseer.defender_ready else "Your opponent is not ready"
 
 func _on_window_resized() -> void:
 	%Unit_spawn_1.position = %PanelContainer.position + Vector2(290,65)
@@ -140,6 +153,7 @@ func _on_manpower_slider_value_changed(value: int) -> void:
 	%Manpower_count.text = str(value)
 
 func _on_ready_button_pressed() -> void:
+	Overseer.request_update_toggle.rpc()
 	if %Ready_Button.text == "Ready":
 		%Ready_Button.text = "Not Ready"
 		%Money_slider.editable = true

@@ -7,6 +7,7 @@ extends Node
 #var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var player_list:Array
 var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
+
 #var selected_player_index:int = -1
 var current_player:String
 #var Logistics_array:Array 
@@ -25,6 +26,7 @@ signal game_started
 signal change_phase
 signal player_resources_updated
 signal Initialization_player_color
+signal toggle_ready(player:int)
 
 const PLAYER_COLORS := {
 	"Red": Vector3(223, 0, 81) / 255.0,
@@ -185,3 +187,33 @@ func Create_unique_ID() -> String:
 		else:
 			random_hex_string +=str(hex_values[randi_range(0,15)])
 	return random_hex_string
+
+var attacker_ready: bool = false
+var defender_ready: bool = false
+var attacking_player: int
+var defending_player: int
+
+@rpc("any_peer", "call_local")
+func request_update_toggle() -> void:
+	if not multiplayer.is_server():
+		return
+
+	var sender_id: int = multiplayer.get_remote_sender_id()
+
+	# If the host/server pressed the button, get_remote_sender_id() is usually 0.
+	if sender_id == 0:
+		sender_id = multiplayer.get_unique_id()
+
+	if sender_id == attacking_player:
+		attacker_ready = !attacker_ready
+		sync_ready_state.rpc(attacker_ready, defender_ready, 0)
+
+	elif sender_id == defending_player:
+		defender_ready = !defender_ready
+		sync_ready_state.rpc(attacker_ready, defender_ready, 1)
+
+@rpc("authority", "call_local")
+func sync_ready_state(new_attacker_ready: bool, new_defender_ready: bool, changed_player: int) -> void:
+	attacker_ready = new_attacker_ready
+	defender_ready = new_defender_ready
+	toggle_ready.emit(changed_player)

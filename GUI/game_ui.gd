@@ -508,23 +508,7 @@ func display_pre_combat(id:int, fighter_count:int, influence_count:int,players_i
 func _on_attack_button_pressed() -> void:
 	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
 	request_pre_combat_ui.rpc(map_node)
-
-#func _request_actual_combat(map_node_path:NodePath) -> void:
-	#if multiplayer.is_server():
-		#var player_id:int = multiplayer.get_remote_sender_id()
-		#var map_node:Node = get_node(map_node_path)
-		#print(map_node.unit_list)
-		#var fighter_count:int = 0
-		#var influence_count:int = 0 
-		#for unit:Resource in map_node.unit_list:
-			#if unit.player_ID == player_id:
-				#if unit.unit_type == 0:
-					#fighter_count +=1
-				#else:
-					#influence_count +=1
-		#display_pre_combat.rpc(player_id, fighter_count, influence_count,)
-
-
+	
 func _on_precombat_initialize(attacking_fighters:int, attacking_influence:int, target_player_id: int) -> void:
 	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
 	print(attacking_fighters)
@@ -569,6 +553,10 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 				defending_units.append(unit)
 	var attacking_player:Resource = Overseer.Identify_player(attacker_id)
 	var defending_player:Resource = Overseer.Identify_player(defender_id)
+	Overseer.attacking_player = attacker_id
+	Overseer.defending_player = defender_id
+	Overseer.attacker_ready = false
+	Overseer.defender_ready = false
 	if multiplayer.get_unique_id() != defender_id: #attacker
 		%Combat.set_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.set_opposition_counts(defending_player.Weapons,defending_player.Money,defending_player.Man_power)
@@ -589,8 +577,6 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	hidden_ui_nodes.erase(%Combat)
 	%Combat.show()
 
-
-
 func hide_ui() -> void:
 	for node in get_children():
 		if node is CanvasItem and node.visible:
@@ -602,9 +588,6 @@ func show_ui() -> void:
 	for node in hidden_ui_nodes:
 		node.visible = true
 	hidden_ui_nodes.clear()
-
-	
-
 
 func _on_precombat_cancel() -> void:
 	show_ui()

@@ -150,7 +150,8 @@ layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Opposition_Weapons_label" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar" unique_id=784002499]
+[node name="Opponent_ready_label" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar" unique_id=784002499]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Your opponent is not ready"
