@@ -26,6 +26,7 @@ func _ready() -> void:
 	_phase_switch_ui()
 	%Support_store_window.hide()
 	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
+	$Close_Info_Button.pressed.connect(Check_container_action.bind($Close_Info_Button.name,"Pressed"))
 	for boxes:VBoxContainer in %HBox_Buy_Placeables.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
@@ -102,6 +103,15 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			else:
 				$Close_UI_Button.position = Vector2(0,64)
 				$Close_UI_Button.text = ">"
+				
+		"Close_Info_Button":
+			$Player_Info.visible = !$Player_Info.visible
+			if $Player_Info.visible:
+				$Close_Info_Button.position = Vector2(610,0)
+				$Close_Info_Button.text = "<"
+			else:
+				$Close_Info_Button.position = Vector2(0,0)
+				$Close_Info_Button.text = ">"
 
 func _player_switch_ui() -> void:
 	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player

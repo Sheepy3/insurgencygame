@@ -49,6 +49,13 @@ offset_right = 267.0
 offset_bottom = 122.0
 text = "<"
 
+[node name="Close_Info_Button" type="Button" parent="." unique_id=577688532]
+layout_direction = 4
+offset_left = 610.0
+offset_right = 628.0
+offset_bottom = 40.0
+text = "<"
+
 [node name="Action_Container" type="PanelContainer" parent="." unique_id=122628786]
 offset_top = 64.0
 offset_right = 232.0
