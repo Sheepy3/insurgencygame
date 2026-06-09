@@ -207,20 +207,33 @@ func Sync_player_phases(New_phase:int,New_phase_cycle:int) -> void:
 	Phase_cycle = New_phase_cycle
 	change_phase.emit()
 
-func Collecting_resources()-> void:
+func Profit_and_Taxes()-> void:
 	if multiplayer.is_server():
-		if current_phase == COLLECT:
+		if current_phase == COLLECT || current_phase == MAINTENENCE:
 			for players:Resource in player_list:
 				for bases:Resource in players.base_list:
-					players.Man_power += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
-					players.Money += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
+					if current_phase == MAINTENENCE:
+						if players.Player_faction == 1:
+							players.Money -= 8
+						else:
+							players.Money -= 4
+					else:
+						players.Man_power += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
+						players.Money += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
 				for node_names:String in The_nodes.keys():
 					var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
 					for unit:Resource in Checking_node.unit_list:
-						if unit.player_ID == players.Player_ID && unit.unit_type == 1 && unit.unit_state == true && Checking_node.Has_building == false:
-							players.Man_power += Checking_node.node_RPU.Population
-							players.Money += Checking_node.node_RPU.RPU
-							break
+						if current_phase == MAINTENENCE:
+							if unit.player_ID == players.Player_ID:
+								if players.Player_faction == 1:
+									players.Money -= 4
+								else:
+									players.Money -= 2
+						else:
+							if unit.player_ID == players.Player_ID && unit.unit_type == 1 && unit.unit_state == true && Checking_node.Has_building == false:
+								players.Man_power += Checking_node.node_RPU.Population
+								players.Money += Checking_node.node_RPU.RPU
+								break
 			Resources_to_rpc()
 		else:
 			pass

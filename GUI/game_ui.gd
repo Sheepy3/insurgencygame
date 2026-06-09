@@ -113,8 +113,8 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				$Close_Info_Button.position = Vector2(0,0)
 				$Close_Info_Button.text = ">"
 
-func _player_switch_ui() -> void:
-	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
+#func _player_switch_ui() -> void:
+	#$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
 
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
@@ -250,7 +250,7 @@ func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Overseer.change_phase.connect(Check_store_unlocked)
 	Overseer.change_phase.connect(Update_available_buttons)
-	Overseer.change_phase.connect(Overseer.Collecting_resources)
+	Overseer.change_phase.connect(Overseer.Profit_and_Taxes)
 	Unique_player_ID = multiplayer.get_unique_id()
 	Update_available_buttons()
 
@@ -486,11 +486,14 @@ func _on_purchase_preview_timer_timeout() -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
 
 func _on_next_phase_button_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		$Next_Phase_Button.text = "YES!"
+	if Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		Check_completed_setup.rpc(multiplayer.get_unique_id(),toggled_on)
 	else:
-		$Next_Phase_Button.text = "NO!"
-	Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
+		if toggled_on:
+			$Next_Phase_Button.text = "YES!"
+		else:
+			$Next_Phase_Button.text = "NO!"
+		Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
 
 func Update_available_buttons() -> void:
 	if Overseer.current_phase == Overseer.INITIAL_DEPLOY:
@@ -508,3 +511,25 @@ func Change_available_buttons(Purchase:bool, Military:bool, Infrastructure:bool)
 	get_tree().call_group("PURCHASE_PHASE_BUTTONS","set_disabled",Purchase)
 	get_tree().call_group("PLACE_MILITARY_PHASE_BUTTON","set_disabled",Military)
 	get_tree().call_group("PLACE_INFRASTRUCTURE_PHASE_BUTTON","set_disabled",Infrastructure)
+
+@rpc("any_peer","call_local")
+func Check_completed_setup(Requester_ID:int,Button_status:bool) -> void:
+	if multiplayer.is_server():
+		var Requester:Resource = Overseer.Identify_player(Requester_ID)
+		if Requester.Player_storage.values().max() == 0:
+			Finished_setup_check.rpc(Requester_ID,Button_status,true)
+		else:
+			Finished_setup_check.rpc(Requester_ID,Button_status,false)
+			action_error.rpc("You need to place all infastructure & units down first!",Requester.Player_ID)
+
+@rpc("authority","call_local")
+func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> void:
+	if multiplayer.get_unique_id() == Overseer.Identify_player(OG_requester).Player_ID:
+		if !move_on:
+			$Next_Phase_Button.set_pressed_no_signal(false)
+		else:
+			if toggel_status:
+				$Next_Phase_Button.text = "YES!"
+			else:
+				$Next_Phase_Button.text = "NO!"
+			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggel_status)
