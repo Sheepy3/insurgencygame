@@ -192,24 +192,43 @@ var attacker_ready: bool = false
 var defender_ready: bool = false
 var attacking_player: int
 var defending_player: int
-var attacking_resource_allocation:Array = [0,0,0]
-var defending_resource_allocation:Array = [0,0,0]
+
+enum RESOURCE_TYPE {NONE, WEAPONS,MONEY,MANPOWER} 
+enum UNIT_TYPE {FIGHTER, INFLUENCE} 
+
+var attacking_resource_type:int = RESOURCE_TYPE.NONE
+var defending_resource_type:int = RESOURCE_TYPE.NONE
+var attacking_resource_allocation:int = 0
+var defending_resource_allocation:int = 0
 var attacking_units:Array
 var defending_units:Array
+
+const DAMAGE_PER_EFFECT := 5.0
 
 @rpc("any_peer", "call_local")
 func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 	if multiplayer.is_server():
 		var sender_id: int = multiplayer.get_remote_sender_id()
-		var sender:Resource = Identify_player(sender_id)
 		if sender_id == 0:
 			sender_id = multiplayer.get_unique_id()
+		var sender:Resource = Identify_player(sender_id)
+
 
 		if sender.Player_ID == attacking_player:
 			attacker_ready = !attacker_ready
-			attacking_resource_allocation[0] = weapons if sender.Weapons >= weapons else 0
-			attacking_resource_allocation[1] = money if sender.Money >= money else 0
-			attacking_resource_allocation[2] = manpower if sender.Man_power >= manpower else 0
+			if !attacker_ready:
+				attacking_resource_type = RESOURCE_TYPE.NONE
+				attacking_resource_allocation = 0
+			else:
+				if weapons > 0:
+					attacking_resource_type = RESOURCE_TYPE.WEAPONS
+					attacking_resource_allocation = weapons if sender.Weapons >= weapons else 0
+				elif money > 0:
+					attacking_resource_type = RESOURCE_TYPE.MONEY
+					attacking_resource_allocation = money if sender.Money >= money else 0
+				elif manpower > 0:
+					attacking_resource_type = RESOURCE_TYPE.MANPOWER
+					attacking_resource_allocation = manpower if sender.Man_power >= manpower else 0 
 
 			if defender_ready and attacker_ready:
 				compute_consequences()
@@ -218,10 +237,21 @@ func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 
 		elif sender.Player_ID == defending_player:
 			defender_ready = !defender_ready
-			defending_resource_allocation[0] = weapons if sender.Weapons >= weapons else 0
-			defending_resource_allocation[1] = money if sender.Money >= money else 0
-			defending_resource_allocation[2] = manpower if sender.Man_power >= manpower else 0
-
+			if !defender_ready:
+				defending_resource_type = RESOURCE_TYPE.NONE
+				defending_resource_allocation = 0
+			else:
+				if weapons > 0:
+					defending_resource_type = RESOURCE_TYPE.WEAPONS
+					defending_resource_allocation = weapons if sender.Weapons >= weapons else 0
+				elif money > 0:
+					defending_resource_type = RESOURCE_TYPE.MONEY
+					defending_resource_allocation = money if sender.Money >= money else 0
+				elif manpower > 0:
+					defending_resource_type = RESOURCE_TYPE.MANPOWER
+					defending_resource_allocation = manpower if sender.Man_power >= manpower else 0 
+			
+				
 			if defender_ready and attacker_ready:
 				compute_consequences()
 			else:
@@ -236,7 +266,147 @@ func sync_ready_state(new_attacker_ready: bool, new_defender_ready: bool, change
 	defender_ready = new_defender_ready
 	toggle_ready.emit(changed_player)
 
-func compute_consequences() ->void:
+func get_selected_resource_type(allocation: Array) -> int:
+	var selected_type := -1
+	var selected_count := 0
+
+	for i: int in range(allocation.size()):
+		if int(allocation[i]) > 0:
+			selected_type = i
+			selected_count += 1
+
+	# Invalid if player selected none or more than one resource type.
+	if selected_count != 1:
+		return -1
+
+	return selected_type
+
+func compute_consequences() -> void:
 	print("combat start!")
-	pass
+
+	#var attacker_resource_type := get_selected_resource_type(attacking_resource_allocation)
+	#var defender_resource_type := get_selected_resource_type(defending_resource_allocation)
+	#
+	#var attacker_bet := int(attacking_resource_allocation[attacker_resource_type])
+	#var defender_bet := int(defending_resource_allocation[defender_resource_type])
+
+	if attacking_resource_allocation <= 0 or defending_resource_allocation <= 0:
+		print("Invalid combat allocation. Bets must be greater than 0.")
+		reset_combat_state()
+		return
+
+	### Both sides pay their bet. DO THIS!!!!!
 	
+	if attacking_resource_allocation == defending_resource_allocation:
+		print("Combat tied. No consequences.")
+		reset_combat_state()
+		Resources_to_rpc()
+		return
+
+	var attacker_won := attacking_resource_allocation > defending_resource_allocation
+
+	var winning_resource_type: int
+	var losing_resource_type: int
+	var winning_bet: int
+	var losing_bet: int
+	var winning_units: Array
+	var losing_units: Array
+
+	if attacker_won:
+		winning_resource_type = attacking_resource_type
+		losing_resource_type = defending_resource_type
+		winning_bet = attacking_resource_allocation
+		losing_bet = defending_resource_allocation
+		winning_units = attacking_units
+		losing_units = defending_units
+	else:
+		winning_resource_type = defending_resource_type
+		losing_resource_type = attacking_resource_type
+		winning_bet = defending_resource_allocation
+		losing_bet = attacking_resource_allocation
+		winning_units = defending_units
+		losing_units = attacking_units
+
+	var base_damage := float(winning_bet - losing_bet)
+	var rps_multiplier := 1.0
+	var winner_rps:bool = false
+
+	#Rock-Paper-Scissors check
+	if winning_resource_type == RESOURCE_TYPE.MONEY and losing_resource_type == RESOURCE_TYPE.WEAPONS:
+		winner_rps = true
+	if winning_resource_type == RESOURCE_TYPE.WEAPONS and losing_resource_type == RESOURCE_TYPE.MANPOWER:
+		winner_rps = true
+	if winning_resource_type == RESOURCE_TYPE.MANPOWER and losing_resource_type == RESOURCE_TYPE.MONEY:
+		winner_rps = true
+
+	if winner_rps:
+		rps_multiplier = 1.5
+	
+	var unit_power := 0.0
+	for unit: Resource in winning_units:
+		if unit.unit_type == UNIT_TYPE.FIGHTER:
+			unit_power += 1.0
+		elif unit.unit_type == UNIT_TYPE.INFLUENCE:
+			unit_power += 0.5
+		print("unit type" + str(unit.unit_type))
+
+	var final_damage := base_damage * rps_multiplier * unit_power
+
+	print("Base damage: " + str(base_damage))
+	print("RPS multiplier: " + str(rps_multiplier))
+	print("Unit power: " + str(unit_power))
+	print("Final damage: " + str(final_damage))
+
+	var remaining_damage := final_damage
+
+	# 1. Kill disrupted fighters first.
+	remaining_damage = kill_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.FIGHTER, true)
+
+	# 2. Kill disrupted influence units.
+	remaining_damage = kill_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.INFLUENCE, true)
+
+	# 3. Disrupt fresh fighters.
+	remaining_damage = disrupt_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.FIGHTER)
+
+	# 4. Disrupt fresh influence units.
+	remaining_damage = disrupt_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.INFLUENCE)
+
+	reset_combat_state()
+	
+	### actually update units on node and then send RPC to update display
+	# Push updated player resources to clients.
+	# Resources_to_rpc()
+
+func kill_units_by_filter(units: Array, damage: float, unit_type: int, must_be_disrupted: bool) -> float:
+	var i := units.size() - 1
+
+	while i >= 0 and damage >= DAMAGE_PER_EFFECT:
+		var unit: Resource = units[i]
+
+		if unit.unit_type == unit_type and unit.disrupted == must_be_disrupted:
+			units.remove_at(i)
+			damage -= DAMAGE_PER_EFFECT
+
+		i -= 1
+
+	return damage
+
+
+func disrupt_units_by_filter(units: Array, damage: float, unit_type: int) -> float:
+	for unit: Resource in units:
+		if damage < DAMAGE_PER_EFFECT:
+			break
+
+		if unit.unit_type == unit_type and unit.disrupted == false:
+			unit.disrupted = true
+			damage -= DAMAGE_PER_EFFECT
+
+	return damage
+
+func reset_combat_state() -> void:
+	attacker_ready = false
+	defender_ready = false
+	attacking_resource_type = RESOURCE_TYPE.NONE
+	defending_resource_type = RESOURCE_TYPE.NONE
+	attacking_resource_allocation = 0
+	defending_resource_allocation = 0

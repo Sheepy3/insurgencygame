@@ -143,16 +143,35 @@ func switch_player_type(type: int) -> void:
 
 func _on_weapons_slider_value_changed(value: int) -> void:
 	%Weapons_count.text = str(value)
+	if value > 0:
+		%Money_slider.editable = false
+		%Manpower_slider.editable = false
+	else:
+		%Money_slider.editable = true
+		%Manpower_slider.editable = true
 
 func _on_money_slider_value_changed(value: int) -> void:
 	%Money_count.text = str(value)
+	if value > 0:
+		%Weapons_slider.editable = false
+		%Manpower_slider.editable = false
+	else:
+		%Weapons_slider.editable = true
+		%Manpower_slider.editable = true
+
 
 func _on_manpower_slider_value_changed(value: int) -> void:
 	%Manpower_count.text = str(value)
+	if value > 0:
+		%Money_slider.editable = false
+		%Weapons_slider.editable = false
+	else:
+		%Money_slider.editable = true
+		%Weapons_slider.editable = true
 
 func _on_ready_button_pressed() -> void:
 	Overseer.request_update_toggle.rpc(%Weapons_slider.value,%Money_slider.value,%Manpower_slider.value)
-	if %Ready_Button.text == "Ready":
+	if %Ready_Button.text == "Ready": ###TODO: FIX WEIRD SYNCING ISSUE
 		%Ready_Button.text = "Not Ready"
 		%Money_slider.editable = true
 		%Weapons_slider.editable = true

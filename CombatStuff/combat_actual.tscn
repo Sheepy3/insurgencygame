@@ -47,7 +47,7 @@ layout_mode = 2
 [node name="Weapons_label" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=1571693529]
 layout_mode = 2
 theme = ExtResource("1_456j5")
-text = "Manpower:"
+text = "	Weapons:"
 
 [node name="Weapons_count" type="Label" parent="PanelContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=395428820]
 unique_name_in_owner = true
