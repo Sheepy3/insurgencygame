@@ -14,10 +14,10 @@ var current_player:String
 var The_networks:Dictionary
 var The_nodes:Dictionary
 var The_support_nodes:Array
-var Phase_cycle:int = 0 # of phases passed or # of times you have reached Purchase again (still kinda deciding)
+var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again 
 var Desired_cycle:int = 3 # of phases before matnince or # of "PURCHASE" phases reached before matnince (will occur on turn of number)
  
-enum {MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, PLACE_MILITARY, COLLECT, INITIAL_DEPLOY}
+enum {MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION}
 var current_phase:int = INITIAL_DEPLOY
 
 signal change_player # Signal may be depricated due to lack of use
@@ -46,7 +46,11 @@ signal player_resources_updated
 		#change_player.emit()
 
 func cycle_phases() -> void:
-	if Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
+	print("This is the phase cycle: "+str(Phase_cycle))
+	if Phase_cycle == 13:
+		current_phase = INTERVENTION
+		change_phase.emit() 
+	elif Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
 		change_phase.emit()
 	elif current_phase == COLLECT and Phase_cycle % Desired_cycle != 0:
@@ -110,7 +114,7 @@ func Request_node_data(Edited_node_name:String) -> void:
 		for units:Resource in Edited_node.unit_list:
 			var Unit_number:String = "Unit:" + str(x)
 			var New_unit:Resource = units
-			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.unit_state,New_unit.player_ID,New_unit.color,New_unit.offcolor]
+			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			x += 1
 		Update_node_data.rpc(Edited_node.name,New_node)
 
@@ -230,7 +234,7 @@ func Profit_and_Taxes()-> void:
 								else:
 									players.Money -= 2
 						else:
-							if unit.player_ID == players.Player_ID && unit.unit_type == 1 && unit.unit_state == true && Checking_node.Has_building == false:
+							if unit.player_ID == players.Player_ID && unit.unit_type == 1 && unit.disrupted == false && Checking_node.Has_building == false:
 								players.Man_power += Checking_node.node_RPU.Population
 								players.Money += Checking_node.node_RPU.RPU
 								break

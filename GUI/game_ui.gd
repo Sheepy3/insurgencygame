@@ -135,6 +135,8 @@ func _phase_switch_ui() -> void:
 			Overseer.Phase_cycle += 1
 		7:
 			$Current_Phase.text = "Muster forces"
+		8:
+			$Current_Phase.text = "UN Intervention"
 	$Next_Phase_Button.set_pressed_no_signal(false)
 	$Next_Phase_Button.text = "NEXT PHASE???"
 
@@ -496,7 +498,10 @@ func _on_next_phase_button_toggled(toggled_on: bool) -> void:
 		Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
 
 func Update_available_buttons() -> void:
-	if Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+	if Overseer.current_phase == Overseer.INTERVENTION:
+		Change_available_buttons(true,true,true)
+		$Next_Phase_Button.set_disabled(true)
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
 		Change_available_buttons(true,false,false)
 	elif Overseer.current_phase == Overseer.PURCHASE:
 		Change_available_buttons(false,true,true)
