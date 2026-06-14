@@ -243,6 +243,8 @@ func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 			print("attackers resources: " + str(attacking_resource_allocation))
 			print("defenders resources: " + str(defending_resource_allocation))
 			if defender_ready and attacker_ready:
+				#sync_ready_state.rpc(attacker_ready, defender_ready, 0)
+				# test uncommenting the above ^
 				compute_consequences()
 			else:
 				sync_ready_state.rpc(attacker_ready, defender_ready, 0)
@@ -265,6 +267,7 @@ func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 			print("attackers resources: " + str(attacking_resource_allocation))
 			print("defenders resources: " + str(defending_resource_allocation))
 			if defender_ready and attacker_ready:
+				sync_ready_state.rpc(attacker_ready, defender_ready, 1)
 				compute_consequences()
 			else:
 				sync_ready_state.rpc(attacker_ready, defender_ready, 1)

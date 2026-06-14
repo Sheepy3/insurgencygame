@@ -41,7 +41,7 @@ func _ready() -> void:
 	#display_opposition(player2_units)
 
 func _toggle_ready(player: int) -> void:
-
+	#TODO: FIX
 	# Attacker toggled, defender should see opponent status
 	if player == 0 and Overseer.defending_player == my_id:
 		%Opponent_ready_label.text = "Your opponent is ready" if Overseer.attacker_ready else "Your opponent is not ready"
