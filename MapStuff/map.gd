@@ -87,8 +87,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 						new_unit_UUID = Overseer.Create_unique_ID()
 						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 						source_node.remove_unit(Current_player.Player_ID,FIGHTER)
-						Overseer.Request_node_data(Checked_node.name)
-						Overseer.Request_node_data(source_node.name)
+						#Overseer.Request_node_data(Checked_node.name)
+						#Overseer.Request_node_data(source_node.name)
+						Overseer.New_request_node_data(Checked_node.name)
+						Overseer.New_request_node_data(source_node.name)
 						Overseer.Resources_to_rpc()
 				else:
 					display_action_error("No fighter found at source node!",Player_ID)
@@ -103,8 +105,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 						new_unit_UUID = Overseer.Create_unique_ID()
 						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 						source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
-						Overseer.Request_node_data(Checked_node.name)
-						Overseer.Request_node_data(source_node.name)
+						#Overseer.Request_node_data(Checked_node.name)
+						#Overseer.Request_node_data(source_node.name)
+						Overseer.New_request_node_data(Checked_node.name)
+						Overseer.New_request_node_data(source_node.name)
 						Overseer.Resources_to_rpc()
 				else:
 					display_action_error("No influence found at source node!",Player_ID)
@@ -118,16 +122,20 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Military_Base"] -= 1
-					Overseer.Request_node_data(Checked_node.name)
+					#Overseer.Request_node_data(Checked_node.name)
+					Overseer.New_request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
+					Overseer.Rpc_to_player_resources()
 				elif Current_player.base_list.size() == 0 && Current_player.Player_storage["Military_Base"] >= 1:
 					#print("You have placed a base on node " + Name)
 					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Military_Base"] -= 1
 					#print(type_string(typeof(Current_node.name)))
-					Overseer.Request_node_data(Checked_node.name)
+					#Overseer.Request_node_data(Checked_node.name)
+					Overseer.New_request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
+					Overseer.Rpc_to_player_resources()
 				else:
 					display_action_error("You do not have the conditions to place a Base!",Player_ID)
 			elif Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
@@ -142,7 +150,8 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Fighter"] -= 1
-					Overseer.Request_node_data(Checked_node.name)
+					#Overseer.Request_node_data(Checked_node.name)
+					Overseer.New_request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
 			elif Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] < 1:
 				display_action_error("You do not have any Fighter units to place!",Player_ID)
@@ -154,7 +163,8 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Influence"] -= 1
-					Overseer.Request_node_data(Checked_node.name)
+					#Overseer.Request_node_data(Checked_node.name)
+					Overseer.New_request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
 				else:
 					display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)

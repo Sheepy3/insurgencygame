@@ -7,6 +7,7 @@ extends Node
 #var players_colors:Array = [Vector3(1.0,0.0,0.0),Vector3(0.0,1.0,0.0)]
 var player_list:Array
 var Player_resource:Resource = load("res://Resources/Preset/Player_Default.tres")
+var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 #var selected_player_index:int = -1
 var current_player:String
 #var Logistics_array:Array 
@@ -98,41 +99,93 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 	Initialization_player_color.emit()
 
 @rpc("any_peer","call_local")
-func Request_node_data(Edited_node_name:String) -> void:
-	var New_node:Dictionary
+func Player_resources_to_rpc() -> void:
 	if multiplayer.is_server():
-		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
-		if Edited_node.Has_building == true:
-			var building:Resource = Edited_node.building
-			New_node["Building"] = [building.unit_type,building.player_ID,building.color,building.location]
-		var x:int = 0
-		for units:Resource in Edited_node.unit_list:
-			var Unit_number:String = "Unit:" + str(x)
-			var New_unit:Resource = units
-			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.unit_state,New_unit.player_ID,New_unit.color,New_unit.offcolor]
-			x += 1
-		Update_node_data.rpc(Edited_node.name,New_node)
+		var Player_rpc_info:Dictionary
+		for Players:Resource in player_list:
+			Player_rpc_info[Players.Player_ID] = Pack_Resource_data(Players)
+			#Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.Player_faction,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points,Players.Player_storage, Players.Ready]
+		#Rpc_to_player_resources.rpc(Player_rpc_info)
+		print("\nThis is the players resources: "+str(Player_rpc_info))
+		player_resources_updated.emit()
 
 @rpc("authority","call_remote")
-func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
+func Rpc_to_player_resources() -> void:
+	pass
+
+@rpc("any_peer","call_local")
+func New_request_node_data(Edited_node_name:String) -> void:
+	if multiplayer.is_server():
+		var new_node:Array
+		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+		if Edited_node.Has_building == true:
+			new_node.append(Pack_Resource_data(Edited_node.building))
+			#print("This is the servers Base resource: "+str(Edited_node.building))
+		for units:Resource in Edited_node.unit_list:
+			new_node.append(Pack_Resource_data(units))
+		Give_clients_node_info.rpc(Edited_node_name,new_node)
+
+@rpc("authority","call_remote")
+func Give_clients_node_info(Edited_node_name:String,Node_info:Array) -> void:
 	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
-	var Present_unit_list:Array = get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
+	var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
 	for existing_units:Node in Present_unit_list:
 		existing_units.free()
-	var x:int = 0
-	for Placables:String in New_node_data.keys():
-		var Values:Array = New_node_data[Placables]
-		if Placables == "Building":
-			Edited_node.add_building(Values[1],Values[0],Values[2])
-			var Updates_to_building:Resource = Edited_node.building
-			Updates_to_building.unit_type = Values[0]
-			Updates_to_building.player_ID = Values[1]
-			Updates_to_building.color = Values[2]
-			Updates_to_building.location = Values[3]
-		elif Placables == "Unit:" + str(x):
-			Edited_node.add_unit(Values[3],Values[0],Values[4],Values[1])
-			x += 1
+	for indexs:Dictionary in Node_info:
+		var new_resource:Resource = Instantiate_by_class_name(indexs["Resource_type"])
+		#print("This is the new "+str(indexs["Resource_type"])+" resource: "+str(new_resource))
+		for keys:String in indexs.keys():
+			if keys != "Resource_type":
+				new_resource.set(keys,indexs[keys]) 
+		if indexs["Resource_type"] == "Building":
+				Edited_node.building = new_resource
+				Edited_node.find_child("Building").material.set_shader_parameter("tint_color", indexs["color"])
+				Edited_node.find_child("Building").material.set_shader_parameter("saturation",0.4)
+				Edited_node.find_child("Building").show()
+		else:
+			Edited_node.unit_list.append(new_resource)
+			var unit_visual:Node = unit_scene.instantiate()
+			unit_visual.Unit_Data = new_resource
+			Edited_node.find_child("Units").add_child(unit_visual)
+
+#@rpc("any_peer","call_local")
+#func Request_node_data(Edited_node_name:String) -> void:
+	#var New_node:Dictionary
+	#if multiplayer.is_server():
+		#Under_construction.rpc(Edited_node_name)
+		#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+		#if Edited_node.Has_building == true:
+			#var building:Resource = Edited_node.building
+			#New_node["Building"] = [building.unit_type,building.player_ID,building.color,building.location]
+		#var x:int = 0
+		#for units:Resource in Edited_node.unit_list:
+			#var Unit_number:String = "Unit:" + str(x)
+			#var New_unit:Resource = units
+			#New_node[Unit_number] = [New_unit.unit_type,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
+			#x += 1
+		##Update_node_data.rpc(Edited_node.name,New_node)
+
+#@rpc("authority","call_remote")
+#func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
+	#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+	#var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children() #get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
+	#Edited_node.unit_list.clear()
+	#for existing_units:Node in Present_unit_list:
+		#existing_units.free()
+	#var x:int = 0
+	#for Placables:String in New_node_data.keys():
+		#var Values:Array = New_node_data[Placables]
+		#if Placables == "Building":
+			#Edited_node.add_building(Values[1],Values[0],Values[2])
+			#var Updates_to_building:Resource = Edited_node.building
+			#Updates_to_building.unit_type = Values[0]
+			#Updates_to_building.player_ID = Values[1]
+			#Updates_to_building.color = Values[2]
+			#Updates_to_building.location = Values[3]
+		#elif Placables == "Unit:" + str(x):
+			#Edited_node.add_unit(Values[3],Values[0],Values[4],Values[1])
+			#x += 1
 
 @rpc("any_peer","call_local")
 func Request_path_data(Requester:Resource,Edited_path_name:String) -> void:
@@ -179,3 +232,30 @@ func Create_unique_ID() -> String:
 		else:
 			random_hex_string +=str(hex_values[randi_range(0,15)])
 	return random_hex_string
+
+func Instantiate_by_class_name(class_name_string: StringName) -> Object:
+	var class_list:Array = ProjectSettings.get_global_class_list()  
+	for script_info:Dictionary in class_list:
+		if script_info["class"] == class_name_string:
+			var loaded_script:Resource = load(script_info["path"])
+			if loaded_script:
+				return loaded_script.new()
+	var Error_node:Node = Node2D.new()
+	Error_node.name == "The Script was not loaded properly"
+	return Error_node
+
+func Pack_Resource_data(Gift:Resource) -> Dictionary:
+	var Wrapped_gift:Dictionary
+	for indexes:Dictionary in Gift.get_property_list():
+		if indexes["usage"] == 4102:
+			Wrapped_gift["Resource_type"] = Gift.get_script().get_global_name().split("&")[0]
+			if typeof(Gift.get(indexes["name"])) == TYPE_ARRAY:
+				#print("\nPETER PINAPPLE IS HAVING A BLAST AT HIS BIRTHDAY PARTY!!!\n")
+				var recursive_dictionary:Dictionary
+				for entries:Resource in Gift.get(indexes["name"]):
+					recursive_dictionary[Create_unique_ID()] = Pack_Resource_data(entries)
+				Wrapped_gift[indexes["name"]] = recursive_dictionary
+			else:
+				Wrapped_gift[indexes["name"]] = Gift.get(indexes["name"])
+	#print(Wrapped_gift)
+	return Wrapped_gift
