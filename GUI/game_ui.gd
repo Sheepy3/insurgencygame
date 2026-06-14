@@ -21,6 +21,7 @@ func _ready() -> void:
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.game_started.connect(connect_update_UI)
+	%Combat.combat_over
 	$Pre_Combat.initialize_pressed.connect(_on_precombat_initialize)
 	$Pre_Combat.cancel_pressed.connect(_on_precombat_cancel)
 	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
@@ -516,10 +517,12 @@ func _on_precombat_initialize(attacking_fighters:int, attacking_influence:int, t
 	print(target_player_id)
 	_request_combat.rpc(attacking_fighters,attacking_influence,target_player_id,map_node)
 
-@rpc("any_peer","call_local")
+@rpc("any_peer", "call_local", "reliable")
 func _request_combat(attacking_fighters:int, attacking_influence:int, target_player_id: int, map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
-		var player_id:int = multiplayer.get_remote_sender_id()
+		var player_id: int = multiplayer.get_remote_sender_id()
+		if player_id == 0:
+			player_id = multiplayer.get_unique_id()
 		var map_node:Node = get_node(map_node_path)
 		var attacking_fighters_found:Array = []
 		var attacking_influence_found:Array = []
@@ -536,14 +539,21 @@ func _request_combat(attacking_fighters:int, attacking_influence:int, target_pla
 			print("bad combat request. attacking fighters: " + str(attacking_fighters) + ", but fighters found: "+ str(attacking_fighters_found.size()))
 			return
 		
-		var final_attacking_units:Array = attacking_fighters_found.slice(0, attacking_fighters-1) + attacking_influence_found.slice(0, attacking_influence-1) 
+		#var final_attacking_units:Array = attacking_fighters_found.slice(0, attacking_fighters-1) + attacking_influence_found.slice(0, attacking_influence-1) 
+		var final_attacking_units: Array = []
+		for i: int in range(min(attacking_fighters, attacking_fighters_found.size())):
+			final_attacking_units.append(attacking_fighters_found[i])
+		for i: int in range(min(attacking_influence, attacking_influence_found.size())):
+			final_attacking_units.append(attacking_influence_found[i])
+			
 		Overseer.defending_units = defending_units
 		Overseer.attacking_units = final_attacking_units
+		Overseer.map_node_path = map_node_path
 		print(final_attacking_units)
 		_initialize_combat.rpc(player_id,target_player_id,attacking_fighters, attacking_influence, map_node_path )
 	
 
-@rpc("authority", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int, attacking_influence:int, map_node_path:NodePath) -> void:
 	var map_node:Node = get_node(map_node_path)
 	var attacking_units:Array = []
@@ -552,11 +562,13 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	var attacking_influence_collected:int = 0
 	for unit:Resource in map_node.unit_list:
 			if unit.player_ID == attacker_id:
-				if unit.unit_type == 0 && (attacking_fighters_collected != attacking_fighters):
+				if unit.unit_type == 0 && (attacking_fighters_collected < attacking_fighters):
 					attacking_units.append(unit)
-				elif (attacking_influence_collected != attacking_influence):
+					attacking_fighters_collected += 1
+				elif unit.unit_type == 1 && (attacking_influence_collected < attacking_influence):
 					attacking_units.append(unit)
-			if unit.player_ID == defender_id:
+					attacking_influence_collected += 1
+			elif unit.player_ID == defender_id:
 				defending_units.append(unit)
 	var attacking_player:Resource = Overseer.Identify_player(attacker_id)
 	var defending_player:Resource = Overseer.Identify_player(defender_id)
@@ -564,19 +576,25 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	Overseer.defending_player = defender_id
 	Overseer.attacker_ready = false
 	Overseer.defender_ready = false
+	%Combat.my_id = multiplayer.get_unique_id()
 	if multiplayer.get_unique_id() != defender_id: #attacker
+		
 		%Combat.set_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.set_opposition_counts(defending_player.Weapons,defending_player.Money,defending_player.Man_power)
 		if multiplayer.get_unique_id() != attacker_id: #spectators 
 			%Combat.switch_player_type(1)
 		else:
 			%Combat.switch_player_type(0)
+		%Combat.left_side_player_id = attacker_id
+		%Combat.right_side_player_id = defender_id
 		%Combat.display_allies(attacking_units)
 		%Combat.display_opposition(defending_units)
 	else: #defender
 		%Combat.set_counts(defending_player.Weapons, defending_player.Money,defending_player.Man_power)
 		%Combat.set_opposition_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.switch_player_type(0)
+		%Combat.left_side_player_id = defender_id
+		%Combat.right_side_player_id = attacker_id
 		%Combat.display_allies(defending_units)
 		%Combat.display_opposition(attacking_units)
 	

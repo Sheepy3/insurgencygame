@@ -27,6 +27,26 @@ signal change_phase
 signal player_resources_updated
 signal Initialization_player_color
 signal toggle_ready(player:int)
+signal update_combat(map_node_path:NodePath)
+
+
+### COMBAT
+var attacker_ready: bool = false
+var defender_ready: bool = false
+var attacking_player: int
+var defending_player: int
+
+enum RESOURCE_TYPE {NONE, WEAPONS,MONEY,MANPOWER} 
+enum UNIT_TYPE {FIGHTER, INFLUENCE} 
+
+var attacking_resource_type:int = RESOURCE_TYPE.NONE
+var defending_resource_type:int = RESOURCE_TYPE.NONE
+var attacking_resource_allocation:int = 0
+var defending_resource_allocation:int = 0
+var attacking_units:Array
+var defending_units:Array
+var map_node_path:NodePath
+const DAMAGE_PER_EFFECT := 5.0
 
 const PLAYER_COLORS := {
 	"Red": Vector3(223, 0, 81) / 255.0,
@@ -106,7 +126,7 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 	Initialization_player_color.emit()
 
 @rpc("any_peer","call_local")
-func Request_node_data(Edited_node_name:String) -> void:
+func Request_node_data(Edited_node_name:String,combat_node_path:NodePath = NodePath("")) -> void:
 	var New_node:Dictionary
 	if multiplayer.is_server():
 		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
@@ -119,10 +139,10 @@ func Request_node_data(Edited_node_name:String) -> void:
 			var New_unit:Resource = units
 			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			x += 1
-		Update_node_data.rpc(Edited_node.name,New_node)
+		Update_node_data.rpc(Edited_node.name,New_node,combat_node_path)
 
-@rpc("authority","call_remote")
-func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
+@rpc("authority", "call_local", "reliable")
+func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_node_path:NodePath = NodePath("")) -> void:
 	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 	var Present_unit_list:Array = get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
@@ -138,9 +158,19 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary) -> void:
 			Updates_to_building.player_ID = Values[1]
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
-		elif Placables == "Unit:" + str(x):
-			Edited_node.add_unit(Values[3],Values[0],Values[4],Values[1])
+		elif Placables.begins_with("Unit:"):
+			Edited_node.add_unit(Values[3], Values[0], Values[4], Values[1])
+			
+			var updated_unit: Resource = Edited_node.unit_list[Edited_node.unit_list.size() - 1] #MONKEYPATCH PLUG IN THE MISSING VALUES
+			updated_unit.unit_type = Values[0]
+			updated_unit.unit_UUID = Values[1]
+			updated_unit.disrupted = Values[2]
+			updated_unit.player_ID = Values[3]
+			updated_unit.color = Values[4]
+			updated_unit.offcolor = Values[5]
 			x += 1
+	if !combat_node_path.is_empty():
+		update_combat.emit(combat_node_path)
 
 @rpc("any_peer","call_local")
 func Request_path_data(Requester:Resource,Edited_path_name:String) -> void:
@@ -165,7 +195,7 @@ func Update_path_data(New_path_data:Dictionary,The_Road:String) -> void:
 			Edited_path.add_intel_network(Values[3])
 		if Values[2] == true:
 			Edited_path.add_logistics_network(Values[3])
-
+	
 func Identify_player(Specific_ID:int) -> Resource:
 	var Server_known_player:int = Specific_ID
 	var Current_player:Resource
@@ -188,32 +218,13 @@ func Create_unique_ID() -> String:
 			random_hex_string +=str(hex_values[randi_range(0,15)])
 	return random_hex_string
 
-var attacker_ready: bool = false
-var defender_ready: bool = false
-var attacking_player: int
-var defending_player: int
-
-enum RESOURCE_TYPE {NONE, WEAPONS,MONEY,MANPOWER} 
-enum UNIT_TYPE {FIGHTER, INFLUENCE} 
-
-var attacking_resource_type:int = RESOURCE_TYPE.NONE
-var defending_resource_type:int = RESOURCE_TYPE.NONE
-var attacking_resource_allocation:int = 0
-var defending_resource_allocation:int = 0
-var attacking_units:Array
-var defending_units:Array
-
-const DAMAGE_PER_EFFECT := 5.0
-
-@rpc("any_peer", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 	if multiplayer.is_server():
 		var sender_id: int = multiplayer.get_remote_sender_id()
 		if sender_id == 0:
 			sender_id = multiplayer.get_unique_id()
 		var sender:Resource = Identify_player(sender_id)
-
-
 		if sender.Player_ID == attacking_player:
 			attacker_ready = !attacker_ready
 			if !attacker_ready:
@@ -229,7 +240,8 @@ func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 				elif manpower > 0:
 					attacking_resource_type = RESOURCE_TYPE.MANPOWER
 					attacking_resource_allocation = manpower if sender.Man_power >= manpower else 0 
-
+			print("attackers resources: " + str(attacking_resource_allocation))
+			print("defenders resources: " + str(defending_resource_allocation))
 			if defender_ready and attacker_ready:
 				compute_consequences()
 			else:
@@ -250,45 +262,26 @@ func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 				elif manpower > 0:
 					defending_resource_type = RESOURCE_TYPE.MANPOWER
 					defending_resource_allocation = manpower if sender.Man_power >= manpower else 0 
-			
-				
+			print("attackers resources: " + str(attacking_resource_allocation))
+			print("defenders resources: " + str(defending_resource_allocation))
 			if defender_ready and attacker_ready:
 				compute_consequences()
 			else:
 				sync_ready_state.rpc(attacker_ready, defender_ready, 1)
 			
-		print("attackers resources: " + str(attacking_resource_allocation))
-		print("defenders resources: " + str(defending_resource_allocation))
 
-@rpc("authority", "call_local")
+@rpc("any_peer", "call_local", "reliable")
 func sync_ready_state(new_attacker_ready: bool, new_defender_ready: bool, changed_player: int) -> void:
 	attacker_ready = new_attacker_ready
 	defender_ready = new_defender_ready
 	toggle_ready.emit(changed_player)
 
-func get_selected_resource_type(allocation: Array) -> int:
-	var selected_type := -1
-	var selected_count := 0
-
-	for i: int in range(allocation.size()):
-		if int(allocation[i]) > 0:
-			selected_type = i
-			selected_count += 1
-
-	# Invalid if player selected none or more than one resource type.
-	if selected_count != 1:
-		return -1
-
-	return selected_type
+@rpc("authority", "call_local") ### TODO: DEPRECATE
+func sync_combat_update() -> void:
+	update_combat.emit()
 
 func compute_consequences() -> void:
 	print("combat start!")
-
-	#var attacker_resource_type := get_selected_resource_type(attacking_resource_allocation)
-	#var defender_resource_type := get_selected_resource_type(defending_resource_allocation)
-	#
-	#var attacker_bet := int(attacking_resource_allocation[attacker_resource_type])
-	#var defender_bet := int(defending_resource_allocation[defender_resource_type])
 
 	if attacking_resource_allocation <= 0 or defending_resource_allocation <= 0:
 		print("Invalid combat allocation. Bets must be greater than 0.")
@@ -374,8 +367,10 @@ func compute_consequences() -> void:
 	reset_combat_state()
 	
 	### actually update units on node and then send RPC to update display
-	# Push updated player resources to clients.
-	# Resources_to_rpc()
+	var map_node:Node = get_node(map_node_path)
+	map_node.unit_list = losing_units + winning_units
+	map_node.reorder_units()
+	Request_node_data(map_node.name, map_node_path)
 
 func kill_units_by_filter(units: Array, damage: float, unit_type: int, must_be_disrupted: bool) -> float:
 	var i := units.size() - 1
@@ -390,7 +385,6 @@ func kill_units_by_filter(units: Array, damage: float, unit_type: int, must_be_d
 		i -= 1
 
 	return damage
-
 
 func disrupt_units_by_filter(units: Array, damage: float, unit_type: int) -> float:
 	for unit: Resource in units:

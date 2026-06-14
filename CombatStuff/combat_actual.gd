@@ -1,11 +1,19 @@
 extends Control
 var unit_scene:PackedScene = load("res://CombatStuff/unit_visual_control.tscn")
 enum player_type {COMBATANT,SPECTATOR} 
+enum visual_type {BINOCULARS,FLASH} 
+enum visual_direction {LEFT,RIGHT}
+signal combat_over
+var my_id:int
 var current_type:int = player_type.COMBATANT
+var left_side_player_id: int = -1
+var right_side_player_id: int = -1
 func _ready() -> void:
+	my_id = multiplayer.get_unique_id()
 	get_viewport().size_changed.connect(_on_window_resized)
 	_on_window_resized()
 	Overseer.toggle_ready.connect(_toggle_ready)
+	Overseer.update_combat.connect(_finalize_combat)
 	#set_counts(5,5,5)
 	#switch_player_type(player_type.SPECTATOR)
 	#var player1_units: Array[Unit] = []
@@ -33,7 +41,6 @@ func _ready() -> void:
 	#display_opposition(player2_units)
 
 func _toggle_ready(player: int) -> void:
-	var my_id := multiplayer.get_unique_id()
 
 	# Attacker toggled, defender should see opponent status
 	if player == 0 and Overseer.defending_player == my_id:
@@ -181,3 +188,31 @@ func _on_ready_button_pressed() -> void:
 		%Money_slider.editable = false
 		%Weapons_slider.editable = false
 		%Manpower_slider.editable = false
+
+func _finalize_combat(Map_node_path: NodePath) -> void:
+	print("finalized")
+
+	var Map_node: Node = get_node(Map_node_path)
+	Map_node.reorder_units()
+
+	for child: Node in %Unit_spawn_1.get_children():
+		child.queue_free()
+	for child: Node in %Unit_spawn_2.get_children():
+		child.queue_free()
+
+	var left_units: Array = []
+	var right_units: Array = []
+
+	for unit: Resource in Map_node.unit_list:
+		if unit.player_ID == left_side_player_id:
+			left_units.append(unit)
+		elif unit.player_ID == right_side_player_id:
+			right_units.append(unit)
+		else:
+			print("finalize ignored unit owner: ", unit.player_ID)
+
+	print("final left units: ", left_units.size())
+	print("final right units: ", right_units.size())
+
+	display_allies(left_units)
+	display_opposition(right_units)

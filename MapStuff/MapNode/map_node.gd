@@ -86,7 +86,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String) -> void:
 	var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
 	unit_visual.Unit_Data = unique_unit
 	%Units.add_child(unit_visual)
-	_reorder_units()
+	reorder_units()
 
 func has_unit(player:int, type:int) -> bool:
 	for unit:Resource in unit_list:
@@ -103,12 +103,12 @@ func remove_unit(player:int,type:int) -> void: ## TODO: HANDLE RECONSTITUTABLE U
 		if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type):
 			unit.queue_free()
 			await unit.tree_exited
-			_reorder_units()
+			reorder_units()
 			break
 
 
 
-func _reorder_units() -> void:
+func reorder_units() -> void:
 	var nodes:Array = %Units.get_children()
 	var count:int = nodes.size()
 	var min_x:float 
