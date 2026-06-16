@@ -126,7 +126,7 @@ func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
 	Initialization_player_color.emit()
 
 @rpc("any_peer","call_local")
-func Request_node_data(Edited_node_name:String,combat_node_path:NodePath = NodePath("")) -> void:
+func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 	var New_node:Dictionary
 	if multiplayer.is_server():
 		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
@@ -139,10 +139,10 @@ func Request_node_data(Edited_node_name:String,combat_node_path:NodePath = NodeP
 			var New_unit:Resource = units
 			New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			x += 1
-		Update_node_data.rpc(Edited_node.name,New_node,combat_node_path)
+		Update_node_data.rpc(Edited_node.name,New_node,combat_data)
 
 @rpc("authority", "call_local", "reliable")
-func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_node_path:NodePath = NodePath("")) -> void:
+func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_data:Array = []) -> void:
 	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 	var Present_unit_list:Array = get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
@@ -169,8 +169,8 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_no
 			updated_unit.color = Values[4]
 			updated_unit.offcolor = Values[5]
 			x += 1
-	if !combat_node_path.is_empty():
-		update_combat.emit(combat_node_path)
+	if !combat_data.is_empty():
+		update_combat.emit(combat_data)
 
 @rpc("any_peer","call_local")
 func Request_path_data(Requester:Resource,Edited_path_name:String) -> void:
@@ -279,10 +279,6 @@ func sync_ready_state(new_attacker_ready: bool, new_defender_ready: bool, change
 	defender_ready = new_defender_ready
 	toggle_ready.emit(changed_player)
 
-@rpc("authority", "call_local") ### TODO: DEPRECATE
-func sync_combat_update() -> void:
-	update_combat.emit()
-
 func compute_consequences() -> void:
 	print("combat start!")
 
@@ -291,8 +287,24 @@ func compute_consequences() -> void:
 		reset_combat_state()
 		return
 
-	### Both sides pay their bet. DO THIS!!!!!
+	### Both sides pay their bet.
+	var defending_player_resource:Resource = Identify_player(defending_player)
+	var attacking_player_resource:Resource = Identify_player(attacking_player)
 	
+	if attacking_resource_type == RESOURCE_TYPE.MONEY:
+		attacking_player_resource.Money -= attacking_resource_allocation
+	elif attacking_resource_type == RESOURCE_TYPE.WEAPONS:
+		attacking_player_resource.Weapons -= attacking_resource_allocation
+	elif attacking_resource_type == RESOURCE_TYPE.MANPOWER:
+		attacking_player_resource.Man_power -= attacking_resource_allocation
+	
+	if defending_resource_type == RESOURCE_TYPE.MONEY:
+		defending_player_resource.Money -= defending_resource_allocation
+	elif defending_resource_type == RESOURCE_TYPE.WEAPONS:
+		defending_player_resource.Weapons -= defending_resource_allocation
+	elif defending_resource_type == RESOURCE_TYPE.MANPOWER:
+		defending_player_resource.Man_power -= defending_resource_allocation
+		
 	if attacking_resource_allocation == defending_resource_allocation:
 		print("Combat tied. No consequences.")
 		reset_combat_state()
@@ -367,13 +379,20 @@ func compute_consequences() -> void:
 	# 4. Disrupt fresh influence units.
 	remaining_damage = disrupt_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.INFLUENCE)
 
-	reset_combat_state()
-	
 	### actually update units on node and then send RPC to update display
+	Resources_to_rpc()
 	var map_node:Node = get_node(map_node_path)
 	map_node.unit_list = losing_units + winning_units
 	map_node.reorder_units()
-	Request_node_data(map_node.name, map_node_path)
+	var winning_player:int
+	if attacker_won:
+		winning_player=1
+	else:
+		winning_player=0
+		
+	var combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,final_damage,winning_player]
+	Request_node_data(map_node.name, combat_data)
+	reset_combat_state()
 
 func kill_units_by_filter(units: Array, damage: float, unit_type: int, must_be_disrupted: bool) -> float:
 	var i := units.size() - 1
@@ -407,3 +426,6 @@ func reset_combat_state() -> void:
 	defending_resource_type = RESOURCE_TYPE.NONE
 	attacking_resource_allocation = 0
 	defending_resource_allocation = 0
+	attacking_units = []
+	defending_units = []
+	map_node_path = NodePath("")

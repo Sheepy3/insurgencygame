@@ -3,6 +3,7 @@ var unit_scene:PackedScene = load("res://CombatStuff/unit_visual_control.tscn")
 enum player_type {COMBATANT,SPECTATOR} 
 enum visual_type {BINOCULARS,FLASH} 
 enum visual_direction {LEFT,RIGHT}
+enum RESOURCE_TYPE {NONE, WEAPONS, MONEY, MANPOWER} 
 signal combat_over
 var my_id:int
 var current_type:int = player_type.COMBATANT
@@ -14,6 +15,7 @@ func _ready() -> void:
 	_on_window_resized()
 	Overseer.toggle_ready.connect(_toggle_ready)
 	Overseer.update_combat.connect(_finalize_combat)
+	%Ready_Button.disabled = true
 	#set_counts(5,5,5)
 	#switch_player_type(player_type.SPECTATOR)
 	#var player1_units: Array[Unit] = []
@@ -49,6 +51,22 @@ func _toggle_ready(player: int) -> void:
 	# Defender toggled, attacker should see opponent status
 	elif player == 1 and Overseer.attacking_player == my_id:
 		%Opponent_ready_label.text = "Your opponent is ready" if Overseer.defender_ready else "Your opponent is not ready"
+
+func swap_header(side_swap:bool) -> void: #pass bool and handle logic in game_ui, because side ID and my ID are always consistent when this runs...
+	print("left side ID:"+str(left_side_player_id))
+	print("right side ID:"+str(right_side_player_id))
+	print("my_id:"+str(multiplayer.get_unique_id()))
+	print("-----")
+	if side_swap:
+		%Attacker_bet.horizontal_alignment = 2
+		%Defender_bet.horizontal_alignment = 0
+		%HeaderContainer.move_child(%Attacker_bet,-1)
+		%HeaderContainer.move_child(%Defender_bet,0)
+	else:
+		%Attacker_bet.horizontal_alignment = 0
+		%Defender_bet.horizontal_alignment = 2
+		%HeaderContainer.move_child(%Attacker_bet,0)
+		%HeaderContainer.move_child(%Defender_bet,-1)
 
 func _on_window_resized() -> void:
 	%Unit_spawn_1.position = %PanelContainer.position + Vector2(290,65)
@@ -114,7 +132,9 @@ func set_counts(weapons_max: int, money_max:int, manpower_max:int) -> void:
 	%Weapons_slider.max_value = weapons_max
 	%Money_slider.max_value = money_max
 	%Manpower_slider.max_value = manpower_max
-	
+	%Weapons_slider.value = 0
+	%Money_slider.value = 0
+	%Manpower_slider.value = 0
 	if weapons_max == 0:
 		%Weapons_label_and_count.hide()
 		%Weapons_slider.hide()
@@ -153,18 +173,22 @@ func _on_weapons_slider_value_changed(value: int) -> void:
 	if value > 0:
 		%Money_slider.editable = false
 		%Manpower_slider.editable = false
+		%Ready_Button.disabled = false
 	else:
 		%Money_slider.editable = true
 		%Manpower_slider.editable = true
+		%Ready_Button.disabled = true
 
 func _on_money_slider_value_changed(value: int) -> void:
 	%Money_count.text = str(value)
 	if value > 0:
 		%Weapons_slider.editable = false
 		%Manpower_slider.editable = false
+		%Ready_Button.disabled = false
 	else:
 		%Weapons_slider.editable = true
 		%Manpower_slider.editable = true
+		%Ready_Button.disabled = true
 
 
 func _on_manpower_slider_value_changed(value: int) -> void:
@@ -172,9 +196,11 @@ func _on_manpower_slider_value_changed(value: int) -> void:
 	if value > 0:
 		%Money_slider.editable = false
 		%Weapons_slider.editable = false
+		%Ready_Button.disabled = false
 	else:
 		%Money_slider.editable = true
 		%Weapons_slider.editable = true
+		%Ready_Button.disabled = true
 
 func _on_ready_button_pressed() -> void:
 	Overseer.request_update_toggle.rpc(%Weapons_slider.value,%Money_slider.value,%Manpower_slider.value)
@@ -188,11 +214,63 @@ func _on_ready_button_pressed() -> void:
 		%Money_slider.editable = false
 		%Weapons_slider.editable = false
 		%Manpower_slider.editable = false
-
-func _finalize_combat(Map_node_path: NodePath) -> void:
+		
+#var combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,final_damage,winning_player]
+func _reset_combat_actual() -> void:
+	for child: Node in %Unit_spawn_1.get_children():
+		child.queue_free()
+	for child: Node in %Unit_spawn_2.get_children():
+		child.queue_free()
+	%Attacker_bet.text = "Attacker: ???"
+	%Attacker_arrow.text = ""
+	%Winner_damage.text = "Winner: ??? Damage"
+	%Defender_arrow.text = ""
+	%Defender_bet.text = "Defender: ???"
+	%Money_slider.editable = true
+	%Weapons_slider.editable = true
+	%Manpower_slider.editable = true
+	%Opponent_ready_label.text = "Your opponent is not ready"
+	%Ready_Button.disabled = true
+	
+func _finalize_combat(combat_data:Array) -> void:
 	print("finalized")
+	
+	var attacker_res_type_string:String
+	var defender_res_type_string:String
+	
+	match combat_data[1]:
+		RESOURCE_TYPE.WEAPONS:
+			attacker_res_type_string = " Weapons"
+		RESOURCE_TYPE.MONEY:
+			attacker_res_type_string = " Money"
+		RESOURCE_TYPE.MANPOWER:
+			attacker_res_type_string = " Manpower"
+	match combat_data[3]:
+		RESOURCE_TYPE.WEAPONS:
+			defender_res_type_string = " Weapons"
+		RESOURCE_TYPE.MONEY:
+			defender_res_type_string = " Money"
+		RESOURCE_TYPE.MANPOWER:
+			defender_res_type_string = " Manpower"
+	%Attacker_bet.text = "Attacker: " + str(combat_data[2]) + attacker_res_type_string
+	%Defender_bet.text = "Defender: " + str(combat_data[4]) + defender_res_type_string
+	%Attacker_arrow.text = ""
+	%Defender_arrow.text = ""
 
-	var Map_node: Node = get_node(Map_node_path)
+	var winning_player_id: int = combat_data[6]
+
+	if winning_player_id == left_side_player_id:
+		%Attacker_arrow.text = "<-"
+	elif winning_player_id == right_side_player_id:
+		%Defender_arrow.text = "->"
+	else:
+		push_warning("Winner was neither left nor right side: " + str(winning_player_id))
+		
+		
+	%Winner_damage.text = "Winner: " + str(combat_data[5]) + " Damage"
+
+
+	var Map_node: Node = get_node(combat_data[0])
 	Map_node.reorder_units()
 
 	for child: Node in %Unit_spawn_1.get_children():
@@ -216,3 +294,9 @@ func _finalize_combat(Map_node_path: NodePath) -> void:
 
 	display_allies(left_units)
 	display_opposition(right_units)
+	%Timer.start()
+
+func _on_timer_timeout() -> void:
+	print("times up")
+	_reset_combat_actual()
+	combat_over.emit()

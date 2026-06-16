@@ -21,7 +21,7 @@ func _ready() -> void:
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
 	Overseer.game_started.connect(connect_update_UI)
-	%Combat.combat_over
+	%Combat.combat_over.connect(_return_ui_after_combat)
 	$Pre_Combat.initialize_pressed.connect(_on_precombat_initialize)
 	$Pre_Combat.cancel_pressed.connect(_on_precombat_cancel)
 	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
@@ -578,7 +578,7 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	Overseer.defender_ready = false
 	%Combat.my_id = multiplayer.get_unique_id()
 	if multiplayer.get_unique_id() != defender_id: #attacker
-		
+		%Combat.swap_header(false)
 		%Combat.set_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.set_opposition_counts(defending_player.Weapons,defending_player.Money,defending_player.Man_power)
 		if multiplayer.get_unique_id() != attacker_id: #spectators 
@@ -590,6 +590,7 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 		%Combat.display_allies(attacking_units)
 		%Combat.display_opposition(defending_units)
 	else: #defender
+		%Combat.swap_header(true)
 		%Combat.set_counts(defending_player.Weapons, defending_player.Money,defending_player.Man_power)
 		%Combat.set_opposition_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.switch_player_type(0)
@@ -607,9 +608,9 @@ func hide_ui() -> void:
 		if node is CanvasItem and node.visible:
 			hidden_ui_nodes.append(node)
 			node.visible = false
-			
+
 func show_ui() -> void:
-	print(hidden_ui_nodes)
+	#print(hidden_ui_nodes)
 	for node in hidden_ui_nodes:
 		node.visible = true
 	hidden_ui_nodes.clear()
@@ -617,3 +618,9 @@ func show_ui() -> void:
 func _on_precombat_cancel() -> void:
 	show_ui()
 	$Pre_Combat.hide()
+
+func _return_ui_after_combat() -> void:
+	update_Player_Info()
+	show_ui()
+	%Combat.hide()
+	%Pre_Combat.hide()
