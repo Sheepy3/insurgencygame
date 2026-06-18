@@ -19,3 +19,12 @@ func  recolor() -> void:
 	if Unit_Data.offcolor:
 		pass
 		$F_sprite.material.set_shader_parameter("value",0.8)
+
+func set_disrupted() -> void:
+	print("i have been disrupted")
+	%F_sprite.material.set_shader_parameter("saturation", 0.25)
+	%I_sprite.material.set_shader_parameter("saturation", 0.25)
+	%F_sprite.position += Vector2(0,20)
+	%I_sprite.position += Vector2(0,20)
+	$F_sprite.rotation = -90
+	$I_sprite.rotation = -90

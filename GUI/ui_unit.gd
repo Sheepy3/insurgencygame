@@ -3,6 +3,7 @@ var FighterSprite:Texture2D = preload("res://Assets/Military/soldier.png")
 var InfluenceSprite:Texture2D = preload("res://Assets/Military/binoculars.png")
 var unit_resource: Resource
 var source_node: String
+var disrupted: bool
 signal move_unit(unit_resource: Resource, source_node: String)
 
 enum unit_type {
@@ -23,7 +24,6 @@ func set_type(type:int) -> void:
 	pass
 
 
-
 func _ready() -> void: 
 	set_color(unit_resource.color)
 	if unit_resource.unit_type == unit_type.Fighter:
@@ -33,3 +33,7 @@ func _ready() -> void:
 
 func _on_move_button_pressed() -> void:
 	move_unit.emit(unit_resource, source_node)
+
+func enable_reconstitution() -> void:
+	%Move_Button.disabled = true
+	%Reconstitution_Button.disabled = false

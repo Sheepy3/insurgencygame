@@ -257,6 +257,9 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 			new_unit_display.move_unit.connect(move_unit_function)
 			%Unit_Display.add_child(new_unit_display)
 			player_unit_count+=1
+			if unit.disrupted:
+				new_unit_display.enable_reconstitution()
+			
 		else:
 			enemy_unit_count+=1
 	if player_unit_count > 0 and enemy_unit_count > 0:
@@ -578,7 +581,6 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	Overseer.defender_ready = false
 	%Combat.my_id = multiplayer.get_unique_id()
 	if multiplayer.get_unique_id() != defender_id: #attacker
-		%Combat.swap_header(false)
 		%Combat.set_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.set_opposition_counts(defending_player.Weapons,defending_player.Money,defending_player.Man_power)
 		if multiplayer.get_unique_id() != attacker_id: #spectators 
@@ -587,15 +589,16 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 			%Combat.switch_player_type(0)
 		%Combat.left_side_player_id = attacker_id
 		%Combat.right_side_player_id = defender_id
+		%Combat.swap_header(false)
 		%Combat.display_allies(attacking_units)
 		%Combat.display_opposition(defending_units)
 	else: #defender
-		%Combat.swap_header(true)
 		%Combat.set_counts(defending_player.Weapons, defending_player.Money,defending_player.Man_power)
 		%Combat.set_opposition_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
 		%Combat.switch_player_type(0)
 		%Combat.left_side_player_id = defender_id
 		%Combat.right_side_player_id = attacker_id
+		%Combat.swap_header(true)
 		%Combat.display_allies(defending_units)
 		%Combat.display_opposition(attacking_units)
 	

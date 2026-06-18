@@ -68,23 +68,26 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	%Building.show()
 	Has_building = true
 
-func add_unit(player:int, type:int, color:Vector3, UUID:String) -> void:
+func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool) -> void:
 	var unique_unit:Resource
 	if type == FIGHTER:
 		unique_unit = fighter_resource.duplicate(true)
 		unique_unit.player_ID = player
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
-		
+	
 	else:
 		unique_unit = influence_resource.duplicate(true)
 		unique_unit.player_ID = player
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
-		
+	
+	
 	unique_unit.unit_UUID = UUID
 	unit_list.append(unique_unit) # ADD UNIT DATA
 	
 	var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
 	unit_visual.Unit_Data = unique_unit
+	if disrupted:
+		unit_visual.set_disrupted()
 	%Units.add_child(unit_visual)
 	reorder_units()
 

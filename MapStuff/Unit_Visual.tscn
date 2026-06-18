@@ -17,6 +17,7 @@ shader_parameter/value = 1.0
 script = ExtResource("1_x8p7o")
 
 [node name="F_sprite" type="Sprite2D" parent="." unique_id=2114500468]
+unique_name_in_owner = true
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")
@@ -24,6 +25,7 @@ position = Vector2(0, -32)
 texture = ExtResource("3_rsuyw")
 
 [node name="I_sprite" type="Sprite2D" parent="." unique_id=983553330]
+unique_name_in_owner = true
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")

@@ -159,7 +159,7 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_da
 			Updates_to_building.color = Values[2]
 			Updates_to_building.location = Values[3]
 		elif Placables.begins_with("Unit:"):
-			Edited_node.add_unit(Values[3], Values[0], Values[4], Values[1])
+			Edited_node.add_unit(Values[3], Values[0], Values[4], Values[1],Values[2])
 			
 			var updated_unit: Resource = Edited_node.unit_list[Edited_node.unit_list.size() - 1] #MONKEYPATCH PLUG IN THE MISSING VALUES
 			updated_unit.unit_type = Values[0]
@@ -384,12 +384,7 @@ func compute_consequences() -> void:
 	var map_node:Node = get_node(map_node_path)
 	map_node.unit_list = losing_units + winning_units
 	map_node.reorder_units()
-	var winning_player:int
-	if attacker_won:
-		winning_player=1
-	else:
-		winning_player=0
-		
+	var winning_player: int = attacking_player if attacker_won else defending_player	
 	var combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,final_damage,winning_player]
 	Request_node_data(map_node.name, combat_data)
 	reset_combat_state()
