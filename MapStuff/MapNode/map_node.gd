@@ -66,8 +66,6 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	%Building.material.set_shader_parameter("saturation", 0.4)
 	%Building.show()
 	Has_building = true
-	#!!!FOR TEST PURPOSES ONLY!!!
-	Overseer.Player_resources_to_rpc.rpc()
 
 func add_unit(player:int, type:int, color:Vector3, UUID:String) -> void:
 	var unique_unit:Resource
