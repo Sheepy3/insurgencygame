@@ -2,9 +2,19 @@
 
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="1_456j5"]
 [ext_resource type="Script" uid="uid://fklv048uap5u" path="res://CombatStuff/combat_actual.gd" id="1_ipkl3"]
+[ext_resource type="Shader" uid="uid://bpf87dwo3epl8" path="res://Assets/Shaders/fade_material.gdshader" id="2_qsta1"]
 [ext_resource type="Texture2D" uid="uid://dldsn1upkphyw" path="res://Assets/Combat_screen.webp" id="3_qsta1"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ipkl3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3i8y7"]
+shader = ExtResource("2_qsta1")
+shader_parameter/progress = 1.0
+shader_parameter/block_size = 2.0
+shader_parameter/softness = 0.0
+
 [node name="Combat" type="Control" unique_id=1693427844]
+material = SubResource("ShaderMaterial_ipkl3")
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,29 +23,39 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ipkl3")
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1408932210]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=843698457]
 unique_name_in_owner = true
+material = SubResource("ShaderMaterial_3i8y7")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -335.0
+offset_top = -162.5
+offset_right = 335.0
+offset_bottom = 162.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1725570964]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1815915073]
+size = Vector2i(670, 325)
+
+[node name="PanelContainer" type="PanelContainer" parent="SubViewportContainer/SubViewport" unique_id=1408932210]
+unique_name_in_owner = true
+offset_right = 670.0
+offset_bottom = 325.0
+size_flags_horizontal = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer" unique_id=1725570964]
 layout_mode = 2
 
-[node name="HeaderContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1096950569]
+[node name="HeaderContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer" unique_id=1096950569]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Attacker_bet" type="Label" parent="PanelContainer/VBoxContainer/HeaderContainer" unique_id=628352120]
+[node name="Attacker_bet" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HeaderContainer" unique_id=628352120]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -43,7 +63,7 @@ theme = ExtResource("1_456j5")
 theme_override_colors/font_color = Color(1, 0, 0.015686275, 1)
 text = "Attacker: ???"
 
-[node name="Attacker_arrow" type="Label" parent="PanelContainer/VBoxContainer/HeaderContainer" unique_id=2072550422]
+[node name="Attacker_arrow" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HeaderContainer" unique_id=2072550422]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
@@ -51,7 +71,7 @@ theme = ExtResource("1_456j5")
 theme_override_colors/font_color = Color(1, 0, 0.015686275, 1)
 horizontal_alignment = 1
 
-[node name="Winner_damage" type="Label" parent="PanelContainer/VBoxContainer/HeaderContainer" unique_id=1811434941]
+[node name="Winner_damage" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HeaderContainer" unique_id=1811434941]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -60,7 +80,7 @@ theme_override_colors/font_color = Color(1, 0, 0.015686275, 1)
 text = "Winner: ??? Damage"
 horizontal_alignment = 1
 
-[node name="Defender_arrow" type="Label" parent="PanelContainer/VBoxContainer/HeaderContainer" unique_id=1486975120]
+[node name="Defender_arrow" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HeaderContainer" unique_id=1486975120]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(15, 0)
 layout_mode = 2
@@ -68,7 +88,7 @@ theme = ExtResource("1_456j5")
 theme_override_colors/font_color = Color(1, 0, 0.015686275, 1)
 horizontal_alignment = 1
 
-[node name="Defender_bet" type="Label" parent="PanelContainer/VBoxContainer/HeaderContainer" unique_id=401239029]
+[node name="Defender_bet" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HeaderContainer" unique_id=401239029]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -78,172 +98,162 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 text = "Defender: ???"
 horizontal_alignment = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1668183708]
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer" unique_id=1668183708]
 layout_mode = 2
 
-[node name="Config_Sidebar" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1532267729]
+[node name="Config_Sidebar" type="VBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1532267729]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Weapons_label2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1590811785]
+[node name="Weapons_label2" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1590811785]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Allocate Resources:"
 
-[node name="Weapons_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=494698509]
+[node name="Weapons_label_and_count" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=494698509]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Weapons_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=1571693529]
+[node name="Weapons_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=1571693529]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "	Weapons:"
 
-[node name="Weapons_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=395428820]
+[node name="Weapons_count" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=395428820]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Weapons_slider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=242508244]
+[node name="Weapons_slider" type="HSlider" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=242508244]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.0
 
-[node name="Money_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1934741973]
+[node name="Money_label_and_count" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1934741973]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Money_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_label_and_count" unique_id=736871737]
+[node name="Money_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_label_and_count" unique_id=736871737]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Money:"
 
-[node name="Money_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_label_and_count" unique_id=2118019317]
+[node name="Money_count" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_label_and_count" unique_id=2118019317]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Money_slider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1653777222]
+[node name="Money_slider" type="HSlider" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1653777222]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.0
 
-[node name="Manpower_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=506519391]
+[node name="Manpower_label_and_count" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=506519391]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Manpower_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_label_and_count" unique_id=955959326]
+[node name="Manpower_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_label_and_count" unique_id=955959326]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Manpower:"
 
-[node name="Manpower_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_label_and_count" unique_id=810146534]
+[node name="Manpower_count" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_label_and_count" unique_id=810146534]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Manpower_slider" type="HSlider" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=984991593]
+[node name="Manpower_slider" type="HSlider" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=984991593]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 0.0
 
-[node name="Control" type="Control" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=755908570]
+[node name="Control" type="Control" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=755908570]
 layout_mode = 2
 
-[node name="Opponent_Label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=889003638]
+[node name="Opponent_Label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=889003638]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Your opponent has:"
 
-[node name="Opposition_Manpower_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=29203397]
+[node name="Opposition_Manpower_label_and_count" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=29203397]
 layout_mode = 2
 
-[node name="Opposition_Manpower_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Manpower_label_and_count" unique_id=1563898541]
+[node name="Opposition_Manpower_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Manpower_label_and_count" unique_id=1563898541]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Manpower:"
 
-[node name="Opposition_Manpower_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Manpower_label_and_count" unique_id=1909682759]
+[node name="Opposition_Manpower_count" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Manpower_label_and_count" unique_id=1909682759]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Opposition_Money_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=990037662]
+[node name="Opposition_Money_label_and_count" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=990037662]
 layout_mode = 2
 
-[node name="Opposition_Money_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Money_label_and_count" unique_id=892955197]
+[node name="Opposition_Money_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Money_label_and_count" unique_id=892955197]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Money:"
 
-[node name="Opposition_Money_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Money_label_and_count" unique_id=575373257]
+[node name="Opposition_Money_count" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Money_label_and_count" unique_id=575373257]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Opposition_Weapons_label_and_count" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1210096565]
+[node name="Opposition_Weapons_label_and_count" type="HBoxContainer" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1210096565]
 layout_mode = 2
 
-[node name="Opposition_Weapons_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Weapons_label_and_count" unique_id=2134878677]
+[node name="Opposition_Weapons_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Weapons_label_and_count" unique_id=2134878677]
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Weapons:"
 
-[node name="Opposition_Weapons_count" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Weapons_label_and_count" unique_id=1516176381]
+[node name="Opposition_Weapons_count" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Opposition_Weapons_label_and_count" unique_id=1516176381]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
-[node name="Opponent_ready_label" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=784002499]
+[node name="Opponent_ready_label" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=784002499]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Your opponent is not ready"
 
-[node name="Control2" type="Control" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=360353903]
+[node name="Control2" type="Control" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=360353903]
 custom_minimum_size = Vector2(212, 0)
 layout_mode = 2
 
-[node name="Ready_Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=64292299]
+[node name="Ready_Button" type="Button" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=64292299]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "Not Ready"
 
-[node name="TextureRect" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1284746358]
+[node name="TextureRect" type="TextureRect" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1284746358]
 layout_mode = 2
 size_flags_vertical = 4
 texture = ExtResource("3_qsta1")
 stretch_mode = 4
 
-[node name="Unit_spawn_2" type="Control" parent="." unique_id=1552240817]
+[node name="Unit_spawn" type="Control" parent="SubViewportContainer/SubViewport/PanelContainer" unique_id=1206338287]
 unique_name_in_owner = true
 z_index = 6
-anchors_preset = 0
-offset_left = 682.0
-offset_top = 336.0
-offset_right = 682.0
-offset_bottom = 336.0
-
-[node name="Unit_spawn_1" type="Control" parent="." unique_id=1206338287]
-unique_name_in_owner = true
-z_index = 6
-layout_mode = 1
-anchors_preset = 0
+layout_mode = 2
 
 [node name="Timer" type="Timer" parent="." unique_id=1834064231]
 unique_name_in_owner = true
 wait_time = 5.0
 one_shot = true
 
-[connection signal="value_changed" from="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_slider" to="." method="_on_weapons_slider_value_changed"]
-[connection signal="value_changed" from="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_slider" to="." method="_on_money_slider_value_changed"]
-[connection signal="value_changed" from="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_slider" to="." method="_on_manpower_slider_value_changed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Ready_Button" to="." method="_on_ready_button_pressed"]
+[connection signal="value_changed" from="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_slider" to="." method="_on_weapons_slider_value_changed"]
+[connection signal="value_changed" from="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_slider" to="." method="_on_money_slider_value_changed"]
+[connection signal="value_changed" from="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_slider" to="." method="_on_manpower_slider_value_changed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Ready_Button" to="." method="_on_ready_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

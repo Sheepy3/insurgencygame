@@ -524,17 +524,31 @@ theme = ExtResource("3_fbkqq")
 text = "Market"
 
 [node name="Node_Info" type="PanelContainer" parent="." unique_id=918072795]
-anchors_preset = 2
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -230.0
 offset_top = -195.0
-offset_right = 230.0
+grow_horizontal = 0
 grow_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Node_Info" unique_id=980163362]
 layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=1781074634]
+layout_mode = 2
+
+[node name="Attack_Button" type="Button" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=271523957]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+disabled = true
+text = "Attack"
+
+[node name="Control" type="Control" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1356406328]
+custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 
 [node name="Clicked_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1044371669]
@@ -547,17 +561,6 @@ label_settings = ExtResource("2_3qqlp")
 layout_mode = 2
 text = "None"
 label_settings = ExtResource("2_3qqlp")
-
-[node name="Control" type="Control" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1356406328]
-custom_minimum_size = Vector2(55, 0)
-layout_mode = 2
-
-[node name="Attack_Button" type="Button" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=271523957]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("3_fbkqq")
-disabled = true
-text = "Attack"
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=1628682351]
 layout_mode = 2

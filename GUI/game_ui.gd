@@ -604,8 +604,9 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	
 	hide_ui()
 	hidden_ui_nodes.erase(%Combat)
-	%Combat.show()
-
+	%Combat.pixel_fade_in()
+	%Pre_Combat.hide()
+	
 func hide_ui() -> void:
 	for node in get_children():
 		if node is CanvasItem and node.visible:
@@ -625,5 +626,5 @@ func _on_precombat_cancel() -> void:
 func _return_ui_after_combat() -> void:
 	update_Player_Info()
 	show_ui()
-	%Combat.hide()
+	%Combat.pixel_fade_out()
 	%Pre_Combat.hide()

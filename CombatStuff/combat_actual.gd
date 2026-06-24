@@ -9,10 +9,14 @@ var my_id:int
 var current_type:int = player_type.COMBATANT
 var left_side_player_id: int = -1
 var right_side_player_id: int = -1
+var _unit_position_update_queued: bool = false
+@onready var viewport_container := %SubViewportContainer
+@onready var fade_material: ShaderMaterial = viewport_container.material
+
 func _ready() -> void:
 	my_id = multiplayer.get_unique_id()
-	get_viewport().size_changed.connect(_on_window_resized)
-	_on_window_resized()
+	get_viewport().size_changed.connect(_queue_unit_position_update)
+	_queue_unit_position_update()
 	Overseer.toggle_ready.connect(_toggle_ready)
 	Overseer.update_combat.connect(_finalize_combat)
 	%Ready_Button.disabled = true
@@ -68,11 +72,16 @@ func swap_header(side_swap:bool) -> void: #pass bool and handle logic in game_ui
 		%HeaderContainer.move_child(%Attacker_bet,0)
 		%HeaderContainer.move_child(%Defender_bet,-1)
 
-func _on_window_resized() -> void:
-	%Unit_spawn_1.position = %PanelContainer.position + Vector2(290,65)
-	%Unit_spawn_2.position = %PanelContainer.position + Vector2(170,125)
-	print("hi")
-	pass
+func _queue_unit_position_update() -> void:
+	if _unit_position_update_queued:
+		return
+	_unit_position_update_queued = true
+	call_deferred("_apply_unit_spawn_positions")
+
+func _apply_unit_spawn_positions() -> void:
+	_unit_position_update_queued = false
+	await get_tree().process_frame
+	%Unit_spawn.position = %PanelContainer.position + Vector2(290, 65)
 
 func display_allies(allies:Array) -> void:
 	var opposition_offset:int = 0
@@ -92,7 +101,7 @@ func display_allies(allies:Array) -> void:
 		if (i % 2 != 0) && count > 2:
 			pass
 			unit_visual.Unit_Data.offcolor = true
-		%Unit_spawn_1.add_child(unit_visual)
+		%Unit_spawn.add_child(unit_visual)
 		unit_visual.position.x -= offsetX
 		unit_visual.position.y += offsetY
 		offsetY+=spacing
@@ -121,7 +130,7 @@ func display_opposition(opps:Array) -> void:
 		if (i % 2 != 0) && count > 2:
 			pass
 			unit_visual.Unit_Data.offcolor = true
-		%Unit_spawn_1.add_child(unit_visual)
+		%Unit_spawn.add_child(unit_visual)
 		unit_visual.position.x += offsetX
 		unit_visual.position.y += offsetY
 		offsetY+=spacing
@@ -217,9 +226,7 @@ func _on_ready_button_pressed() -> void:
 		
 #var combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,final_damage,winning_player]
 func _reset_combat_actual() -> void:
-	for child: Node in %Unit_spawn_1.get_children():
-		child.queue_free()
-	for child: Node in %Unit_spawn_2.get_children():
+	for child: Node in %Unit_spawn.get_children():
 		child.queue_free()
 	%Attacker_bet.text = "Attacker: ???"
 	%Attacker_arrow.text = ""
@@ -273,11 +280,9 @@ func _finalize_combat(combat_data:Array) -> void:
 	var Map_node: Node = get_node(combat_data[0])
 	Map_node.reorder_units()
 
-	for child: Node in %Unit_spawn_1.get_children():
+	for child: Node in %Unit_spawn.get_children():
 		child.queue_free()
-	for child: Node in %Unit_spawn_2.get_children():
-		child.queue_free()
-
+		
 	var left_units: Array = []
 	var right_units: Array = []
 
@@ -300,3 +305,29 @@ func _on_timer_timeout() -> void:
 	print("times up")
 	_reset_combat_actual()
 	combat_over.emit()
+
+func pixel_fade_in(duration: float = 0.5) -> void:
+	show()
+	fade_material.set_shader_parameter("progress", 0.0)
+
+	var tween := create_tween()
+	tween.tween_method(
+		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
+		0.0,
+		1.0,
+		duration
+	)
+	
+func pixel_fade_out(duration: float = 0.5) -> void:
+	fade_material.set_shader_parameter("progress", 1.0)
+
+	var tween := create_tween()
+	tween.tween_method(
+		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
+		1.0,
+		0.0,
+		duration
+	)
+
+	await tween.finished
+	hide()

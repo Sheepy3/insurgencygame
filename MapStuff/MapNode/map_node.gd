@@ -16,6 +16,7 @@ enum{FIGHTER,INFLUENCE}
 
 
 func _ready() -> void:
+	get_parent().find_child("Combat").combat_over.connect(_update_ui)
 	Overseer.Initialization_player_color.connect(Set_player_color)
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	_randomize_sprites()
@@ -37,6 +38,13 @@ func Set_player_color() -> void:
 func _update_label()-> void:
 	$Label.text = name
 
+func _update_ui() -> void:
+	var parent_node:Node  = get_parent()
+	parent_node.find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
+	parent_node.find_child("Dynamic_RPU").text = str(node_RPU.RPU)
+	parent_node.find_child("Dynamic_Pop").text = str(node_RPU.Population)
+	parent_node.find_child("UI").update_node_unit_list(unit_list,name)
+
 # Detects when Node is clicked on by mouse
 func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_idx: int) -> void:
 	if event is InputEventMouseButton \
@@ -44,11 +52,7 @@ func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_i
 	and not event.pressed:
 		#print("you have clicked on Node " + $Label.text) #Prints the name of the node that is clicked on
 		#print(str(node_RPU.RPU) + " " + str(node_RPU.Population))
-		var parent_node:Node  = get_parent()
-		parent_node.find_child("Dynamic_Clicked").text = "Node " + name #probably should be replaced with a signal to UI instead of using find_child, ideally a universal update_UI(label, text) function to update any text in the UI.
-		parent_node.find_child("Dynamic_RPU").text = str(node_RPU.RPU)
-		parent_node.find_child("Dynamic_Pop").text = str(node_RPU.Population)
-		parent_node.find_child("UI").update_node_unit_list(unit_list,name)
+		_update_ui()
 
 		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
 func add_building(player_ID:int, _type:int, color:Vector3) -> void:
