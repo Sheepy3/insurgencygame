@@ -229,24 +229,20 @@ func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 		#if Values[2] == true:
 			#Edited_path.add_logistics_network(Values[3])
 
-@rpc("any_peer","call_local") ## TODO: Fix color of path changing on client from match the last person who placed a network down
+@rpc("any_peer","call_local")
 func New_request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 	if multiplayer.is_server():
-		print("I triggred")
 		var The_Roads:Array = Edited_path_name.split("-")
 		var Edited_path:Node = get_parent().get_child(1).find_child(The_Roads[0]).find_child(Edited_path_name)
 		var Path_data:Dictionary = {"Path_name":Edited_path.name}
 		for indexes:Dictionary in Edited_path.get_property_list(): 
 			if indexes["usage"] == 4102:
 				Path_data[indexes["name"]] = Edited_path.get(indexes["name"])
-		#Give_clients_path_data(Path_data,The_Roads[0],Identify_player(Requester_ID).color)
-		if Edited_path.Has_intel:
+		if Edited_path.Has_intel: 
 			Path_data["intel"] = Edited_path.find_child("Intelligence_Network").material.get_shader_parameter("tint_color")
 		if Edited_path.Has_logs: 
 			Path_data["logs"] = Edited_path.find_child("Logistics_Network").material.get_shader_parameter("tint_color")
-		print("This is the path data: "+str(Path_data))
 		Give_clients_path_data.rpc(Path_data,The_Roads[0],Identify_player(Requester_ID).color)
-
 
 @rpc("authority","call_remote")
 func Give_clients_path_data(New_path_data:Dictionary,The_Road:String,Network_color:Vector3) -> void:
@@ -255,10 +251,14 @@ func Give_clients_path_data(New_path_data:Dictionary,The_Road:String,Network_col
 	New_path_data.erase("Path_name")
 	for Path_info:String in New_path_data.keys():
 		Edited_path.set(Path_info,New_path_data[Path_info])
-	if Edited_path.Has_intel: 
-		Edited_path.add_intel_network(New_path_data["intel"])
-	if Edited_path.Has_logs:
-		Edited_path.add_logistics_network(New_path_data["logs"])
+	for players:int in Edited_path.Has_intel.keys():
+		if  Edited_path.Has_intel[players]: 
+			Edited_path.add_intel_network(New_path_data["intel"])
+			break
+	for players:int in Edited_path.Has_logs.keys():
+		if  Edited_path.Has_logs[players]:
+			Edited_path.add_logistics_network(New_path_data["logs"])
+			break
 
 func Identify_player(Specific_ID:int) -> Resource:
 	var Server_known_player:int = Specific_ID

@@ -1,8 +1,8 @@
 extends Node2D
 signal A_path_clicked(Name: String)
 @export var connection:Vector2
-@export var Has_intel: bool = false
-@export var Has_logs: bool = false 
+@export var Has_intel:Dictionary 
+@export var Has_logs:Dictionary  
 #@export var networks:Array #This variable can be depricated due to lack of use
 
 # Called when the node enters the scene tree for the first time.
@@ -17,6 +17,10 @@ func _ready() -> void:
 	$BackBufferCopy/Mask2.rotation=rotation*-1
 	$BackBufferCopy/Mask.global_position  -=Vector2(0,15)
 	$BackBufferCopy/Mask2.global_position -=Vector2(0,15)
+	if multiplayer.is_server():
+		for players:Resource in Overseer.player_list:
+			Has_intel[players.Player_ID] = false
+			Has_logs[players.Player_ID] = false
 
 	if rad_to_deg(rotation) > 90:
 		%Intelligence_Network.set_flip_v(true)

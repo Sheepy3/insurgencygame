@@ -239,16 +239,6 @@ func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
 	Unique_player_ID = multiplayer.get_unique_id()
-	for players:Resource in Overseer.player_list:
-		if players.Player_ID == multiplayer.get_unique_id():
-			#print("This is "+str(multiplayer.get_unique_id())+"'s player resource:")
-			for indexes:Dictionary in players.get_property_list(): 
-				if indexes["usage"] == 4102:
-					pass
-					#print(indexes)
-			#print("This is palyer "+str(multiplayer.get_unique_id())+"'s resource list: "+str(players.get_property_list()))
-			#print("\n")
-	#Overseer.Player_resources_to_rpc()
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode

@@ -172,13 +172,13 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 			Current_player = Overseer.Identify_player(Player_ID)
 			var Current_path: Node = find_child(Name)
 			if Executing_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] >= 1:
-				if Current_path.Has_intel:
+				if Current_path.Has_intel[Player_ID]:
 					display_action_error("There is already an Intelligence Network on this path!",Player_ID)
 				elif Intell_possible(Current_path.name,Current_player) == true:
 					#print("You have placed a Intelligence network on path " + Name)
 					Current_path.add_intel_network(Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
-					Current_path.Has_intel = true
+					Current_path.Has_intel[Player_ID] = true
 					Intelligence_add_astar_path(Current_path.name,Current_player)
 					Current_player.Player_storage["Intelligence"] -= 1
 					Overseer.Request_path_data(Current_player.Player_ID,Current_path.name)
@@ -189,13 +189,13 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 				display_action_error("You do not have any Intelligence Networks to place!",Player_ID)
 
 			if Executing_action == "Logs_placing" && Current_player.Player_storage["Logistics"] >= 1:
-				if Current_path.Has_logs:
+				if Current_path.Has_logs[Player_ID]:
 					display_action_error("There is already an Logistics Network on this path!",Player_ID)
 				elif Logs_possible(Current_path.name,Current_player) == true:
 					#print("You have placed a Logistics Network on path " + Name)
 					Current_path.add_logistics_network(Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
-					Current_path.Has_logs = true
+					Current_path.Has_logs[Player_ID] = true
 					Logistics_add_astar_path(Current_path.name,Current_player)
 					Current_player.Player_storage["Logistics"] -= 1
 					Overseer.Request_path_data(Current_player.Player_ID,Current_path.name)
