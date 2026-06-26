@@ -85,7 +85,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
 					if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
 						new_unit_UUID = Overseer.Create_unique_ID()
-						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
+						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID,false)
 						source_node.remove_unit(Current_player.Player_ID,FIGHTER)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
@@ -101,7 +101,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
 					if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
 						new_unit_UUID = Overseer.Create_unique_ID()
-						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
+						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID,false)
 						source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
@@ -139,7 +139,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				elif  Fighter_possible(Checked_node.name,Current_player) == true:
 					#print("You have placed a Fighter at a base on node " + Name)
 					new_unit_UUID = Overseer.Create_unique_ID()
-					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID)
+					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID,false)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Fighter"] -= 1
 					Overseer.Request_node_data(Checked_node.name)
@@ -151,7 +151,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				if Influence_possible(Checked_node.name,Current_player) == true:
 					#print("You have placed a Influence on node " + Name)
 					new_unit_UUID = Overseer.Create_unique_ID()
-					Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID)
+					Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID,false)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Influence"] -= 1
 					Overseer.Request_node_data(Checked_node.name)

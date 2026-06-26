@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ck130fomwb5h1"]
+[gd_scene format=3 uid="uid://ck130fomwb5h1"]
 
 [ext_resource type="Script" uid="uid://dyei3nxhc4w6o" path="res://MapStuff/unit_visual.gd" id="1_x8p7o"]
 [ext_resource type="Shader" uid="uid://dirmfbhesf0h7" path="res://Assets/Shaders/Player_Color.gdshader" id="2_wd323"]
@@ -13,17 +13,19 @@ shader_parameter/intensity = 0.2
 shader_parameter/saturation = 13.135
 shader_parameter/value = 1.0
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=284205482]
 script = ExtResource("1_x8p7o")
 
-[node name="F_sprite" type="Sprite2D" parent="."]
+[node name="F_sprite" type="Sprite2D" parent="." unique_id=2114500468]
+unique_name_in_owner = true
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")
 position = Vector2(0, -32)
 texture = ExtResource("3_rsuyw")
 
-[node name="I_sprite" type="Sprite2D" parent="."]
+[node name="I_sprite" type="Sprite2D" parent="." unique_id=983553330]
+unique_name_in_owner = true
 visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")

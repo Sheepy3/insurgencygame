@@ -13,6 +13,7 @@ func _ready() -> void:
 	$Error_Message.hide()
 	%Color_select.disabled = true
 	%Faction_select.disabled = true
+	
 
 func _on_start_button_pressed() -> void:
 	for Players:Resource in Overseer.player_list:
@@ -113,22 +114,9 @@ func _on_color_select_item_selected(index: int) -> void:
 @rpc("any_peer","call_local")
 func Update_player_color(ID:int,Color_ID:int) -> void:
 	if multiplayer.is_server():
-		var Selected_color:Vector3
+		var Selected_color: Vector3 = Overseer.get_player_color_by_index(Color_ID)
 		for player:Resource in Overseer.player_list:
 			if player.Player_ID == ID: 
-				match Color_ID:
-					0:
-						Selected_color = Vector3(223, 0, 81)/255
-					1:
-						Selected_color = Vector3(186, 165, 0)/255
-					2:
-						Selected_color = Vector3(235, 136, 41)/255
-					3:
-						Selected_color = Vector3(46, 197, 0)/255
-					4:
-						Selected_color = Vector3(88, 167, 255)/255
-					5:
-						Selected_color = Vector3(207, 118, 255)/255
 				var picked:bool = false
 				for Sub_player:Resource in Overseer.player_list:
 					if Sub_player.color == Selected_color:
