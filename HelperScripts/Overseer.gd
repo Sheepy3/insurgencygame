@@ -218,6 +218,8 @@ func New_request_node_data(Edited_node_name:String,combat_data:Array = []) -> vo
 		for units:Resource in Edited_node.unit_list:
 			new_node.append(Pack_Resource_data(units))
 		Give_clients_node_data.rpc(Edited_node_name,new_node,combat_data)
+		if !combat_data.is_empty():
+			update_combat.emit(combat_data)
 
 @rpc("authority","call_remote")
 func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:Array = []) -> void:
