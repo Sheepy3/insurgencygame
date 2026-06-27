@@ -174,10 +174,10 @@ func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 			#New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			#x += 1
 		#Update_node_data.rpc(Edited_node.name,New_node,combat_data)
-		New_request_node_data.rpc(Edited_node_name)
+		New_request_node_data.rpc(Edited_node_name,combat_data)
 
-#@rpc("authority", "call_local", "reliable")
-#func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_data:Array = []) -> void:
+@rpc("authority", "call_local", "reliable")
+func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_data:Array = []) -> void:
 	#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 	#var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children() #get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
 	#Edited_node.unit_list.clear()
@@ -193,22 +193,23 @@ func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 			#Updates_to_building.player_ID = Values[1]
 			#Updates_to_building.color = Values[2]
 			#Updates_to_building.location = Values[3]
-		elif Placables.begins_with("Unit:"):
-			Edited_node.add_unit(Values[3], Values[0], Values[4], Values[1],Values[2])
-			
-			var updated_unit: Resource = Edited_node.unit_list[Edited_node.unit_list.size() - 1] #MONKEYPATCH PLUG IN THE MISSING VALUES
-			updated_unit.unit_type = Values[0]
-			updated_unit.unit_UUID = Values[1]
-			updated_unit.disrupted = Values[2]
-			updated_unit.player_ID = Values[3]
-			updated_unit.color = Values[4]
-			updated_unit.offcolor = Values[5]
-			x += 1
-	if !combat_data.is_empty():
-		update_combat.emit(combat_data)
+		#elif Placables.begins_with("Unit:"):
+			#Edited_node.add_unit(Values[3], Values[0], Values[4], Values[1],Values[2])
+			#
+			#var updated_unit: Resource = Edited_node.unit_list[Edited_node.unit_list.size() - 1] #MONKEYPATCH PLUG IN THE MISSING VALUES
+			#updated_unit.unit_type = Values[0]
+			#updated_unit.unit_UUID = Values[1]
+			#updated_unit.disrupted = Values[2]
+			#updated_unit.player_ID = Values[3]
+			#updated_unit.color = Values[4]
+			#updated_unit.offcolor = Values[5]
+			#x += 1
+	#if !combat_data.is_empty():
+		#update_combat.emit(combat_data)
+	pass
 
 @rpc("any_peer","call_local")
-func New_request_node_data(Edited_node_name:String) -> void:
+func New_request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 	if multiplayer.is_server():
 		var new_node:Array
 		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
@@ -216,10 +217,10 @@ func New_request_node_data(Edited_node_name:String) -> void:
 			new_node.append(Pack_Resource_data(Edited_node.building))
 		for units:Resource in Edited_node.unit_list:
 			new_node.append(Pack_Resource_data(units))
-		Give_clients_node_data.rpc(Edited_node_name,new_node)
+		Give_clients_node_data.rpc(Edited_node_name,new_node,combat_data)
 
 @rpc("authority","call_remote")
-func Give_clients_node_data(Edited_node_name:String,Node_info:Array) -> void:
+func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:Array = []) -> void:
 	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 	var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
@@ -240,6 +241,17 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array) -> void:
 			var unit_visual:Node = unit_scene.instantiate()
 			unit_visual.Unit_Data = new_resource
 			Edited_node.find_child("Units").add_child(unit_visual)
+			#var updated_unit: Resource = Edited_node.unit_list[Edited_node.unit_list.size() - 1] #MONKEYPATCH PLUG IN THE MISSING VALUES
+			#updated_unit.unit_type = Values[0]
+			#updated_unit.unit_UUID = Values[1]
+			#updated_unit.disrupted = Values[2]
+			#updated_unit.player_ID = Values[3]
+			#updated_unit.color = Values[4]
+			#updated_unit.offcolor = Values[5]
+			#x += 1
+		Edited_node.reorder_units()
+	if !combat_data.is_empty():
+		update_combat.emit(combat_data)
 
 @rpc("any_peer","call_local")
 func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
@@ -345,6 +357,7 @@ func Pack_Resource_data(Gift:Resource) -> Dictionary: #,args:Array) -> Dictionar
 			else:
 				Wrapped_gift[indexes["name"]] = Gift.get(indexes["name"])
 	return Wrapped_gift
+
 @rpc("any_peer", "call_local", "reliable")
 func request_update_toggle(weapons:int,money:int, manpower:int) -> void:
 	if multiplayer.is_server():

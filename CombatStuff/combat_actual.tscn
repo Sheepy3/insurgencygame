@@ -40,7 +40,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1815915073]
+handle_input_locally = false
 size = Vector2i(670, 325)
+render_target_update_mode = 4
 
 [node name="PanelContainer" type="PanelContainer" parent="SubViewportContainer/SubViewport" unique_id=1408932210]
 unique_name_in_owner = true
