@@ -221,7 +221,7 @@ func New_request_node_data(Edited_node_name:String,combat_data:Array = []) -> vo
 		if !combat_data.is_empty():
 			update_combat.emit(combat_data)
 
-@rpc("authority","call_remote")
+@rpc("authority","call_local","reliable")
 func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:Array = []) -> void:
 	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
 	var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children()
@@ -242,6 +242,8 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 			Edited_node.unit_list.append(new_resource)
 			var unit_visual:Node = unit_scene.instantiate()
 			unit_visual.Unit_Data = new_resource
+			if new_resource.disrupted:
+				unit_visual.set_disrupted()
 			Edited_node.find_child("Units").add_child(unit_visual)
 			#var updated_unit: Resource = Edited_node.unit_list[Edited_node.unit_list.size() - 1] #MONKEYPATCH PLUG IN THE MISSING VALUES
 			#updated_unit.unit_type = Values[0]
