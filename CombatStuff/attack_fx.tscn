@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://3dp7k0iokjn6"]
+
+[ext_resource type="Texture2D" uid="uid://82n1yu1738j3" path="res://Assets/Military/binoculars_thrown.png" id="1_0myw8"]
+[ext_resource type="Script" uid="uid://bijy2powviafx" path="res://CombatStuff/attack_fx.gd" id="2_sfjkm"]
+
+[node name="Control" type="TextureRect" unique_id=2107714376]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+texture = ExtResource("1_0myw8")
+script = ExtResource("2_sfjkm")
+metadata/_edit_use_anchors_ = true

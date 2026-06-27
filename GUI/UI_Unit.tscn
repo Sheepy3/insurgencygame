@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bhdf2v4t2b3wx"]
+[gd_scene format=3 uid="uid://bhdf2v4t2b3wx"]
 
 [ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="1_dkkks"]
 [ext_resource type="Script" uid="uid://cqf1x8j48nehe" path="res://GUI/ui_unit.gd" id="1_pkw48"]
@@ -12,26 +12,28 @@ shader_parameter/intensity = 0.2
 shader_parameter/saturation = 1.0
 shader_parameter/value = 1.0
 
-[node name="UI_Unit_Container" type="PanelContainer"]
+[node name="UI_Unit_Container" type="PanelContainer" unique_id=848486665]
 offset_right = 64.0
 offset_bottom = 99.0
 script = ExtResource("1_pkw48")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1119640271]
 layout_mode = 2
 
-[node name="Move_Button" type="Button" parent="VBoxContainer"]
+[node name="Move_Button" type="Button" parent="VBoxContainer" unique_id=899417166]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_dkkks")
 text = "Move"
 
-[node name="Reconstitution_Button" type="Button" parent="VBoxContainer"]
+[node name="Reconstitution_Button" type="Button" parent="VBoxContainer" unique_id=578601952]
+unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_dkkks")
 disabled = true
 text = "Reconst."
 
-[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=1965007984]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_0tlcp")
 layout_mode = 2
