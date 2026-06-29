@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dteesqpw1o4v5"]
+[gd_scene format=3 uid="uid://dteesqpw1o4v5"]
 
 [ext_resource type="Script" uid="uid://cecjltaerihui" path="res://MapStuff/map.gd" id="1_bhwkw"]
 [ext_resource type="Script" uid="uid://dos6ix3a4pbte" path="res://GUI/camera_2d.gd" id="3_ftre2"]
@@ -6,26 +6,26 @@
 [ext_resource type="PackedScene" uid="uid://qt1ubvjmkebw" path="res://GUI/Game_Config.tscn" id="5_4jjmt"]
 [ext_resource type="PackedScene" uid="uid://d2snlsfd0fnws" path="res://MapStuff/MapGeneration/map_builder.tscn" id="5_lwl08"]
 
-[node name="Map_parent" type="Node2D"]
+[node name="Map_parent" type="Node2D" unique_id=1726476680]
 script = ExtResource("1_bhwkw")
 
-[node name="Board" type="Sprite2D" parent="."]
+[node name="Board" type="Sprite2D" parent="." unique_id=852724472]
 light_mask = 2
 visibility_layer = 2
 z_index = -3
 texture_filter = 1
 scale = Vector2(1.00098, 1)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=135349975]
 zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 position_smoothing_speed = 30.0
 script = ExtResource("3_ftre2")
 
-[node name="UI" parent="." instance=ExtResource("3_vxjy0")]
+[node name="UI" parent="." unique_id=717350063 instance=ExtResource("3_vxjy0")]
 visible = false
 
-[node name="GameConfig" parent="." instance=ExtResource("5_4jjmt")]
+[node name="GameConfig" parent="." unique_id=1863104179 instance=ExtResource("5_4jjmt")]
 visible = false
 
-[node name="MapBuilder" parent="." instance=ExtResource("5_lwl08")]
+[node name="MapBuilder" parent="." unique_id=434470944 instance=ExtResource("5_lwl08")]

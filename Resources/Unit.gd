@@ -6,3 +6,4 @@ class_name Unit
 @export var player_ID:int
 @export var color:Vector3
 @export var offcolor:bool
+@export var been_reconstituted:bool = false

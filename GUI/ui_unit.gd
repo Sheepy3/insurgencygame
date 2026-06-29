@@ -3,6 +3,7 @@ var FighterSprite:Texture2D = preload("res://Assets/Military/soldier.png")
 var InfluenceSprite:Texture2D = preload("res://Assets/Military/binoculars.png")
 var unit_resource: Resource
 var source_node: String
+var disrupted: bool
 signal move_unit(unit_resource: Resource, source_node: String)
 
 enum unit_type {
@@ -43,3 +44,6 @@ func Check_unit_phase()-> void:
 	else:
 		$VBoxContainer/Move_Button.set_disabled(true)
 		$VBoxContainer/Reconstitution_Button.set_disabled(true)
+func enable_reconstitution() -> void:
+	%Move_Button.disabled = true
+	%Reconstitution_Button.disabled = false

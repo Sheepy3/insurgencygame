@@ -4,6 +4,8 @@ var Store_action: String = ""
 var last_clicked_node:String = ""
 var Unique_player_ID:int 
 var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
+var UI_pre_combat_Scene: PackedScene = preload("res://CombatStuff/pre_combat.tscn")
+var hidden_ui_nodes: Array[CanvasItem] = []
 var Preview_placables:Array = [
 	preload("res://Assets/Icons/gun.png"),
 	preload("res://Assets/Military/Tent.png"),
@@ -12,7 +14,6 @@ var Preview_placables:Array = [
 	preload("res://Assets/Icons/IntelNetwork.png"),
 	preload("res://Assets/Icons/LogiNetwork.png")
 ]
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Open_Market_Button.set_disabled(true)
@@ -21,6 +22,9 @@ func _ready() -> void:
 	Overseer.change_phase.connect(_phase_switch_ui)
 	#Overseer.change_phase.connect()
 	Overseer.game_started.connect(connect_update_UI)
+	%Combat.combat_over.connect(_return_ui_after_combat)
+	$Pre_Combat.initialize_pressed.connect(_on_precombat_initialize)
+	$Pre_Combat.cancel_pressed.connect(_on_precombat_cancel)
 	get_parent().find_child("Camera2D").clouds.connect(_toggle_clouds)
 	#Overseer.cycle_players()
 	_phase_switch_ui()
@@ -259,6 +263,8 @@ func connect_update_UI() -> void:
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
 	reset_node_unit_list()
+	var player_unit_count:int = 0
+	var enemy_unit_count:int = 0	
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
@@ -269,6 +275,16 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 			#new_unit_display.set_type(unit.unit_type)
 			new_unit_display.Check_unit_phase()
 			%Unit_Display.add_child(new_unit_display)
+			player_unit_count+=1
+			if unit.disrupted:
+				new_unit_display.enable_reconstitution()
+			
+		else:
+			enemy_unit_count+=1
+	if player_unit_count > 0 and enemy_unit_count > 0:
+		%Attack_Button.disabled = false
+	else:
+		%Attack_Button.disabled = true
 
 func move_unit_function(unit_resource:Resource, source_node:String) -> void:
 	print("move unit from " + source_node)
@@ -538,3 +554,150 @@ func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> v
 			else:
 				$Next_Phase_Button.text = "NO!"
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggel_status)
+@rpc("any_peer","call_local")
+func request_pre_combat_ui(map_node_path:NodePath) -> void:
+	if multiplayer.is_server():
+		var player_id:int = multiplayer.get_remote_sender_id() # attacker ID
+		var map_node:Node = get_node(map_node_path)
+		print(map_node.unit_list)
+		var fighter_count:int = 0
+		var influence_count:int = 0 
+		var players_involved:Array
+		for unit:Resource in map_node.unit_list:
+			if unit.player_ID != player_id and not players_involved.has(unit.player_ID):
+				players_involved.append(unit.player_ID)
+			if unit.player_ID == player_id:
+				if unit.unit_type == 0:
+					fighter_count +=1
+				else:
+					influence_count +=1
+		display_pre_combat.rpc(player_id, fighter_count, influence_count,players_involved)
+
+@rpc("authority", "call_local")
+func display_pre_combat(id:int, fighter_count:int, influence_count:int,players_involved:Array) -> void:
+	if multiplayer.get_unique_id() == id:
+		$Pre_Combat.set_counts(fighter_count, influence_count,players_involved)
+		hide_ui()
+		hidden_ui_nodes.erase($Pre_Combat)
+		$Pre_Combat.show()
+
+
+func _on_attack_button_pressed() -> void:
+	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
+	request_pre_combat_ui.rpc(map_node)
+	
+func _on_precombat_initialize(attacking_fighters:int, attacking_influence:int, target_player_id: int) -> void:
+	var map_node:NodePath =get_parent().find_child(last_clicked_node).get_path()
+	print(attacking_fighters)
+	print(attacking_influence)
+	print(target_player_id)
+	_request_combat.rpc(attacking_fighters,attacking_influence,target_player_id,map_node)
+
+@rpc("any_peer", "call_local", "reliable")
+func _request_combat(attacking_fighters:int, attacking_influence:int, target_player_id: int, map_node_path:NodePath) -> void:
+	if multiplayer.is_server():
+		var player_id: int = multiplayer.get_remote_sender_id()
+		if player_id == 0:
+			player_id = multiplayer.get_unique_id()
+		var map_node:Node = get_node(map_node_path)
+		var attacking_fighters_found:Array = []
+		var attacking_influence_found:Array = []
+		var defending_units:Array = []
+		for unit:Resource in map_node.unit_list:
+			if unit.player_ID == player_id:
+				if unit.unit_type == 0:
+					attacking_fighters_found.append(unit)
+				else:
+					attacking_influence_found.append(unit)
+			if unit.player_ID == target_player_id:
+				defending_units.append(unit)
+		if attacking_fighters_found.size() < attacking_fighters || attacking_influence_found.size() < attacking_influence: #check if client is lying
+			print("bad combat request. attacking fighters: " + str(attacking_fighters) + ", but fighters found: "+ str(attacking_fighters_found.size()))
+			return
+		
+		#var final_attacking_units:Array = attacking_fighters_found.slice(0, attacking_fighters-1) + attacking_influence_found.slice(0, attacking_influence-1) 
+		var final_attacking_units: Array = []
+		for i: int in range(min(attacking_fighters, attacking_fighters_found.size())):
+			final_attacking_units.append(attacking_fighters_found[i])
+		for i: int in range(min(attacking_influence, attacking_influence_found.size())):
+			final_attacking_units.append(attacking_influence_found[i])
+			
+		Overseer.defending_units = defending_units
+		Overseer.attacking_units = final_attacking_units
+		Overseer.map_node_path = map_node_path
+		print(final_attacking_units)
+		_initialize_combat.rpc(player_id,target_player_id,attacking_fighters, attacking_influence, map_node_path )
+	
+
+@rpc("any_peer", "call_local", "reliable")
+func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int, attacking_influence:int, map_node_path:NodePath) -> void:
+	var map_node:Node = get_node(map_node_path)
+	var attacking_units:Array = []
+	var defending_units:Array = []
+	var attacking_fighters_collected:int = 0
+	var attacking_influence_collected:int = 0
+	for unit:Resource in map_node.unit_list:
+			if unit.player_ID == attacker_id:
+				if unit.unit_type == 0 && (attacking_fighters_collected < attacking_fighters):
+					attacking_units.append(unit)
+					attacking_fighters_collected += 1
+				elif unit.unit_type == 1 && (attacking_influence_collected < attacking_influence):
+					attacking_units.append(unit)
+					attacking_influence_collected += 1
+			elif unit.player_ID == defender_id:
+				defending_units.append(unit)
+	var attacking_player:Resource = Overseer.Identify_player(attacker_id)
+	var defending_player:Resource = Overseer.Identify_player(defender_id)
+	Overseer.attacking_player = attacker_id
+	Overseer.defending_player = defender_id
+	Overseer.attacker_ready = false
+	Overseer.defender_ready = false
+	%Combat.my_id = multiplayer.get_unique_id()
+	if multiplayer.get_unique_id() != defender_id: #attacker
+		%Combat.set_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
+		%Combat.set_opposition_counts(defending_player.Weapons,defending_player.Money,defending_player.Man_power)
+		if multiplayer.get_unique_id() != attacker_id: #spectators 
+			%Combat.switch_player_type(1)
+		else:
+			%Combat.switch_player_type(0)
+		%Combat.left_side_player_id = attacker_id
+		%Combat.right_side_player_id = defender_id
+		%Combat.swap_header(false)
+		%Combat.display_allies(attacking_units)
+		%Combat.display_opposition(defending_units)
+	else: #defender
+		%Combat.set_counts(defending_player.Weapons, defending_player.Money,defending_player.Man_power)
+		%Combat.set_opposition_counts(attacking_player.Weapons, attacking_player.Money,attacking_player.Man_power)
+		%Combat.switch_player_type(0)
+		%Combat.left_side_player_id = defender_id
+		%Combat.right_side_player_id = attacker_id
+		%Combat.swap_header(true)
+		%Combat.display_allies(defending_units)
+		%Combat.display_opposition(attacking_units)
+	
+	hide_ui()
+	hidden_ui_nodes.erase(%Combat)
+	%Combat.pixel_fade_in()
+	%Pre_Combat.hide()
+	
+func hide_ui() -> void:
+	for node in get_children():
+		if node is CanvasItem and node.visible:
+			hidden_ui_nodes.append(node)
+			node.visible = false
+
+func show_ui() -> void:
+	#print(hidden_ui_nodes)
+	for node in hidden_ui_nodes:
+		node.visible = true
+	hidden_ui_nodes.clear()
+
+func _on_precombat_cancel() -> void:
+	show_ui()
+	$Pre_Combat.hide()
+
+func _return_ui_after_combat() -> void:
+	update_Player_Info()
+	show_ui()
+	%Combat.pixel_fade_out()
+	%Pre_Combat.hide()
