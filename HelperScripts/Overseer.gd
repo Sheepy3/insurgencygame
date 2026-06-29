@@ -410,6 +410,7 @@ func Profit_and_Taxes()-> void:
 			Resources_to_rpc()
 		else:
 			pass
+
 func Instantiate_by_class_name(class_name_string: StringName) -> Object:
 	var class_list:Array = ProjectSettings.get_global_class_list()  
 	for script_info:Dictionary in class_list:

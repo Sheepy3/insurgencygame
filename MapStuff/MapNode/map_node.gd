@@ -33,6 +33,10 @@ func _ready() -> void:
 				pass
 				#print(hexes.position.distance_squared_to(position))
 
+func Set_player_color() -> void:
+	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
+	Overseer.Initialization_player_color.disconnect(Set_player_color) 
+
 func _update_label()-> void:
 	$Label.text = name
 
@@ -91,7 +95,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool) 
 	if disrupted:
 		unit_visual.set_disrupted()
 	%Units.add_child(unit_visual)
-	_reorder_units()
+	reorder_units()
 	get_parent().find_child("UI").update_node_unit_list(unit_list,name)
 
 func has_unit(player:int, type:int) -> bool:

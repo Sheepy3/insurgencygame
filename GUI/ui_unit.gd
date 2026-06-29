@@ -44,6 +44,7 @@ func Check_unit_phase()-> void:
 	else:
 		$VBoxContainer/Move_Button.set_disabled(true)
 		$VBoxContainer/Reconstitution_Button.set_disabled(true)
+
 func enable_reconstitution() -> void:
 	%Move_Button.disabled = true
 	%Reconstitution_Button.disabled = false

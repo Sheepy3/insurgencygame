@@ -16,7 +16,7 @@ var Preview_placables:Array = [
 ]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Open_Market_Button.set_disabled(true)
+	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
@@ -141,8 +141,8 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Muster forces"
 		8:
 			$Current_Phase.text = "UN Intervention"
-	$Next_Phase_Button.set_pressed_no_signal(false)
-	$Next_Phase_Button.text = "NEXT PHASE???"
+	%Next_Phase_Button.set_pressed_no_signal(false)
+	%Next_Phase_Button.text = "NEXT PHASE???"
 
 @rpc("authority","call_local")
 func action_error(error_message:String, player_ID:int) -> void:
@@ -155,7 +155,7 @@ func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
 
 func _on_open_market_button_pressed() -> void:
-	$Open_Market_Button.hide()
+	%Open_Market_Button.hide()
 	%Support_store_window.show()
 	#!!! Reminder !!! The portion below is added for testing purposes
 	# Should be depricated when testing is finished
@@ -195,7 +195,7 @@ func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 
 func _on_support_store_window_close_requested() -> void:
 	%Support_store_window.hide()
-	$Open_Market_Button.show()
+	%Open_Market_Button.show()
 
 func _on_support_store_window_window_input(event: InputEvent) -> void:
 	$Store_bounds.global_position = %Support_store_window.position 
@@ -310,11 +310,11 @@ func Check_store_unlocked() -> void:
 		if checked_node.Has_building && checked_node.building.player_ID == Unique_player_ID:
 			Meets_condition += 1
 	if Meets_condition >= 1 && Overseer.current_phase == Overseer.PURCHASE:
-		$Open_Market_Button.set_disabled(false)
+		%Open_Market_Button.set_disabled(false)
 	else:
-		if !$Open_Market_Button.is_visible():
-			$Open_Market_Button.show()
-		$Open_Market_Button.set_disabled(true)
+		if !%Open_Market_Button.is_visible():
+			%Open_Market_Button.show()
+		%Open_Market_Button.set_disabled(true)
 		$Support_store_window.hide()
 
 @rpc("any_peer","call_local")
@@ -508,15 +508,15 @@ func _on_next_phase_button_toggled(toggled_on: bool) -> void:
 		Check_completed_setup.rpc(multiplayer.get_unique_id(),toggled_on)
 	else:
 		if toggled_on:
-			$Next_Phase_Button.text = "YES!"
+			%Next_Phase_Button.text = "YES!"
 		else:
-			$Next_Phase_Button.text = "NO!"
+			%Next_Phase_Button.text = "NO!"
 		Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
 
 func Update_available_buttons() -> void:
 	if Overseer.current_phase == Overseer.INTERVENTION:
 		Change_available_buttons(true,true,true)
-		$Next_Phase_Button.set_disabled(true)
+		%Next_Phase_Button.set_disabled(true)
 	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
 		Change_available_buttons(true,false,false)
 	elif Overseer.current_phase == Overseer.PURCHASE:
@@ -547,13 +547,14 @@ func Check_completed_setup(Requester_ID:int,Button_status:bool) -> void:
 func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> void:
 	if multiplayer.get_unique_id() == Overseer.Identify_player(OG_requester).Player_ID:
 		if !move_on:
-			$Next_Phase_Button.set_pressed_no_signal(false)
+			%Next_Phase_Button.set_pressed_no_signal(false)
 		else:
 			if toggel_status:
-				$Next_Phase_Button.text = "YES!"
+				%Next_Phase_Button.text = "YES!"
 			else:
-				$Next_Phase_Button.text = "NO!"
+				%Next_Phase_Button.text = "NO!"
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggel_status)
+
 @rpc("any_peer","call_local")
 func request_pre_combat_ui(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
