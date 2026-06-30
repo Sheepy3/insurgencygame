@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Overseer="*res://HelperScripts/Overseer.gd"
+ButtonStyler="*res://HelperScripts/ButtonStyler.gd"
 
 [debug]
 

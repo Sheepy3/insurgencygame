@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ckhg5l58ejmnb"
-path="res://.godot/imported/dock_left.png-7e0a226cf96e8a84ced9527cec3dc9a4.ctex"
+uid="uid://bnmj5nxhhm6o6"
+path="res://.godot/imported/0_1.png-8f0ecd752ee9cd81726692923955d2e6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Map_Tiles/dock_left.png"
-dest_files=["res://.godot/imported/dock_left.png-7e0a226cf96e8a84ced9527cec3dc9a4.ctex"]
+source_file="res://Assets/RPU_Tokens/old/0_1.png"
+dest_files=["res://.godot/imported/0_1.png-8f0ecd752ee9cd81726692923955d2e6.ctex"]
 
 [params]
 

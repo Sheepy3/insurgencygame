@@ -193,6 +193,17 @@ func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 		#Update_node_data.rpc(Edited_node.name,New_node,combat_data)
 		New_request_node_data.rpc(Edited_node_name,combat_data)
 
+
+func _find_current_scene_node(node_name: String) -> Node:
+	var current_scene := get_tree().current_scene
+	if current_scene == null:
+		push_error("Cannot find '%s': there is no current scene." % node_name)
+		return null
+	var found_node := current_scene.find_child(node_name, true, false)
+	if found_node == null:
+		push_error("Cannot find '%s' below current scene '%s'." % [node_name, current_scene.name])
+	return found_node
+
 @rpc("authority", "call_local", "reliable")
 func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_data:Array = []) -> void:
 	#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
@@ -229,7 +240,9 @@ func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_da
 func New_request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 	if multiplayer.is_server():
 		var new_node:Array
-		var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+		var Edited_node:Node = _find_current_scene_node(Edited_node_name)
+		if Edited_node == null:
+			return
 		if Edited_node.Has_building == true:
 			new_node.append(Pack_Resource_data(Edited_node.building))
 		for units:Resource in Edited_node.unit_list:
@@ -240,7 +253,9 @@ func New_request_node_data(Edited_node_name:String,combat_data:Array = []) -> vo
 
 @rpc("authority","call_local","reliable")
 func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:Array = []) -> void:
-	var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+	var Edited_node:Node = _find_current_scene_node(Edited_node_name)
+	if Edited_node == null:
+		return
 	var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
 	for existing_units:Node in Present_unit_list:
@@ -308,7 +323,7 @@ func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 func New_request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 	if multiplayer.is_server():
 		var The_Roads:Array = Edited_path_name.split("-")
-		var Edited_path:Node = get_parent().get_child(1).find_child(The_Roads[0]).find_child(Edited_path_name)
+		var Edited_path:Node = _find_current_scene_node(The_Roads[0]).find_child(Edited_path_name)
 		var Path_data:Dictionary = {"Path_name":Edited_path.name}
 		for indexes:Dictionary in Edited_path.get_property_list(): 
 			if indexes["usage"] == 4102:
@@ -322,7 +337,7 @@ func New_request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 @rpc("authority","call_remote")
 func Give_clients_path_data(New_path_data:Dictionary,The_Road:String,Network_color:Vector3) -> void:
 	The_networks.clear()
-	var Edited_path:Node = get_parent().get_child(1).find_child(The_Road).find_child(New_path_data["Path_name"])
+	var Edited_path:Node = _find_current_scene_node(The_Road).find_child(New_path_data["Path_name"])
 	New_path_data.erase("Path_name")
 	for Path_info:String in New_path_data.keys():
 		Edited_path.set(Path_info,New_path_data[Path_info])
@@ -394,10 +409,10 @@ func Profit_and_Taxes()-> void:
 						else:
 							players.Money -= 4
 					else:
-						players.Man_power += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
-						players.Money += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
+						players.Man_power += (_find_current_scene_node(str(bases.location)).node_RPU.Population * 2) 
+						players.Money += (_find_current_scene_node(str(bases.location)).node_RPU.RPU* 2)
 				for node_names:String in The_nodes.keys():
-					var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
+					var Checking_node:Node = _find_current_scene_node(node_names)
 					for unit:Resource in Checking_node.unit_list:
 						if current_phase == MAINTENENCE:
 							if unit.player_ID == players.Player_ID:
