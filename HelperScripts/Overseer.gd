@@ -104,6 +104,8 @@ func cycle_phases() -> void:
 		change_phase.emit()
 	elif current_phase < COLLECT:
 		current_phase+=1
+		if current_phase == PLACE_INFRASTRUCTURE:
+			Clear_unit_movement_exclusives()
 		change_phase.emit()
 	elif current_phase == INITIAL_DEPLOY:
 		current_phase = COLLECT
@@ -643,3 +645,9 @@ func reset_combat_state() -> void:
 	attacking_units = []
 	defending_units = []
 	map_node_path = NodePath("")
+
+func Clear_unit_movement_exclusives() -> void:
+	for key_names:String in The_nodes.keys():
+		var A_map_node:Node = get_parent().get_child(1).find_child(key_names)
+		if A_map_node.unit_list.size() > 0:
+			A_map_node.Reset_combat_data()

@@ -231,3 +231,9 @@ func _process(_delta:float) -> void:
 	var color:Vector3 = Player_color #get_parent().Current_player.color 
 	var color_2:Vector4 = Vector4(color.x,color.y,color.z,0.5)
 	%Selection_Circle.material.set_shader_parameter("color", color_2)
+
+func Reset_combat_data() -> void:
+	for units:Resource in unit_list:
+		units.been_reconstituted = false
+		units.has_moved = false
+	Overseer.Request_node_data(name)
