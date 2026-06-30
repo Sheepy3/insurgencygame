@@ -7,3 +7,4 @@ class_name Unit
 @export var color:Vector3
 @export var offcolor:bool
 @export var been_reconstituted:bool = false
+@export var has_moved:bool = false

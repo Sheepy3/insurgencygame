@@ -42,3 +42,4 @@ texture = ExtResource("3_8scry")
 stretch_mode = 3
 
 [connection signal="pressed" from="VBoxContainer/Move_Button" to="." method="_on_move_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Reconstitution_Button" to="." method="_on_reconstitution_button_pressed"]

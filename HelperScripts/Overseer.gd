@@ -30,6 +30,7 @@ signal player_resources_updated
 signal Initialization_player_color
 signal toggle_ready(player:int)
 signal update_combat(map_node_path:NodePath)
+signal Received_node_data
 
 #func populate_player_list(Game_Size:int)-> void:
 	#for x:int in range(Game_Size):
@@ -177,7 +178,6 @@ func Rpc_to_player_resources(new_player_info:Array) -> void:
 
 @rpc("any_peer","call_local")
 func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
-	var New_node:Dictionary
 	if multiplayer.is_server():
 		#var New_node:Dictionary
 		#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
@@ -273,6 +273,7 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 		Edited_node.reorder_units()
 	if !combat_data.is_empty():
 		update_combat.emit(combat_data)
+	Received_node_data.emit()
 
 @rpc("any_peer","call_local")
 func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:

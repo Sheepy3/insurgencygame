@@ -84,9 +84,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				print("moving fighter from " + str(unpacked_node) + " to " + Name)
 				var source_node:Node = find_child(str(unpacked_node))
 				if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
-					if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
-						new_unit_UUID = Overseer.Create_unique_ID()
-						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID,false)
+					var The_fighter:Resource = source_node.Find_first_of_unit(Current_player.Player_ID, FIGHTER)
+					if Fighter_movement_possible(int(Name),unpacked_node,Player_ID,The_fighter.has_moved):
+						#new_unit_UUID = Overseer.Create_unique_ID()
+						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,The_fighter.unit_UUID,false,true)
 						source_node.remove_unit(Current_player.Player_ID,FIGHTER)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
@@ -100,9 +101,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				print("moving influence from " + str(unpacked_node) + " to " + Name)
 				var source_node:Node = find_child(str(unpacked_node))
 				if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
-					if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
-						new_unit_UUID = Overseer.Create_unique_ID()
-						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID,false)
+					var The_influence:Resource = source_node.Find_first_of_unit(Current_player.Player_ID, INFLUENCE)
+					if Influence_movement_possible(int(Name),unpacked_node,Player_ID,The_influence.has_moved):
+						#new_unit_UUID = Overseer.Create_unique_ID()
+						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,The_influence.unit_UUID,false,true)
 						source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
@@ -336,40 +338,48 @@ func Fighter_possible(Node_name:String,Checked_player:Resource) -> bool:
 		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
 		return false
 
-func Fighter_movement_possible(from:int, to:int, Player_ID:int) -> bool:
+func Fighter_movement_possible(from:int, to:int, Player_ID:int,Checked_unit:bool) -> bool:
 	if Overseer.current_phase == Overseer.UNIT_MOVEMENT:
-		var logs_map:AStar2D = Overseer.The_networks[Player_ID][1]
-		var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
-		
-		var logs_pathfind:int = logs_map.get_id_path(from,to,false).size()
-		var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
-		
-		if (intel_pathfind <= 3) and (logs_pathfind <= 3):
-			if  (intel_pathfind > 0) and (logs_pathfind > 0):
-				return true
-			else:
-				display_action_error("Fighters can only move to nodes connected by logi. and intel networks!", Player_ID)
-				return false
-		else:
-			display_action_error("Fighters can only move 2 nodes!", Player_ID)
+		if Checked_unit:
+			display_action_error("You have already moved this unit!",Player_ID)
 			return false
+		else:
+			var logs_map:AStar2D = Overseer.The_networks[Player_ID][1]
+			var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
+			
+			var logs_pathfind:int = logs_map.get_id_path(from,to,false).size()
+			var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
+			
+			if (intel_pathfind <= 3) and (logs_pathfind <= 3):
+				if  (intel_pathfind > 0) and (logs_pathfind > 0):
+					return true
+				else:
+					display_action_error("Fighters can only move to nodes connected by logi. and intel networks!", Player_ID)
+					return false
+			else:
+				display_action_error("Fighters can only move 2 nodes!", Player_ID)
+				return false
 	else:
 		display_action_error("You cant do that in this phase!", Player_ID)
 		return false
 
-func Influence_movement_possible(from:int, to:int, Player_ID:int) -> bool:
+func Influence_movement_possible(from:int, to:int, Player_ID:int,Checked_unit:bool) -> bool:
 	if Overseer.current_phase == Overseer.UNIT_MOVEMENT:
-		var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
-		var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
-		if (intel_pathfind <= 2):
-			if  (intel_pathfind > 0):
-				return true
-			else:
-				display_action_error("Influence can only move to nodes connected by intel networks!", Player_ID)
-				return false
-		else:
-			display_action_error("Influence can only move 1 node!", Player_ID)
+		if Checked_unit:
+			display_action_error("You have already moved this unit!",Player_ID)
 			return false
+		else:
+			var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
+			var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
+			if (intel_pathfind <= 2):
+				if  (intel_pathfind > 0):
+					return true
+				else:
+					display_action_error("Influence can only move to nodes connected by intel networks!", Player_ID)
+					return false
+			else:
+				display_action_error("Influence can only move 1 node!", Player_ID)
+				return false
 	else:
 		display_action_error("You cant do that in this phase!", Player_ID)
 		return false

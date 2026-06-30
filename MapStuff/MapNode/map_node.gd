@@ -19,6 +19,7 @@ func _ready() -> void:
 	Overseer.Resources_to_rpc()
 	Player_color = Overseer.Identify_player(multiplayer.get_unique_id()).color
 	get_parent().find_child("Combat").combat_over.connect(_update_ui)
+	Overseer.Received_node_data.connect(_update_ui)
 	Overseer.Initialization_player_color.connect(Set_player_color)
 	$Map_Node_Area2D.set_pickable(true) #sets-up the clickable area for the map nodes
 	_randomize_sprites()
@@ -57,6 +58,7 @@ func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_i
 		_update_ui()
 
 		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
+
 func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)
 	node_owner = str(player_ID) #player_list[Overseer.selected_player_index].Player_name
@@ -74,7 +76,7 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	%Building.show()
 	Has_building = true
 
-func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool) -> void:
+func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool, DID_HE_MOVED:bool = false, is_reconstituted:bool = false) -> void:
 	var unique_unit:Resource
 	if type == FIGHTER:
 		unique_unit = fighter_resource.duplicate(true)
@@ -86,8 +88,9 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool) 
 		unique_unit.player_ID = player
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
 	
-	
+	unique_unit.has_moved = DID_HE_MOVED
 	unique_unit.unit_UUID = UUID
+	unique_unit.been_reconstituted = is_reconstituted
 	unit_list.append(unique_unit) # ADD UNIT DATA
 	
 	var unit_visual := unit_scene.instantiate() #GENERATE VISUAL
@@ -104,19 +107,35 @@ func has_unit(player:int, type:int) -> bool:
 			return true
 	return false
 
-func remove_unit(player:int,type:int) -> void: ## TODO: HANDLE RECONSTITUTABLE UNITS (THIS DOES NOT CARE ABOUT UNIT STATE, CURRENTLY ONLY TYPE AND PLAYER)
-	for unit:Resource in unit_list: # DELETE UNIT DATA
+func remove_unit(player:int,type:int,search_by_UUID:bool = false,UUID:String = "") -> void: ## TODO: HANDLE RECONSTITUTABLE UNITS (THIS DOES NOT CARE ABOUT UNIT STATE, CURRENTLY ONLY TYPE AND PLAYER) 
+	if search_by_UUID:                                                                              ## chat we fixed this ^
+		for unit:Resource in unit_list: # DELETE UNIT DATA
+			if (unit.player_ID == player) and (unit.unit_type == type) and (unit.unit_UUID == UUID):
+				unit_list.erase(unit) 
+				break
+		for unit:Node in %Units.get_children(): # DELETE UNIT VISUAL
+			if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type) and (unit.Unit_Data.unit_UUID == UUID):
+				unit.queue_free()
+				await unit.tree_exited
+				reorder_units()
+				break
+	else:
+		for unit:Resource in unit_list: # DELETE UNIT DATA
+			if (unit.player_ID == player) and (unit.unit_type == type):
+				unit_list.erase(unit) 
+				break
+		for unit:Node in %Units.get_children(): # DELETE UNIT VISUAL
+			if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type):
+				unit.queue_free()
+				await unit.tree_exited
+				reorder_units()
+				break
+
+func Find_first_of_unit(player:int, type:int) -> Resource:
+	for unit:Resource in unit_list:
 		if (unit.player_ID == player) and (unit.unit_type == type):
-			unit_list.erase(unit) 
-			break
-	for unit:Node in %Units.get_children(): # DELETE UNIT VISUAL
-		if (unit.Unit_Data.player_ID == player) and (unit.Unit_Data.unit_type == type):
-			unit.queue_free()
-			await unit.tree_exited
-			reorder_units()
-			break
-
-
+			return unit
+	return Resource.new()
 
 func reorder_units() -> void:
 	var nodes:Array = %Units.get_children()

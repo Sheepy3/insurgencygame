@@ -264,21 +264,21 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
 	reset_node_unit_list()
 	var player_unit_count:int = 0
-	var enemy_unit_count:int = 0	
+	var enemy_unit_count:int = 0
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
 			new_unit_display.unit_resource = unit
 			new_unit_display.source_node = str(mapnode)
 			new_unit_display.move_unit.connect(move_unit_function)
-			#new_unit_display.set_color(unit.color)
-			#new_unit_display.set_type(unit.unit_type)
+			new_unit_display.attmepted_reconstitution.connect(Call_reconst_function)
+			new_unit_display.set_color(unit.color)
+			new_unit_display.set_type(unit.unit_type)
 			new_unit_display.Check_unit_phase()
 			%Unit_Display.add_child(new_unit_display)
 			player_unit_count+=1
-			if unit.disrupted:
-				new_unit_display.enable_reconstitution()
-			
+			#if unit.disrupted:
+				#new_unit_display.enable_reconstitution()
 		else:
 			enemy_unit_count+=1
 	if player_unit_count > 0 and enemy_unit_count > 0:
@@ -702,3 +702,59 @@ func _return_ui_after_combat() -> void:
 	show_ui()
 	%Combat.pixel_fade_out()
 	%Pre_Combat.hide()
+
+func Call_reconst_function(Player_ID:int,units_type:int,unit_ID:String,node_name:String) -> void:
+	Reconstitution_possible.rpc(Player_ID,units_type,unit_ID,node_name)
+
+@rpc("any_peer","call_local")
+func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_name:String) -> void:
+	if multiplayer.is_server():
+		var Player_resource:Resource = Overseer.Identify_player(Caller_ID)
+		var Edited_node:Node = get_parent().find_child(node_name)
+		var checked_unit:Resource
+		for units:Resource in Edited_node.unit_list:
+			if units.disrupted and units.unit_UUID == unit_UUID:
+				checked_unit =  units
+		if checked_unit:
+			match unit_type:
+				0:
+					if Player_resource.Player_faction == 1:
+						if Player_resource.Man_power >= 4 and Player_resource.Money >= 8 and Player_resource.Weapons >= 4:
+							Player_resource.Man_power -= 4
+							Player_resource.Money -= 8
+							Player_resource.Weapons -= 4
+							Edited_node.remove_unit(Player_resource.Player_ID,0,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,0,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+					else:
+						if Player_resource.Man_power >= 3 and Player_resource.Money >= 5 and Player_resource.Weapons >= 3:
+							Player_resource.Man_power -= 3
+							Player_resource.Money -= 5
+							Player_resource.Weapons -= 3
+							Edited_node.remove_unit(Player_resource.Player_ID,0,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,0,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+				1:
+					if Player_resource.Player_faction == 1:
+						if Player_resource.Man_power >= 4 and Player_resource.Money >= 13:
+							Player_resource.Man_power -= 4
+							Player_resource.Money -= 13
+							Edited_node.remove_unit(Player_resource.Player_ID,1,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,1,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+					else:
+						if Player_resource.Man_power >= 3 and Player_resource.Money >= 8:
+							Player_resource.Man_power -= 3
+							Player_resource.Money -= 8
+							Edited_node.remove_unit(Player_resource.Player_ID,1,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,1,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+		else:
+			print("\nSomething is worong here...\n")
+
+# Weapons Money Man_power
+			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)

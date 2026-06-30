@@ -5,6 +5,7 @@ var unit_resource: Resource
 var source_node: String
 var disrupted: bool
 signal move_unit(unit_resource: Resource, source_node: String)
+signal attmepted_reconstitution(Player_ID:int,units_type:int,unit_ID:String,node_name:String)
 
 enum unit_type {
 	Fighter,
@@ -38,13 +39,24 @@ func _on_move_button_pressed() -> void:
 func Check_unit_phase()-> void:
 	print("This is the current phase: "+str(Overseer.current_phase))
 	if Overseer.current_phase == Overseer.UNIT_MOVEMENT:
-		$VBoxContainer/Move_Button.set_disabled(false)
+		if unit_resource.been_reconstituted or unit_resource.has_moved:
+			%Move_Button.set_disabled(true)
+			%Reconstitution_Button.set_disabled(true)
+		elif unit_resource.disrupted:
+			%Move_Button.set_disabled(true)
+			%Reconstitution_Button.set_disabled(false)
+		else:
+			%Move_Button.set_disabled(false)
 	elif Overseer.current_phase == Overseer.PURCHASE:
-		$VBoxContainer/Reconstitution_Button.set_disabled(false)
+		if unit_resource.disrupted:
+			%Reconstitution_Button.set_disabled(false)
 	else:
-		$VBoxContainer/Move_Button.set_disabled(true)
-		$VBoxContainer/Reconstitution_Button.set_disabled(true)
+		%Move_Button.set_disabled(true)
+		%Reconstitution_Button.set_disabled(true)
 
 func enable_reconstitution() -> void:
 	%Move_Button.disabled = true
 	%Reconstitution_Button.disabled = false
+
+func _on_reconstitution_button_pressed() -> void:
+	attmepted_reconstitution.emit(multiplayer.get_unique_id(),unit_resource.unit_type,unit_resource.unit_UUID,source_node)
