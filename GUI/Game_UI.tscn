@@ -49,19 +49,14 @@ offset_left = 232.0
 offset_top = 64.0
 offset_right = 267.0
 offset_bottom = 122.0
-text = "<"
-
-[node name="Close_Info_Button" type="Button" parent="." unique_id=577688532]
-layout_direction = 4
-offset_left = 610.0
-offset_right = 628.0
-offset_bottom = 40.0
+theme = ExtResource("3_fbkqq")
 text = "<"
 
 [node name="Action_Container" type="PanelContainer" parent="." unique_id=122628786]
 offset_top = 64.0
 offset_right = 232.0
 offset_bottom = 421.0
+theme = ExtResource("3_fbkqq")
 
 [node name="Purchase_preview_timer" type="Timer" parent="Action_Container" unique_id=1422258315]
 wait_time = 4.5
@@ -134,13 +129,14 @@ label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=741442794]
+z_index = 1
 layout_mode = 2
 
 [node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=778075643 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
-text = "Buy"
+text = " Buy "
 
 [node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1902198732 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
@@ -172,10 +168,11 @@ theme = ExtResource("3_fbkqq")
 text = "Buy"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1091863742]
+z_index = 1
 layout_mode = 2
 
 [node name="Control" type="Control" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=884511078]
-custom_minimum_size = Vector2(0, 27)
+custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 
 [node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1314151927 groups=["PLACE_MILITARY_PHASE_BUTTON"]]
@@ -304,62 +301,67 @@ horizontal_alignment = 1
 [node name="Error_timer" type="Timer" parent="." unique_id=1619178676]
 wait_time = 3.0
 
-[node name="Player_Info" type="PanelContainer" parent="." unique_id=1306428175]
-offset_right = 530.0
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1593208647]
+offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Player_Info" unique_id=241141480]
+[node name="Player_Info" type="PanelContainer" parent="HBoxContainer" unique_id=1306428175]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Player_Info" unique_id=241141480]
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=1933350601]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=1933350601]
 layout_mode = 2
 texture = ExtResource("5_tsku8")
 expand_mode = 2
 
-[node name="Guns" type="Label" parent="Player_Info/HBoxContainer" unique_id=185321698]
+[node name="Guns" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=185321698]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect2" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=187787]
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=187787]
 layout_mode = 2
 texture = ExtResource("6_pqiix")
 expand_mode = 2
 
-[node name="Money" type="Label" parent="Player_Info/HBoxContainer" unique_id=1891773717]
+[node name="Money" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=1891773717]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect3" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=2121623612]
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=2121623612]
 layout_mode = 2
 texture = ExtResource("7_sw8an")
 expand_mode = 2
 
-[node name="Population" type="Label" parent="Player_Info/HBoxContainer" unique_id=302881614]
+[node name="Population" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=302881614]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect4" type="TextureRect" parent="Player_Info/HBoxContainer" unique_id=30395559]
+[node name="TextureRect4" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=30395559]
 layout_mode = 2
 texture = ExtResource("8_n388q")
 expand_mode = 2
 
-[node name="VictoryPoints" type="Label" parent="Player_Info/HBoxContainer" unique_id=918409969]
+[node name="VictoryPoints" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=918409969]
 layout_mode = 2
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Spacer" type="Control" parent="Player_Info/HBoxContainer" unique_id=1099731667]
+[node name="Spacer" type="Control" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=1099731667]
 custom_minimum_size = Vector2(14.05, 0)
 layout_mode = 2
 
-[node name="Spacer2" type="Control" parent="Player_Info/HBoxContainer" unique_id=1149095525]
+[node name="Spacer2" type="Control" parent="HBoxContainer/Player_Info/HBoxContainer" unique_id=1149095525]
 custom_minimum_size = Vector2(310, 0)
 layout_mode = 2
 
-[node name="TextureRect5" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1256353942]
+[node name="TextureRect5" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=1256353942]
 layout_mode = 0
 offset_left = 18.0
 offset_right = 58.0
@@ -367,7 +369,7 @@ offset_bottom = 40.0
 texture = ExtResource("9_yb2yk")
 expand_mode = 2
 
-[node name="Fighter_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1590725689]
+[node name="Fighter_count" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=1590725689]
 layout_mode = 0
 offset_left = 62.0
 offset_top = 10.0
@@ -376,7 +378,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect6" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=154197470]
+[node name="TextureRect6" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=154197470]
 layout_mode = 0
 offset_left = 75.0
 offset_right = 115.0
@@ -384,7 +386,7 @@ offset_bottom = 40.0
 texture = ExtResource("10_82g8w")
 expand_mode = 2
 
-[node name="Influence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=396573021]
+[node name="Influence_count" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=396573021]
 layout_mode = 0
 offset_left = 119.0
 offset_top = 10.0
@@ -393,7 +395,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect7" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=413583324]
+[node name="TextureRect7" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=413583324]
 layout_mode = 0
 offset_left = 132.0
 offset_right = 172.0
@@ -401,7 +403,7 @@ offset_bottom = 40.0
 texture = ExtResource("11_0wnlq")
 expand_mode = 2
 
-[node name="Base_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=126547056]
+[node name="Base_count" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=126547056]
 layout_mode = 0
 offset_left = 176.0
 offset_top = 10.0
@@ -410,7 +412,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect8" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1496364789]
+[node name="TextureRect8" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=1496364789]
 layout_mode = 0
 offset_left = 189.0
 offset_right = 229.0
@@ -418,7 +420,7 @@ offset_bottom = 40.0
 texture = ExtResource("12_yb2yk")
 expand_mode = 2
 
-[node name="Intelligence_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=334391359]
+[node name="Intelligence_count" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=334391359]
 layout_mode = 0
 offset_left = 233.0
 offset_top = 10.0
@@ -427,7 +429,7 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="TextureRect9" type="TextureRect" parent="Player_Info/HBoxContainer/Spacer2" unique_id=87142579]
+[node name="TextureRect9" type="TextureRect" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=87142579]
 layout_mode = 0
 offset_left = 246.0
 offset_right = 286.0
@@ -435,7 +437,7 @@ offset_bottom = 40.0
 texture = ExtResource("13_82g8w")
 expand_mode = 2
 
-[node name="Logistics_count" type="Label" parent="Player_Info/HBoxContainer/Spacer2" unique_id=1279719389]
+[node name="Logistics_count" type="Label" parent="HBoxContainer/Player_Info/HBoxContainer/Spacer2" unique_id=1279719389]
 layout_mode = 0
 offset_left = 290.0
 offset_top = 10.0
@@ -444,12 +446,20 @@ offset_bottom = 29.0
 text = "0"
 label_settings = ExtResource("2_3qqlp")
 
+[node name="Close_Info_Button" type="Button" parent="HBoxContainer" unique_id=577688532]
+unique_name_in_owner = true
+layout_direction = 4
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+text = "<"
+
 [node name="Support_store_window" type="Window" parent="." unique_id=2053279193]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Support Market"
 position = Vector2i(0, 36)
 size = Vector2i(165, 100)
+visible = false
 min_size = Vector2i(165, 100)
 max_size = Vector2i(165, 100)
 
@@ -552,6 +562,7 @@ text = "NEXT PHASE???"
 [node name="Node_Info" type="PanelContainer" parent="VBoxContainer" unique_id=918072795]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("3_fbkqq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Node_Info" unique_id=980163362]
 layout_mode = 2
