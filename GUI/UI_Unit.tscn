@@ -24,6 +24,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_dkkks")
+disabled = true
 text = "Move"
 
 [node name="Reconstitution_Button" type="Button" parent="VBoxContainer" unique_id=578601952]
@@ -41,3 +42,4 @@ texture = ExtResource("3_8scry")
 stretch_mode = 3
 
 [connection signal="pressed" from="VBoxContainer/Move_Button" to="." method="_on_move_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Reconstitution_Button" to="." method="_on_reconstitution_button_pressed"]

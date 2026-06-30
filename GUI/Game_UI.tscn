@@ -51,7 +51,14 @@ offset_right = 267.0
 offset_bottom = 122.0
 text = "<"
 
-[node name="Action_Container" type="PanelContainer" parent="." unique_id=1290009684]
+[node name="Close_Info_Button" type="Button" parent="." unique_id=577688532]
+layout_direction = 4
+offset_left = 610.0
+offset_right = 628.0
+offset_bottom = 40.0
+text = "<"
+
+[node name="Action_Container" type="PanelContainer" parent="." unique_id=122628786]
 offset_top = 64.0
 offset_right = 232.0
 offset_bottom = 421.0
@@ -126,76 +133,76 @@ text = "Logistics"
 label_settings = ExtResource("2_3qqlp")
 vertical_alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1114561132]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=741442794]
 layout_mode = 2
 
-[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=857227100]
-layout_mode = 2
-size_flags_vertical = 4
-theme = ExtResource("3_fbkqq")
-text = "Buy"
-
-[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1628236930]
+[node name="Weapons_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=778075643 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1791855036]
+[node name="Base_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1902198732 groups=["PURCHASE_PHASE_BUTTONS"]]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("3_fbkqq")
+text = "Buy"
+
+[node name="Fighter_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1467880052 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=349717379]
+[node name="Influence_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=984577820 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1642589049]
+[node name="Intelligence_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1946652052 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1335015401]
+[node name="Logistics_Network_Buy_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer2" unique_id=1840041959 groups=["PURCHASE_PHASE_BUTTONS"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Buy"
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1026092951]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables" unique_id=1091863742]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1817766929]
+[node name="Control" type="Control" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=884511078]
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 
-[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1234028650]
+[node name="Base_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1314151927 groups=["PLACE_MILITARY_PHASE_BUTTON"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=700340699]
+[node name="Fighter_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1915714525 groups=["PLACE_MILITARY_PHASE_BUTTON"]]
 layout_mode = 2
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.0
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=556204986]
+[node name="Influence_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1153853310 groups=["PLACE_INFRASTRUCTURE_PHASE_BUTTON"]]
 layout_mode = 2
 size_flags_vertical = 4
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=1828544941]
+[node name="Intelligence_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=27424906 groups=["PLACE_INFRASTRUCTURE_PHASE_BUTTON"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
 
-[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=2065613899]
+[node name="Logistics_Network_Place_Button" type="Button" parent="Action_Container/VBoxContainer/HBox_Buy_Placeables/VBoxContainer3" unique_id=119891609 groups=["PLACE_INFRASTRUCTURE_PHASE_BUTTON"]]
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 text = "Place"
@@ -509,98 +516,110 @@ position = Vector2(165, 100)
 scale = Vector2(0.949999, 1)
 enable_node_path = NodePath("../../Support_store_window")
 
-[node name="Open_Market_Button" type="Button" parent="." unique_id=1620508103]
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -62.0
-offset_top = -13.5
-offset_bottom = 13.5
-grow_horizontal = 0
-grow_vertical = 2
-theme = ExtResource("3_fbkqq")
-text = "Market"
-
-[node name="Node_Info" type="PanelContainer" parent="." unique_id=918072795]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1293227730]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -230.0
-offset_top = -195.0
+offset_top = -139.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Node_Info" unique_id=980163362]
+[node name="HBoxContainer" type="BoxContainer" parent="VBoxContainer" unique_id=218959028]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Open_Market_Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1620508103]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("3_fbkqq")
+text = "Market"
+
+[node name="HBoxContainer2" type="BoxContainer" parent="VBoxContainer" unique_id=1634381290]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Next_Phase_Button" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=941914121]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_fbkqq")
+toggle_mode = true
+text = "NEXT PHASE???"
+
+[node name="Node_Info" type="PanelContainer" parent="VBoxContainer" unique_id=918072795]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=1781074634]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Node_Info" unique_id=980163362]
 layout_mode = 2
 
-[node name="Attack_Button" type="Button" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=271523957]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/Node_Info/VBoxContainer" unique_id=1781074634]
+layout_mode = 2
+
+[node name="Attack_Button" type="Button" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2" unique_id=271523957]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("3_fbkqq")
 disabled = true
 text = "Attack"
 
-[node name="Control" type="Control" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1356406328]
+[node name="Control" type="Control" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2" unique_id=1356406328]
 custom_minimum_size = Vector2(55, 0)
 layout_mode = 2
 
-[node name="Clicked_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1044371669]
+[node name="Clicked_Label" type="Label" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2" unique_id=1044371669]
 texture_filter = 1
 layout_mode = 2
 text = " Clicked:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_Clicked" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer2" unique_id=1921552710]
+[node name="Dynamic_Clicked" type="Label" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2" unique_id=1921552710]
 layout_mode = 2
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=1628682351]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer/Node_Info/VBoxContainer" unique_id=1628682351]
 layout_mode = 2
 
-[node name="RPU_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer3" unique_id=171537813]
+[node name="RPU_Label" type="Label" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer3" unique_id=171537813]
 texture_filter = 1
 layout_mode = 2
 text = " RPU:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_RPU" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer3" unique_id=636634722]
+[node name="Dynamic_RPU" type="Label" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer3" unique_id=636634722]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="Node_Info/VBoxContainer" unique_id=717552253]
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer/Node_Info/VBoxContainer" unique_id=717552253]
 layout_mode = 2
 
-[node name="Pop_Label" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer4" unique_id=1594978661]
+[node name="Pop_Label" type="Label" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer4" unique_id=1594978661]
 texture_filter = 1
 layout_mode = 2
 text = " Population:"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="Dynamic_Pop" type="Label" parent="Node_Info/VBoxContainer/HBoxContainer4" unique_id=169381849]
+[node name="Dynamic_Pop" type="Label" parent="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer4" unique_id=169381849]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "None"
 label_settings = ExtResource("2_3qqlp")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Node_Info/VBoxContainer" unique_id=1254184405]
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Node_Info/VBoxContainer" unique_id=1254184405]
 layout_mode = 2
 mouse_filter = 0
 mouse_force_pass_scroll_events = false
 vertical_scroll_mode = 0
 
-[node name="Unit_Display" type="HBoxContainer" parent="Node_Info/VBoxContainer/ScrollContainer" unique_id=268745545]
+[node name="Unit_Display" type="HBoxContainer" parent="VBoxContainer/Node_Info/VBoxContainer/ScrollContainer" unique_id=268745545]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -647,5 +666,6 @@ visible = false
 [connection signal="screen_exited" from="Store_bounds/Top_right" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Bottom_left" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Bottom_right" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
-[connection signal="pressed" from="Open_Market_Button" to="." method="_on_open_market_button_pressed"]
-[connection signal="pressed" from="Node_Info/VBoxContainer/HBoxContainer2/Attack_Button" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Open_Market_Button" to="." method="_on_open_market_button_pressed"]
+[connection signal="toggled" from="VBoxContainer/HBoxContainer2/Next_Phase_Button" to="." method="_on_next_phase_button_toggled"]
+[connection signal="pressed" from="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2/Attack_Button" to="." method="_on_attack_button_pressed"]

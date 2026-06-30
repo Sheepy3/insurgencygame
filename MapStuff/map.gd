@@ -15,6 +15,7 @@ func _process(_delta: float) -> void:
 		Current_node.flare.rpc(multiplayer.get_unique_id())
 
 func initialize(size:int) -> void:
+	#Overseer.game_started.connect(State_second_placing) # here for the testing and vibes (remove me when I work)
 	$UI.The_action.connect(Update_action)
 	$UI.show()
 	var num: int = 1 #iterator for name
@@ -83,9 +84,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				print("moving fighter from " + str(unpacked_node) + " to " + Name)
 				var source_node:Node = find_child(str(unpacked_node))
 				if source_node && source_node.has_unit(Current_player.Player_ID, FIGHTER):
-					if Fighter_movement_possible(int(Name),unpacked_node,Player_ID):
-						new_unit_UUID = Overseer.Create_unique_ID()
-						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID,false)
+					var The_fighter:Resource = source_node.Find_first_of_unit(Current_player.Player_ID, FIGHTER)
+					if Fighter_movement_possible(int(Name),unpacked_node,Player_ID,The_fighter.has_moved):
+						#new_unit_UUID = Overseer.Create_unique_ID()
+						Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,The_fighter.unit_UUID,false,true)
 						source_node.remove_unit(Current_player.Player_ID,FIGHTER)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
@@ -99,9 +101,10 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				print("moving influence from " + str(unpacked_node) + " to " + Name)
 				var source_node:Node = find_child(str(unpacked_node))
 				if source_node && source_node.has_unit(Current_player.Player_ID, INFLUENCE):
-					if Influence_movement_possible(int(Name),unpacked_node,Player_ID):
-						new_unit_UUID = Overseer.Create_unique_ID()
-						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID,false)
+					var The_influence:Resource = source_node.Find_first_of_unit(Current_player.Player_ID, INFLUENCE)
+					if Influence_movement_possible(int(Name),unpacked_node,Player_ID,The_influence.has_moved):
+						#new_unit_UUID = Overseer.Create_unique_ID()
+						Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,The_influence.unit_UUID,false,true)
 						source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
@@ -114,29 +117,19 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 				if Checked_node.Has_building:
 					display_action_error("There is already a base on this node!",Player_ID)
 				#elif Current_player.base_list.size() > 0:
+				elif Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
+					display_action_error("You do not have any Military Bases to place!",Player_ID)
 				elif Base_possible(Checked_node.name,Current_player,Checked_node) == true:
 					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Military_Base"] -= 1
 					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
-				elif Current_player.base_list.size() == 0 && Current_player.Player_storage["Military_Base"] >= 1:
-					#print("You have placed a base on node " + Name)
-					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
-					#find_child("Dynamic_Action").text = "None"
-					Current_player.Player_storage["Military_Base"] -= 1
-					#print(type_string(typeof(Current_node.name)))
-					Overseer.Request_node_data(Checked_node.name)
-					Overseer.Resources_to_rpc()
-				else:
-					display_action_error("You do not have the conditions to place a Base!",Player_ID)
-			elif Executing_action == "Base_placing" && Current_player.Player_storage["Military_Base"] < 1:
-				display_action_error("You do not have any Military Bases to place!",Player_ID)
 
 			if Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] >= 1:
-				if Fighter_possible(Checked_node.name,Current_player) == false:
-					display_action_error("Fighters must be placed at your own base!",Player_ID)
-				elif  Fighter_possible(Checked_node.name,Current_player) == true:
+				#if Fighter_possible(Checked_node.name,Current_player) == false:
+					#display_action_error("Fighters must be placed at your own base!",Player_ID)
+				if  Fighter_possible(Checked_node.name,Current_player) == true:
 					#print("You have placed a Fighter at a base on node " + Name)
 					new_unit_UUID = Overseer.Create_unique_ID()
 					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID,false)
@@ -156,8 +149,8 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Current_player.Player_storage["Influence"] -= 1
 					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
-				else:
-					display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)
+				#else:
+					#display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!",Player_ID)
 			elif Executing_action == "Influence_placing" && Current_player.Player_storage["Influence"] < 1:
 				display_action_error("You do not have any Influence units to place!",Player_ID)
 
@@ -183,8 +176,8 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 					Current_player.Player_storage["Intelligence"] -= 1
 					Overseer.Request_path_data(Current_player.Player_ID,Current_path.name)
 					Overseer.Resources_to_rpc()
-				else:
-					display_action_error("You must place Intelligence Networks next to an existing one!",Player_ID)
+				#else:
+					#display_action_error("You must place Intelligence Networks next to an existing one!",Player_ID)
 			elif Executing_action == "Intel_placing" && Current_player.Player_storage["Intelligence"] < 1:
 				display_action_error("You do not have any Intelligence Networks to place!",Player_ID)
 
@@ -200,8 +193,8 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 					Current_player.Player_storage["Logistics"] -= 1
 					Overseer.Request_path_data(Current_player.Player_ID,Current_path.name)
 					Overseer.Resources_to_rpc()
-				else:
-					display_action_error("You must place Logistics Networks next to an existing one!",Player_ID)
+				#else:
+					#display_action_error("You must place Logistics Networks next to an existing one!",Player_ID)
 			elif Executing_action == "Logs_placing" && Current_player.Player_storage["Logistics"] < 1:
 				display_action_error("You do not have any Logistics Networks to place!",Player_ID)
 
@@ -218,85 +211,228 @@ func Intelligence_add_astar_path(Road:String,Checked_player:Resource)-> void:
 	#Overseer.Intelligence_array[Overseer.selected_player_index].connect_points(int(The_Roads[0]),int(The_Roads[1]),true)
 
 func Base_possible(Desired:String,Checked_player:Resource,Checked_node:Node)-> bool:
-	if Checked_node.Has_building == true:
+	if Overseer.current_phase == Overseer.PLACE_MILITARY:
+		if Checked_node.Has_building == true:
+			return false
+		else:
+			for x:Resource in Checked_player.base_list:
+				var Existing:int = x.location
+				var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
+				var logs_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][1]
+				if logs_map.get_id_path(Existing,int(Desired),false).size() > 0 and intel_map.get_id_path(Existing,int(Desired),false).size() > 0:
+				#Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0:
+					return true
+		display_action_error("You do not have the conditions to place a Base!", Checked_player.Player_ID)
 		return false
-	else:
-		for x:Resource in Checked_player.base_list:
-			var Existing:int = x.location
-			var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
-			var logs_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][1]
-			if logs_map.get_id_path(Existing,int(Desired),false).size() > 0 and intel_map.get_id_path(Existing,int(Desired),false).size() > 0:
-			#Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0 and Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0:
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_node.Has_building == true:
+			return false
+		else:
+			if Checked_player.Player_faction == 1:
+				if State_second_placing(Checked_player,"Military_Base",Desired):
+					return true
+				else:
+					return false
+			else:
 				return true
-	return false
+	else:
+		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
+		return false
 
 func Intell_possible(Desired:String,Checked_player:Resource)-> bool:
-	var The_Roads: Array = Desired.split("-")
-	var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
-	for x:Resource in Checked_player.base_list:
-		var Existing:int = x.location
-		if intel_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or intel_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
-		#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
-			return true
-	return false
+	if Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+		var The_Roads: Array = Desired.split("-")
+		var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
+		for x:Resource in Checked_player.base_list:
+			var Existing:int = x.location
+			if intel_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or intel_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+			#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+				return true
+		display_action_error("You must place Intelligence Networks next to an existing one!", Checked_player.Player_ID)
+		return false
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_player.Player_faction == 1:
+			if State_second_placing(Checked_player,"Intelligence",Desired):
+				return true
+			else:
+				return false
+		else:
+			var The_Roads: Array = Desired.split("-")
+			var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
+			for x:Resource in Checked_player.base_list:
+				var Existing:int = x.location
+				if intel_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or intel_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+					return true
+			display_action_error("You must place Intelligence Networks next to an existing one!", Checked_player.Player_ID)
+			return false
+	else:
+		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
+		return false
 
 func Logs_possible(Desired:String,Checked_player:Resource)-> bool:
-	var The_Roads: Array = Desired.split("-")
-	var logs_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][1]
-	for x:Resource in Checked_player.base_list:
-		var Existing:int = x.location
-		if logs_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or logs_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
-		#Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
-			return true
-	return false
+	if Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+		var The_Roads: Array = Desired.split("-")
+		var logs_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][1]
+		for x:Resource in Checked_player.base_list:
+			var Existing:int = x.location
+			if logs_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or logs_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+			#Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or Overseer.Logistics_array[Overseer.selected_player_index].get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+				return true
+		display_action_error("You must place Logistics Networks next to an existing one!", Checked_player.Player_ID)
+		return false
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_player.Player_faction == 1:
+			if State_second_placing(Checked_player,"Logistics",Desired):
+				return true
+			else:
+				return false
+		else:
+			var The_Roads: Array = Desired.split("-")
+			var logs_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][1]
+			for x:Resource in Checked_player.base_list:
+				var Existing:int = x.location
+				if logs_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or logs_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+					return true
+			display_action_error("You must place Logistics Networks next to an existing one!", Checked_player.Player_ID)
+			return false
+	else:
+		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
+		return false
 
 func Influence_possible(Desired:String,Checked_player:Resource)-> bool:
-	for x:Resource in Checked_player.base_list:
-		var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
-		var Existing:int = x.location
-		if intel_map.get_id_path(Existing,int(Desired),false).size() > 0: 
-		#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0: 
-			return true
-	return false
+	if Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+		for x:Resource in Checked_player.base_list:
+			var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
+			var Existing:int = x.location
+			if intel_map.get_id_path(Existing,int(Desired),false).size() > 0: 
+			#Overseer.Intelligence_array[Overseer.selected_player_index].get_id_path(Existing,int(Desired),false).size() > 0: 
+				return true
+		display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!", Checked_player.Player_ID)
+		return false
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		if Checked_player.Player_faction == 1:
+			if State_second_placing(Checked_player,"Influence",Desired):
+				return true
+			else:
+				return false
+		else:
+			for x:Resource in Checked_player.base_list:
+				var intel_map:AStar2D = Overseer.The_networks[Checked_player.Player_ID][0]
+				var Existing:int = x.location
+				if intel_map.get_id_path(Existing,int(Desired),false).size() > 0: 
+					return true
+			display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!", Checked_player.Player_ID)
+			return false
+	else:
+		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
+		return false
 
 func Fighter_possible(Node_name:String,Checked_player:Resource) -> bool:
-	var Targeted_node:Node = find_child(Node_name)
-	if Targeted_node.Has_building && Targeted_node.building.color == Checked_player.color:
-		return true
+	if Overseer.current_phase == Overseer.PLACE_MILITARY:
+		var Targeted_node:Node = find_child(Node_name)
+		if Targeted_node.Has_building && Targeted_node.building.color == Checked_player.color:
+			return true
+		display_action_error("Fighters must be placed at your own base!", Checked_player.Player_ID)
+		return false
+	else:
+		display_action_error("You cant do that in this phase!", Checked_player.Player_ID)
+		return false
+
+func Fighter_movement_possible(from:int, to:int, Player_ID:int,Checked_unit:bool) -> bool:
+	if Overseer.current_phase == Overseer.UNIT_MOVEMENT:
+		if Checked_unit:
+			display_action_error("You have already moved this unit!",Player_ID)
+			return false
+		else:
+			var logs_map:AStar2D = Overseer.The_networks[Player_ID][1]
+			var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
+			
+			var logs_pathfind:int = logs_map.get_id_path(from,to,false).size()
+			var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
+			
+			if (intel_pathfind <= 3) and (logs_pathfind <= 3):
+				if  (intel_pathfind > 0) and (logs_pathfind > 0):
+					return true
+				else:
+					display_action_error("Fighters can only move to nodes connected by logi. and intel networks!", Player_ID)
+					return false
+			else:
+				display_action_error("Fighters can only move 2 nodes!", Player_ID)
+				return false
+	else:
+		display_action_error("You cant do that in this phase!", Player_ID)
+		return false
+
+func Influence_movement_possible(from:int, to:int, Player_ID:int,Checked_unit:bool) -> bool:
+	if Overseer.current_phase == Overseer.UNIT_MOVEMENT:
+		if Checked_unit:
+			display_action_error("You have already moved this unit!",Player_ID)
+			return false
+		else:
+			var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
+			var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
+			if (intel_pathfind <= 2):
+				if  (intel_pathfind > 0):
+					return true
+				else:
+					display_action_error("Influence can only move to nodes connected by intel networks!", Player_ID)
+					return false
+			else:
+				display_action_error("Influence can only move 1 node!", Player_ID)
+				return false
+	else:
+		display_action_error("You cant do that in this phase!", Player_ID)
+		return false
+
+func State_second_placing(State_player:Resource,Placable:String,Desired:String) -> bool:
+	if State_player.Player_storage[Placable] > 1:
+		match Placable:
+			"Military_Base":
+				return true
+				#for x:Resource in State_player.base_list:
+					#print(State_player.base_list)
+					#var Existing:int = x.location
+					#var intel_map:AStar2D = Overseer.The_networks[State_player.Player_ID][0]
+					#var logs_map:AStar2D = Overseer.The_networks[State_player.Player_ID][1]
+					#if logs_map.get_id_path(Existing,int(Desired),false).size() > 0 and intel_map.get_id_path(Existing,int(Desired),false).size() > 0:
+						#return true
+			"Intelligence":
+				var The_Roads:Array = Desired.split("-")
+				var intel_map:AStar2D = Overseer.The_networks[State_player.Player_ID][0]
+				for x:Resource in State_player.base_list:
+					var Existing:int = x.location
+					if intel_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or intel_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+						return true
+				display_action_error("You must place Intelligence Networks next to an existing one!", State_player.Player_ID)
+			"Logistics":
+				var The_Roads: Array = Desired.split("-")
+				var logs_map:AStar2D = Overseer.The_networks[State_player.Player_ID][1]
+				for x:Resource in State_player.base_list:
+					var Existing:int = x.location
+					if logs_map.get_id_path(int(The_Roads[0]),Existing,false).size() > 0 or logs_map.get_id_path(int(The_Roads[1]),Existing,false).size() > 0:
+						return true
+				display_action_error("You must place Logistics Networks next to an existing one!", State_player.Player_ID)
+			"Influence":
+				for x:Resource in State_player.base_list:
+					var intel_map:AStar2D = Overseer.The_networks[State_player.Player_ID][0]
+					var Existing:int = x.location
+					if intel_map.get_id_path(Existing,int(Desired),false).size() > 0: 
+						return true
+				display_action_error("Influence must be placed on a node connected to a base by Intelligence networks!", State_player.Player_ID)
+	else:
+		var Non_state_players:Array
+		var count:int
+		for players:Resource in Overseer.player_list:
+			if players.Player_faction != 1:
+				Non_state_players.append(players)
+		for non_states:Resource in Non_state_players:
+			if non_states.Player_storage.values().max() == 0:
+				count += 1
+		if count == Non_state_players.size():
+			return true
+		display_action_error("Non State players need to place all of their pieces first!", State_player.Player_ID)
+		return false
 	return false
-
-func Fighter_movement_possible(from:int, to:int, Player_ID:int) -> bool:
-	var logs_map:AStar2D = Overseer.The_networks[Player_ID][1]
-	var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
-	
-	var logs_pathfind:int = logs_map.get_id_path(from,to,false).size()
-	var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
-	
-	if (intel_pathfind <= 3) and (logs_pathfind <= 3):
-		if  (intel_pathfind > 0) and (logs_pathfind > 0):
-			return true
-		else:
-			display_action_error("Fighters can only move to nodes connected by logi. and intel networks!", Player_ID)
-			return false
-	else:
-		display_action_error("Fighters can only move 2 nodes!", Player_ID)
-		return false
-	
-
-func Influence_movement_possible(from:int, to:int, Player_ID:int) -> bool:
-	var intel_map:AStar2D = Overseer.The_networks[Player_ID][0]
-	var intel_pathfind:int = intel_map.get_id_path(from,to,false).size()
-	
-	if (intel_pathfind <= 2):
-		if  (intel_pathfind > 0):
-			return true
-		else:
-			display_action_error("Influence can only move to nodes connected by intel networks!", Player_ID)
-			return false
-	else:
-		display_action_error("Influence can only move 1 node!", Player_ID)
-		return false
-	
 
 func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 	if Current_node:

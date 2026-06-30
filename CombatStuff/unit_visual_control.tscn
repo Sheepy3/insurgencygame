@@ -29,6 +29,7 @@ offset_bottom = 42.0
 texture = ExtResource("2_1y7gq")
 
 [node name="F_sprite" type="TextureRect" parent="." unique_id=620187893]
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_n0eri")
 layout_mode = 0

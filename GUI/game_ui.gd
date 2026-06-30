@@ -16,10 +16,11 @@ var Preview_placables:Array = [
 ]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Open_Market_Button.set_disabled(true)
+	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
 	Overseer.change_phase.connect(_phase_switch_ui)
+	#Overseer.change_phase.connect()
 	Overseer.game_started.connect(connect_update_UI)
 	%Combat.combat_over.connect(_return_ui_after_combat)
 	$Pre_Combat.initialize_pressed.connect(_on_precombat_initialize)
@@ -29,6 +30,7 @@ func _ready() -> void:
 	_phase_switch_ui()
 	%Support_store_window.hide()
 	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
+	$Close_Info_Button.pressed.connect(Check_container_action.bind($Close_Info_Button.name,"Pressed"))
 	for boxes:VBoxContainer in %HBox_Buy_Placeables.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
@@ -38,10 +40,6 @@ func _ready() -> void:
 	for Price_elements:Control in $Action_Container/VBoxContainer.get_children(true):
 		if Price_elements.name.contains("Hover"):
 			Price_elements.hide()
-
-func _on_player_switch_button_pressed() -> void:
-	pass
-	#Overseer.cycle_players()
 
 func Check_container_action(Button_name:String,Action:String) -> void:
 	match Button_name:
@@ -109,10 +107,18 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			else:
 				$Close_UI_Button.position = Vector2(0,64)
 				$Close_UI_Button.text = ">"
+				
+		"Close_Info_Button":
+			$Player_Info.visible = !$Player_Info.visible
+			if $Player_Info.visible:
+				$Close_Info_Button.position = Vector2(610,0)
+				$Close_Info_Button.text = "<"
+			else:
+				$Close_Info_Button.position = Vector2(0,0)
+				$Close_Info_Button.text = ">"
 
-func _player_switch_ui() -> void:
-	$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
-	#update_Player_Info()
+#func _player_switch_ui() -> void:
+	#$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
 
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
@@ -121,15 +127,22 @@ func _phase_switch_ui() -> void:
 		1:
 			$Current_Phase.text = "Purchase Units & Infrastructure"
 		2:
-			$Current_Phase.text = "Place Military Units & Infrastructure"
+			$Current_Phase.text = "Place Influence Units & Infrastructure"
 		3:
 			$Current_Phase.text = "Move Units"
 		4:
+			$Current_Phase.text = "Combat"
+		5:
+			$Current_Phase.text = "Placce Fighter Units & Bases"
+		6:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
-
-func _on_phase_button_pressed() -> void:
-	Overseer.cycle_phases()
+		7:
+			$Current_Phase.text = "Muster forces"
+		8:
+			$Current_Phase.text = "UN Intervention"
+	%Next_Phase_Button.set_pressed_no_signal(false)
+	%Next_Phase_Button.text = "NEXT PHASE???"
 
 @rpc("authority","call_local")
 func action_error(error_message:String, player_ID:int) -> void:
@@ -142,7 +155,7 @@ func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
 
 func _on_open_market_button_pressed() -> void:
-	$Open_Market_Button.hide()
+	%Open_Market_Button.hide()
 	%Support_store_window.show()
 	#!!! Reminder !!! The portion below is added for testing purposes
 	# Should be depricated when testing is finished
@@ -182,7 +195,7 @@ func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 
 func _on_support_store_window_close_requested() -> void:
 	%Support_store_window.hide()
-	$Open_Market_Button.show()
+	%Open_Market_Button.show()
 
 func _on_support_store_window_window_input(event: InputEvent) -> void:
 	$Store_bounds.global_position = %Support_store_window.position 
@@ -201,7 +214,6 @@ var cloud_fade_in_target:float
 func _process(delta: float) -> void:
 	cloud_fade_in = lerp(cloud_fade_in,cloud_fade_in_target,0.1)
 	%Clouds.material.set_shader_parameter("opacity",cloud_fade_in)
-
 
 @rpc("any_peer","call_local")
 func Manpower_action(Player_ID:int,action:String)-> void:
@@ -242,24 +254,31 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 func connect_update_UI() -> void:
 	Overseer.player_resources_updated.connect(update_Player_Info)
 	Overseer.player_resources_updated.connect(Check_store_unlocked)
+	Overseer.change_phase.connect(Check_store_unlocked)
+	Overseer.change_phase.connect(Update_available_buttons)
+	Overseer.change_phase.connect(Overseer.Profit_and_Taxes)
 	Unique_player_ID = multiplayer.get_unique_id()
+	Update_available_buttons()
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
 	reset_node_unit_list()
 	var player_unit_count:int = 0
-	var enemy_unit_count:int = 0	
+	var enemy_unit_count:int = 0
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
 			var new_unit_display:Control = UI_Unit_Scene.instantiate()
 			new_unit_display.unit_resource = unit
 			new_unit_display.source_node = str(mapnode)
 			new_unit_display.move_unit.connect(move_unit_function)
+			new_unit_display.attmepted_reconstitution.connect(Call_reconst_function)
+			new_unit_display.set_color(unit.color)
+			new_unit_display.set_type(unit.unit_type)
+			new_unit_display.Check_unit_phase()
 			%Unit_Display.add_child(new_unit_display)
 			player_unit_count+=1
-			if unit.disrupted:
-				new_unit_display.enable_reconstitution()
-			
+			#if unit.disrupted:
+				#new_unit_display.enable_reconstitution()
 		else:
 			enemy_unit_count+=1
 	if player_unit_count > 0 and enemy_unit_count > 0:
@@ -290,10 +309,13 @@ func Check_store_unlocked() -> void:
 				Meets_condition +=1
 		if checked_node.Has_building && checked_node.building.player_ID == Unique_player_ID:
 			Meets_condition += 1
-	if Meets_condition >= 1:
-		$Open_Market_Button.set_disabled(false)
+	if Meets_condition >= 1 && Overseer.current_phase == Overseer.PURCHASE:
+		%Open_Market_Button.set_disabled(false)
 	else:
-		$Open_Market_Button.set_disabled(true)
+		if !%Open_Market_Button.is_visible():
+			%Open_Market_Button.show()
+		%Open_Market_Button.set_disabled(true)
+		$Support_store_window.hide()
 
 @rpc("any_peer","call_local")
 func check_buy_action(Buyable:String,Player_ID:int) -> void:
@@ -481,6 +503,58 @@ func _on_purchase_preview_timer_timeout() -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Image.hide()
 	$Action_Container/VBoxContainer/Purchase_Hover_Price.hide()
 
+func _on_next_phase_button_toggled(toggled_on: bool) -> void:
+	if Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		Check_completed_setup.rpc(multiplayer.get_unique_id(),toggled_on)
+	else:
+		if toggled_on:
+			%Next_Phase_Button.text = "YES!"
+		else:
+			%Next_Phase_Button.text = "NO!"
+		Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggled_on)
+
+func Update_available_buttons() -> void:
+	if Overseer.current_phase == Overseer.INTERVENTION:
+		Change_available_buttons(true,true,true)
+		%Next_Phase_Button.set_disabled(true)
+	elif Overseer.current_phase == Overseer.INITIAL_DEPLOY:
+		Change_available_buttons(true,false,false)
+	elif Overseer.current_phase == Overseer.PURCHASE:
+		Change_available_buttons(false,true,true)
+	elif Overseer.current_phase == Overseer.PLACE_INFRASTRUCTURE:
+		Change_available_buttons(true,true,false)
+	elif Overseer.current_phase == Overseer.PLACE_MILITARY:
+		Change_available_buttons(true,false,true)
+	else:
+		Change_available_buttons(true,true,true)
+
+func Change_available_buttons(Purchase:bool, Military:bool, Infrastructure:bool) -> void:
+	get_tree().call_group("PURCHASE_PHASE_BUTTONS","set_disabled",Purchase)
+	get_tree().call_group("PLACE_MILITARY_PHASE_BUTTON","set_disabled",Military)
+	get_tree().call_group("PLACE_INFRASTRUCTURE_PHASE_BUTTON","set_disabled",Infrastructure)
+
+@rpc("any_peer","call_local")
+func Check_completed_setup(Requester_ID:int,Button_status:bool) -> void:
+	if multiplayer.is_server():
+		var Requester:Resource = Overseer.Identify_player(Requester_ID)
+		if Requester.Player_storage.values().max() == 0:
+			Finished_setup_check.rpc(Requester_ID,Button_status,true)
+		else:
+			Finished_setup_check.rpc(Requester_ID,Button_status,false)
+			action_error.rpc("You need to place all infastructure & units down first!",Requester.Player_ID)
+
+@rpc("authority","call_local")
+func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> void:
+	if multiplayer.get_unique_id() == Overseer.Identify_player(OG_requester).Player_ID:
+		if !move_on:
+			%Next_Phase_Button.set_pressed_no_signal(false)
+		else:
+			if toggel_status:
+				%Next_Phase_Button.text = "YES!"
+			else:
+				%Next_Phase_Button.text = "NO!"
+			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),toggel_status)
+
 @rpc("any_peer","call_local")
 func request_pre_combat_ui(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
@@ -628,3 +702,59 @@ func _return_ui_after_combat() -> void:
 	show_ui()
 	%Combat.pixel_fade_out()
 	%Pre_Combat.hide()
+
+func Call_reconst_function(Player_ID:int,units_type:int,unit_ID:String,node_name:String) -> void:
+	Reconstitution_possible.rpc(Player_ID,units_type,unit_ID,node_name)
+
+@rpc("any_peer","call_local")
+func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_name:String) -> void:
+	if multiplayer.is_server():
+		var Player_resource:Resource = Overseer.Identify_player(Caller_ID)
+		var Edited_node:Node = get_parent().find_child(node_name)
+		var checked_unit:Resource
+		for units:Resource in Edited_node.unit_list:
+			if units.disrupted and units.unit_UUID == unit_UUID:
+				checked_unit =  units
+		if checked_unit:
+			match unit_type:
+				0:
+					if Player_resource.Player_faction == 1:
+						if Player_resource.Man_power >= 4 and Player_resource.Money >= 8 and Player_resource.Weapons >= 4:
+							Player_resource.Man_power -= 4
+							Player_resource.Money -= 8
+							Player_resource.Weapons -= 4
+							Edited_node.remove_unit(Player_resource.Player_ID,0,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,0,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+					else:
+						if Player_resource.Man_power >= 3 and Player_resource.Money >= 5 and Player_resource.Weapons >= 3:
+							Player_resource.Man_power -= 3
+							Player_resource.Money -= 5
+							Player_resource.Weapons -= 3
+							Edited_node.remove_unit(Player_resource.Player_ID,0,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,0,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+				1:
+					if Player_resource.Player_faction == 1:
+						if Player_resource.Man_power >= 4 and Player_resource.Money >= 13:
+							Player_resource.Man_power -= 4
+							Player_resource.Money -= 13
+							Edited_node.remove_unit(Player_resource.Player_ID,1,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,1,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+					else:
+						if Player_resource.Man_power >= 3 and Player_resource.Money >= 8:
+							Player_resource.Man_power -= 3
+							Player_resource.Money -= 8
+							Edited_node.remove_unit(Player_resource.Player_ID,1,true,checked_unit.unit_UUID)
+							Edited_node.add_unit(Player_resource.Player_ID,1,Player_resource.color,checked_unit.unit_UUID,false,false,true)
+							Overseer.Request_node_data(node_name)
+							Overseer.Resources_to_rpc()
+		else:
+			print("\nSomething is worong here...\n")
+
+# Weapons Money Man_power
+			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)

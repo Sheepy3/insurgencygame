@@ -16,20 +16,31 @@ var current_player:String
 var The_networks:Dictionary
 var The_nodes:Dictionary
 var The_support_nodes:Array
-var Phase_cycle:int = 0
-var Desired_cycle:int = 3
+var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again 
+var Desired_cycle:int = 3 # of phases before matnince or # of "PURCHASE" phases reached before matnince (will occur on turn of number)
+ 
+enum {MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION}
+var current_phase:int = INITIAL_DEPLOY
 var lock:bool = false
-enum {MAINTENENCE, PURCHASE, PLACE, UNIT_MOVEMENT, COLLECT}
-var current_phase:int = MAINTENENCE
 
-signal change_player
+signal change_player # Signal may be depricated due to lack of use
 signal game_started
 signal change_phase
 signal player_resources_updated
 signal Initialization_player_color
 signal toggle_ready(player:int)
 signal update_combat(map_node_path:NodePath)
+signal Received_node_data
 
+#func populate_player_list(Game_Size:int)-> void:
+	#for x:int in range(Game_Size):
+		#player_list.append(Player_resource.duplicate(true))
+		#Player_resource.color = players_colors[x]
+		#player_list[x].Player_name = "Player " + str(x+1)
+		#var Logistics_map:AStar2D = AStar2D.new()
+		#var Intelligence_map:AStar2D = AStar2D.new()
+		#Logistics_array.append(Logistics_map)
+		#Intelligence_array.append(Intelligence_map)
 
 ### COMBAT
 var attacker_ready: bool = false
@@ -81,7 +92,11 @@ func get_player_color_name(color: Vector3) -> String:
 
 	return "Unknown"
 func cycle_phases() -> void:
-	if Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
+	print("This is the phase cycle: "+str(Phase_cycle))
+	if Phase_cycle == 13:
+		current_phase = INTERVENTION
+		change_phase.emit() 
+	elif Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
 		change_phase.emit()
 	elif current_phase == COLLECT and Phase_cycle % Desired_cycle != 0:
@@ -90,6 +105,11 @@ func cycle_phases() -> void:
 	elif current_phase < COLLECT:
 		current_phase+=1
 		change_phase.emit()
+	elif current_phase == INITIAL_DEPLOY:
+		current_phase = COLLECT
+		change_phase.emit()
+	Sync_player_phases.rpc(current_phase,Phase_cycle)
+
 
 func _ready() -> void:
 	pass
@@ -103,7 +123,6 @@ func Resources_to_rpc() -> void:
 		#Rpc_to_resources.rpc(Player_rpc_info)
 		Player_resources_to_rpc.rpc()
 		player_resources_updated.emit()
-		Initialization_player_color.emit()
 
 #@rpc("authority","call_remote")
 #func Rpc_to_resources(Player_rpc_info:Dictionary) -> void:
@@ -156,11 +175,9 @@ func Rpc_to_player_resources(new_player_info:Array) -> void:
 					new_player_resource.set(keys,indexes[keys]) 
 		player_list.append(new_player_resource)
 	player_resources_updated.emit()
-	Initialization_player_color.emit()
 
 @rpc("any_peer","call_local")
 func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
-	var New_node:Dictionary
 	if multiplayer.is_server():
 		#var New_node:Dictionary
 		#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
@@ -256,6 +273,7 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 		Edited_node.reorder_units()
 	if !combat_data.is_empty():
 		update_combat.emit(combat_data)
+	Received_node_data.emit()
 
 @rpc("any_peer","call_local")
 func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
@@ -336,6 +354,63 @@ func Create_unique_ID() -> String:
 		else:
 			random_hex_string +=str(hex_values[randi_range(0,15)])
 	return random_hex_string
+
+@rpc("any_peer","call_local")
+func Update_player_ready(ID:int,updated_ready:bool) -> void:
+	if multiplayer.is_server():
+		for player:Resource in Overseer.player_list:
+			if player.Player_ID == ID: 
+				player.Ready = updated_ready
+		Resources_to_rpc()
+		if The_nodes.size() > 0:
+			Check_phase_status()
+
+func Check_phase_status() -> void:
+	var ready_players:int = 0
+	for player:Resource in player_list:
+		if player.Ready == true:
+			ready_players +=1
+	if (ready_players == Overseer.player_list.size()):
+		cycle_phases()
+		for players:Resource in player_list:
+			players.Ready = false
+
+@rpc("authority","call_remote")
+func Sync_player_phases(New_phase:int,New_phase_cycle:int) -> void:
+	current_phase = New_phase
+	Phase_cycle = New_phase_cycle
+	change_phase.emit()
+
+func Profit_and_Taxes()-> void:
+	if multiplayer.is_server():
+		if current_phase == COLLECT || current_phase == MAINTENENCE:
+			for players:Resource in player_list:
+				for bases:Resource in players.base_list:
+					if current_phase == MAINTENENCE:
+						if players.Player_faction == 1:
+							players.Money -= 8
+						else:
+							players.Money -= 4
+					else:
+						players.Man_power += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
+						players.Money += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
+				for node_names:String in The_nodes.keys():
+					var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
+					for unit:Resource in Checking_node.unit_list:
+						if current_phase == MAINTENENCE:
+							if unit.player_ID == players.Player_ID:
+								if players.Player_faction == 1:
+									players.Money -= 4
+								else:
+									players.Money -= 2
+						else:
+							if unit.player_ID == players.Player_ID && unit.unit_type == 1 && unit.disrupted == false && Checking_node.Has_building == false:
+								players.Man_power += Checking_node.node_RPU.Population
+								players.Money += Checking_node.node_RPU.RPU
+								break
+			Resources_to_rpc()
+		else:
+			pass
 
 func Instantiate_by_class_name(class_name_string: StringName) -> Object:
 	var class_list:Array = ProjectSettings.get_global_class_list()  
