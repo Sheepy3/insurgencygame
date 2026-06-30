@@ -271,6 +271,8 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 			#updated_unit.offcolor = Values[5]
 			#x += 1
 		Edited_node.reorder_units()
+	if The_support_nodes.has(Edited_node_name):
+		Edited_node.attempt_place_dock()
 	if !combat_data.is_empty():
 		update_combat.emit(combat_data)
 	Received_node_data.emit()
