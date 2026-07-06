@@ -126,4 +126,8 @@ position = Vector2(280, 0)
 scale = Vector2(1, 0.98)
 texture = ExtResource("10_58pqk")
 
+[node name="Color_Switch" type="Timer" parent="." unique_id=986777685]
+autostart = true
+
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]
+[connection signal="timeout" from="Color_Switch" to="." method="_on_color_switch_timeout"]
