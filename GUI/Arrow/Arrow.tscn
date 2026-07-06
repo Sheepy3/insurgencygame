@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cp0pl7r0dxxys"]
+[gd_scene format=3 uid="uid://cp0pl7r0dxxys"]
 
 [ext_resource type="Script" uid="uid://dkk75lgcdetqp" path="res://GUI/Arrow/arrow.gd" id="1_vleab"]
 [ext_resource type="PackedScene" uid="uid://kxvm0j7sptuq" path="res://GUI/Arrow/Arrow_Model.tscn" id="2_io27a"]
@@ -6,10 +6,10 @@
 [sub_resource type="ViewportTexture" id="ViewportTexture_um4hd"]
 viewport_path = NodePath("SubViewport")
 
-[node name="Arrow" type="Node2D"]
+[node name="Arrow" type="Node2D" unique_id=919931891]
 script = ExtResource("1_vleab")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=471017325]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -26,16 +26,16 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = SubResource("ViewportTexture_um4hd")
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="SubViewport" type="SubViewport" parent="." unique_id=233973793]
 own_world_3d = true
 transparent_bg = true
 size = Vector2i(256, 256)
 
-[node name="arrow" parent="SubViewport" instance=ExtResource("2_io27a")]
+[node name="arrow" parent="SubViewport" unique_id=359381444 instance=ExtResource("2_io27a")]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1923954492]
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=731136090]
 wait_time = 5.0
 one_shot = true
 autostart = true

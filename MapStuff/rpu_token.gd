@@ -6,7 +6,7 @@ func _ready() -> void:
 	RPU_array = [
 	preload("res://Assets/RPU_Tokens/RPU_Farm.png"),
 	preload("res://Assets/RPU_Tokens/RPU_Mine.png"),
-	preload("res://Assets/RPU_Tokens/old/0_3.png"),
+	preload("res://Assets/RPU_Tokens/RPU_Oilwell.png"),
 	preload("res://Assets/RPU_Tokens/RPU_Village.png"),
 	preload("res://Assets/RPU_Tokens/RPU_Factory.png"),
 	preload("res://Assets/RPU_Tokens/RPU_City.png"),
@@ -27,6 +27,7 @@ func randomize(generation_seed:int, index:int) -> void:
 		2:
 			rpu.RPU = 3
 			rpu.Population = 0
+			%Oil_Well_Sprite.show()
 		3:
 			rpu.RPU = 1
 			rpu.Population = 1
