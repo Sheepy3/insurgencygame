@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://cjgd2islnk1dx" path="res://Assets/Military/Tent.png" id="11_0wnlq"]
 [ext_resource type="Texture2D" uid="uid://boiqc3l35gmff" path="res://Assets/Icons/IntelNetwork.png" id="12_yb2yk"]
 [ext_resource type="Texture2D" uid="uid://c1xq20thy12to" path="res://Assets/Icons/LogiNetwork.png" id="13_82g8w"]
+[ext_resource type="StyleBox" uid="uid://b1d1bh60j1w7e" path="res://GUI/Button_Panel_Theme_Alt.tres" id="14_ygoei"]
 [ext_resource type="PackedScene" uid="uid://mugxmvhhce6q" path="res://CombatStuff/pre_combat.tscn" id="16_82g8w"]
 [ext_resource type="PackedScene" uid="uid://b755b2gx4g0n8" path="res://CombatStuff/combat_actual.tscn" id="17_0wnlq"]
 
@@ -24,6 +25,27 @@ font_size = 32
 font_color = Color(1, 0, 0, 1)
 outline_size = 9
 outline_color = Color(0.251859, 0, 0.0484084, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1pjib"]
+content_margin_left = 6.0
+content_margin_top = 3.0
+content_margin_right = 6.0
+content_margin_bottom = 3.0
+
+[sub_resource type="Theme" id="Theme_ve5d6"]
+default_font = ExtResource("4_w20xb")
+default_font_size = 20
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 9
+Button/styles/disabled = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/focus = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/hover = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/normal = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/pressed = SubResource("StyleBoxEmpty_1pjib")
+OptionButton/constants/outline_size = 9
+Panel/styles/panel = ExtResource("14_ygoei")
+PanelContainer/styles/panel = ExtResource("14_ygoei")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n388q"]
 shader = ExtResource("8_sw8an")
@@ -459,16 +481,17 @@ oversampling_override = 1.0
 title = "Support Market"
 position = Vector2i(0, 36)
 size = Vector2i(165, 100)
-visible = false
 min_size = Vector2i(165, 100)
 max_size = Vector2i(165, 100)
 
 [node name="Store_Container" type="PanelContainer" parent="Support_store_window" unique_id=1107668340]
-offset_left = 16.0
-offset_right = 152.0
-offset_bottom = 110.0
+z_index = 1
+offset_right = 161.0
+offset_bottom = 115.0
+theme = SubResource("Theme_ve5d6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container" unique_id=1578131010]
+z_index = 1
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer" unique_id=845546067]
@@ -491,17 +514,14 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Sell"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer" unique_id=667538739]
+[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer" unique_id=1714253405]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3" unique_id=1714253405]
-layout_mode = 2
-
-[node name="Weapons_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=2009895510]
+[node name="Weapons_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/VBoxContainer" unique_id=2009895510]
 layout_mode = 2
 text = "Weapons ↔ $3"
 
-[node name="Manpower_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=147519628]
+[node name="Manpower_Button" type="Button" parent="Support_store_window/Store_Container/VBoxContainer/VBoxContainer" unique_id=147519628]
 layout_mode = 2
 text = "Man power ↔ $5"
 
@@ -671,8 +691,8 @@ visible = false
 [connection signal="window_input" from="Support_store_window" to="." method="_on_support_store_window_window_input"]
 [connection signal="pressed" from="Support_store_window/Store_Container/VBoxContainer/HBoxContainer/VBoxContainer/Buy_Button" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="Support_store_window/Store_Container/VBoxContainer/HBoxContainer/VBoxContainer2/Sell_Button" to="." method="_on_sell_button_pressed"]
-[connection signal="pressed" from="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer/Weapons_Button" to="." method="_on_weapons_button_pressed"]
-[connection signal="pressed" from="Support_store_window/Store_Container/VBoxContainer/HBoxContainer3/VBoxContainer/Manpower_Button" to="." method="_on_manpower_button_pressed"]
+[connection signal="pressed" from="Support_store_window/Store_Container/VBoxContainer/VBoxContainer/Weapons_Button" to="." method="_on_weapons_button_pressed"]
+[connection signal="pressed" from="Support_store_window/Store_Container/VBoxContainer/VBoxContainer/Manpower_Button" to="." method="_on_manpower_button_pressed"]
 [connection signal="screen_exited" from="Store_bounds/Top_left" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Top_right" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Bottom_left" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
