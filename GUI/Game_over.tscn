@@ -50,7 +50,6 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container" unique_id=688400945]
 layout_mode = 2
-size_flags_vertical = 0
 
 [node name="Game_over_title" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=1830317249]
 layout_mode = 2
@@ -67,7 +66,7 @@ horizontal_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=948799633]
 clip_contents = false
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer" unique_id=1784911341]
 layout_mode = 2
@@ -96,7 +95,6 @@ label_settings = ExtResource("3_h7gq2")
 [node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=1908733565]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer" unique_id=1965482862]
 layout_mode = 2
