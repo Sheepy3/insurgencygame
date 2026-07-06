@@ -68,6 +68,7 @@ vertical_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=948799633]
 layout_mode = 2
 size_flags_vertical = 3
+scroll_vertical = 630
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer" unique_id=70184179]
 clip_contents = true
@@ -75,15 +76,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1784911341]
+[node name="Player_stats_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1784911341]
 layout_mode = 2
 size_flags_horizontal = 0
 alignment = 1
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer" unique_id=1001695164]
+[node name="Resources_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=1001695164]
 layout_mode = 2
 
-[node name="Label7" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer3" unique_id=277857836]
+[node name="Resources_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=277857836]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 text = "Resources:"
@@ -91,30 +92,30 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Label4" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer3" unique_id=2134125015]
+[node name="Victory_points_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=2134125015]
 layout_mode = 2
 text = "Total Victory points aquired:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer3" unique_id=646399721]
+[node name="Weapons_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=646399721]
 layout_mode = 2
 text = "Total Weapons aquired:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label2" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer3" unique_id=1858359513]
+[node name="Money_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1858359513]
 layout_mode = 2
 text = "Total Money aquired:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label3" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer3" unique_id=1732093621]
+[node name="Man_Power_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1732093621]
 layout_mode = 2
 text = "Total Man Power aquired:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="VBoxContainer6" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer" unique_id=1510448058]
+[node name="Exchange_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=1510448058]
 layout_mode = 2
 
-[node name="Label7" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=1641197572]
+[node name="Exchange_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=1641197572]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 text = "Exchange:"
@@ -122,40 +123,40 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=799436187]
+[node name="Weapons_given_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=799436187]
 layout_mode = 2
 text = "Total Weapons given:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label2" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=1187673692]
+[node name="Weapons_received_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=1187673692]
 layout_mode = 2
 text = "Total Weapons received:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label3" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=991656665]
+[node name="Money_given_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=991656665]
 layout_mode = 2
 text = "Total Money given:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label4" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=772177050]
+[node name="Money_recived_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=772177050]
 layout_mode = 2
 text = "Total Money received:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label5" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=138491351]
+[node name="Man_power_given_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=138491351]
 layout_mode = 2
 text = "Total Man Power given:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label6" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer6" unique_id=346375314]
+[node name="Man_power_received_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Exchange_Container" unique_id=346375314]
 layout_mode = 2
 text = "Total Man Power received:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer" unique_id=906161245]
+[node name="Infastructure_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=906161245]
 layout_mode = 2
 
-[node name="Label6" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=1149740895]
+[node name="Infastructure_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=1149740895]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 1
@@ -164,50 +165,50 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Label13" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=62276709]
+[node name="Bases_bought_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=62276709]
 layout_mode = 2
 text = "Total Bases bought:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label14" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=1814088071]
+[node name="Bases_placed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=1814088071]
 layout_mode = 2
 text = "Total Bases placed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label15" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=1933280464]
+[node name="Networks_bought_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=1933280464]
 layout_mode = 2
 text = "Total Networks bought:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label16" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=2134426370]
+[node name="Networks_placed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=2134426370]
 layout_mode = 2
 text = "Total Networks placed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label17" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=1297745887]
+[node name="Intel_bought_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=1297745887]
 layout_mode = 2
-text = "Total Intelligence Networks units bought:"
+text = "Total Intelligence Networks bought:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label18" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=690618760]
+[node name="Intel_placed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=690618760]
 layout_mode = 2
-text = "Total Intelligence Networks units placed:"
+text = "Total Intelligence Networks placed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label19" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=247879346]
+[node name="Logs_bought_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=247879346]
 layout_mode = 2
 text = "Total Logistics Networks units bought:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label20" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer2" unique_id=529288651]
+[node name="Logs_placed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Infastructure_Container" unique_id=529288651]
 layout_mode = 2
-text = "Total Logistics Networks units placed:"
+text = "Total Logistics Networks placed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer" unique_id=155510742]
+[node name="Units_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=155510742]
 layout_mode = 2
 
-[node name="Label8" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=2128141228]
+[node name="Units_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Units_Container" unique_id=2128141228]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 1
@@ -216,30 +217,30 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Label9" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1120270239]
+[node name="Influence_bought_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Units_Container" unique_id=1120270239]
 layout_mode = 2
 text = "Total Influence units bought:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label10" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=521252009]
+[node name="Influence_placed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Units_Container" unique_id=521252009]
 layout_mode = 2
 text = "Total Influence units placed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label11" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1752542208]
+[node name="Fighter_bought_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Units_Container" unique_id=1752542208]
 layout_mode = 2
 text = "Total Fighter units bought:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label12" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer" unique_id=408284257]
+[node name="Fighter_placed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Units_Container" unique_id=408284257]
 layout_mode = 2
 text = "Total Fighter units placed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="VBoxContainer5" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer" unique_id=1295215650]
+[node name="Combat_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=1295215650]
 layout_mode = 2
 
-[node name="Label8" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer5" unique_id=1222740254]
+[node name="Combat_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=1222740254]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 1
@@ -248,33 +249,30 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Label9" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer5" unique_id=426967443]
+[node name="Bases_destroyed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=426967443]
 layout_mode = 2
 text = "Total Bases destroyed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label10" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer5" unique_id=1407442103]
+[node name="Units_killedLabel" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=1407442103]
 layout_mode = 2
 text = "Total units killed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label13" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer5" unique_id=1866450829]
+[node name="Units_lost_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=1866450829]
 layout_mode = 2
 text = "Total units lost:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label11" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer5" unique_id=1232080571]
+[node name="Influence_killed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=1232080571]
 layout_mode = 2
 text = "Total Influence units killed:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Label12" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer/VBoxContainer5" unique_id=1048686513]
+[node name="Figther_killed_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=1048686513]
 layout_mode = 2
 text = "Total Fighter units killed:"
 label_settings = ExtResource("3_h7gq2")
-
-[node name="VBoxContainer4" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/VBoxContainer" unique_id=1037244230]
-layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1827990124]
 visible = false
