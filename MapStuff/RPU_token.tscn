@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmb7vr3n3pp5a"]
 
-[ext_resource type="Texture2D" uid="uid://cl0r32efqvo6k" path="res://Assets/RPU_Tokens/RPU_Oilwell.png" id="1_bvap0"]
+[ext_resource type="Texture2D" uid="uid://mr2ec43u68mk" path="res://Assets/RPU_Tokens/RPU_Oilwell.webp" id="1_bvap0"]
 [ext_resource type="Script" uid="uid://6737bs0lavon" path="res://MapStuff/rpu_token.gd" id="2_2djxv"]
 [ext_resource type="Resource" uid="uid://c6fjgpu1d3p5b" path="res://Resources/Preset/RPU_Default.tres" id="3_qtkgu"]
 [ext_resource type="PackedScene" uid="uid://b6w7byxbe58hc" path="res://MapStuff/RPU_tokens/oil_well_model.tscn" id="4_4s3kk"]
@@ -16,13 +16,21 @@ rpu = ExtResource("3_qtkgu")
 [node name="Oil_Well_Sprite" type="Sprite2D" parent="." unique_id=1804321405]
 unique_name_in_owner = true
 visible = false
-position = Vector2(7, 3)
+position = Vector2(1, 11)
 texture = SubResource("ViewportTexture_7xr5f")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1178467308]
 own_world_3d = true
 transparent_bg = true
-size = Vector2i(64, 64)
+size = Vector2i(144, 144)
 
 [node name="Oil_Well" parent="SubViewport" unique_id=811368076 instance=ExtResource("4_4s3kk")]
 unique_name_in_owner = true
+
+[node name="Circle_003" parent="SubViewport/Oil_Well/Oil_Rig" parent_id_path=PackedInt32Array(811368076, 402733987) index="1" unique_id=1608956156]
+transform = Transform3D(2.6901554e-09, 0.19396523, 4.62449e-08, -0.18779278, 1.4177963e-08, -0.048542406, -0.04854241, -4.4100048e-08, 0.18779276, 0.49999994, 1.4533955, -0.090975285)
+
+[node name="Camera3D" parent="SubViewport/Oil_Well" index="2" unique_id=1124612288]
+size = 3.5
+
+[editable path="SubViewport/Oil_Well"]

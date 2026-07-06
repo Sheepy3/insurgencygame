@@ -4,12 +4,12 @@ var RPU_array:Array
 
 func _ready() -> void:
 	RPU_array = [
-	preload("res://Assets/RPU_Tokens/RPU_Farm.png"),
-	preload("res://Assets/RPU_Tokens/RPU_Mine.png"),
-	preload("res://Assets/RPU_Tokens/RPU_Oilwell.png"),
-	preload("res://Assets/RPU_Tokens/RPU_Village.png"),
-	preload("res://Assets/RPU_Tokens/RPU_Factory.png"),
-	preload("res://Assets/RPU_Tokens/RPU_City.png"),
+	preload("res://Assets/RPU_Tokens/RPU_Farm.webp"),
+	preload("res://Assets/RPU_Tokens/RPU_Mine.webp"),
+	preload("res://Assets/RPU_Tokens/RPU_Oilwell.webp"),
+	preload("res://Assets/RPU_Tokens/RPU_Village.webp"),
+	preload("res://Assets/RPU_Tokens/RPU_Factory.webp"),
+	preload("res://Assets/RPU_Tokens/RPU_City.webp"),
 	]
 
 
