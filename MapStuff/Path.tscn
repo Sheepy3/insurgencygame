@@ -117,12 +117,13 @@ texture = ExtResource("7_pka5v")
 
 [node name="Mask" type="Sprite2D" parent="BackBufferCopy" unique_id=124675164]
 material = SubResource("ShaderMaterial_6ohwi")
+position = Vector2(0, -9)
 scale = Vector2(1, 0.98)
 texture = ExtResource("10_58pqk")
 
 [node name="Mask2" type="Sprite2D" parent="BackBufferCopy" unique_id=1735674540]
 material = SubResource("ShaderMaterial_6ohwi")
-position = Vector2(280, 0)
+position = Vector2(280, -9.000001)
 scale = Vector2(1, 0.98)
 texture = ExtResource("10_58pqk")
 
