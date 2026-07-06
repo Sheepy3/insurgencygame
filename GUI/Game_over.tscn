@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://dck2ceqmicmoh"]
+
+[ext_resource type="Script" uid="uid://d33x6ue5m437h" path="res://GUI/game_over.gd" id="1_40ofs"]
+[ext_resource type="Shader" uid="uid://bpf87dwo3epl8" path="res://Assets/Shaders/fade_material.gdshader" id="2_6q624"]
+[ext_resource type="LabelSettings" uid="uid://1enntx58kkhe" path="res://GUI/Game_UI.tres" id="3_h7gq2"]
+[ext_resource type="Theme" uid="uid://de8ppri0rbmul" path="res://GUI/Button_Theme.tres" id="4_6q624"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y0hil"]
+shader = ExtResource("2_6q624")
+shader_parameter/progress = 1.0
+shader_parameter/block_size = 2.0
+shader_parameter/softness = 0.0
+
+[node name="Game_Over" type="Control" unique_id=2052234248]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_40ofs")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=361616446]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_y0hil")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -335.0
+offset_top = -162.5
+offset_right = 335.0
+offset_bottom = 162.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=138559357]
+handle_input_locally = false
+size = Vector2i(670, 325)
+render_target_update_mode = 4
+
+[node name="Game_over_info_container" type="PanelContainer" parent="SubViewportContainer/SubViewport" unique_id=1003000190]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container" unique_id=688400945]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Game_over_title" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=1830317249]
+layout_mode = 2
+text = "GAME OVER,"
+label_settings = ExtResource("3_h7gq2")
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=1189735846]
+layout_mode = 2
+text = "Player Stats:"
+label_settings = ExtResource("3_h7gq2")
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=948799633]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer" unique_id=1784911341]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Label4" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=2134125015]
+layout_mode = 2
+text = "Total Victory points aquired:"
+label_settings = ExtResource("3_h7gq2")
+
+[node name="Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=646399721]
+layout_mode = 2
+text = "Total Weapons aquired:"
+label_settings = ExtResource("3_h7gq2")
+
+[node name="Label2" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1858359513]
+layout_mode = 2
+text = "Total Money aquired:"
+label_settings = ExtResource("3_h7gq2")
+
+[node name="Label3" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1732093621]
+layout_mode = 2
+text = "Total Man Power aquired:"
+label_settings = ExtResource("3_h7gq2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=1908733565]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer" unique_id=1965482862]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Show_map_Button" type="Button" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=292445545]
+layout_mode = 2
+theme = ExtResource("4_6q624")
+text = "Back to map"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer" unique_id=555127895]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Leave_game_Button" type="Button" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1886692027]
+layout_mode = 2
+theme = ExtResource("4_6q624")
+text = "Leave game"
