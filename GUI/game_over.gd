@@ -1,10 +1,12 @@
 extends Control
 
-@onready var viewport_container := %SubViewportContainer
-@onready var fade_material: ShaderMaterial = viewport_container.material
+@onready var viewport_container:SubViewportContainer = %SubViewportContainer
+@onready var fade_material:ShaderMaterial = viewport_container.material
 
 func _ready() -> void:
 	pass
+
+
 
 func pixel_fade_in(duration: float = 0.5) -> void:
 	show()

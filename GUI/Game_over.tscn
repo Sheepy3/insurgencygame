@@ -35,6 +35,7 @@ offset_right = 335.0
 offset_bottom = 162.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_6q624")
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=138559357]
 handle_input_locally = false
@@ -47,6 +48,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_6q624")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container" unique_id=688400945]
 layout_mode = 2
@@ -59,6 +61,7 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=1189735846]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 text = "Player Stats:"
 label_settings = ExtResource("3_h7gq2")
@@ -68,7 +71,6 @@ vertical_alignment = 1
 [node name="ScrollContainer" type="ScrollContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer" unique_id=948799633]
 layout_mode = 2
 size_flags_vertical = 3
-scroll_vertical = 630
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer" unique_id=70184179]
 clip_contents = true
@@ -92,7 +94,7 @@ label_settings = ExtResource("3_h7gq2")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="Victory_points_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=2134125015]
+[node name="Victory_points_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=2134125015]
 layout_mode = 2
 text = "Total Victory points aquired:"
 label_settings = ExtResource("3_h7gq2")
@@ -102,14 +104,29 @@ layout_mode = 2
 text = "Total Weapons aquired:"
 label_settings = ExtResource("3_h7gq2")
 
+[node name="Weapons_spent_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=891089440]
+layout_mode = 2
+text = "Total Weapons spent:"
+label_settings = ExtResource("3_h7gq2")
+
 [node name="Money_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1858359513]
 layout_mode = 2
 text = "Total Money aquired:"
 label_settings = ExtResource("3_h7gq2")
 
+[node name="Money_spent_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=474791510]
+layout_mode = 2
+text = "Total Money spent:"
+label_settings = ExtResource("3_h7gq2")
+
 [node name="Man_Power_total_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1732093621]
 layout_mode = 2
 text = "Total Man Power aquired:"
+label_settings = ExtResource("3_h7gq2")
+
+[node name="Man_Power_spent_Label2" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1496944626]
+layout_mode = 2
+text = "Total Man Power spent:"
 label_settings = ExtResource("3_h7gq2")
 
 [node name="Exchange_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=1510448058]
@@ -238,6 +255,7 @@ text = "Total Fighter units placed:"
 label_settings = ExtResource("3_h7gq2")
 
 [node name="Combat_Container" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container" unique_id=1295215650]
+visible = false
 layout_mode = 2
 
 [node name="Combat_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Combat_Container" unique_id=1222740254]

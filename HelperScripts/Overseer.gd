@@ -25,6 +25,7 @@ var lock:bool = false
 
 signal change_player # Signal may be depricated due to lack of use
 signal game_started
+signal game_ended
 signal change_phase
 signal player_resources_updated
 signal Initialization_player_color
@@ -91,6 +92,7 @@ func get_player_color_name(color: Vector3) -> String:
 			return color_name
 
 	return "Unknown"
+
 func cycle_phases() -> void:
 	print("This is the phase cycle: "+str(Phase_cycle))
 	if Phase_cycle == 13:

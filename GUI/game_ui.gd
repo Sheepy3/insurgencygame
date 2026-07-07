@@ -758,3 +758,12 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 
 # Weapons Money Man_power
 			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)
+
+@rpc("any_peer","call_local")
+func _compile_game_over_info() -> void:
+	if multiplayer.is_server():
+		pass
+
+@rpc("authority","call_local")
+func _game_over_UI_initialize() -> void:
+	%Game_Over.pixel_fade_in()

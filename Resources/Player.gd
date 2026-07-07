@@ -17,3 +17,9 @@ class_name Player
 	"Logistics":0,
 	}
 @export var Ready:bool = false
+@export var Player_stats:Dictionary = {
+	"Earned_weapons":0, "Spent_weapons":0, "Earned_money":0, "Spent_money":0, "Earned_man_power":0, "Spent_man_power":0, 
+	"Give_weapons":0, "Get_weapons":0, "Give_money":0, "Get_money":0, "Give_man_power":0, "Get_man_power":0,
+	"Buy_base":0, "Place_base":0, "Buy_Intel":0, "Place_Intel":0, "Buy_Logs":0, "Place_Logs":0,
+	"Buy_influence":0, "Place_influence":0, "Buy_fighter":0, "Place_fighter":0
+	}
