@@ -1,0 +1,13 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://b1d1bh60j1w7e"]
+
+[ext_resource type="Texture2D" uid="uid://otbu2riscesn" path="res://Assets/9slice_2.png" id="1_yqd0s"]
+
+[resource]
+texture = ExtResource("1_yqd0s")
+texture_margin_left = 2.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 2.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(0, 0, 128, 128)

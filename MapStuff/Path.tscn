@@ -117,13 +117,18 @@ texture = ExtResource("7_pka5v")
 
 [node name="Mask" type="Sprite2D" parent="BackBufferCopy" unique_id=124675164]
 material = SubResource("ShaderMaterial_6ohwi")
+position = Vector2(0, -9)
 scale = Vector2(1, 0.98)
 texture = ExtResource("10_58pqk")
 
 [node name="Mask2" type="Sprite2D" parent="BackBufferCopy" unique_id=1735674540]
 material = SubResource("ShaderMaterial_6ohwi")
-position = Vector2(280, 0)
+position = Vector2(280, -9.000001)
 scale = Vector2(1, 0.98)
 texture = ExtResource("10_58pqk")
 
+[node name="Color_Switch" type="Timer" parent="." unique_id=986777685]
+autostart = true
+
 [connection signal="input_event" from="Node_Path_Area2D" to="." method="_on_node_path_area_2d_input_event"]
+[connection signal="timeout" from="Color_Switch" to="." method="_on_color_switch_timeout"]
