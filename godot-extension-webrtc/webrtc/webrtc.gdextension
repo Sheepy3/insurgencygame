@@ -2,7 +2,7 @@
 
 entry_symbol = "webrtc_extension_init"
 compatibility_minimum = 4.1
-
+reloadable = false
 [libraries]
 
 linux.debug.x86_64 = "lib/libwebrtc_native.linux.template_debug.x86_64.so"
