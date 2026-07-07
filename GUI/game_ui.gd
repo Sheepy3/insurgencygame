@@ -222,12 +222,16 @@ func Manpower_action(Player_ID:int,action:String)-> void:
 		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
 		if Store_action == "Buy" and Player_resource.Money >= 5:
 			Player_resource.Man_power += 1
+			Player_resource.Player_stats["Earned_man_power"] += 1
 			Player_resource.Money -= 5
+			Player_resource.Player_stats["Spent_moeny"] += 5
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		elif Store_action == "Sell" and Player_resource.Man_power >= 1:
 			Player_resource.Man_power -= 1
+			Player_resource.Player_stats["Spent_man_power"] += 1
 			Player_resource.Money += 5
+			Player_resource.Player_stats["Earned_moeny"] += 5
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else: 
@@ -240,12 +244,16 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
 		if Store_action == "Buy" and Player_resource.Money >= 3:
 			Player_resource.Weapons += 1
+			Player_resource.Player_stats["Earned_weapons"] += 1
 			Player_resource.Money -= 3
+			Player_resource.Player_stats["Spent_money"] += 3
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		elif Store_action == "Sell" and Player_resource.Weapons >= 1:
 			Player_resource.Weapons -= 1
+			Player_resource.Player_stats["Spent_weapons"] += 1
 			Player_resource.Money += 3
+			Player_resource.Player_stats["Earned_money"] += 3
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else:
@@ -325,12 +333,16 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 			"Buy_Weapons":
 				if Current_player.Money >= 8 && Current_player.Player_faction == 1:
 					Current_player.Money -= 8
+					Current_player.Player_stats["Spent_money"] += 8
 					Current_player.Weapons += 1
+					Current_player.Player_stats["Earned_weapons"] += 1
 					Overseer.Resources_to_rpc()
 				
 				elif Current_player.Money >= 5 && Current_player.Player_faction == 0:
 					Current_player.Money -= 5
+					Current_player.Player_stats["Spent_money"] += 5
 					Current_player.Weapons += 1
+					Current_player.Player_stats["Earned_weapons"] += 1
 					Overseer.Resources_to_rpc()
 				
 				else:
@@ -339,14 +351,20 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 			"Buy_Base":
 				if Current_player.Man_power >= 17 && Current_player.Money >= 45 && Current_player.Player_faction == 1:
 					Current_player.Man_power -= 17
+					Current_player.Player_stats["Spent_man_power"] += 17
 					Current_player.Money -= 45
+					Current_player.Player_stats["Spent_money"] += 45
 					Current_player.Player_storage["Military_Base"] += 1
+					Current_player.Player_stats["Buy_base"] += 1
 					Overseer.Resources_to_rpc()
 				
 				elif Current_player.Man_power >= 10 && Current_player.Money >= 30 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 10 
+					Current_player.Player_stats["Spent_man_power"] += 10
 					Current_player.Money -= 30
+					Current_player.Player_stats["Spent_money"] += 30
 					Current_player.Player_storage["Military_Base"] += 1
+					Current_player.Player_stats["Buy_base"] += 1
 					Overseer.Resources_to_rpc()
 				
 				else:
@@ -355,16 +373,24 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 			"Buy_Fighter":
 				if Current_player.Man_power >= 8 && Current_player.Money >= 15 && Current_player.Weapons >= 8 && Current_player.Player_faction == 1:
 					Current_player.Man_power -= 8 
+					Current_player.Player_stats["Spent_man_power"] += 8 
 					Current_player.Money -= 15 
+					Current_player.Player_stats["Spent_money"] += 15 
 					Current_player.Weapons -= 8
+					Current_player.Player_stats["Spent_weapons"] += 8
 					Current_player.Player_storage["Fighter"] += 1
+					Current_player.Player_stats["Buy_fighter"] += 1
 					Overseer.Resources_to_rpc()
 				
 				elif Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5 && Current_player.Player_faction == 0:
-					Current_player.Man_power -= 5 
-					Current_player.Money -= 10 
+					Current_player.Man_power -= 5
+					Current_player.Player_stats["Spent_man_power"] += 5 
+					Current_player.Money -= 10
+					Current_player.Player_stats["Spent_money"] += 10
 					Current_player.Weapons -= 5
+					Current_player.Player_stats["Spent_weapons"] += 5
 					Current_player.Player_storage["Fighter"] += 1
+					Current_player.Player_stats["Buy_fighter"] += 1
 					Overseer.Resources_to_rpc()
 				
 				else:
@@ -373,14 +399,20 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 			"Buy_Influence":
 				if Current_player.Man_power >= 8 && Current_player.Money >= 25 && Current_player.Player_faction == 1:
 					Current_player.Man_power -= 8 
+					Current_player.Player_stats["Spent_man_power"] += 8 
 					Current_player.Money -= 25
+					Current_player.Player_stats["Spent_money"] += 25
 					Current_player.Player_storage["Influence"] += 1
+					Current_player.Player_stats["Buy_influence"] += 1
 					Overseer.Resources_to_rpc()
 				
 				elif Current_player.Man_power >= 5 && Current_player.Money >= 15 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5 
+					Current_player.Player_stats["Spent_man_power"] += 5 
 					Current_player.Money -= 15
+					Current_player.Player_stats["Spent_money"] += 15
 					Current_player.Player_storage["Influence"] += 1
+					Current_player.Player_stats["Buy_influence"] += 1
 					Overseer.Resources_to_rpc()
 				
 				else:
@@ -389,14 +421,20 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 			"Buy_Intel":
 				if Current_player.Man_power >= 2 && Current_player.Money >= 15 && Current_player.Player_faction == 1:
 					Current_player.Man_power -= 2 
+					Current_player.Player_stats["Spent_man_power"] += 2 
 					Current_player.Money -= 15
+					Current_player.Player_stats["Spent_money"] += 15
 					Current_player.Player_storage["Intelligence"] += 1
+					Current_player.Player_stats["Buy_Intel"] += 1
 					Overseer.Resources_to_rpc()
 				
 				elif Current_player.Man_power >= 1 && Current_player.Money >= 10 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
+					Current_player.Player_stats["Spent_man_power"] += 1 
 					Current_player.Money -= 10
+					Current_player.Player_stats["Spent_money"] += 10
 					Current_player.Player_storage["Intelligence"] += 1
+					Current_player.Player_stats["Buy_Intel"] += 1
 					Overseer.Resources_to_rpc()
 				
 				else:
@@ -405,14 +443,20 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 			"Buy_Logs":
 				if Current_player.Man_power >= 2 && Current_player.Money >= 10 && Current_player.Player_faction == 1:
 					Current_player.Man_power -= 2 
+					Current_player.Player_stats["Spent_man_power"] += 2 
 					Current_player.Money -= 10
+					Current_player.Player_stats["Spent_money"] += 10
 					Current_player.Player_storage["Logistics"] += 1
+					Current_player.Player_stats["Buy_Logs"] += 1
 					Overseer.Resources_to_rpc()
 				
 				elif Current_player.Man_power >= 1 && Current_player.Money >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
+					Current_player.Player_stats["Spent_man_power"] += 1 
 					Current_player.Money -= 5
+					Current_player.Player_stats["Spent_money"] += 5
 					Current_player.Player_storage["Logistics"] += 1
+					Current_player.Player_stats["Buy_Logs"] += 1
 					Overseer.Resources_to_rpc()
 				
 				else:
@@ -721,8 +765,11 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 					if Player_resource.Player_faction == 1:
 						if Player_resource.Man_power >= 4 and Player_resource.Money >= 8 and Player_resource.Weapons >= 4:
 							Player_resource.Man_power -= 4
+							Player_resource.Player_stats["Spent_man_power"] += 4
 							Player_resource.Money -= 8
+							Player_resource.Player_stats["Spent_money"] += 8
 							Player_resource.Weapons -= 4
+							Player_resource.Player_stats["Spent_weapons"] += 4
 							Edited_node.remove_unit(Player_resource.Player_ID,0,true,checked_unit.unit_UUID)
 							Edited_node.add_unit(Player_resource.Player_ID,0,Player_resource.color,checked_unit.unit_UUID,false,false,true)
 							Overseer.Request_node_data(node_name)
@@ -730,8 +777,11 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 					else:
 						if Player_resource.Man_power >= 3 and Player_resource.Money >= 5 and Player_resource.Weapons >= 3:
 							Player_resource.Man_power -= 3
+							Player_resource.Player_stats["Spent_man_power"] += 3
 							Player_resource.Money -= 5
+							Player_resource.Player_stats["Spent_money"] += 5
 							Player_resource.Weapons -= 3
+							Player_resource.Player_stats["Spent_weapons"] += 3
 							Edited_node.remove_unit(Player_resource.Player_ID,0,true,checked_unit.unit_UUID)
 							Edited_node.add_unit(Player_resource.Player_ID,0,Player_resource.color,checked_unit.unit_UUID,false,false,true)
 							Overseer.Request_node_data(node_name)
@@ -740,7 +790,9 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 					if Player_resource.Player_faction == 1:
 						if Player_resource.Man_power >= 4 and Player_resource.Money >= 13:
 							Player_resource.Man_power -= 4
+							Player_resource.Player_stats["Spent_man_power"] += 4
 							Player_resource.Money -= 13
+							Player_resource.Player_stats["Spent_money"] += 13
 							Edited_node.remove_unit(Player_resource.Player_ID,1,true,checked_unit.unit_UUID)
 							Edited_node.add_unit(Player_resource.Player_ID,1,Player_resource.color,checked_unit.unit_UUID,false,false,true)
 							Overseer.Request_node_data(node_name)
@@ -748,7 +800,9 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 					else:
 						if Player_resource.Man_power >= 3 and Player_resource.Money >= 8:
 							Player_resource.Man_power -= 3
+							Player_resource.Player_stats["Spent_man_power"] += 3
 							Player_resource.Money -= 8
+							Player_resource.Player_stats["Spent_money"] += 8
 							Edited_node.remove_unit(Player_resource.Player_ID,1,true,checked_unit.unit_UUID)
 							Edited_node.add_unit(Player_resource.Player_ID,1,Player_resource.color,checked_unit.unit_UUID,false,false,true)
 							Overseer.Request_node_data(node_name)

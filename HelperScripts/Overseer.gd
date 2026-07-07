@@ -393,11 +393,15 @@ func Profit_and_Taxes()-> void:
 					if current_phase == MAINTENENCE:
 						if players.Player_faction == 1:
 							players.Money -= 8
+							players.Player_stats["Spent_money"] += 8
 						else:
 							players.Money -= 4
+							players.Player_stats["Spent_money"] += 4
 					else:
 						players.Man_power += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
+						players.Player_stats["Earned_man_power"] += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
 						players.Money += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
+						players.Player_stats["Earned_money"] += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
 				for node_names:String in The_nodes.keys():
 					var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
 					for unit:Resource in Checking_node.unit_list:
@@ -405,12 +409,16 @@ func Profit_and_Taxes()-> void:
 							if unit.player_ID == players.Player_ID:
 								if players.Player_faction == 1:
 									players.Money -= 4
+									players.Player_stats["Spent_money"] += 4
 								else:
 									players.Money -= 2
+									players.Player_stats["Spent_money"] += 2
 						else:
 							if unit.player_ID == players.Player_ID && unit.unit_type == 1 && unit.disrupted == false && Checking_node.Has_building == false:
 								players.Man_power += Checking_node.node_RPU.Population
+								players.Player_stats["Earned_man_power"] += Checking_node.node_RPU.Population
 								players.Money += Checking_node.node_RPU.RPU
+								players.Player_stats["Earned_money"] += Checking_node.node_RPU.RPU
 								break
 			Resources_to_rpc()
 		else:
@@ -516,17 +524,23 @@ func compute_consequences() -> void:
 	
 	if attacking_resource_type == RESOURCE_TYPE.MONEY:
 		attacking_player_resource.Money -= attacking_resource_allocation
+		attacking_player_resource.Player_stats["Spent_money"] += attacking_resource_allocation
 	elif attacking_resource_type == RESOURCE_TYPE.WEAPONS:
 		attacking_player_resource.Weapons -= attacking_resource_allocation
+		attacking_player_resource.Player_stats["Spent_weapons"] += attacking_resource_allocation
 	elif attacking_resource_type == RESOURCE_TYPE.MANPOWER:
 		attacking_player_resource.Man_power -= attacking_resource_allocation
+		attacking_player_resource.Player_stats["Spent_man_power"] += attacking_resource_allocation
 	
 	if defending_resource_type == RESOURCE_TYPE.MONEY:
 		defending_player_resource.Money -= defending_resource_allocation
+		defending_player_resource.Player_stats["Spent_money"] += defending_resource_allocation
 	elif defending_resource_type == RESOURCE_TYPE.WEAPONS:
 		defending_player_resource.Weapons -= defending_resource_allocation
+		defending_player_resource.Player_stats["Spent_weapons"] += defending_resource_allocation
 	elif defending_resource_type == RESOURCE_TYPE.MANPOWER:
 		defending_player_resource.Man_power -= defending_resource_allocation
+		defending_player_resource.Player_stats["Spent_man_power"] += defending_resource_allocation
 		
 	if attacking_resource_allocation == defending_resource_allocation:
 		print("Combat tied. No consequences.")
