@@ -527,6 +527,8 @@ func Update_available_buttons() -> void:
 		Change_available_buttons(true,false,true)
 	else:
 		Change_available_buttons(true,true,true)
+	if Overseer.current_phase != Overseer.PURCHASE:
+		%Trade.hide()
 
 func Change_available_buttons(Purchase:bool, Military:bool, Infrastructure:bool) -> void:
 	get_tree().call_group("PURCHASE_PHASE_BUTTONS","set_disabled",Purchase)
@@ -756,5 +758,13 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 		else:
 			print("\nSomething is worong here...\n")
 
+	
+
 # Weapons Money Man_power
 			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)
+
+
+func _on_open_trade_button_pressed() -> void:
+	var player:Player = Overseer.Identify_player(multiplayer.get_unique_id())
+	%Trade.set_counts(player.Weapons,player.Money,player.Man_power)
+	%Trade.show()

@@ -18,6 +18,7 @@
 [ext_resource type="StyleBox" uid="uid://b1d1bh60j1w7e" path="res://GUI/Button_Panel_Theme_Alt.tres" id="14_ygoei"]
 [ext_resource type="PackedScene" uid="uid://mugxmvhhce6q" path="res://CombatStuff/pre_combat.tscn" id="16_82g8w"]
 [ext_resource type="PackedScene" uid="uid://b755b2gx4g0n8" path="res://CombatStuff/combat_actual.tscn" id="17_0wnlq"]
+[ext_resource type="PackedScene" uid="uid://d0k0on7spbf72" path="res://GUI/trade.tscn" id="19_ve5d6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
 font = ExtResource("4_w20xb")
@@ -568,6 +569,14 @@ size_flags_horizontal = 8
 theme = ExtResource("3_fbkqq")
 text = "Market"
 
+[node name="Open_Trade_Button" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1617783214 groups=["PURCHASE_PHASE_BUTTONS"]]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("3_fbkqq")
+disabled = true
+text = "Trade"
+
 [node name="HBoxContainer2" type="BoxContainer" parent="VBoxContainer" unique_id=1634381290]
 layout_mode = 2
 size_flags_horizontal = 8
@@ -685,6 +694,10 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
+[node name="Trade" parent="." unique_id=627851301 instance=ExtResource("19_ve5d6")]
+unique_name_in_owner = true
+visible = false
+
 [connection signal="timeout" from="Action_Container/Purchase_preview_timer" to="." method="_on_purchase_preview_timer_timeout"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
 [connection signal="close_requested" from="Support_store_window" to="." method="_on_support_store_window_close_requested"]
@@ -698,5 +711,6 @@ visible = false
 [connection signal="screen_exited" from="Store_bounds/Bottom_left" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="screen_exited" from="Store_bounds/Bottom_right" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Open_Market_Button" to="." method="_on_open_market_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Open_Trade_Button" to="." method="_on_open_trade_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/Next_Phase_Button" to="." method="_on_next_phase_button_toggled"]
 [connection signal="pressed" from="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2/Attack_Button" to="." method="_on_attack_button_pressed"]
