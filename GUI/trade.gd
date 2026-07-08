@@ -19,6 +19,8 @@ func set_counts(weapons: int, money:int, manpower:int) -> void:
 	%Money_count.text = "0"
 	%Manpower_count.text = "0"
 	for player:Player in Overseer.player_list:
+		if player.Player_ID == multiplayer.get_unique_id():
+			continue
 		var player_color:Vector3 = player.color
 		var color_string:String = Overseer.get_player_color_name(player_color)
 		var final_string:String = str(player.Player_ID) + " [" + color_string + "]"

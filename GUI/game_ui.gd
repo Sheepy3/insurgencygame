@@ -527,6 +527,8 @@ func Update_available_buttons() -> void:
 		Change_available_buttons(true,false,true)
 	else:
 		Change_available_buttons(true,true,true)
+	if Overseer.current_phase != Overseer.PURCHASE:
+		%Trade.hide()
 
 func Change_available_buttons(Purchase:bool, Military:bool, Infrastructure:bool) -> void:
 	get_tree().call_group("PURCHASE_PHASE_BUTTONS","set_disabled",Purchase)
