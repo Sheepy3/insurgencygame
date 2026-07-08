@@ -660,3 +660,30 @@ func reset_combat_state() -> void:
 	attacking_units = []
 	defending_units = []
 	map_node_path = NodePath("")
+
+@rpc("any_peer","call_local")
+func attempt_complete_trade(to:int,weapons:int,money:int,manpower:int) -> void:
+	if multiplayer.is_server():
+		var sender_id:int = multiplayer.get_remote_sender_id()
+		if sender_id == 0:
+			sender_id = multiplayer.get_unique_id()
+		var from_player:Player = Identify_player(sender_id)
+		var to_player:Player = Identify_player(to)
+		if from_player == null or to_player == null:
+			return
+		if from_player.Player_ID == to_player.Player_ID:
+			return
+		if weapons > from_player.Weapons:
+			return
+		if money > from_player.Money:
+			return
+		if manpower > from_player.Man_power:
+			return
+
+		from_player.Weapons -= weapons
+		from_player.Money -= money
+		from_player.Man_power -= manpower
+		to_player.Weapons += weapons
+		to_player.Money += money
+		to_player.Man_power += manpower
+		Resources_to_rpc()

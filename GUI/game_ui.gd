@@ -756,5 +756,13 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 		else:
 			print("\nSomething is worong here...\n")
 
+	
+
 # Weapons Money Man_power
 			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)
+
+
+func _on_open_trade_button_pressed() -> void:
+	var player:Player = Overseer.Identify_player(multiplayer.get_unique_id())
+	%Trade.set_counts(player.Weapons,player.Money,player.Man_power)
+	%Trade.show()
