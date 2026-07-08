@@ -124,7 +124,7 @@ layout_mode = 2
 text = "Total Man Power aquired:"
 label_settings = ExtResource("3_h7gq2")
 
-[node name="Man_Power_spent_Label2" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1496944626]
+[node name="Man_Power_spent_Label" type="Label" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/ScrollContainer/HBoxContainer/Player_stats_Container/Resources_Container" unique_id=1496944626]
 layout_mode = 2
 text = "Total Man Power spent:"
 label_settings = ExtResource("3_h7gq2")

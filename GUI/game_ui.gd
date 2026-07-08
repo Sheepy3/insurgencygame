@@ -22,6 +22,7 @@ func _ready() -> void:
 	Overseer.change_phase.connect(_phase_switch_ui)
 	#Overseer.change_phase.connect()
 	Overseer.game_started.connect(connect_update_UI)
+	Overseer.game_ended.connect(Compile_game_over_info)
 	%Combat.combat_over.connect(_return_ui_after_combat)
 	$Pre_Combat.initialize_pressed.connect(_on_precombat_initialize)
 	$Pre_Combat.cancel_pressed.connect(_on_precombat_cancel)
@@ -141,6 +142,8 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Muster forces"
 		8:
 			$Current_Phase.text = "UN Intervention"
+		9:
+			$Current_Phase.text = "A player has won"
 	%Next_Phase_Button.set_pressed_no_signal(false)
 	%Next_Phase_Button.text = "NEXT PHASE???"
 
@@ -813,11 +816,12 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 # Weapons Money Man_power
 			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)
 
-@rpc("any_peer","call_local")
-func _compile_game_over_info() -> void:
+#@rpc("any_peer","call_local")
+func Compile_game_over_info() -> void:
 	if multiplayer.is_server():
-		pass
+		%Game_Over.pixel_fade_in()
+		Game_over_UI_initialize.rpc()
 
-@rpc("authority","call_local")
-func _game_over_UI_initialize() -> void:
+@rpc("authority","call_remote")
+func Game_over_UI_initialize() -> void:
 	%Game_Over.pixel_fade_in()

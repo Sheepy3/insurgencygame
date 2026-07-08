@@ -11,15 +11,20 @@ var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 
 #var selected_player_index:int = -1
 var current_player:String
+var Winning_players:Array
 #var Logistics_array:Array 
 #var Intelligence_array:Array
 var The_networks:Dictionary
 var The_nodes:Dictionary
 var The_support_nodes:Array
 var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again 
-var Desired_cycle:int = 3 # of phases before matnince or # of "PURCHASE" phases reached before matnince (will occur on turn of number)
- 
-enum {MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION}
+var Desired_cycle:int = 3 # of full "Phases_cycles" before matnince/ # of "PURCHASE" phases reached before matnince (will occur on turn of number)
+var Num_of_phases:int = 13 # of full "Phase_cycles" before the auto end of the game (INTERVENTION phase)
+
+enum {
+	MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, 
+	PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION, GAME_OVER
+	}
 var current_phase:int = INITIAL_DEPLOY
 var lock:bool = false
 
@@ -95,8 +100,15 @@ func get_player_color_name(color: Vector3) -> String:
 
 func cycle_phases() -> void:
 	print("This is the phase cycle: "+str(Phase_cycle))
-	if Phase_cycle == 13:
+	Check_VPs(false,true)
+	if Winning_players.size() > 0:
+		current_phase = GAME_OVER
+		change_phase.emit()
+		game_ended.emit()
+	elif Phase_cycle == Num_of_phases:
 		current_phase = INTERVENTION
+		Check_VPs(false,true,true)
+		game_ended.emit()
 		change_phase.emit() 
 	elif Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
@@ -125,6 +137,7 @@ func Resources_to_rpc() -> void:
 		#for Players:Resource in player_list:
 			#Player_rpc_info[str(Players.Player_ID)] = [Players.Player_ID,Players.Player_name,Players.Player_faction,Players.color,Players.base_list,Players.Weapons,Players.Money,Players.Man_power,Players.Victory_points,Players.Player_storage, Players.Ready]
 		#Rpc_to_resources.rpc(Player_rpc_info)
+		Check_VPs()
 		Player_resources_to_rpc.rpc()
 		player_resources_updated.emit()
 
@@ -195,6 +208,7 @@ func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 			#New_node[Unit_number] = [New_unit.unit_type,New_unit.unit_UUID,New_unit.disrupted,New_unit.player_ID,New_unit.color,New_unit.offcolor]
 			#x += 1
 		#Update_node_data.rpc(Edited_node.name,New_node,combat_data)
+		Check_VPs()
 		New_request_node_data.rpc(Edited_node_name,combat_data)
 
 @rpc("authority", "call_local", "reliable")
@@ -667,3 +681,35 @@ func Clear_unit_movement_exclusives() -> void:
 		var A_map_node:Node = get_parent().get_child(1).find_child(key_names)
 		if A_map_node.unit_list.size() > 0:
 			A_map_node.Reset_combat_data()
+
+func Check_VPs(Calculate_VPs:bool = true,Check_for_winner:bool = false,Intervention_phase:bool = false) -> void:
+	if Calculate_VPs:
+		for players:Resource in player_list:
+			var Total_VPs:int
+			for bases:Resource in players.base_list:
+				Total_VPs += 2
+			for node_names:String in The_nodes.keys():
+				var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
+				for unit:Resource in Checking_node.unit_list:
+					if unit.player_ID == players.Player_ID:
+						Total_VPs += 1
+			print("These are "+str(players.Player_ID)+"'s Total Victory points ----> "+str(Total_VPs))
+			players.Victory_points = Total_VPs
+	else:
+		if Check_for_winner:
+			if Intervention_phase:
+				for players:Resource in player_list:
+					if Winning_players.size() <= 0:
+						Winning_players.append(players)
+					else:
+						if Winning_players[0].Victory_points < players.Victory_points:
+							Winning_players.clear()
+							Winning_players.append(players)
+						elif Winning_players[0].Victory_points == players.Victory_points:
+							Winning_players.append(players)
+						else:
+							pass
+			else:
+				for players:Resource in player_list:
+					if players.Victory_points >= 15:
+						Winning_players.append(players)
