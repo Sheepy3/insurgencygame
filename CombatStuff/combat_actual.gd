@@ -1,5 +1,6 @@
 extends Control
 var unit_scene:PackedScene = load("res://CombatStuff/unit_visual_control.tscn")
+var effect_scene:PackedScene = load("res://CombatStuff/Attack_Animation_Effect.tscn")
 enum player_type {COMBATANT,SPECTATOR} 
 enum visual_type {BINOCULARS,FLASH} 
 enum visual_direction {LEFT,RIGHT}
@@ -223,7 +224,7 @@ func _on_ready_button_pressed() -> void:
 		%Money_slider.editable = false
 		%Weapons_slider.editable = false
 		%Manpower_slider.editable = false
-		
+
 #var combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,final_damage,winning_player]
 func _reset_combat_actual() -> void:
 	for child: Node in %Unit_spawn.get_children():
@@ -240,8 +241,7 @@ func _reset_combat_actual() -> void:
 	%Ready_Button.disabled = true
 	
 func _finalize_combat(combat_data:Array) -> void:
-	print("finalized")
-	
+
 	var attacker_res_type_string:String
 	var defender_res_type_string:String
 	
@@ -296,18 +296,39 @@ func _finalize_combat(combat_data:Array) -> void:
 			left_units.append(unit)
 		elif unit.player_ID == right_side_player_id:
 			right_units.append(unit)
-		else:
-			print("finalize ignored unit owner: ", unit.player_ID)
-
-	print("final left units: ", left_units.size())
-	print("final right units: ", right_units.size())
+		#else:
+			#print("finalize ignored unit owner: ", unit.player_ID)
+	#
+	#print("final left units: ", left_units.size())
+	#print("final right units: ", right_units.size())
 
 	display_allies(left_units)
 	display_opposition(right_units)
+	spawn_attack_effects()
 	%Timer.start()
 
+func spawn_attack_effects() -> void:
+	for child:Node in %Unit_spawn.get_children():
+		if child.Unit_Data.disrupted == true:
+			continue
+		var instanced_effect_scene:Node = effect_scene.instantiate()
+		if child.Unit_Data.unit_type == 1:
+			if child.flipped:
+				instanced_effect_scene.position -= Vector2(0,0)
+				instanced_effect_scene.flipped = true
+			else:
+				instanced_effect_scene.position += Vector2(55,0)
+			instanced_effect_scene.Is_binoculars = true
+		if child.Unit_Data.unit_type == 0:
+			if child.flipped:
+				instanced_effect_scene.position -= Vector2(18,13)
+				instanced_effect_scene.flipped = true
+			else:
+				instanced_effect_scene.position += Vector2(55,-11)
+			
+		child.add_child(instanced_effect_scene)
+
 func _on_timer_timeout() -> void:
-	print("times up")
 	_reset_combat_actual()
 	combat_over.emit()
 

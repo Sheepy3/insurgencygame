@@ -1,7 +1,7 @@
 extends Control
 @export var Unit_Data:Resource
 enum{FIGHTER,INFLUENCE}
-
+@export var flipped:bool = false
 func test() ->void:
 	print("hi")
 
@@ -13,6 +13,7 @@ func flip() ->void:
 	$F_sprite.flip_h = true
 	$I_sprite.flip_h = true
 	%Shadow.position += Vector2(9,0)
+	flipped = true
 
 
 func recolor() -> void:
