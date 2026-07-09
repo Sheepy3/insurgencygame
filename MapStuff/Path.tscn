@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://drgvjknpbfisx" path="res://Assets/lightmask.png" id="10_58pqk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nxxog"]
-size = Vector2(114, 45)
+size = Vector2(114, 72)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5b33m"]
 
