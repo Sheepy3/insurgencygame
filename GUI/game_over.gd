@@ -1,12 +1,20 @@
 extends Control
 
+signal stats_closed
+
 @onready var viewport_container:SubViewportContainer = %SubViewportContainer
 @onready var fade_material:ShaderMaterial = viewport_container.material
 
 func _ready() -> void:
 	pass
 
-func Populate_title(winners:Array) -> void:
+func Populate_title(winners:Array,End_by_intervention:bool = false) -> void:
+	#if End_by_intervention:
+		#if winners.size() > 1:
+			#%Game_over_title.text += " "
+		#elif: 
+			#%Game_over_title.text += " "
+	#else:
 	pass
 
 func Populate_stats(stats:Dictionary) -> void:
@@ -43,3 +51,4 @@ func pixel_fade_out(duration: float = 0.5) -> void:
 
 func _on_show_map_button_pressed() -> void:
 	pixel_fade_out()
+	stats_closed.emit()

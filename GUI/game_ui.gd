@@ -30,7 +30,9 @@ func _ready() -> void:
 	#Overseer.cycle_players()
 	_phase_switch_ui()
 	%Support_store_window.hide()
+	%Game_Over.stats_closed.connect(Show_stats_button)
 	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
+	$Show_Stats_Button.pressed.connect(Check_container_action.bind($Show_Stats_Button.name,"Pressed"))
 	%Close_Info_Button.pressed.connect(Check_container_action.bind(%Close_Info_Button.name,"Pressed"))
 	for boxes:VBoxContainer in %HBox_Buy_Placeables.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
@@ -117,6 +119,10 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 			else:
 				%Close_Info_Button.position = Vector2(0,0)
 				%Close_Info_Button.text = ">"
+				
+		"Show_Stats_Button":
+			%Game_Over.pixel_fade_in()
+			$Show_Stats_Button.hide()
 
 #func _player_switch_ui() -> void:
 	#$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
@@ -833,7 +839,7 @@ func Compile_game_over_info() -> void:
 		for keys:int in player_data.keys():
 			if multiplayer.get_unique_id() == keys:
 				my_stats = player_data[keys]
-		#%Game_Over.Populate_title(Winning_players)
+		%Game_Over.Populate_title(winners)
 		%Game_Over.Populate_stats(my_stats)
 		%Game_Over.pixel_fade_in()
 		Game_over_UI_initialize.rpc(winners,player_data)
@@ -846,7 +852,7 @@ func Game_over_UI_initialize(Winning_players:Array,Stat_data:Dictionary) -> void
 		if multiplayer.get_unique_id() == keys:
 			my_stats = Stat_data[keys]
 	print(my_stats)
-	#%Game_Over.Populate_title(Winning_players)
+	%Game_Over.Populate_title(Winning_players)
 	%Game_Over.Populate_stats(my_stats)
 	%Game_Over.pixel_fade_in()
 
@@ -854,3 +860,6 @@ func _on_open_trade_button_pressed() -> void:
 	var player:Player = Overseer.Identify_player(multiplayer.get_unique_id())
 	%Trade.set_counts(player.Weapons,player.Money,player.Man_power)
 	%Trade.show()
+
+func Show_stats_button() -> void:
+	$Show_Stats_Button.show()
