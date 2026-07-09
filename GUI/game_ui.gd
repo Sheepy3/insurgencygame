@@ -133,7 +133,7 @@ func _phase_switch_ui() -> void:
 		4:
 			$Current_Phase.text = "Combat"
 		5:
-			$Current_Phase.text = "Placce Fighter Units & Bases"
+			$Current_Phase.text = "Place Fighter Units & Bases"
 		6:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
@@ -141,6 +141,8 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Muster forces"
 		8:
 			$Current_Phase.text = "UN Intervention"
+	
+	$Current_Phase.text += " (Turn " + str(Overseer.Phase_cycle) + ("/12)")
 	%Next_Phase_Button.set_pressed_no_signal(false)
 	%Next_Phase_Button.text = "NEXT PHASE???"
 
@@ -263,7 +265,9 @@ func connect_update_UI() -> void:
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
 	reset_node_unit_list()
+	var map_node:Node = get_parent().find_child(str(mapnode))
 	var player_unit_count:int = 0
+	var player_units_available_to_attack:int = 0
 	var enemy_unit_count:int = 0
 	for unit:Resource in units:
 		if unit.player_ID == multiplayer.get_unique_id():
@@ -277,14 +281,27 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 			new_unit_display.Check_unit_phase()
 			%Unit_Display.add_child(new_unit_display)
 			player_unit_count+=1
+			if !unit.has_fought:
+				player_units_available_to_attack+=1
 			#if unit.disrupted:
 				#new_unit_display.enable_reconstitution()
 		else:
 			enemy_unit_count+=1
-	if player_unit_count > 0 and enemy_unit_count > 0:
+	if Overseer.current_phase == Overseer.COMBAT and player_unit_count > 0 and player_units_available_to_attack > 0 and (enemy_unit_count > 0 or has_attackable_enemy_base(map_node, multiplayer.get_unique_id())):
 		%Attack_Button.disabled = false
 	else:
 		%Attack_Button.disabled = true
+
+func has_attackable_enemy_base(map_node:Node, attacker_id:int) -> bool:
+	if map_node == null or !map_node.Has_building or map_node.building.player_ID == attacker_id:
+		return false
+	return !has_defending_units_for_player(map_node, map_node.building.player_ID)
+
+func has_defending_units_for_player(map_node:Node, player_id:int) -> bool:
+	for unit:Resource in map_node.unit_list:
+		if unit.player_ID == player_id:
+			return true
+	return false
 
 func move_unit_function(unit_resource:Resource, source_node:String) -> void:
 	print("move unit from " + source_node)
@@ -561,6 +578,8 @@ func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> v
 func request_pre_combat_ui(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
 		var player_id:int = multiplayer.get_remote_sender_id() # attacker ID
+		if player_id == 0:
+			player_id = multiplayer.get_unique_id()
 		var map_node:Node = get_node(map_node_path)
 		print(map_node.unit_list)
 		var fighter_count:int = 0
@@ -569,11 +588,13 @@ func request_pre_combat_ui(map_node_path:NodePath) -> void:
 		for unit:Resource in map_node.unit_list:
 			if unit.player_ID != player_id and not players_involved.has(unit.player_ID):
 				players_involved.append(unit.player_ID)
-			if unit.player_ID == player_id:
+			if unit.player_ID == player_id and !unit.has_fought:
 				if unit.unit_type == 0:
 					fighter_count +=1
 				else:
 					influence_count +=1
+		if has_attackable_enemy_base(map_node, player_id) and not players_involved.has(map_node.building.player_ID):
+			players_involved.append(map_node.building.player_ID)
 		display_pre_combat.rpc(player_id, fighter_count, influence_count,players_involved)
 
 @rpc("authority", "call_local")
@@ -607,7 +628,7 @@ func _request_combat(attacking_fighters:int, attacking_influence:int, target_pla
 		var attacking_influence_found:Array = []
 		var defending_units:Array = []
 		for unit:Resource in map_node.unit_list:
-			if unit.player_ID == player_id:
+			if unit.player_ID == player_id and !unit.has_fought:
 				if unit.unit_type == 0:
 					attacking_fighters_found.append(unit)
 				else:
@@ -624,6 +645,15 @@ func _request_combat(attacking_fighters:int, attacking_influence:int, target_pla
 			final_attacking_units.append(attacking_fighters_found[i])
 		for i: int in range(min(attacking_influence, attacking_influence_found.size())):
 			final_attacking_units.append(attacking_influence_found[i])
+		if final_attacking_units.is_empty():
+			print("bad combat request. No eligible attackers or defenders found.")
+			return
+		if defending_units.is_empty() and can_destroy_undefended_base(map_node, player_id, target_player_id):
+			destroy_undefended_base(map_node, final_attacking_units, player_id)
+			return
+		if defending_units.is_empty():
+			print("bad combat request. No eligible attackers or defenders found.")
+			return
 			
 		Overseer.defending_units = defending_units
 		Overseer.attacking_units = final_attacking_units
@@ -640,15 +670,15 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	var attacking_fighters_collected:int = 0
 	var attacking_influence_collected:int = 0
 	for unit:Resource in map_node.unit_list:
-			if unit.player_ID == attacker_id:
-				if unit.unit_type == 0 && (attacking_fighters_collected < attacking_fighters):
-					attacking_units.append(unit)
-					attacking_fighters_collected += 1
-				elif unit.unit_type == 1 && (attacking_influence_collected < attacking_influence):
-					attacking_units.append(unit)
-					attacking_influence_collected += 1
-			elif unit.player_ID == defender_id:
-				defending_units.append(unit)
+		if unit.player_ID == attacker_id and !unit.has_fought:
+			if unit.unit_type == 0 && (attacking_fighters_collected < attacking_fighters):
+				attacking_units.append(unit)
+				attacking_fighters_collected += 1
+			elif unit.unit_type == 1 && (attacking_influence_collected < attacking_influence):
+				attacking_units.append(unit)
+				attacking_influence_collected += 1
+		elif unit.player_ID == defender_id:
+			defending_units.append(unit)
 	var attacking_player:Resource = Overseer.Identify_player(attacker_id)
 	var defending_player:Resource = Overseer.Identify_player(defender_id)
 	Overseer.attacking_player = attacker_id
@@ -682,6 +712,28 @@ func _initialize_combat(attacker_id:int, defender_id:int, attacking_fighters:int
 	hidden_ui_nodes.erase(%Combat)
 	%Combat.pixel_fade_in()
 	%Pre_Combat.hide()
+
+func can_destroy_undefended_base(map_node:Node, attacker_id:int, target_player_id:int) -> bool:
+	if map_node == null or !map_node.Has_building:
+		return false
+	if map_node.building.player_ID != target_player_id or target_player_id == attacker_id:
+		return false
+	return !has_defending_units_for_player(map_node, target_player_id)
+
+func destroy_undefended_base(map_node:Node, attacking_units:Array, attacker_id:int) -> void:
+	for unit:Resource in attacking_units:
+		unit.has_fought = true
+	map_node.remove_building()
+	map_node.reorder_units()
+	Overseer.Resources_to_rpc()
+	Overseer.Request_node_data(map_node.name)
+	base_attack_complete.rpc(attacker_id)
+
+@rpc("authority", "call_local")
+func base_attack_complete(attacker_id:int) -> void:
+	if multiplayer.get_unique_id() == attacker_id:
+		show_ui()
+		%Pre_Combat.hide()
 	
 func hide_ui() -> void:
 	for node in get_children():

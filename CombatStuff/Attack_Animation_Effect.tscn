@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://d0rhngdo6uew1"]
+
+[ext_resource type="Texture2D" uid="uid://82n1yu1738j3" path="res://Assets/Military/binoculars_thrown.png" id="1_22lt6"]
+[ext_resource type="Script" uid="uid://cntqkcnihptjs" path="res://CombatStuff/attack_animation_effect.gd" id="1_kxl7i"]
+[ext_resource type="Texture2D" uid="uid://cialwn7xcur4m" path="res://Assets/Military/muzzle_flash_1.png" id="2_kxl7i"]
+
+[node name="Node2D" type="Node2D" unique_id=1847791843]
+script = ExtResource("1_kxl7i")
+
+[node name="Attack_Binoculars" type="Sprite2D" parent="." unique_id=328082091]
+visible = false
+texture = ExtResource("1_22lt6")
+
+[node name="Attack_MuzzleFlash" type="Sprite2D" parent="." unique_id=1149277901]
+visible = false
+position = Vector2(11, 0)
+texture = ExtResource("2_kxl7i")
+
+[node name="Timer" type="Timer" parent="." unique_id=888313075]
+wait_time = 1.5999999999999999
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

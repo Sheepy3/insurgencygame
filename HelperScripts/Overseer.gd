@@ -95,19 +95,17 @@ func cycle_phases() -> void:
 	print("This is the phase cycle: "+str(Phase_cycle))
 	if Phase_cycle == 13:
 		current_phase = INTERVENTION
-		change_phase.emit() 
 	elif Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
-		change_phase.emit()
 	elif current_phase == COLLECT and Phase_cycle % Desired_cycle != 0:
 		current_phase = 1
-		change_phase.emit()
 	elif current_phase < COLLECT:
 		current_phase+=1
-		change_phase.emit()
 	elif current_phase == INITIAL_DEPLOY:
 		current_phase = COLLECT
-		change_phase.emit()
+	if current_phase == COMBAT:
+		reset_all_unit_has_fought()
+	change_phase.emit()
 	Sync_player_phases.rpc(current_phase,Phase_cycle)
 
 
@@ -258,6 +256,10 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 		return
 	var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children()
 	Edited_node.unit_list.clear()
+	Edited_node.building = null
+	Edited_node.Has_building = false
+	Edited_node.node_owner = ""
+	Edited_node.find_child("Building").hide()
 	for existing_units:Node in Present_unit_list:
 		existing_units.free()
 	for indexs:Dictionary in Node_info:
@@ -267,6 +269,8 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 				new_resource.set(keys,indexs[keys]) 
 		if indexs["Resource_type"] == "Building":
 				Edited_node.building = new_resource
+				Edited_node.Has_building = true
+				Edited_node.node_owner = str(new_resource.player_ID)
 				Edited_node.find_child("Building").material.set_shader_parameter("tint_color", indexs["color"])
 				Edited_node.find_child("Building").material.set_shader_parameter("saturation",0.4)
 				Edited_node.find_child("Building").show()
@@ -396,7 +400,17 @@ func Check_phase_status() -> void:
 func Sync_player_phases(New_phase:int,New_phase_cycle:int) -> void:
 	current_phase = New_phase
 	Phase_cycle = New_phase_cycle
+	if current_phase == COMBAT:
+		reset_all_unit_has_fought()
 	change_phase.emit()
+
+func reset_all_unit_has_fought() -> void:
+	for node_names:String in The_nodes.keys():
+		var checking_node:Node = _find_current_scene_node(node_names)
+		if checking_node == null:
+			continue
+		for unit:Resource in checking_node.unit_list:
+			unit.has_fought = false
 
 func Profit_and_Taxes()-> void:
 	if multiplayer.is_server():
@@ -522,6 +536,9 @@ func compute_consequences() -> void:
 		print("Invalid combat allocation. Bets must be greater than 0.")
 		reset_combat_state()
 		return
+	
+	var map_node:Node = get_node(map_node_path)
+	mark_attacking_units_has_fought()
 
 	### Both sides pay their bet.
 	var defending_player_resource:Resource = Identify_player(defending_player)
@@ -543,8 +560,10 @@ func compute_consequences() -> void:
 		
 	if attacking_resource_allocation == defending_resource_allocation:
 		print("Combat tied. No consequences.")
-		reset_combat_state()
+		var tie_combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,0.0,0]
 		Resources_to_rpc()
+		Request_node_data(map_node.name, tie_combat_data)
+		reset_combat_state()
 		return
 
 	var attacker_won := attacking_resource_allocation > defending_resource_allocation
@@ -601,29 +620,35 @@ func compute_consequences() -> void:
 	print("Unit power: " + str(unit_power))
 	print("Final damage: " + str(final_damage))
 
-	var remaining_damage := final_damage
-
-	# 1. Kill disrupted fighters first.
-	remaining_damage = kill_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.FIGHTER, true)
-
-	# 2. Kill disrupted influence units.
-	remaining_damage = kill_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.INFLUENCE, true)
-
-	# 3. Disrupt fresh fighters.
-	remaining_damage = disrupt_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.FIGHTER)
-
-	# 4. Disrupt fresh influence units.
-	remaining_damage = disrupt_units_by_filter(losing_units, remaining_damage, UNIT_TYPE.INFLUENCE)
+	var units_not_in_combat:Array = get_units_not_in_combat(map_node.unit_list)
+	apply_damage_to_units(losing_units, final_damage)
 
 	### actually update units on node and then send RPC to update display
 	Resources_to_rpc()
-	var map_node:Node = get_node(map_node_path)
-	map_node.unit_list = losing_units + winning_units
+	map_node.unit_list = units_not_in_combat + losing_units + winning_units
 	map_node.reorder_units()
 	var winning_player: int = attacking_player if attacker_won else defending_player	
 	var combat_data:Array = [map_node_path,attacking_resource_type,attacking_resource_allocation,defending_resource_type,defending_resource_allocation,final_damage,winning_player]
 	Request_node_data(map_node.name, combat_data)
 	reset_combat_state()
+
+func mark_attacking_units_has_fought() -> void:
+	for unit:Resource in attacking_units:
+		unit.has_fought = true
+
+func get_units_not_in_combat(all_units:Array) -> Array:
+	var uninvolved_units:Array = []
+	for unit:Resource in all_units:
+		if !attacking_units.has(unit) and !defending_units.has(unit):
+			uninvolved_units.append(unit)
+	return uninvolved_units
+
+func apply_damage_to_units(units:Array, damage:float) -> void:
+	var remaining_damage := damage
+	remaining_damage = kill_units_by_filter(units, remaining_damage, UNIT_TYPE.FIGHTER, true)
+	remaining_damage = kill_units_by_filter(units, remaining_damage, UNIT_TYPE.INFLUENCE, true)
+	remaining_damage = disrupt_units_by_filter(units, remaining_damage, UNIT_TYPE.FIGHTER)
+	remaining_damage = disrupt_units_by_filter(units, remaining_damage, UNIT_TYPE.INFLUENCE)
 
 func kill_units_by_filter(units: Array, damage: float, unit_type: int, must_be_disrupted: bool) -> float:
 	var i := units.size() - 1
