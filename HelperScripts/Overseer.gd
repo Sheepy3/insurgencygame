@@ -17,7 +17,7 @@ var Winning_players:Array = []
 var The_networks:Dictionary
 var The_nodes:Dictionary
 var The_support_nodes:Array
-var Phase_cycle:int = 12   # of times you have reached the "PURCHASE" phase again 
+var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again 
 var Desired_cycle:int = 3 # of full "Phases_cycles" before matnince/ # of "PURCHASE" phases reached before matnince (will occur on turn of number)
 var Num_of_phases:int = 13 # of full "Phase_cycles" before the auto end of the game (INTERVENTION phase)
 
@@ -25,7 +25,7 @@ enum {
 	MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, 
 	PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION, GAME_OVER
 	}
-var current_phase:int = INITIAL_DEPLOY #INITIAL_DEPLOY
+var current_phase:int = INITIAL_DEPLOY
 var lock:bool = false
 
 signal change_player # Signal may be depricated due to lack of use
