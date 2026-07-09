@@ -270,11 +270,16 @@ func _finalize_combat(combat_data:Array) -> void:
 		%Attacker_arrow.text = "<-"
 	elif winning_player_id == right_side_player_id:
 		%Defender_arrow.text = "->"
+	elif winning_player_id == 0:
+		pass
 	else:
 		push_warning("Winner was neither left nor right side: " + str(winning_player_id))
 		
 		
-	%Winner_damage.text = "Winner: " + str(combat_data[5]) + " Damage"
+	if winning_player_id == 0:
+		%Winner_damage.text = "Tie: 0 Damage"
+	else:
+		%Winner_damage.text = "Winner: " + str(combat_data[5]) + " Damage"
 
 
 	var Map_node: Node = get_node(combat_data[0])

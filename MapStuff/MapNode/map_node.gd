@@ -80,6 +80,20 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	Has_building = true
 	attempt_place_dock()
 
+func remove_building() -> void:
+	if Has_building and building:
+		var owning_player:Resource = Overseer.Identify_player(building.player_ID)
+		if owning_player:
+			for base_index:int in range(owning_player.base_list.size() - 1, -1, -1):
+				var base:Resource = owning_player.base_list[base_index]
+				if base.location == building.location:
+					owning_player.base_list.remove_at(base_index)
+					break
+	building = null
+	Has_building = false
+	node_owner = ""
+	%Building.hide()
+
 func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool, DID_HE_MOVED:bool = false, is_reconstituted:bool = false) -> void:
 	var unique_unit:Resource
 	if type == FIGHTER:
@@ -95,6 +109,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool, 
 	
 	unique_unit.has_moved = DID_HE_MOVED
 	unique_unit.unit_UUID = UUID
+	unique_unit.disrupted = disrupted
 	unique_unit.been_reconstituted = is_reconstituted
 	unit_list.append(unique_unit) # ADD UNIT DATA
 	
