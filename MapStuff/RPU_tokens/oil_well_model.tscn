@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://b6w7byxbe58hc"]
+
+[ext_resource type="PackedScene" uid="uid://bubul5doocbob" path="res://Assets/Models/Oil_Well.glb" id="1_yloip"]
+[ext_resource type="Script" uid="uid://qghaou4crk5y" path="res://MapStuff/RPU_tokens/oil_well_model.gd" id="2_061sk"]
+
+[sub_resource type="Environment" id="Environment_yloip"]
+ambient_light_source = 2
+ambient_light_color = Color(0.72, 0.78, 0.88, 1)
+ambient_light_energy = 0.55
+
+[sub_resource type="Shader" id="Shader_shadow_catcher"]
+code = "shader_type spatial;
+render_mode cull_disabled;
+
+uniform vec3 shadow_color: source_color = vec3(0.0);
+uniform float shadow_opacity: hint_range(0.0, 1.0) = 0.7;
+uniform float shadow_max_opacity: hint_range(0.0, 1.0) = 0.8;
+uniform float shadow_threshold: hint_range(0.01, 1.0) = 0.25;
+
+void fragment() {
+	ALBEDO = shadow_color;
+	ALPHA = 0.0;
+}
+
+void light() {
+	DIFFUSE_LIGHT = ALBEDO;
+	// ATTENUATION also contains OmniLight distance falloff. Only values near
+	// zero are treated as shadow so the lit plane remains fully transparent.
+	float shadow = 1.0 - smoothstep(0.0, shadow_threshold, ATTENUATION);
+	ALPHA = min(ALPHA + shadow_opacity * shadow, shadow_max_opacity);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shadow_catcher"]
+render_priority = 0
+shader = SubResource("Shader_shadow_catcher")
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+shader_parameter/shadow_opacity = 0.7
+shader_parameter/shadow_max_opacity = 0.8
+shader_parameter/shadow_threshold = 0.25
+
+[sub_resource type="QuadMesh" id="QuadMesh_061sk"]
+material = SubResource("ShaderMaterial_shadow_catcher")
+size = Vector2(2, 2)
+
+[node name="Oil_Well" unique_id=811368076 instance=ExtResource("1_yloip")]
+script = ExtResource("2_061sk")
+
+[node name="Circle_003" parent="Oil_Rig" parent_id_path=PackedInt32Array(402733987) index="1" unique_id=1608956156]
+transform = Transform3D(2.6901557e-09, 0.19396523, 4.6244903e-08, -0.1877928, 1.4177963e-08, -0.04854241, -0.048542414, -4.4100048e-08, 0.18779278, 0.49999994, 1.4533955, -0.090975285)
+
+[node name="Cylinder" parent="Oil_Rig" parent_id_path=PackedInt32Array(402733987) index="2" unique_id=1710631687]
+transform = Transform3D(0.008950581, 0, 0, 0, 0.60344917, 0, 0, 0, 0.008950581, 0.5024696, 0.9323097, 0.49099374)
+
+[node name="Cube_012" parent="Oil_Rig" parent_id_path=PackedInt32Array(402733987) index="7" unique_id=1848922362]
+transform = Transform3D(1, 0, 9.620924e-18, 0, 1, 0, -9.620924e-18, 0, 1, 0.5, 1.399788, -0.39506128)
+
+[node name="Camera3D" type="Camera3D" parent="." index="2" unique_id=1124612288]
+transform = Transform3D(0.7071067, -0.35355332, 0.6123724, 0, 0.8660252, 0.5, -0.7071067, -0.35355332, 0.6123724, 3.865, 4.4, 3.62)
+environment = SubResource("Environment_yloip")
+projection = 1
+current = true
+size = 4.39
+
+[node name="ShadowCatcher" type="MeshInstance3D" parent="." index="3" unique_id=1252366823]
+transform = Transform3D(2, 0, 0, 0, -8.742278e-08, -2, 0, 2, -8.742278e-08, 0.9357158, 1.7492578, 0.96146524)
+cast_shadow = 0
+mesh = SubResource("QuadMesh_061sk")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="4" unique_id=2116786700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29732704, 3.7483149, 1.5952563)
+shadow_enabled = true
+omni_range = 7.680844

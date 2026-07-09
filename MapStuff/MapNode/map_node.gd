@@ -11,8 +11,11 @@ var influence_resource:Resource=load("res://Resources/Preset/Influence.tres")
 var base_resource:Resource=load("res://Resources/Preset/Miliary_Base.tres")
 var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 var flare_scene:PackedScene = load("res://GUI/Arrow/Arrow.tscn")
+var dock_left:Texture = load("res://Assets/Map_Tiles/dock_left.png")
+var dock_right:Texture = load("res://Assets/Map_Tiles/dock_right.png")
 var Player_color:Vector3
 enum{FIGHTER,INFLUENCE}
+@onready var fade_material: ShaderMaterial = %Dock.material
 
 
 func _ready() -> void:
@@ -75,6 +78,7 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	%Building.material.set_shader_parameter("saturation", 0.4)
 	%Building.show()
 	Has_building = true
+	attempt_place_dock()
 
 func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool, DID_HE_MOVED:bool = false, is_reconstituted:bool = false) -> void:
 	var unique_unit:Resource
@@ -87,6 +91,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool, 
 		unique_unit = influence_resource.duplicate(true)
 		unique_unit.player_ID = player
 		unique_unit.color = color #get_parent().Current_player.color #players_colors[Overseer.selected_player_index]
+		attempt_place_dock()
 	
 	unique_unit.has_moved = DID_HE_MOVED
 	unique_unit.unit_UUID = UUID
@@ -237,3 +242,40 @@ func Reset_combat_data() -> void:
 		units.been_reconstituted = false
 		units.has_moved = false
 	Overseer.Request_node_data(name)
+
+func spawn_dock(duration: float = 0.5) -> void:
+	%Dock.show()
+	fade_material.set_shader_parameter("progress", 0.0)
+
+	var tween := create_tween()
+	tween.tween_method(
+		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
+		0.0,
+		1.0,
+		duration
+	)
+
+func despawn_dock(duration: float = 0.5) -> void:
+	fade_material.set_shader_parameter("progress", 1.0)
+
+	var tween := create_tween()
+	tween.tween_method(
+		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
+		1.0,
+		0.0,
+		duration
+	)
+
+	await tween.finished
+	%Dock.hide()
+
+func attempt_place_dock() -> void:
+	if %Dock.visible:
+		return
+	if Overseer.The_support_nodes.has(name):
+		if position.x > 0:
+			%Dock.texture = dock_right
+			spawn_dock()
+		else:
+			%Dock.texture = dock_left
+			spawn_dock()

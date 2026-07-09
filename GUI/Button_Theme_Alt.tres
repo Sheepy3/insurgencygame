@@ -1,0 +1,25 @@
+[gd_resource type="Theme" format=3 uid="uid://c7d2sn6q1p472"]
+
+[ext_resource type="StyleBox" uid="uid://b1d1bh60j1w7e" path="res://GUI/Button_Panel_Theme_Alt.tres" id="1_t8kux"]
+[ext_resource type="FontFile" uid="uid://jeu6ag8vn6v7" path="res://GUI/Bitrimus.ttf" id="3_m8vh5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1pjib"]
+content_margin_left = 6.0
+content_margin_top = 3.0
+content_margin_right = 6.0
+content_margin_bottom = 3.0
+
+[resource]
+default_font = ExtResource("3_m8vh5")
+default_font_size = 24
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/constants/outline_size = 9
+Button/styles/disabled = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/focus = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/hover = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/normal = SubResource("StyleBoxEmpty_1pjib")
+Button/styles/pressed = SubResource("StyleBoxEmpty_1pjib")
+OptionButton/constants/outline_size = 9
+Panel/styles/panel = ExtResource("1_t8kux")
+PanelContainer/styles/panel = ExtResource("1_t8kux")

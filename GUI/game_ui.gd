@@ -31,7 +31,7 @@ func _ready() -> void:
 	_phase_switch_ui()
 	%Support_store_window.hide()
 	$Close_UI_Button.pressed.connect(Check_container_action.bind($Close_UI_Button.name,"Pressed"))
-	$Close_Info_Button.pressed.connect(Check_container_action.bind($Close_Info_Button.name,"Pressed"))
+	%Close_Info_Button.pressed.connect(Check_container_action.bind(%Close_Info_Button.name,"Pressed"))
 	for boxes:VBoxContainer in %HBox_Buy_Placeables.get_children(true):
 		for UI_elements:Control in boxes.get_children(true):
 			if UI_elements is Button:
@@ -110,13 +110,13 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 				$Close_UI_Button.text = ">"
 				
 		"Close_Info_Button":
-			$Player_Info.visible = !$Player_Info.visible
-			if $Player_Info.visible:
-				$Close_Info_Button.position = Vector2(610,0)
-				$Close_Info_Button.text = "<"
+			%Player_Info.visible = !%Player_Info.visible
+			if %Player_Info.visible:
+				%Close_Info_Button.position = Vector2(610,0)
+				%Close_Info_Button.text = "<"
 			else:
-				$Close_Info_Button.position = Vector2(0,0)
-				$Close_Info_Button.text = ">"
+				%Close_Info_Button.position = Vector2(0,0)
+				%Close_Info_Button.text = ">"
 
 #func _player_switch_ui() -> void:
 	#$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
@@ -183,15 +183,15 @@ func _on_weapons_button_pressed() -> void:
 
 func update_Player_Info() -> void:
 	var player:Resource = Overseer.Identify_player(Unique_player_ID)
-	$Player_Info/HBoxContainer/Guns.text = str(player.Weapons)
-	$Player_Info/HBoxContainer/Money.text = str(player.Money)
-	$Player_Info/HBoxContainer/Population.text = str(player.Man_power)
-	$Player_Info/HBoxContainer/VictoryPoints.text = str(player.Victory_points)
-	$Player_Info/HBoxContainer/Spacer2/Base_count.text = str(player.Player_storage["Military_Base"])
-	$Player_Info/HBoxContainer/Spacer2/Fighter_count.text = str(player.Player_storage["Fighter"])
-	$Player_Info/HBoxContainer/Spacer2/Influence_count.text = str(player.Player_storage["Influence"])
-	$Player_Info/HBoxContainer/Spacer2/Intelligence_count.text = str(player.Player_storage["Intelligence"])
-	$Player_Info/HBoxContainer/Spacer2/Logistics_count.text = str(player.Player_storage["Logistics"])
+	%Player_Info/HBoxContainer/Guns.text = str(player.Weapons)
+	%Player_Info/HBoxContainer/Money.text = str(player.Money)
+	%Player_Info/HBoxContainer/Population.text = str(player.Man_power)
+	%Player_Info/HBoxContainer/VictoryPoints.text = str(player.Victory_points)
+	%Player_Info/HBoxContainer/Spacer2/Base_count.text = str(player.Player_storage["Military_Base"])
+	%Player_Info/HBoxContainer/Spacer2/Fighter_count.text = str(player.Player_storage["Fighter"])
+	%Player_Info/HBoxContainer/Spacer2/Influence_count.text = str(player.Player_storage["Influence"])
+	%Player_Info/HBoxContainer/Spacer2/Intelligence_count.text = str(player.Player_storage["Intelligence"])
+	%Player_Info/HBoxContainer/Spacer2/Logistics_count.text = str(player.Player_storage["Logistics"])
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	%Support_store_window.position = Vector2(975,36)
@@ -574,6 +574,8 @@ func Update_available_buttons() -> void:
 		Change_available_buttons(true,false,true)
 	else:
 		Change_available_buttons(true,true,true)
+	if Overseer.current_phase != Overseer.PURCHASE:
+		%Trade.hide()
 
 func Change_available_buttons(Purchase:bool, Military:bool, Infrastructure:bool) -> void:
 	get_tree().call_group("PURCHASE_PHASE_BUTTONS","set_disabled",Purchase)
@@ -813,6 +815,8 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 		else:
 			print("\nSomething is worong here...\n")
 
+	
+
 # Weapons Money Man_power
 			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)
 
@@ -825,3 +829,8 @@ func Compile_game_over_info() -> void:
 @rpc("authority","call_remote")
 func Game_over_UI_initialize() -> void:
 	%Game_Over.pixel_fade_in()
+
+func _on_open_trade_button_pressed() -> void:
+	var player:Player = Overseer.Identify_player(multiplayer.get_unique_id())
+	%Trade.set_counts(player.Weapons,player.Money,player.Man_power)
+	%Trade.show()
