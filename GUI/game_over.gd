@@ -6,7 +6,16 @@ extends Control
 func _ready() -> void:
 	pass
 
+func Populate_title(winners:Array) -> void:
+	pass
 
+func Populate_stats(stats:Dictionary) -> void:
+	for vboxes:VBoxContainer in %Player_stats_Container.get_children():
+		for stat_displays:Label in vboxes.get_children():
+			for keys:String in stats.keys():
+				if stat_displays.name.contains(keys):
+					stat_displays.text += " "+str(stats[keys])
+					break
 
 func pixel_fade_in(duration: float = 0.5) -> void:
 	show()
@@ -31,3 +40,6 @@ func pixel_fade_out(duration: float = 0.5) -> void:
 	)
 	await tween.finished
 	hide()
+
+func _on_show_map_button_pressed() -> void:
+	pixel_fade_out()

@@ -22,7 +22,7 @@ func _ready() -> void:
 	Overseer.change_phase.connect(_phase_switch_ui)
 	#Overseer.change_phase.connect()
 	Overseer.game_started.connect(connect_update_UI)
-	Overseer.game_ended.connect(Compile_game_over_info)
+	Overseer.game_ended.connect(connect_update_UI)
 	%Combat.combat_over.connect(_return_ui_after_combat)
 	$Pre_Combat.initialize_pressed.connect(_on_precombat_initialize)
 	$Pre_Combat.cancel_pressed.connect(_on_precombat_cancel)
@@ -263,13 +263,17 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
 
 func connect_update_UI() -> void:
-	Overseer.player_resources_updated.connect(update_Player_Info)
-	Overseer.player_resources_updated.connect(Check_store_unlocked)
-	Overseer.change_phase.connect(Check_store_unlocked)
-	Overseer.change_phase.connect(Update_available_buttons)
-	Overseer.change_phase.connect(Overseer.Profit_and_Taxes)
-	Unique_player_ID = multiplayer.get_unique_id()
-	Update_available_buttons()
+	if Overseer.current_phase == Overseer.INTERVENTION or Overseer.GAME_OVER:
+		if multiplayer.is_server():
+			Compile_game_over_info.rpc()
+	else:
+		Overseer.player_resources_updated.connect(update_Player_Info)
+		Overseer.player_resources_updated.connect(Check_store_unlocked)
+		Overseer.change_phase.connect(Check_store_unlocked)
+		Overseer.change_phase.connect(Update_available_buttons)
+		Overseer.change_phase.connect(Overseer.Profit_and_Taxes)
+		Unique_player_ID = multiplayer.get_unique_id()
+		Update_available_buttons()
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
@@ -815,19 +819,35 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 		else:
 			print("\nSomething is worong here...\n")
 
-	
-
-# Weapons Money Man_power
-			#action_error.rpc("You somehow have a unit that is not in the gmae, congrats!",Caller_ID)
-
-#@rpc("any_peer","call_local")
+@rpc("any_peer","call_local")
 func Compile_game_over_info() -> void:
 	if multiplayer.is_server():
+		var winners:Array 
+		var my_stats:Dictionary
+		var player_data:Dictionary
+		for people:Resource in Overseer.Winning_players: 
+			winners.append(people.Player_ID)
+		for players:Resource in Overseer.player_list: 
+			player_data[players.Player_ID] = Overseer.Pack_Resource_data(players)["Player_stats"]
+			player_data[players.Player_ID]["Victory_points"] = players.Victory_points
+		for keys:int in player_data.keys():
+			if multiplayer.get_unique_id() == keys:
+				my_stats = player_data[keys]
+		#%Game_Over.Populate_title(Winning_players)
+		%Game_Over.Populate_stats(my_stats)
 		%Game_Over.pixel_fade_in()
-		Game_over_UI_initialize.rpc()
+		Game_over_UI_initialize.rpc(winners,player_data)
 
 @rpc("authority","call_remote")
-func Game_over_UI_initialize() -> void:
+func Game_over_UI_initialize(Winning_players:Array,Stat_data:Dictionary) -> void:
+	var my_stats:Dictionary
+	print("This is my ID: "+str(multiplayer.get_unique_id()))
+	for keys:int in Stat_data.keys():
+		if multiplayer.get_unique_id() == keys:
+			my_stats = Stat_data[keys]
+	print(my_stats)
+	#%Game_Over.Populate_title(Winning_players)
+	%Game_Over.Populate_stats(my_stats)
 	%Game_Over.pixel_fade_in()
 
 func _on_open_trade_button_pressed() -> void:

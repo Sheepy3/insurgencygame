@@ -25,7 +25,7 @@ enum {
 	MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, 
 	PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION, GAME_OVER
 	}
-var current_phase:int = INITIAL_DEPLOY
+var current_phase:int = INTERVENTION #INITIAL_DEPLOY
 var lock:bool = false
 
 signal change_player # Signal may be depricated due to lack of use
@@ -708,7 +708,7 @@ func Check_VPs(Calculate_VPs:bool = true,Check_for_winner:bool = false,Intervent
 			for node_names:String in The_nodes.keys():
 				var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
 				for unit:Resource in Checking_node.unit_list:
-					if unit.player_ID == players.Player_ID:
+					if unit.player_ID == players.Player_ID and !unit.disrupted:
 						Total_VPs += 1
 			print("These are "+str(players.Player_ID)+"'s Total Victory points ----> "+str(Total_VPs))
 			players.Victory_points = Total_VPs
@@ -751,9 +751,15 @@ func attempt_complete_trade(to:int,weapons:int,money:int,manpower:int) -> void:
 			return
 
 		from_player.Weapons -= weapons
+		from_player.Player_stats["Give_weapons"] += weapons
 		from_player.Money -= money
+		from_player.Player_stats["Give_money"] += money
 		from_player.Man_power -= manpower
+		from_player.Player_stats["Give_man_power"] += manpower
 		to_player.Weapons += weapons
+		to_player.Player_stats["Get_weapons"] += weapons
 		to_player.Money += money
+		to_player.Player_stats["Get_money"] += money
 		to_player.Man_power += manpower
+		to_player.Player_stats["Get_man_power"] += manpower
 		Resources_to_rpc()
