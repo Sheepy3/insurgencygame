@@ -133,7 +133,7 @@ func _phase_switch_ui() -> void:
 		4:
 			$Current_Phase.text = "Combat"
 		5:
-			$Current_Phase.text = "Placce Fighter Units & Bases"
+			$Current_Phase.text = "Place Fighter Units & Bases"
 		6:
 			$Current_Phase.text = "Collect Resources"
 			Overseer.Phase_cycle += 1
@@ -141,6 +141,8 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Muster forces"
 		8:
 			$Current_Phase.text = "UN Intervention"
+	
+	$Current_Phase.text += " (Turn " + str(Overseer.Phase_cycle) + ("/12)")
 	%Next_Phase_Button.set_pressed_no_signal(false)
 	%Next_Phase_Button.text = "NEXT PHASE???"
 
