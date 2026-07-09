@@ -268,10 +268,10 @@ func Weapons_action(Player_ID:int,action:String)-> void:
 		else:
 			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
 
-func connect_update_UI() -> void:
-	if Overseer.current_phase == Overseer.INTERVENTION or Overseer.GAME_OVER:
+func connect_update_UI(Intervention:bool = false) -> void:
+	if Overseer.current_phase == Overseer.INTERVENTION or Overseer.current_phase == Overseer.GAME_OVER:
 		if multiplayer.is_server():
-			Compile_game_over_info.rpc()
+			Compile_game_over_info.rpc(Intervention)
 	else:
 		Overseer.player_resources_updated.connect(update_Player_Info)
 		Overseer.player_resources_updated.connect(Check_store_unlocked)
@@ -826,7 +826,7 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 			print("\nSomething is worong here...\n")
 
 @rpc("any_peer","call_local")
-func Compile_game_over_info() -> void:
+func Compile_game_over_info(Intervention:bool = false) -> void:
 	if multiplayer.is_server():
 		var winners:Array 
 		var my_stats:Dictionary
@@ -839,20 +839,18 @@ func Compile_game_over_info() -> void:
 		for keys:int in player_data.keys():
 			if multiplayer.get_unique_id() == keys:
 				my_stats = player_data[keys]
-		%Game_Over.Populate_title(winners)
+		%Game_Over.Populate_title(winners,Intervention)
 		%Game_Over.Populate_stats(my_stats)
 		%Game_Over.pixel_fade_in()
-		Game_over_UI_initialize.rpc(winners,player_data)
+		Game_over_UI_initialize.rpc(winners,player_data,Intervention)
 
 @rpc("authority","call_remote")
-func Game_over_UI_initialize(Winning_players:Array,Stat_data:Dictionary) -> void:
+func Game_over_UI_initialize(Winning_players:Array,Stat_data:Dictionary,Intervention:bool = false) -> void:
 	var my_stats:Dictionary
-	print("This is my ID: "+str(multiplayer.get_unique_id()))
 	for keys:int in Stat_data.keys():
 		if multiplayer.get_unique_id() == keys:
 			my_stats = Stat_data[keys]
-	print(my_stats)
-	%Game_Over.Populate_title(Winning_players)
+	%Game_Over.Populate_title(Winning_players,Intervention)
 	%Game_Over.Populate_stats(my_stats)
 	%Game_Over.pixel_fade_in()
 

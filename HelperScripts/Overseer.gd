@@ -11,13 +11,13 @@ var unit_scene:PackedScene = load("res://MapStuff/Unit_Visual.tscn")
 
 #var selected_player_index:int = -1
 var current_player:String
-var Winning_players:Array
+var Winning_players:Array = []
 #var Logistics_array:Array 
 #var Intelligence_array:Array
 var The_networks:Dictionary
 var The_nodes:Dictionary
 var The_support_nodes:Array
-var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again 
+var Phase_cycle:int = 12   # of times you have reached the "PURCHASE" phase again 
 var Desired_cycle:int = 3 # of full "Phases_cycles" before matnince/ # of "PURCHASE" phases reached before matnince (will occur on turn of number)
 var Num_of_phases:int = 13 # of full "Phase_cycles" before the auto end of the game (INTERVENTION phase)
 
@@ -25,12 +25,12 @@ enum {
 	MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, 
 	PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION, GAME_OVER
 	}
-var current_phase:int = INTERVENTION #INITIAL_DEPLOY
+var current_phase:int = INITIAL_DEPLOY #INITIAL_DEPLOY
 var lock:bool = false
 
 signal change_player # Signal may be depricated due to lack of use
 signal game_started
-signal game_ended
+signal game_ended(by_intervention:bool)
 signal change_phase
 signal player_resources_updated
 signal Initialization_player_color
@@ -99,16 +99,15 @@ func get_player_color_name(color: Vector3) -> String:
 	return "Unknown"
 
 func cycle_phases() -> void:
-	print("This is the phase cycle: "+str(Phase_cycle))
 	Check_VPs(false,true)
-	if Winning_players.size() > 0:
+	if Winning_players.size() >= 1:
 		current_phase = GAME_OVER
 		change_phase.emit()
-		game_ended.emit()
+		game_ended.emit(false)
 	elif Phase_cycle == Num_of_phases:
 		current_phase = INTERVENTION
 		Check_VPs(false,true,true)
-		game_ended.emit()
+		game_ended.emit(true)
 		change_phase.emit() 
 	elif Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
@@ -197,7 +196,7 @@ func Rpc_to_player_resources(new_player_info:Array) -> void:
 func Request_node_data(Edited_node_name:String,combat_data:Array = []) -> void:
 	if multiplayer.is_server():
 		#var New_node:Dictionary
-		#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
+		#var Edited_node:Node = get_parent().get_child(2).find_child(Edited_node_name)
 		#if Edited_node.Has_building == true:
 			#var building:Resource = Edited_node.building
 			#New_node["Building"] = [building.unit_type,building.player_ID,building.color,building.location]
@@ -224,8 +223,8 @@ func _find_current_scene_node(node_name: String) -> Node:
 
 @rpc("authority", "call_local", "reliable")
 func Update_node_data(Edited_node_name:String,New_node_data:Dictionary,combat_data:Array = []) -> void:
-	#var Edited_node:Node = get_parent().get_child(1).find_child(Edited_node_name)
-	#var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children() #get_parent().get_child(1).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
+	#var Edited_node:Node = get_parent().get_child(2).find_child(Edited_node_name)
+	#var Present_unit_list:Array = Edited_node.find_child("Sort").find_child("Units").get_children() #get_parent().get_child(2).find_child(Edited_node_name).find_child("Sort").find_child("Units").get_children()
 	#Edited_node.unit_list.clear()
 	#for existing_units:Node in Present_unit_list:
 		#existing_units.free()
@@ -314,7 +313,7 @@ func Give_clients_node_data(Edited_node_name:String,Node_info:Array,combat_data:
 func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 	if multiplayer.is_server():
 		#var The_Roads: Array = Edited_path_name.split("-")
-		#var Edited_path:Node = get_parent().get_child(1).find_child(The_Roads[0]).find_child(Edited_path_name)
+		#var Edited_path:Node = get_parent().get_child(2).find_child(The_Roads[0]).find_child(Edited_path_name)
 		#var Path_data:Dictionary 
 		#Path_data[Edited_path.name] = [Edited_path.connection,Edited_path.Has_intel,Edited_path.Has_logs,Identify_player(Requester_ID).color]
 		#Update_path_data.rpc(Path_data,The_Roads[0])
@@ -326,7 +325,7 @@ func Request_path_data(Requester_ID:int,Edited_path_name:String) -> void:
 #func Update_path_data(New_path_data:Dictionary,The_Road:String) -> void:
 	#The_networks = {}
 	#var path_keys:Array = New_path_data.keys()
-	#var Edited_path:Node = get_parent().get_child(1).find_child(The_Road).find_child(path_keys[0])
+	#var Edited_path:Node = get_parent().get_child(2).find_child(The_Road).find_child(path_keys[0])
 	#for keys:String in New_path_data.keys():
 		#var Values:Array = New_path_data[keys]
 		#Edited_path.connection = Values[0]
@@ -429,10 +428,10 @@ func Profit_and_Taxes()-> void:
 							players.Money -= 4
 							players.Player_stats["Spent_money"] += 4
 					else:
-						players.Man_power += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
-						players.Player_stats["Earned_man_power"] += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.Population * 2) 
-						players.Money += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
-						players.Player_stats["Earned_money"] += (get_parent().get_child(1).find_child(str(bases.location)).node_RPU.RPU* 2)
+						players.Man_power += (get_parent().get_child(2).find_child(str(bases.location)).node_RPU.Population * 2) 
+						players.Player_stats["Earned_man_power"] += (get_parent().get_child(2).find_child(str(bases.location)).node_RPU.Population * 2) 
+						players.Money += (get_parent().get_child(2).find_child(str(bases.location)).node_RPU.RPU* 2)
+						players.Player_stats["Earned_money"] += (get_parent().get_child(2).find_child(str(bases.location)).node_RPU.RPU* 2)
 				for node_names:String in The_nodes.keys():
 					var Checking_node:Node = _find_current_scene_node(node_names)
 					for unit:Resource in Checking_node.unit_list:
@@ -695,7 +694,7 @@ func reset_combat_state() -> void:
 
 func Clear_unit_movement_exclusives() -> void:
 	for key_names:String in The_nodes.keys():
-		var A_map_node:Node = get_parent().get_child(1).find_child(key_names)
+		var A_map_node:Node = get_parent().get_child(2).find_child(key_names)
 		if A_map_node.unit_list.size() > 0:
 			A_map_node.Reset_combat_data()
 
@@ -706,11 +705,10 @@ func Check_VPs(Calculate_VPs:bool = true,Check_for_winner:bool = false,Intervent
 			for bases:Resource in players.base_list:
 				Total_VPs += 2
 			for node_names:String in The_nodes.keys():
-				var Checking_node:Node = get_parent().get_child(1).find_child(node_names)
+				var Checking_node:Node = get_parent().get_child(2).find_child(node_names)
 				for unit:Resource in Checking_node.unit_list:
 					if unit.player_ID == players.Player_ID and !unit.disrupted:
 						Total_VPs += 1
-			print("These are "+str(players.Player_ID)+"'s Total Victory points ----> "+str(Total_VPs))
 			players.Victory_points = Total_VPs
 	else:
 		if Check_for_winner:
