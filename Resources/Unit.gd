@@ -8,3 +8,4 @@ class_name Unit
 @export var offcolor:bool
 @export var been_reconstituted:bool = false
 @export var has_moved:bool = false
+@export var has_fought:bool = false
