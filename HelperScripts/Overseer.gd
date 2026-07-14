@@ -795,5 +795,5 @@ func Clean_overseer_script() -> void:
 	The_networks.clear()
 	The_nodes.clear()
 	The_support_nodes.clear()
-	Phase_cycle = 0
+	Phase_cycle = 12
 	current_phase = INITIAL_DEPLOY

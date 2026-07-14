@@ -70,6 +70,6 @@ func Create_winner_string(Winners:Array) -> String:
 		winners_string += str(Winners[0])+" & "+str(Winners[1])
 		return winners_string
 
-
 func _on_leave_game_button_pressed() -> void:
 	leave_game.emit(multiplayer.get_unique_id())
+	hide()

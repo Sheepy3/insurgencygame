@@ -8,7 +8,7 @@ var Current_node: Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	get_child(3).clean_game_over.connect(Clean_map_children)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Flare") && Current_node && Current_node.is_in_group("MapNode"):
@@ -459,3 +459,10 @@ func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 func display_action_error(the_error:String, Player_ID:int) -> void:
 	$UI.action_error.rpc(the_error,Player_ID)
 	Last_action = ""
+
+func Clean_map_children() -> void:
+	$Board.texture = null
+	$UI.The_action.disconnect(Update_action)
+	var The_choping_block:Array = get_children().slice(5,get_children().size())
+	for Map_things:Node in The_choping_block:
+		Map_things.queue_free()

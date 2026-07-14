@@ -921,3 +921,4 @@ func Clean_UI_script() -> void:
 	Overseer.change_phase.disconnect(Check_store_unlocked)
 	Overseer.change_phase.disconnect(Update_available_buttons)
 	Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
+	hide()
