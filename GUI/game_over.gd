@@ -1,6 +1,7 @@
 extends Control
 
 signal stats_closed
+signal leave_game(ID:int)
 
 @onready var viewport_container:SubViewportContainer = %SubViewportContainer
 @onready var fade_material:ShaderMaterial = viewport_container.material
@@ -68,3 +69,7 @@ func Create_winner_string(Winners:Array) -> String:
 	else:
 		winners_string += str(Winners[0])+" & "+str(Winners[1])
 		return winners_string
+
+
+func _on_leave_game_button_pressed() -> void:
+	leave_game.emit(multiplayer.get_unique_id())

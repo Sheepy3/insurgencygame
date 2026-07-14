@@ -4,11 +4,16 @@ var size:int = 2
 @onready var client:Node = $Client
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
 
+signal clean_game_over
+
 func _ready() -> void:
 	client.lobby_joined.connect(_lobby_joined)
 	multiplayer.peer_connected.connect(Add_player_resource)
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
+	#print(get_parent().get_child(2).name)
+	#print(str(get_parent().get_child(2).find_child("Game_Over").name))
+	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Attempt_leaving_game)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
@@ -60,10 +65,12 @@ func _lobby_joined(lobby:String) -> void:
 func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
 		var Player_resource:Resource = Player.new()
+		#### THE CODE BELOW SHOULD BE REMOVED BEFORE REAL PLAY ####
 		Player_resource.Player_ID = ID
 		Player_resource.Money = 300
 		Player_resource.Man_power = 300
 		Player_resource.Weapons = 300
+		#### THE CODE ABOVE SHOULD BE REMOVED BEFORE REAL PLAY ####
 		Overseer.player_list.append(Player_resource)
 		var Logistics_map:AStar2D = AStar2D.new()
 		var Intelligence_map:AStar2D = AStar2D.new()
@@ -182,3 +189,23 @@ func _on_ready_button_pressed() -> void:
 		else:
 			%ReadyButton.text = "Ready"
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),true)
+
+func Attempt_leaving_game(ID:int) -> void:
+	Request_leave_game.rpc(ID)
+
+@rpc("any_peer","call_local")
+func Request_leave_game(ID:int) -> void:
+	if multiplayer.is_server():
+		print("\nPLAYER "+str(ID)+" HAS LEFT THE GAME!!!")
+		_render_players()
+		show()
+	if multiplayer.get_unique_id() == ID:
+		clean_game_over.emit()
+		_render_players()
+		get_tree().call_group("CONFIG_BUTTONS","set_disabled",true)
+		%ReadyButton.text = "Not Ready"
+		%Color_select._select_int(6)
+		%Faction_select._select_int(2)
+		%Join_Button.set_disabled(false)
+		$Client.stop()
+		show()

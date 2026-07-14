@@ -378,3 +378,4 @@ theme = ExtResource("4_6q624")
 text = "Leave game"
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer/Show_map_Button" to="." method="_on_show_map_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer2/Leave_game_Button" to="." method="_on_leave_game_button_pressed"]

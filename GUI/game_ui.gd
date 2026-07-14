@@ -16,6 +16,7 @@ var Preview_placables:Array = [
 ]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_parent().get_child(3).clean_game_over.connect(Clean_UI_script)
 	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
@@ -913,3 +914,10 @@ func _on_open_trade_button_pressed() -> void:
 
 func Show_stats_button() -> void:
 	$Show_Stats_Button.show()
+
+func Clean_UI_script() -> void:
+	Overseer.player_resources_updated.disconnect(update_Player_Info)
+	Overseer.player_resources_updated.disconnect(Check_store_unlocked)
+	Overseer.change_phase.disconnect(Check_store_unlocked)
+	Overseer.change_phase.disconnect(Update_available_buttons)
+	Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
