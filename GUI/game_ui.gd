@@ -144,7 +144,8 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Place Fighter Units & Bases"
 		6:
 			$Current_Phase.text = "Collect Resources"
-			Overseer.Phase_cycle += 1
+			if multiplayer.is_server():
+				Overseer.Phase_cycle += 1
 		7:
 			$Current_Phase.text = "Muster forces"
 		8:
