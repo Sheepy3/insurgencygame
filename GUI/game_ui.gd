@@ -283,6 +283,9 @@ func connect_update_UI(Intervention:bool = false) -> void:
 		Overseer.change_phase.connect(Overseer.Profit_and_Taxes)
 		Unique_player_ID = multiplayer.get_unique_id()
 		Update_available_buttons()
+		%Next_Phase_Button.set_disabled(false)
+		_phase_switch_ui()
+		
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode

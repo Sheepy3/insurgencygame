@@ -102,13 +102,13 @@ func cycle_phases() -> void:
 	Check_VPs(false,true)
 	if Winning_players.size() >= 1:
 		current_phase = GAME_OVER
-		change_phase.emit()
+		#change_phase.emit()
 		game_ended.emit(false)
 	elif Phase_cycle == Num_of_phases:
 		current_phase = INTERVENTION
 		Check_VPs(false,true,true)
 		game_ended.emit(true)
-		change_phase.emit() 
+		#change_phase.emit() 
 	elif Phase_cycle % Desired_cycle == 0 and current_phase == COLLECT:
 		current_phase = 0
 	elif current_phase == COLLECT and Phase_cycle % Desired_cycle != 0:
@@ -117,7 +117,7 @@ func cycle_phases() -> void:
 		current_phase+=1
 		if current_phase == PLACE_INFRASTRUCTURE:
 			Clear_unit_movement_exclusives()
-		change_phase.emit()
+		#change_phase.emit()
 	elif current_phase == INITIAL_DEPLOY:
 		current_phase = COLLECT
 	if current_phase == COMBAT:
@@ -795,5 +795,5 @@ func Clean_overseer_script() -> void:
 	The_networks.clear()
 	The_nodes.clear()
 	The_support_nodes.clear()
-	Phase_cycle = 12
+	Phase_cycle = 0
 	current_phase = INITIAL_DEPLOY

@@ -11,8 +11,6 @@ func _ready() -> void:
 	multiplayer.peer_connected.connect(Add_player_resource)
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
-	#print(get_parent().get_child(2).name)
-	#print(str(get_parent().get_child(2).find_child("Game_Over").name))
 	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Attempt_leaving_game)
 	show()
 	$Error_Message.hide()
@@ -198,7 +196,7 @@ func Request_leave_game(ID:int) -> void:
 	if multiplayer.is_server():
 		print("\nPLAYER "+str(ID)+" HAS LEFT THE GAME!!!")
 		_render_players()
-		show()
+		#show()
 	if multiplayer.get_unique_id() == ID:
 		clean_game_over.emit()
 		_render_players()
