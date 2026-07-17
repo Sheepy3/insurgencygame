@@ -3,20 +3,22 @@ var map_generator:PackedScene = preload("res://MapStuff/MapGeneration/map_genera
 var size:int = 2
 @onready var client:Node = $Client
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
+var In_server:bool = false
+var UID:int
 
 signal clean_game_over
 
 func _ready() -> void:
 	client.lobby_joined.connect(_lobby_joined)
 	multiplayer.peer_connected.connect(Add_player_resource)
+	multiplayer.peer_disconnected.connect(Reset_game_config)
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
-	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Attempt_leaving_game)
+	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Reset_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
 	%Faction_select.disabled = true
-	
 
 func _on_start_button_pressed() -> void:
 	for Players:Resource in Overseer.player_list:
@@ -49,6 +51,7 @@ func _on_join_button_pressed() -> void:
 	client.start(%IP.text, %Room.text, true)
 
 func _lobby_joined(lobby:String) -> void:
+	In_server = true
 	%Room.text = lobby
 	%Room.editable = false
 	%Join_Button.disabled = true
@@ -59,6 +62,7 @@ func _lobby_joined(lobby:String) -> void:
 		%StartButton.set_disabled(true)
 		%OptionButton.set_disabled(true)
 	%ReadyButton.set_disabled(false)
+	UID = multiplayer.get_unique_id()
 
 func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
@@ -77,12 +81,13 @@ func Add_player_resource(ID:int) -> void:
 		#Overseer.Player_rpc_info["Player " +str(ID)] = [Overseer.Player_resource.Player_ID,Overseer.Player_resource.Player_name,Overseer.Player_resource.color,Overseer.Player_resource.base_list,Overseer.Player_resource.Weapons,Overseer.Player_resource.Money,Overseer.Player_resource.Man_power,Overseer.Player_resource.Victory_points]
 
 func Remove_player_resource(ID:int) -> void: 
-	if multiplayer.is_server():
-		for existing_player:Resource in Overseer.player_list: 
-			if existing_player.Player_ID == ID:
-				Overseer.player_list.remove_at(Overseer.player_list.find(existing_player))
-				Overseer.The_networks.erase(ID)
-				Overseer.Resources_to_rpc()
+	if In_server:
+		if multiplayer.is_server():
+			for existing_player:Resource in Overseer.player_list: 
+				if existing_player.Player_ID == ID:
+					Overseer.player_list.remove_at(Overseer.player_list.find(existing_player))
+					Overseer.The_networks.erase(ID)
+					Overseer.Resources_to_rpc()
 
 func _render_players() -> void:
 	%Color_select.disabled = false
@@ -109,11 +114,12 @@ func _render_players() -> void:
 		%Player_list_container.add_child(new_player_scene)
 	
 	#check if all players are ready
-	if (ready_players == Overseer.player_list.size() && multiplayer.is_server()):
-		%StartButton.set_disabled(false)
-	else:
-		%StartButton.set_disabled(true)
-		
+	if In_server:
+		if (ready_players == Overseer.player_list.size() && multiplayer.is_server()):
+			%StartButton.set_disabled(false)
+		else:
+			%StartButton.set_disabled(true)
+
 func _on_color_select_item_selected(index: int) -> void:
 	Update_player_color.rpc(multiplayer.get_unique_id(),index)
 
@@ -188,16 +194,11 @@ func _on_ready_button_pressed() -> void:
 			%ReadyButton.text = "Ready"
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),true)
 
-func Attempt_leaving_game(ID:int) -> void:
-	Request_leave_game.rpc(ID)
-
-@rpc("any_peer","call_local")
-func Request_leave_game(ID:int) -> void:
-	if multiplayer.is_server():
-		print("\nPLAYER "+str(ID)+" HAS LEFT THE GAME!!!")
-		_render_players()
-		#show()
-	if multiplayer.get_unique_id() == ID:
+func Reset_game_config(ID:int = 0) -> void:
+	print("This is the ID ---> "+str(ID)+"\nThis is the unique ID ---> "+str(get_parent().get_child(2).Unique_player_ID))
+	if ID == 1 or ID == get_parent().get_child(2).Unique_player_ID or ID == UID:
+		In_server = false
+		get_parent().get_child(2).find_child("Game_Over").hide()
 		clean_game_over.emit()
 		_render_players()
 		get_tree().call_group("CONFIG_BUTTONS","set_disabled",true)

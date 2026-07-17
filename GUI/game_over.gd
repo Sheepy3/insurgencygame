@@ -5,6 +5,7 @@ signal leave_game(ID:int)
 
 @onready var viewport_container:SubViewportContainer = %SubViewportContainer
 @onready var fade_material:ShaderMaterial = viewport_container.material
+var Player_ID:int
 
 func _ready() -> void:
 	pass
@@ -30,6 +31,7 @@ func Populate_stats(stats:Dictionary) -> void:
 					break
 
 func pixel_fade_in(duration: float = 0.5) -> void:
+	Player_ID = Overseer.Identify_player(multiplayer.get_unique_id()).Player_ID
 	show()
 	fade_material.set_shader_parameter("progress", 0.0)
 
@@ -71,5 +73,5 @@ func Create_winner_string(Winners:Array) -> String:
 		return winners_string
 
 func _on_leave_game_button_pressed() -> void:
-	leave_game.emit(multiplayer.get_unique_id())
 	hide()
+	leave_game.emit(Player_ID)

@@ -286,7 +286,6 @@ func connect_update_UI(Intervention:bool = false) -> void:
 		Update_available_buttons()
 		%Next_Phase_Button.set_disabled(false)
 		_phase_switch_ui()
-		
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
