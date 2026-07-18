@@ -367,6 +367,14 @@ layout_mode = 2
 theme = ExtResource("4_6q624")
 text = "Back to map"
 
+[node name="VBoxContainer3" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer" unique_id=2109179363]
+layout_mode = 2
+
+[node name="Back_to_lobby_Button" type="Button" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer3" unique_id=1641022000]
+layout_mode = 2
+theme = ExtResource("4_6q624")
+text = "Back to lobby"
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer" unique_id=555127895]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -378,4 +386,5 @@ theme = ExtResource("4_6q624")
 text = "Leave game"
 
 [connection signal="pressed" from="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer/Show_map_Button" to="." method="_on_show_map_button_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer3/Back_to_lobby_Button" to="." method="_on_back_to_lobby_button_pressed"]
 [connection signal="pressed" from="SubViewportContainer/SubViewport/Game_over_info_container/VBoxContainer/HBoxContainer/VBoxContainer2/Leave_game_Button" to="." method="_on_leave_game_button_pressed"]

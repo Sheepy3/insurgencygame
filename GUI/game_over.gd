@@ -2,6 +2,7 @@ extends Control
 
 signal stats_closed
 signal leave_game(ID:int)
+signal return_to_lobby
 
 @onready var viewport_container:SubViewportContainer = %SubViewportContainer
 @onready var fade_material:ShaderMaterial = viewport_container.material
@@ -75,3 +76,6 @@ func Create_winner_string(Winners:Array) -> String:
 func _on_leave_game_button_pressed() -> void:
 	hide()
 	leave_game.emit(Player_ID)
+
+func _on_back_to_lobby_button_pressed() -> void:
+	return_to_lobby.emit()

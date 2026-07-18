@@ -789,11 +789,31 @@ func attempt_complete_trade(to:int,weapons:int,money:int,manpower:int) -> void:
 		to_player.Player_stats["Get_man_power"] += manpower
 		Resources_to_rpc()
 
-func Clean_overseer_script() -> void:
-	player_list.clear()
-	Winning_players.clear()
-	The_networks.clear()
+func Clean_overseer_script(Leaving_game:bool = false) -> void:
 	The_nodes.clear()
 	The_support_nodes.clear()
 	Phase_cycle = 0
 	current_phase = INITIAL_DEPLOY
+	if Leaving_game:
+		player_list.clear()
+		Winning_players.clear()
+		The_networks.clear()
+	else:
+		if multiplayer.is_server():
+			Reset_player_resources()
+			Resources_to_rpc()
+		Update_player_ready.rpc(multiplayer.get_unique_id(),false)
+
+func Reset_player_resources() -> void:
+	for players:Resource in player_list:
+		players.base_list.clear()
+		players.Money = 0
+		for things:String in players.Player_storage.keys():
+			players.Player_storage[things] = 0
+		for things:String in players.Player_stats.keys():
+			players.Player_stats[things] = 0
+		players.Weapons = 0
+		players.Man_power = 0
+		players.Victory_points = 0
+	for people:int in The_networks.keys():
+		The_networks[people] = [AStar2D.new(),AStar2D.new()]

@@ -6,7 +6,7 @@ var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
 var In_server:bool = false
 var UID:int
 
-signal clean_game_over
+signal clean_game_over(Leaving:bool)
 
 func _ready() -> void:
 	client.lobby_joined.connect(_lobby_joined)
@@ -15,6 +15,7 @@ func _ready() -> void:
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
 	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Reset_game_config)
+	get_parent().get_child(2).find_child("Game_Over").return_to_lobby.connect(Clean_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
@@ -199,7 +200,7 @@ func Reset_game_config(ID:int = 0) -> void:
 	if ID == 1 or ID == get_parent().get_child(2).Unique_player_ID or ID == UID:
 		In_server = false
 		get_parent().get_child(2).find_child("Game_Over").hide()
-		clean_game_over.emit()
+		clean_game_over.emit(true)
 		_render_players()
 		get_tree().call_group("CONFIG_BUTTONS","set_disabled",true)
 		%ReadyButton.text = "Not Ready"
@@ -208,3 +209,10 @@ func Reset_game_config(ID:int = 0) -> void:
 		%Join_Button.set_disabled(false)
 		$Client.stop()
 		show()
+
+func Clean_game_config() -> void:
+	get_parent().get_child(2).find_child("Game_Over").hide()
+	clean_game_over.emit(false)
+	%ReadyButton.text = "Not Ready"
+	_render_players()
+	show()

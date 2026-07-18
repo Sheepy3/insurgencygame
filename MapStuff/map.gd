@@ -460,7 +460,7 @@ func display_action_error(the_error:String, Player_ID:int) -> void:
 	$UI.action_error.rpc(the_error,Player_ID)
 	Last_action = ""
 
-func Clean_map_children() -> void:
+func Clean_map_children(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
 	$Board.texture = null
 	$UI.The_action.disconnect(Update_action)
 	var The_choping_block:Array = get_children().slice(5,get_children().size())

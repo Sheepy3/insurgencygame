@@ -918,7 +918,7 @@ func _on_open_trade_button_pressed() -> void:
 func Show_stats_button() -> void:
 	$Show_Stats_Button.show()
 
-func Clean_UI_script() -> void:
+func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
 	Overseer.player_resources_updated.disconnect(update_Player_Info)
 	Overseer.player_resources_updated.disconnect(Check_store_unlocked)
 	Overseer.change_phase.disconnect(Check_store_unlocked)
