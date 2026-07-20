@@ -196,10 +196,10 @@ func _on_ready_button_pressed() -> void:
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),true)
 
 func Reset_game_config(ID:int = 0) -> void:
-	print("This is the ID ---> "+str(ID)+"\nThis is the unique ID ---> "+str(get_parent().get_child(2).Unique_player_ID))
 	if ID == 1 or ID == get_parent().get_child(2).Unique_player_ID or ID == UID:
 		In_server = false
 		get_parent().get_child(2).find_child("Game_Over").hide()
+		get_parent().get_child(2).find_child("Game_Over").Reset_game_over()
 		clean_game_over.emit(true)
 		_render_players()
 		get_tree().call_group("CONFIG_BUTTONS","set_disabled",true)
@@ -212,6 +212,7 @@ func Reset_game_config(ID:int = 0) -> void:
 
 func Clean_game_config() -> void:
 	get_parent().get_child(2).find_child("Game_Over").hide()
+	get_parent().get_child(2).find_child("Game_Over").Reset_game_over()
 	clean_game_over.emit(false)
 	%ReadyButton.text = "Not Ready"
 	_render_players()

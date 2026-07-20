@@ -79,3 +79,10 @@ func _on_leave_game_button_pressed() -> void:
 
 func _on_back_to_lobby_button_pressed() -> void:
 	return_to_lobby.emit()
+
+func Reset_game_over() -> void:
+	%Game_over_title.text = %Game_over_title.text.left(10)
+	for vboxes:VBoxContainer in %Player_stats_Container.get_children():
+		for stat_displays:Label in vboxes.get_children():
+			var current_text:Array = stat_displays.text.split(":")
+			stat_displays.text = str(current_text[0])+":"

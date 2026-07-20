@@ -790,13 +790,13 @@ func attempt_complete_trade(to:int,weapons:int,money:int,manpower:int) -> void:
 		Resources_to_rpc()
 
 func Clean_overseer_script(Leaving_game:bool = false) -> void:
+	Phase_cycle = 13
 	The_nodes.clear()
+	Winning_players.clear()
 	The_support_nodes.clear()
-	Phase_cycle = 0
 	current_phase = INITIAL_DEPLOY
 	if Leaving_game:
 		player_list.clear()
-		Winning_players.clear()
 		The_networks.clear()
 	else:
 		if multiplayer.is_server():
