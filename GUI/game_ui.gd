@@ -898,6 +898,7 @@ func Compile_game_over_info(Intervention:bool = false) -> void:
 		%Game_Over.Populate_title(winners,Intervention)
 		%Game_Over.Populate_stats(my_stats)
 		%Game_Over.pixel_fade_in()
+		Overseer.player_resources_updated.disconnect(update_Player_Info)
 		Game_over_UI_initialize.rpc(winners,player_data,Intervention)
 
 @rpc("authority","call_remote")
@@ -909,6 +910,7 @@ func Game_over_UI_initialize(Winning_players:Array,Stat_data:Dictionary,Interven
 	%Game_Over.Populate_title(Winning_players,Intervention)
 	%Game_Over.Populate_stats(my_stats)
 	%Game_Over.pixel_fade_in()
+	Overseer.player_resources_updated.disconnect(update_Player_Info)
 
 func _on_open_trade_button_pressed() -> void:
 	var player:Player = Overseer.Identify_player(multiplayer.get_unique_id())
@@ -919,7 +921,6 @@ func Show_stats_button() -> void:
 	$Show_Stats_Button.show()
 
 func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
-	Overseer.player_resources_updated.disconnect(update_Player_Info)
 	Overseer.player_resources_updated.disconnect(Check_store_unlocked)
 	Overseer.change_phase.disconnect(Check_store_unlocked)
 	Overseer.change_phase.disconnect(Update_available_buttons)

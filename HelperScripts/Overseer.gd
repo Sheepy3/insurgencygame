@@ -17,7 +17,7 @@ var Winning_players:Array = []
 var The_networks:Dictionary
 var The_nodes:Dictionary
 var The_support_nodes:Array
-var Phase_cycle:int = 13   # of times you have reached the "PURCHASE" phase again 
+var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again (modify this to test end of game features)
 var Desired_cycle:int = 3 # of full "Phases_cycles" before matnince/ # of "PURCHASE" phases reached before matnince (will occur on turn of number)
 var Num_of_phases:int = 13 # of full "Phase_cycles" before the auto end of the game (INTERVENTION phase)
 
@@ -790,7 +790,7 @@ func attempt_complete_trade(to:int,weapons:int,money:int,manpower:int) -> void:
 		Resources_to_rpc()
 
 func Clean_overseer_script(Leaving_game:bool = false) -> void:
-	Phase_cycle = 13
+	Phase_cycle = 0 #modify this to test end of game features (after leaving previous game)
 	The_nodes.clear()
 	Winning_players.clear()
 	The_support_nodes.clear()
