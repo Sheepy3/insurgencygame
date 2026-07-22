@@ -8,7 +8,7 @@ var Current_node: Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	get_child(3).clean_game_over.connect(Clean_map_children)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Flare") && Current_node && Current_node.is_in_group("MapNode"):
@@ -123,6 +123,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Checked_node.add_building(Current_player.Player_ID, BASE, Current_player.color)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Military_Base"] -= 1
+					Current_player.Player_stats["Place_base"] += 1
 					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
 
@@ -135,6 +136,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Checked_node.add_unit(Current_player.Player_ID,FIGHTER,Current_player.color,new_unit_UUID,false)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Fighter"] -= 1
+					Current_player.Player_stats["Place_fighter"] += 1
 					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
 			elif Executing_action == "Fighter_placing" && Current_player.Player_storage["Fighter"] < 1:
@@ -147,6 +149,7 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 					Checked_node.add_unit(Current_player.Player_ID,INFLUENCE,Current_player.color,new_unit_UUID,false)
 					#find_child("Dynamic_Action").text = "None"
 					Current_player.Player_storage["Influence"] -= 1
+					Current_player.Player_stats["Place_influence"] += 1
 					Overseer.Request_node_data(Checked_node.name)
 					Overseer.Resources_to_rpc()
 				#else:
@@ -174,6 +177,7 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 					Current_path.Has_intel[Player_ID] = true
 					Intelligence_add_astar_path(Current_path.name,Current_player)
 					Current_player.Player_storage["Intelligence"] -= 1
+					Current_player.Player_stats["Place_Intel"] += 1
 					Overseer.Request_path_data(Current_player.Player_ID,Current_path.name)
 					Overseer.Resources_to_rpc()
 				#else:
@@ -191,6 +195,7 @@ func Check_path_action(Name: String,Player_ID:int,Executing_action:String) -> vo
 					Current_path.Has_logs[Player_ID] = true
 					Logistics_add_astar_path(Current_path.name,Current_player)
 					Current_player.Player_storage["Logistics"] -= 1
+					Current_player.Player_stats["Place_Logs"] += 1
 					Overseer.Request_path_data(Current_player.Player_ID,Current_path.name)
 					Overseer.Resources_to_rpc()
 				#else:
@@ -454,3 +459,10 @@ func Call_rpc_functions(Name:String,Player_ID:int,Tile:String) -> void:
 func display_action_error(the_error:String, Player_ID:int) -> void:
 	$UI.action_error.rpc(the_error,Player_ID)
 	Last_action = ""
+
+func Clean_map_children(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
+	$Board.texture = null
+	$UI.The_action.disconnect(Update_action)
+	var The_choping_block:Array = get_children().slice(5,get_children().size())
+	for Map_things:Node in The_choping_block:
+		Map_things.queue_free()

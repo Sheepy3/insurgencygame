@@ -18,6 +18,7 @@
 [ext_resource type="StyleBox" uid="uid://b1d1bh60j1w7e" path="res://GUI/Button_Panel_Theme_Alt.tres" id="14_ygoei"]
 [ext_resource type="PackedScene" uid="uid://mugxmvhhce6q" path="res://CombatStuff/pre_combat.tscn" id="16_82g8w"]
 [ext_resource type="PackedScene" uid="uid://b755b2gx4g0n8" path="res://CombatStuff/combat_actual.tscn" id="17_0wnlq"]
+[ext_resource type="PackedScene" uid="uid://dck2ceqmicmoh" path="res://GUI/Game_over.tscn" id="18_ygoei"]
 [ext_resource type="PackedScene" uid="uid://d0k0on7spbf72" path="res://GUI/trade.tscn" id="19_ve5d6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_c1gip"]
@@ -74,6 +75,17 @@ offset_right = 267.0
 offset_bottom = 122.0
 theme = ExtResource("3_fbkqq")
 text = "<"
+
+[node name="Show_Stats_Button" type="Button" parent="." unique_id=1464854293]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -97.0
+offset_bottom = 31.0
+grow_horizontal = 0
+theme = ExtResource("3_fbkqq")
+text = "Show stats"
 
 [node name="Action_Container" type="PanelContainer" parent="." unique_id=122628786]
 offset_top = 64.0
@@ -692,6 +704,10 @@ unique_name_in_owner = true
 visible = false
 
 [node name="Combat" parent="." unique_id=1693427844 instance=ExtResource("17_0wnlq")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Game_Over" parent="." unique_id=2052234248 instance=ExtResource("18_ygoei")]
 unique_name_in_owner = true
 visible = false
 

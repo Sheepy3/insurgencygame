@@ -3,17 +3,23 @@ var map_generator:PackedScene = preload("res://MapStuff/MapGeneration/map_genera
 var size:int = 2
 @onready var client:Node = $Client
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
+var In_server:bool = false
+var UID:int
+
+signal clean_game_over(Leaving:bool)
 
 func _ready() -> void:
 	client.lobby_joined.connect(_lobby_joined)
 	multiplayer.peer_connected.connect(Add_player_resource)
+	multiplayer.peer_disconnected.connect(Reset_game_config)
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
+	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Reset_game_config)
+	get_parent().get_child(2).find_child("Game_Over").return_to_lobby.connect(Clean_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
 	%Faction_select.disabled = true
-	
 
 func _on_start_button_pressed() -> void:
 	for Players:Resource in Overseer.player_list:
@@ -46,6 +52,7 @@ func _on_join_button_pressed() -> void:
 	client.start(%IP.text, %Room.text, true)
 
 func _lobby_joined(lobby:String) -> void:
+	In_server = true
 	%Room.text = lobby
 	%Room.editable = false
 	%Join_Button.disabled = true
@@ -56,14 +63,17 @@ func _lobby_joined(lobby:String) -> void:
 		%StartButton.set_disabled(true)
 		%OptionButton.set_disabled(true)
 	%ReadyButton.set_disabled(false)
+	UID = multiplayer.get_unique_id()
 
 func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
 		var Player_resource:Resource = Player.new()
+		#### THE CODE BELOW SHOULD BE REMOVED BEFORE REAL PLAY ####
 		Player_resource.Player_ID = ID
 		Player_resource.Money = 300
 		Player_resource.Man_power = 300
 		Player_resource.Weapons = 300
+		#### THE CODE ABOVE SHOULD BE REMOVED BEFORE REAL PLAY ####
 		Overseer.player_list.append(Player_resource)
 		var Logistics_map:AStar2D = AStar2D.new()
 		var Intelligence_map:AStar2D = AStar2D.new()
@@ -72,12 +82,13 @@ func Add_player_resource(ID:int) -> void:
 		#Overseer.Player_rpc_info["Player " +str(ID)] = [Overseer.Player_resource.Player_ID,Overseer.Player_resource.Player_name,Overseer.Player_resource.color,Overseer.Player_resource.base_list,Overseer.Player_resource.Weapons,Overseer.Player_resource.Money,Overseer.Player_resource.Man_power,Overseer.Player_resource.Victory_points]
 
 func Remove_player_resource(ID:int) -> void: 
-	if multiplayer.is_server():
-		for existing_player:Resource in Overseer.player_list: 
-			if existing_player.Player_ID == ID:
-				Overseer.player_list.remove_at(Overseer.player_list.find(existing_player))
-				Overseer.The_networks.erase(ID)
-				Overseer.Resources_to_rpc()
+	if In_server:
+		if multiplayer.is_server():
+			for existing_player:Resource in Overseer.player_list: 
+				if existing_player.Player_ID == ID:
+					Overseer.player_list.remove_at(Overseer.player_list.find(existing_player))
+					Overseer.The_networks.erase(ID)
+					Overseer.Resources_to_rpc()
 
 func _render_players() -> void:
 	%Color_select.disabled = false
@@ -104,11 +115,12 @@ func _render_players() -> void:
 		%Player_list_container.add_child(new_player_scene)
 	
 	#check if all players are ready
-	if (ready_players == Overseer.player_list.size() && multiplayer.is_server()):
-		%StartButton.set_disabled(false)
-	else:
-		%StartButton.set_disabled(true)
-		
+	if In_server:
+		if (ready_players == Overseer.player_list.size() && multiplayer.is_server()):
+			%StartButton.set_disabled(false)
+		else:
+			%StartButton.set_disabled(true)
+
 func _on_color_select_item_selected(index: int) -> void:
 	Update_player_color.rpc(multiplayer.get_unique_id(),index)
 
@@ -182,3 +194,26 @@ func _on_ready_button_pressed() -> void:
 		else:
 			%ReadyButton.text = "Ready"
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),true)
+
+func Reset_game_config(ID:int = 0) -> void:
+	if ID == 1 or ID == get_parent().get_child(2).Unique_player_ID or ID == UID:
+		In_server = false
+		get_parent().get_child(2).find_child("Game_Over").hide()
+		get_parent().get_child(2).find_child("Game_Over").Reset_game_over()
+		clean_game_over.emit(true)
+		_render_players()
+		get_tree().call_group("CONFIG_BUTTONS","set_disabled",true)
+		%ReadyButton.text = "Not Ready"
+		%Color_select._select_int(6)
+		%Faction_select._select_int(2)
+		%Join_Button.set_disabled(false)
+		$Client.stop()
+		show()
+
+func Clean_game_config() -> void:
+	get_parent().get_child(2).find_child("Game_Over").hide()
+	get_parent().get_child(2).find_child("Game_Over").Reset_game_over()
+	clean_game_over.emit(false)
+	%ReadyButton.text = "Not Ready"
+	_render_players()
+	show()

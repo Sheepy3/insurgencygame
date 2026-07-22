@@ -69,7 +69,7 @@ size_flags_horizontal = 4
 text = "Map Size"
 label_settings = ExtResource("1_8cj6o")
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=370438014]
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=370438014 groups=["CONFIG_BUTTONS"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_qer0v")
@@ -88,7 +88,7 @@ popup/item_3/id = 3
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=1285593778]
+[node name="StartButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=1285593778 groups=["CONFIG_BUTTONS"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -97,7 +97,7 @@ theme = ExtResource("2_qer0v")
 disabled = true
 text = "Start Game"
 
-[node name="ReadyButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=2084916679]
+[node name="ReadyButton" type="Button" parent="VBoxContainer/HBoxContainer/Panel/VBoxContainer" unique_id=2084916679 groups=["CONFIG_BUTTONS"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -140,7 +140,7 @@ size_flags_vertical = 3
 theme = ExtResource("2_qer0v")
 placeholder_text = "Enter Room Code"
 
-[node name="Color_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=508823087]
+[node name="Color_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=508823087 groups=["CONFIG_BUTTONS"]]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
@@ -163,7 +163,7 @@ popup/item_6/text = "Select a color..."
 popup/item_6/id = 6
 popup/item_6/disabled = true
 
-[node name="Faction_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=1437201379]
+[node name="Faction_select" type="OptionButton" parent="VBoxContainer/HBoxContainer/Networking_Panel/VBoxContainer" unique_id=1437201379 groups=["CONFIG_BUTTONS"]]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
