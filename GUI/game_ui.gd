@@ -286,6 +286,11 @@ func connect_update_UI(Intervention:bool = false) -> void:
 	if Overseer.current_phase == Overseer.INTERVENTION or Overseer.current_phase == Overseer.GAME_OVER:
 		if multiplayer.is_server():
 			Compile_game_over_info.rpc(Intervention)
+			find_child("Combat").combat_over.disconnect(Resume_phase_timers)
+			Overseer.change_phase.disconnect(Callable(%Phase_timer,"start"))
+			Overseer.change_phase.disconnect(Callable(%Phase_timer/fife,"start").bind(float(%Phase_timer.wait_time/2)))
+			Overseer.change_phase.disconnect(Callable(%Phase_timer/won,"start").bind(float(%Phase_timer.wait_time-60)))
+			Overseer.change_phase.disconnect(Callable(%Phase_timer/thrrtea,"start").bind(float(%Phase_timer.wait_time-30)))
 	else:
 		Overseer.player_resources_updated.connect(update_Player_Info)
 		Overseer.player_resources_updated.connect(Check_store_unlocked)
@@ -297,6 +302,7 @@ func connect_update_UI(Intervention:bool = false) -> void:
 		%Next_Phase_Button.set_disabled(false)
 		_phase_switch_ui()
 		if multiplayer.is_server():
+			find_child("Combat").combat_over.connect(Resume_phase_timers)
 			Overseer.change_phase.connect(Callable(%Phase_timer,"start"))
 			Overseer.change_phase.connect(Callable(%Phase_timer/fife,"start").bind(float(%Phase_timer.wait_time/2)))
 			Overseer.change_phase.connect(Callable(%Phase_timer/won,"start").bind(float(%Phase_timer.wait_time-60)))
@@ -653,6 +659,7 @@ func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> v
 @rpc("any_peer","call_local")
 func request_pre_combat_ui(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
+		get_tree().call_group("PHASE_TIMERS","set_paused",true)
 		var player_id:int = multiplayer.get_remote_sender_id() # attacker ID
 		if player_id == 0:
 			player_id = multiplayer.get_unique_id()
@@ -696,7 +703,6 @@ func _on_precombat_initialize(attacking_fighters:int, attacking_influence:int, t
 @rpc("any_peer", "call_local", "reliable")
 func _request_combat(attacking_fighters:int, attacking_influence:int, target_player_id: int, map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
-		%Phase_timer.set_paused(true)
 		var player_id: int = multiplayer.get_remote_sender_id()
 		if player_id == 0:
 			player_id = multiplayer.get_unique_id()
@@ -958,3 +964,7 @@ func _on_won_timeout() -> void:
 
 func _on_thrrtea_timeout() -> void:
 	action_error.rpc("Thirty seconds remaining!",multiplayer.get_unique_id(),true)
+
+func Resume_phase_timers() -> void:
+	if multiplayer.is_server():
+		get_tree().call_group("PHASE_TIMERS","set_paused",false)

@@ -716,20 +716,20 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
-[node name="Phase_timer" type="Timer" parent="." unique_id=1205193209]
+[node name="Phase_timer" type="Timer" parent="." unique_id=1205193209 groups=["PHASE_TIMERS"]]
 unique_name_in_owner = true
 wait_time = 600.0
 one_shot = true
 
-[node name="fife" type="Timer" parent="Phase_timer" unique_id=1301279512]
+[node name="fife" type="Timer" parent="Phase_timer" unique_id=1301279512 groups=["PHASE_TIMERS"]]
 wait_time = 300.0
 one_shot = true
 
-[node name="won" type="Timer" parent="Phase_timer" unique_id=1690465233]
+[node name="won" type="Timer" parent="Phase_timer" unique_id=1690465233 groups=["PHASE_TIMERS"]]
 wait_time = 540.0
 one_shot = true
 
-[node name="thrrtea" type="Timer" parent="Phase_timer" unique_id=1039877075]
+[node name="thrrtea" type="Timer" parent="Phase_timer" unique_id=1039877075 groups=["PHASE_TIMERS"]]
 wait_time = 570.0
 one_shot = true
 
