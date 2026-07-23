@@ -66,6 +66,7 @@ shader_parameter/opacity = 0.1
 
 [node name="UI" type="CanvasLayer" unique_id=271015966]
 script = ExtResource("1_2if7r")
+Phase_timer_time = 600.0
 
 [node name="Close_UI_Button" type="Button" parent="." unique_id=1931464878]
 layout_direction = 4
@@ -715,6 +716,23 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
+[node name="Phase_timer" type="Timer" parent="." unique_id=1205193209]
+unique_name_in_owner = true
+wait_time = 600.0
+one_shot = true
+
+[node name="fife" type="Timer" parent="Phase_timer" unique_id=1301279512]
+wait_time = 300.0
+one_shot = true
+
+[node name="won" type="Timer" parent="Phase_timer" unique_id=1690465233]
+wait_time = 540.0
+one_shot = true
+
+[node name="thrrtea" type="Timer" parent="Phase_timer" unique_id=1039877075]
+wait_time = 570.0
+one_shot = true
+
 [connection signal="timeout" from="Action_Container/Purchase_preview_timer" to="." method="_on_purchase_preview_timer_timeout"]
 [connection signal="timeout" from="Error_timer" to="." method="_on_error_timer_timeout"]
 [connection signal="close_requested" from="Support_store_window" to="." method="_on_support_store_window_close_requested"]
@@ -731,3 +749,7 @@ visible = false
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Open_Trade_Button" to="." method="_on_open_trade_button_pressed"]
 [connection signal="toggled" from="VBoxContainer/HBoxContainer2/Next_Phase_Button" to="." method="_on_next_phase_button_toggled"]
 [connection signal="pressed" from="VBoxContainer/Node_Info/VBoxContainer/HBoxContainer2/Attack_Button" to="." method="_on_attack_button_pressed"]
+[connection signal="timeout" from="Phase_timer" to="." method="_on_game_clock_timeout"]
+[connection signal="timeout" from="Phase_timer/fife" to="." method="_on_fife_timeout"]
+[connection signal="timeout" from="Phase_timer/won" to="." method="_on_won_timeout"]
+[connection signal="timeout" from="Phase_timer/thrrtea" to="." method="_on_thrrtea_timeout"]

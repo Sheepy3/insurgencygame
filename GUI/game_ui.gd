@@ -6,6 +6,7 @@ var Unique_player_ID:int
 var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
 var UI_pre_combat_Scene: PackedScene = preload("res://CombatStuff/pre_combat.tscn")
 var hidden_ui_nodes: Array[CanvasItem] = []
+@export var Phase_timer_time:float
 var Preview_placables:Array = [
 	preload("res://Assets/Icons/gun.png"),
 	preload("res://Assets/Military/Tent.png"),
@@ -16,6 +17,7 @@ var Preview_placables:Array = [
 ]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	%Phase_timer.wait_time = Phase_timer_time
 	get_parent().get_child(3).clean_game_over.connect(Clean_UI_script)
 	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
@@ -156,13 +158,21 @@ func _phase_switch_ui() -> void:
 	$Current_Phase.text += " (Turn " + str(Overseer.Phase_cycle) + ("/12)")
 	%Next_Phase_Button.set_pressed_no_signal(false)
 	%Next_Phase_Button.text = "NEXT PHASE???"
+	#if multiplayer.is_server() and Overseer.current_phase != Overseer.INTERVENTION and Overseer.current_phase != Overseer.GAME_OVER and !get_parent().get_child(3).is_visible():
+		#print("This is visible!")
+		#%Phase_timer.start()
 
 @rpc("authority","call_local")
-func action_error(error_message:String, player_ID:int) -> void:
-	if multiplayer.get_unique_id() == player_ID: 
+func action_error(error_message:String, player_ID:int, Notify_all:bool = false) -> void:
+	if Notify_all:
 		$Error_Message.text = error_message
 		$Error_Message.show()
 		$Error_timer.start()
+	else:
+		if multiplayer.get_unique_id() == player_ID: 
+			$Error_Message.text = error_message
+			$Error_Message.show()
+			$Error_timer.start()
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
@@ -286,6 +296,11 @@ func connect_update_UI(Intervention:bool = false) -> void:
 		Update_available_buttons()
 		%Next_Phase_Button.set_disabled(false)
 		_phase_switch_ui()
+		if multiplayer.is_server():
+			Overseer.change_phase.connect(Callable(%Phase_timer,"start"))
+			Overseer.change_phase.connect(Callable(%Phase_timer/fife,"start").bind(float(%Phase_timer.wait_time/2)))
+			Overseer.change_phase.connect(Callable(%Phase_timer/won,"start").bind(float(%Phase_timer.wait_time-60)))
+			Overseer.change_phase.connect(Callable(%Phase_timer/thrrtea,"start").bind(float(%Phase_timer.wait_time-30)))
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
@@ -681,6 +696,7 @@ func _on_precombat_initialize(attacking_fighters:int, attacking_influence:int, t
 @rpc("any_peer", "call_local", "reliable")
 func _request_combat(attacking_fighters:int, attacking_influence:int, target_player_id: int, map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
+		%Phase_timer.set_paused(true)
 		var player_id: int = multiplayer.get_remote_sender_id()
 		if player_id == 0:
 			player_id = multiplayer.get_unique_id()
@@ -926,3 +942,19 @@ func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so functio
 	Overseer.change_phase.disconnect(Update_available_buttons)
 	Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
 	hide()
+
+func _on_game_clock_timeout() -> void:
+	if multiplayer.is_server():
+		for players:Resource in Overseer.player_list:
+			players.Ready = true
+		Overseer.Resources_to_rpc()
+		Overseer.Check_phase_status()
+
+func _on_fife_timeout() -> void:
+	action_error.rpc("Five minutes remaining!",multiplayer.get_unique_id(),true)
+
+func _on_won_timeout() -> void:
+	action_error.rpc("One minute remaining!",multiplayer.get_unique_id(),true)
+
+func _on_thrrtea_timeout() -> void:
+	action_error.rpc("Thirty seconds remaining!",multiplayer.get_unique_id(),true)
