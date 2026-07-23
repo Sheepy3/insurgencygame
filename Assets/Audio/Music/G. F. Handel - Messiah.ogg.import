@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c5os0vvj5x484"
+path="res://.godot/imported/G. F. Handel - Messiah.ogg-4ad5572c9ec3067c285e41f796702d60.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/G. F. Handel - Messiah.ogg"
+dest_files=["res://.godot/imported/G. F. Handel - Messiah.ogg-4ad5572c9ec3067c285e41f796702d60.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

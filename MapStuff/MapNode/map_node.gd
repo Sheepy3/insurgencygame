@@ -61,6 +61,7 @@ func _on_map_node_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_i
 		_update_ui()
 
 		A_node_clicked.emit(name,multiplayer.get_unique_id(),"Node")
+		AudioController.play_sfx(AudioController.Sfx.CLICK)
 
 func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	building = base_resource.duplicate(true)
@@ -77,6 +78,7 @@ func add_building(player_ID:int, _type:int, color:Vector3) -> void:
 	%Building.material.set_shader_parameter("tint_color", color)
 	%Building.material.set_shader_parameter("saturation", 0.4)
 	%Building.show()
+	AudioController.play_sfx(AudioController.Sfx.CONSTRUCTION)
 	Has_building = true
 	attempt_place_dock()
 
@@ -118,6 +120,7 @@ func add_unit(player:int, type:int, color:Vector3, UUID:String, disrupted:bool, 
 	if disrupted:
 		unit_visual.set_disrupted()
 	%Units.add_child(unit_visual)
+	AudioController.play_sfx(AudioController.Sfx.FOOTSTEPS)
 	reorder_units()
 	get_parent().find_child("UI").update_node_unit_list(unit_list,name)
 
@@ -261,7 +264,7 @@ func Reset_combat_data() -> void:
 func spawn_dock(duration: float = 0.5) -> void:
 	%Dock.show()
 	fade_material.set_shader_parameter("progress", 0.0)
-
+	AudioController.play_sfx(AudioController.Sfx.SHIP_HORN)
 	var tween := create_tween()
 	tween.tween_method(
 		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
