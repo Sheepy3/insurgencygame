@@ -20,7 +20,7 @@ var The_support_nodes:Array
 var Phase_cycle:int = 0   # of times you have reached the "PURCHASE" phase again (modify this to test end of game features)
 var Desired_cycle:int = 3 # of full "Phases_cycles" before matnince/ # of "PURCHASE" phases reached before matnince (will occur on turn of number)
 var Num_of_phases:int = 13 # of full "Phase_cycles" before the auto end of the game (INTERVENTION phase)
-
+var Settings_Shown:bool = false
 enum {
 	MAINTENENCE, PURCHASE, PLACE_INFRASTRUCTURE, UNIT_MOVEMENT, COMBAT, 
 	PLACE_MILITARY, COLLECT, INITIAL_DEPLOY, INTERVENTION, GAME_OVER
@@ -129,6 +129,17 @@ func cycle_phases() -> void:
 
 func _ready() -> void:
 	get_parent().get_child(3).get_child(3).clean_game_over.connect(Clean_overseer_script)
+
+func _unhandled_input(event: InputEvent) -> void:
+	var dir:int = 0
+	if event.is_action_pressed("Settings"):
+		if Settings_Shown:
+			get_tree().current_scene.get_node("Settings").hide()
+			Settings_Shown = false
+		else:
+			get_tree().current_scene.get_node("Settings").show()
+			Settings_Shown = true
+
 
 @rpc("any_peer","call_local")
 func Resources_to_rpc() -> void:
