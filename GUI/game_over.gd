@@ -75,10 +75,13 @@ func Create_winner_string(Winners:Array) -> String:
 
 func _on_leave_game_button_pressed() -> void:
 	hide()
+	AudioController.stop_music()
 	leave_game.emit(Player_ID)
 
 func _on_back_to_lobby_button_pressed() -> void:
+	AudioController.stop_music()
 	return_to_lobby.emit()
+	
 
 func Reset_game_over() -> void:
 	%Game_over_title.text = %Game_over_title.text.left(10)

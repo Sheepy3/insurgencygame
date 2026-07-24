@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://dmjvqvfseup10"]
+
+[ext_resource type="Script" uid="uid://c6b0pfv2sqodx" path="res://GUI/settings.gd" id="1_1gk1d"]
+[ext_resource type="Theme" uid="uid://c7d2sn6q1p472" path="res://GUI/Button_Theme_Alt.tres" id="1_lqlgg"]
+
+[node name="Settings" type="CanvasLayer" unique_id=919572234]
+script = ExtResource("1_1gk1d")
+
+[node name="Control" type="Control" parent="." unique_id=501644216]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="Control" unique_id=1999325915]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -120.0
+offset_right = 270.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lqlgg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer" unique_id=653396144]
+z_index = 1
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="Control/PanelContainer/HBoxContainer" unique_id=591977043]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/HBoxContainer" unique_id=117668814]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="Settings_Header" type="Label" parent="Control/PanelContainer/HBoxContainer/VBoxContainer" unique_id=65535644]
+layout_mode = 2
+text = "SETTINGS
+
+"
+horizontal_alignment = 1
+
+[node name="Sfx_Volume_Label" type="Label" parent="Control/PanelContainer/HBoxContainer/VBoxContainer" unique_id=71918975]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SFX volume (50%)"
+horizontal_alignment = 1
+
+[node name="SFX_Slider" type="HSlider" parent="Control/PanelContainer/HBoxContainer/VBoxContainer" unique_id=550144626]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="Music_Volume_Label" type="Label" parent="Control/PanelContainer/HBoxContainer/VBoxContainer" unique_id=1016619161]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Music volume (50%)"
+horizontal_alignment = 1
+
+[node name="Music_Slider" type="HSlider" parent="Control/PanelContainer/HBoxContainer/VBoxContainer" unique_id=600965839]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer/HBoxContainer/VBoxContainer" unique_id=1020320599]
+layout_mode = 2
+
+[node name="Back_to_game" type="Button" parent="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1264127450]
+layout_mode = 2
+text = "Back to Game"
+
+[node name="Quit" type="Button" parent="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1469967691]
+layout_mode = 2
+text = "Quit"
+
+[node name="Control" type="Control" parent="Control/PanelContainer/HBoxContainer" unique_id=946280650]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/PanelContainer/HBoxContainer" unique_id=1397452420]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer/HBoxContainer/ScrollContainer" unique_id=1242180625]
+layout_mode = 2
+
+[node name="Credits_Header" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=914151165]
+layout_mode = 2
+text = "Credits"
+horizontal_alignment = 1
+
+[node name="Body1" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=614635381]
+layout_mode = 2
+text = "Original wargame 
+\"Insurgent Uprising\" Developed 
+by Jeremy J. Arias and 
+Chad O. Klay"
+
+[node name="LinkButton" type="LinkButton" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=1584457374]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Original Paper found here!"
+uri = "https://archive.org/details/insurgentuprisin1094556773/insurgentuprisin1094556773/page/n1/mode/2up"
+
+[node name="Body2" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=626235228]
+layout_mode = 2
+text = "
+Software developed by 
+Cleifton M and Shawn M 
+
+External asset credits:
+
+- Military Tent by Lvilka 
+- US Green Army Miniature 001, 
+Photogrammetry by Trinh Nguyen 
+- Armyman, plain\" by michaelkraft
+- Ak 47 icons created by
+Muhammad Atif - Flaticon
+
+- Sfx By Nicole Marie T
+- digitized seagulls by 
+simmys_recycle_bin
+- Snow Footsteps Running by 
+qubodup
+- synth_sand_wave.wav by vr 
+- ChaChing.mp3 by Lucish
+
+- SC-55 Soundfont by nitro-shoe"
+
+[node name="LinkButton2" type="LinkButton" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=551715126]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Soundfont found here!"
+uri = "https://github.com/nitro-shoe/sc-55-soundfont"
+
+[node name="Body3" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=504227907]
+layout_mode = 2
+text = "
+Midi Compositions Obtained 
+from the Mutopia Project."
+
+[node name="LinkButton3" type="LinkButton" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=1211834237]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Mutopia found here!"
+uri = "https://www.ibiblio.org/mutopia/"
+
+[node name="Body4" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=320748728]
+layout_mode = 2
+text = "
+"
+
+[connection signal="value_changed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/SFX_Slider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="value_changed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/Music_Slider" to="." method="_on_music_slider_value_changed"]
+[connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/Back_to_game" to="." method="_on_back_to_game_pressed"]
+[connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/Quit" to="." method="_on_quit_pressed"]

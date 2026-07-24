@@ -319,13 +319,14 @@ func spawn_attack_effects() -> void:
 			else:
 				instanced_effect_scene.position += Vector2(55,0)
 			instanced_effect_scene.Is_binoculars = true
+			AudioController.play_sfx(AudioController.Sfx.THROW)
 		if child.Unit_Data.unit_type == 0:
 			if child.flipped:
 				instanced_effect_scene.position -= Vector2(18,13)
 				instanced_effect_scene.flipped = true
 			else:
 				instanced_effect_scene.position += Vector2(55,-11)
-			
+			AudioController.play_sfx(AudioController.Sfx.GUN_FIRE)
 		child.add_child(instanced_effect_scene)
 
 func _on_timer_timeout() -> void:

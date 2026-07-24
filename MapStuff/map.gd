@@ -47,6 +47,7 @@ func initialize(size:int) -> void:
 					new_path.set_owner(child)
 					generated_paths.append(constructed_name)
 	update_label.emit()
+	AudioController.start_music()
 
 	match size:
 		0:
