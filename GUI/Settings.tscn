@@ -126,6 +126,11 @@ Cleifton M and Shawn M
 
 External asset credits:
 
+- Military Tent by Lvilka 
+- US Green Army Miniature 001, 
+Photogrammetry by Trinh Nguyen 
+- Armyman, plain\" by michaelkraft
+
 - Sfx By Nicole Marie T
 - digitized seagulls by 
 simmys_recycle_bin
@@ -141,9 +146,6 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 text = "Soundfont found here!"
 uri = "https://github.com/nitro-shoe/sc-55-soundfont"
-
-[node name="Body3" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=1170267691]
-layout_mode = 2
 
 [connection signal="value_changed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/SFX_Slider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="value_changed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/Music_Slider" to="." method="_on_music_slider_value_changed"]
