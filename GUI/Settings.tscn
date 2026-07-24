@@ -149,6 +149,23 @@ theme_override_colors/font_color = Color(1, 0, 0, 1)
 text = "Soundfont found here!"
 uri = "https://github.com/nitro-shoe/sc-55-soundfont"
 
+[node name="Body3" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=504227907]
+layout_mode = 2
+text = "
+Midi Compositions Obtained 
+from the Mutopia Project."
+
+[node name="LinkButton3" type="LinkButton" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=1211834237]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Mutopia found here!"
+uri = "https://www.ibiblio.org/mutopia/"
+
+[node name="Body4" type="Label" parent="Control/PanelContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=320748728]
+layout_mode = 2
+text = "
+"
+
 [connection signal="value_changed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/SFX_Slider" to="." method="_on_sfx_slider_value_changed"]
 [connection signal="value_changed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/Music_Slider" to="." method="_on_music_slider_value_changed"]
 [connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/Back_to_game" to="." method="_on_back_to_game_pressed"]
