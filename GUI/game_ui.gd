@@ -6,6 +6,7 @@ var Unique_player_ID:int
 var UI_Unit_Scene: PackedScene = preload("res://GUI/UI_Unit.tscn")
 var UI_pre_combat_Scene: PackedScene = preload("res://CombatStuff/pre_combat.tscn")
 var hidden_ui_nodes: Array[CanvasItem] = []
+@export var Phase_timer_time:float
 var Preview_placables:Array = [
 	preload("res://Assets/Icons/gun.png"),
 	preload("res://Assets/Military/Tent.png"),
@@ -14,9 +15,11 @@ var Preview_placables:Array = [
 	preload("res://Assets/Icons/IntelNetwork.png"),
 	preload("res://Assets/Icons/LogiNetwork.png")
 ]
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	get_parent().find_child("GameConfig").clean_game_over.connect(Clean_UI_script)
+	%Phase_timer.wait_time = Phase_timer_time
 	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
@@ -156,13 +159,21 @@ func _phase_switch_ui() -> void:
 	$Current_Phase.text += " (Turn " + str(Overseer.Phase_cycle) + ("/12)")
 	%Next_Phase_Button.set_pressed_no_signal(false)
 	%Next_Phase_Button.text = "NEXT PHASE???"
+	#if multiplayer.is_server() and Overseer.current_phase != Overseer.INTERVENTION and Overseer.current_phase != Overseer.GAME_OVER and !get_parent().get_child(3).is_visible():
+		#print("This is visible!")
+		#%Phase_timer.start()
 
 @rpc("authority","call_local")
-func action_error(error_message:String, player_ID:int) -> void:
-	if multiplayer.get_unique_id() == player_ID: 
+func action_error(error_message:String, player_ID:int, Notify_all:bool = false) -> void:
+	if Notify_all:
 		$Error_Message.text = error_message
 		$Error_Message.show()
 		$Error_timer.start()
+	else:
+		if multiplayer.get_unique_id() == player_ID: 
+			$Error_Message.text = error_message
+			$Error_Message.show()
+			$Error_timer.start()
 
 func _on_error_timer_timeout() -> void:
 	$Error_Message.hide()
@@ -276,6 +287,11 @@ func connect_update_UI(Intervention:bool = false) -> void:
 	if Overseer.current_phase == Overseer.INTERVENTION or Overseer.current_phase == Overseer.GAME_OVER:
 		if multiplayer.is_server():
 			Compile_game_over_info.rpc(Intervention)
+			find_child("Combat").combat_over.disconnect(Resume_phase_timers)
+			Overseer.change_phase.disconnect(Callable(%Phase_timer,"start"))
+			Overseer.change_phase.disconnect(Callable(%Phase_timer/fife,"start").bind(float(%Phase_timer.wait_time/2)))
+			Overseer.change_phase.disconnect(Callable(%Phase_timer/won,"start").bind(float(%Phase_timer.wait_time-60)))
+			Overseer.change_phase.disconnect(Callable(%Phase_timer/thrrtea,"start").bind(float(%Phase_timer.wait_time-30)))
 	else:
 		Overseer.player_resources_updated.connect(update_Player_Info)
 		Overseer.player_resources_updated.connect(Check_store_unlocked)
@@ -286,6 +302,12 @@ func connect_update_UI(Intervention:bool = false) -> void:
 		Update_available_buttons()
 		%Next_Phase_Button.set_disabled(false)
 		_phase_switch_ui()
+		if multiplayer.is_server():
+			find_child("Combat").combat_over.connect(Resume_phase_timers)
+			Overseer.change_phase.connect(Callable(%Phase_timer,"start"))
+			Overseer.change_phase.connect(Callable(%Phase_timer/fife,"start").bind(float(%Phase_timer.wait_time/2)))
+			Overseer.change_phase.connect(Callable(%Phase_timer/won,"start").bind(float(%Phase_timer.wait_time-60)))
+			Overseer.change_phase.connect(Callable(%Phase_timer/thrrtea,"start").bind(float(%Phase_timer.wait_time-30)))
 
 func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 	last_clicked_node = mapnode
@@ -656,6 +678,7 @@ func Finished_setup_check(OG_requester:int,toggel_status:bool,move_on:bool) -> v
 @rpc("any_peer","call_local")
 func request_pre_combat_ui(map_node_path:NodePath) -> void:
 	if multiplayer.is_server():
+		get_tree().call_group("PHASE_TIMERS","set_paused",true)
 		var player_id:int = multiplayer.get_remote_sender_id() # attacker ID
 		if player_id == 0:
 			player_id = multiplayer.get_unique_id()
@@ -946,3 +969,23 @@ func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so functio
 		Overseer.change_phase.disconnect(Update_available_buttons)
 		Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
 	hide()
+
+func _on_game_clock_timeout() -> void:
+	if multiplayer.is_server():
+		for players:Resource in Overseer.player_list:
+			players.Ready = true
+		Overseer.Resources_to_rpc()
+		Overseer.Check_phase_status()
+
+func _on_fife_timeout() -> void:
+	action_error.rpc("Five minutes remaining!",multiplayer.get_unique_id(),true)
+
+func _on_won_timeout() -> void:
+	action_error.rpc("One minute remaining!",multiplayer.get_unique_id(),true)
+
+func _on_thrrtea_timeout() -> void:
+	action_error.rpc("Thirty seconds remaining!",multiplayer.get_unique_id(),true)
+
+func Resume_phase_timers() -> void:
+	if multiplayer.is_server():
+		get_tree().call_group("PHASE_TIMERS","set_paused",false)
