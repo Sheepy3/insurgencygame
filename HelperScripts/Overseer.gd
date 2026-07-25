@@ -128,7 +128,11 @@ func cycle_phases() -> void:
 
 
 func _ready() -> void:
-	get_parent().get_child(3).get_child(3).clean_game_over.connect(Clean_overseer_script)
+	call_deferred("_connect_game_config")
+
+func _connect_game_config() -> void:
+	var game_config: Node = get_tree().current_scene.find_child("GameConfig")
+	game_config.clean_game_over.connect(Clean_overseer_script)
 
 func _unhandled_input(event: InputEvent) -> void:
 	var dir:int = 0
@@ -652,6 +656,8 @@ func compute_consequences() -> void:
 	
 	var unit_power := 0.0
 	for unit: Resource in winning_units:
+		if unit.disrupted:
+			continue
 		if unit.unit_type == UNIT_TYPE.FIGHTER:
 			unit_power += 1.0
 		elif unit.unit_type == UNIT_TYPE.INFLUENCE:

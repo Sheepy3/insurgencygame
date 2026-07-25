@@ -2,6 +2,9 @@ extends CanvasLayer
 var map_generator:PackedScene = preload("res://MapStuff/MapGeneration/map_generator.tscn")
 var size:int = 2
 @onready var client:Node = $Client
+@onready var map_scene:Node = get_tree().current_scene
+@onready var game_ui:Node = map_scene.find_child("UI")
+@onready var game_over:Node = map_scene.find_child("Game_Over")
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
 var In_server:bool = false
 var UID:int
@@ -14,8 +17,8 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(Reset_game_config)
 	Overseer.player_resources_updated.connect(_render_players)
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
-	get_parent().get_child(2).find_child("Game_Over").leave_game.connect(Reset_game_config)
-	get_parent().get_child(2).find_child("Game_Over").return_to_lobby.connect(Clean_game_config)
+	game_over.leave_game.connect(Reset_game_config)
+	game_over.return_to_lobby.connect(Clean_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
@@ -41,8 +44,8 @@ func _on_start_button_pressed() -> void:
 func _start_map_gen() -> void:
 	var spawn_map_generator:Node = map_generator.instantiate()
 	spawn_map_generator.size = size 
-	get_parent().add_child.call_deferred(spawn_map_generator)
-	hide()
+	map_scene.add_child.call_deferred(spawn_map_generator)
+	#hide()
 
 func _on_option_button_item_selected(index: int) -> void:
 	size = index
@@ -196,10 +199,10 @@ func _on_ready_button_pressed() -> void:
 			Overseer.Update_player_ready.rpc(multiplayer.get_unique_id(),true)
 
 func Reset_game_config(ID:int = 0) -> void:
-	if ID == 1 or ID == get_parent().get_child(2).Unique_player_ID or ID == UID:
+	if ID == 1 or ID == game_ui.Unique_player_ID or ID == UID:
 		In_server = false
-		get_parent().get_child(2).find_child("Game_Over").hide()
-		get_parent().get_child(2).find_child("Game_Over").Reset_game_over()
+		game_over.hide()
+		game_over.Reset_game_over()
 		clean_game_over.emit(true)
 		_render_players()
 		get_tree().call_group("CONFIG_BUTTONS","set_disabled",true)
@@ -211,8 +214,8 @@ func Reset_game_config(ID:int = 0) -> void:
 		show()
 
 func Clean_game_config() -> void:
-	get_parent().get_child(2).find_child("Game_Over").hide()
-	get_parent().get_child(2).find_child("Game_Over").Reset_game_over()
+	game_over.hide()
+	game_over.Reset_game_over()
 	clean_game_over.emit(false)
 	%ReadyButton.text = "Not Ready"
 	_render_players()
