@@ -13,6 +13,7 @@ enum Sfx {
 	CLICK,
 	CLOCK_TICKING,
 	CONSTRUCTION,
+	DEFIBRILLATOR,
 	FOOTSTEPS,
 	GUN_FIRE,
 	NEXT_TURN,
@@ -41,6 +42,7 @@ const SFX_CASH: AudioStream = preload("res://Assets/Audio/cash.ogg")
 const SFX_CLICK: AudioStream = preload("res://Assets/Audio/click.ogg")
 const SFX_CLOCK_TICKING: AudioStream = preload("res://Assets/Audio/clock_ticking.ogg")
 const SFX_CONSTRUCTION: AudioStream = preload("res://Assets/Audio/construction.ogg")
+const SFX_DEFIBRILLATOR: AudioStream = preload("res://Assets/Audio/defibrillator.ogg")
 const SFX_FOOTSTEPS: AudioStream = preload("res://Assets/Audio/footsteps.ogg")
 const SFX_GUN_FIRE: AudioStream = preload("res://Assets/Audio/gun_fire.ogg")
 const SFX_NEXT_TURN: AudioStream = preload("res://Assets/Audio/next_turn.ogg")
@@ -143,6 +145,8 @@ func _get_sfx_stream(sfx: Sfx) -> AudioStream:
 			return SFX_CLOCK_TICKING
 		Sfx.CONSTRUCTION:
 			return SFX_CONSTRUCTION
+		Sfx.DEFIBRILLATOR:
+			return SFX_DEFIBRILLATOR
 		Sfx.FOOTSTEPS:
 			return SFX_FOOTSTEPS
 		Sfx.GUN_FIRE:

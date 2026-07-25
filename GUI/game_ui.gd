@@ -849,6 +849,7 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 			if units.disrupted and units.unit_UUID == unit_UUID:
 				checked_unit =  units
 		if checked_unit:
+			AudioController.play_sfx_for_client(Caller_ID,AudioController.Sfx.DEFIBRILLATOR)
 			match unit_type:
 				0:
 					if Player_resource.Player_faction == 1:
