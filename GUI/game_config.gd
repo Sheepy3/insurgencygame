@@ -75,10 +75,10 @@ func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
 		var Player_resource:Resource = Player.new()
 		#### THE CODE BELOW SHOULD BE REMOVED BEFORE REAL PLAY ####
-		Player_resource.Player_ID = ID
-		Player_resource.Money = 300
-		Player_resource.Man_power = 300
-		Player_resource.Weapons = 300
+		#Player_resource.Player_ID = ID
+		#Player_resource.Money = 300
+		#Player_resource.Man_power = 300
+		#Player_resource.Weapons = 300
 		#### THE CODE ABOVE SHOULD BE REMOVED BEFORE REAL PLAY ####
 		Overseer.player_list.append(Player_resource)
 		var Logistics_map:AStar2D = AStar2D.new()

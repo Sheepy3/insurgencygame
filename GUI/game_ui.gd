@@ -172,12 +172,12 @@ func _on_open_market_button_pressed() -> void:
 	%Support_store_window.show()
 	#!!! Reminder !!! The portion below is added for testing purposes
 	# Should be depricated when testing is finished
-	if multiplayer.is_server():
-		for players:Resource in Overseer.player_list:
-			players.Weapons += 30
-			players.Money += 30
-			players.Man_power += 30
-		Overseer.Resources_to_rpc.rpc()
+	#if multiplayer.is_server():
+		#for players:Resource in Overseer.player_list:
+			#players.Weapons += 30
+			#players.Money += 30
+			#players.Man_power += 30
+		#Overseer.Resources_to_rpc.rpc()
 
 func _on_buy_button_pressed() -> void:
 	Store_action = "Buy"
