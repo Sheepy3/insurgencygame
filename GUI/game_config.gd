@@ -5,6 +5,7 @@ var size:int = 2
 @onready var map_scene:Node = get_tree().current_scene
 @onready var game_ui:Node = map_scene.find_child("UI")
 @onready var game_over:Node = map_scene.find_child("Game_Over")
+@onready var settings:Node = map_scene.find_child("Settings")
 @onready var main_menu:SubViewportContainer = map_scene.find_child("MainMenu")
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
 var In_server:bool = false
@@ -20,6 +21,8 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
 	game_over.leave_game.connect(Reset_game_config)
 	game_over.return_to_lobby.connect(Clean_game_config)
+	settings.settings_return_to_lobby.connect(Clean_game_config)
+	settings.settings_leave_game.connect(Reset_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
@@ -72,10 +75,10 @@ func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
 		var Player_resource:Resource = Player.new()
 		#### THE CODE BELOW SHOULD BE REMOVED BEFORE REAL PLAY ####
-		Player_resource.Player_ID = ID
-		Player_resource.Money = 300
-		Player_resource.Man_power = 300
-		Player_resource.Weapons = 300
+		#Player_resource.Player_ID = ID
+		#Player_resource.Money = 300
+		#Player_resource.Man_power = 300
+		#Player_resource.Weapons = 300
 		#### THE CODE ABOVE SHOULD BE REMOVED BEFORE REAL PLAY ####
 		Overseer.player_list.append(Player_resource)
 		var Logistics_map:AStar2D = AStar2D.new()

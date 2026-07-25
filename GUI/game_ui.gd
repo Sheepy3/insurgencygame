@@ -172,12 +172,12 @@ func _on_open_market_button_pressed() -> void:
 	%Support_store_window.show()
 	#!!! Reminder !!! The portion below is added for testing purposes
 	# Should be depricated when testing is finished
-	if multiplayer.is_server():
-		for players:Resource in Overseer.player_list:
-			players.Weapons += 30
-			players.Money += 30
-			players.Man_power += 30
-		Overseer.Resources_to_rpc.rpc()
+	#if multiplayer.is_server():
+		#for players:Resource in Overseer.player_list:
+			#players.Weapons += 30
+			#players.Money += 30
+			#players.Man_power += 30
+		#Overseer.Resources_to_rpc.rpc()
 
 func _on_buy_button_pressed() -> void:
 	Store_action = "Buy"
@@ -237,14 +237,14 @@ func Manpower_action(Player_ID:int,action:String)-> void:
 			Player_resource.Man_power += 1
 			Player_resource.Player_stats["Earned_man_power"] += 1
 			Player_resource.Money -= 5
-			Player_resource.Player_stats["Spent_moeny"] += 5
+			Player_resource.Player_stats["Spent_money"] += 5
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		elif Store_action == "Sell" and Player_resource.Man_power >= 1:
 			Player_resource.Man_power -= 1
 			Player_resource.Player_stats["Spent_man_power"] += 1
 			Player_resource.Money += 5
-			Player_resource.Player_stats["Earned_moeny"] += 5
+			Player_resource.Player_stats["Earned_money"] += 5
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else: 
@@ -940,8 +940,9 @@ func Show_stats_button() -> void:
 	$Show_Stats_Button.show()
 
 func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
-	Overseer.player_resources_updated.disconnect(Check_store_unlocked)
-	Overseer.change_phase.disconnect(Check_store_unlocked)
-	Overseer.change_phase.disconnect(Update_available_buttons)
-	Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
+	if get_parent().find_child("Board").texture != null and get_parent().get_children().size() > 8:
+		Overseer.player_resources_updated.disconnect(Check_store_unlocked)
+		Overseer.change_phase.disconnect(Check_store_unlocked)
+		Overseer.change_phase.disconnect(Update_available_buttons)
+		Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
 	hide()
