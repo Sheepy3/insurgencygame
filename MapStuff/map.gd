@@ -467,9 +467,10 @@ func display_action_error(the_error:String, Player_ID:int) -> void:
 func Clean_map_children(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
 	$Board.texture = null
 	$UI.The_action.disconnect(Update_action)
-	var The_choping_block:Array = get_children().slice(5,get_children().size())
+	var The_choping_block:Array = get_children().slice(7,get_children().size())
 	for Map_things:Node in The_choping_block:
 		Map_things.queue_free()
+	pixel_fade_in()
 
 func pixel_fade_in(duration: float = 0.5) -> void:
 	%MainMenuLayer.show()

@@ -5,6 +5,7 @@ var size:int = 2
 @onready var map_scene:Node = get_tree().current_scene
 @onready var game_ui:Node = map_scene.find_child("UI")
 @onready var game_over:Node = map_scene.find_child("Game_Over")
+@onready var settings:Node = map_scene.find_child("Settings")
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
 var In_server:bool = false
 var UID:int
@@ -19,6 +20,7 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
 	game_over.leave_game.connect(Reset_game_config)
 	game_over.return_to_lobby.connect(Clean_game_config)
+	settings.return_to_lobby.connect(Clean_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
