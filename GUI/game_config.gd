@@ -5,6 +5,7 @@ var size:int = 2
 @onready var map_scene:Node = get_tree().current_scene
 @onready var game_ui:Node = map_scene.find_child("UI")
 @onready var game_over:Node = map_scene.find_child("Game_Over")
+@onready var main_menu:SubViewportContainer = map_scene.find_child("MainMenu")
 var UI_player:PackedScene = preload("res://GUI/Lobby_ui_player.tscn")
 var In_server:bool = false
 var UID:int
@@ -45,7 +46,6 @@ func _start_map_gen() -> void:
 	var spawn_map_generator:Node = map_generator.instantiate()
 	spawn_map_generator.size = size 
 	map_scene.add_child.call_deferred(spawn_map_generator)
-	#hide()
 
 func _on_option_button_item_selected(index: int) -> void:
 	size = index
