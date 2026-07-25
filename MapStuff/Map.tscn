@@ -83,6 +83,7 @@ repeat_times = 16
 ignore_camera_scroll = true
 
 [node name="Sprite2D" type="Sprite2D" parent="MainMenuLayer/MainMenu/SubViewport/Background/Parallax2D" unique_id=2096594220]
+texture_filter = 1
 texture = ExtResource("7_5l2ee")
 
 [node name="MainGameBackground" type="CanvasLayer" parent="." unique_id=163152209]
