@@ -66,4 +66,4 @@ func Find_map_corner_nodes() -> void:
 					Corner_nodes.append(keys)
 					Winner = 0
 	Overseer.The_support_nodes.append_array(Edge_nodes)
-	Overseer.The_support_nodes.append_array(Corner_nodes)
+	#Overseer.The_support_nodes.append_array(Corner_nodes)

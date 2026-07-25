@@ -5,10 +5,12 @@ var Last_action: String = ""
 enum{FIGHTER,INFLUENCE}
 enum{BASE}
 var Current_node: Node
+@onready var MainMenu := %MainMenu
+@onready var fade_material: ShaderMaterial = MainMenu.material
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	get_child(3).clean_game_over.connect(Clean_map_children)
+	find_child("GameConfig").clean_game_over.connect(Clean_map_children)
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("Flare") && Current_node && Current_node.is_in_group("MapNode"):
@@ -62,6 +64,7 @@ func initialize(size:int) -> void:
 		3:
 			var board_texture:Texture2D = load("res://Assets/Board_large.webp")
 			$Board.set_texture(board_texture)
+	pixel_fade_out()
 
 func Update_action(action: String = "") ->void:
 	Last_action = action
@@ -467,3 +470,28 @@ func Clean_map_children(Leaving_game:bool) -> void: #Leaving_game exists so func
 	var The_choping_block:Array = get_children().slice(5,get_children().size())
 	for Map_things:Node in The_choping_block:
 		Map_things.queue_free()
+
+func pixel_fade_in(duration: float = 0.5) -> void:
+	%MainMenuLayer.show()
+	fade_material.set_shader_parameter("progress", 0.0)
+
+	var tween := create_tween()
+	tween.tween_method(
+		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
+		0.0,
+		1.0,
+		duration
+	)
+	
+func pixel_fade_out(duration: float = 0.5) -> void:
+	fade_material.set_shader_parameter("progress", 1.0)
+
+	var tween := create_tween()
+	tween.tween_method(
+		func(v: float) -> void: fade_material.set_shader_parameter("progress", v),
+		1.0,
+		0.0,
+		duration
+	)
+	await tween.finished
+	%MainMenuLayer.hide()

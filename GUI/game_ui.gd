@@ -16,7 +16,7 @@ var Preview_placables:Array = [
 ]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	get_parent().get_child(3).clean_game_over.connect(Clean_UI_script)
+	get_parent().find_child("GameConfig").clean_game_over.connect(Clean_UI_script)
 	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
