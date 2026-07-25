@@ -939,8 +939,9 @@ func Show_stats_button() -> void:
 	$Show_Stats_Button.show()
 
 func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
-	Overseer.player_resources_updated.disconnect(Check_store_unlocked)
-	Overseer.change_phase.disconnect(Check_store_unlocked)
-	Overseer.change_phase.disconnect(Update_available_buttons)
-	Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
+	if get_parent().find_child("Board").texture != null and get_parent().get_children().size() > 8:
+		Overseer.player_resources_updated.disconnect(Check_store_unlocked)
+		Overseer.change_phase.disconnect(Check_store_unlocked)
+		Overseer.change_phase.disconnect(Update_available_buttons)
+		Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
 	hide()

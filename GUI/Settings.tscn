@@ -99,6 +99,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Back to lobby"
 
+[node name="Leave_game_button" type="Button" parent="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=1370108728]
+layout_mode = 2
+text = "Leave Game"
+
 [node name="Control" type="Control" parent="Control/PanelContainer/HBoxContainer" unique_id=946280650]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
@@ -181,3 +185,4 @@ text = "
 [connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Back_to_game" to="." method="_on_back_to_game_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Back_to_lobby_button" to="." method="_on_back_to_lobby_button_pressed"]
+[connection signal="pressed" from="Control/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/Leave_game_button" to="." method="_on_leave_game_button_pressed"]

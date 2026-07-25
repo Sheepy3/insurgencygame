@@ -20,7 +20,8 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(Remove_player_resource)
 	game_over.leave_game.connect(Reset_game_config)
 	game_over.return_to_lobby.connect(Clean_game_config)
-	settings.return_to_lobby.connect(Clean_game_config)
+	settings.settings_return_to_lobby.connect(Clean_game_config)
+	settings.settings_leave_game.connect(Reset_game_config)
 	show()
 	$Error_Message.hide()
 	%Color_select.disabled = true
