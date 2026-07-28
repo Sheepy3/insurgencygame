@@ -43,12 +43,14 @@ func _on_node_path_area_2d_input_event(_viewport: Node,event: InputEvent,_shape_
 		A_path_clicked.emit(name,multiplayer.get_unique_id(),"Path")
 
 func add_intel_network(Currnet_player_color:Vector3) -> void:
+	AudioController.play_sfx(AudioController.Sfx.RADIO)
 	if not %Intelligence_Network.visible:
 		%Intelligence_Network.show()
 		%Intelligence_Network.material.set_shader_parameter("tint_color",Currnet_player_color)
 		%Intelligence_Text.material.set_shader_parameter("tint_color", Currnet_player_color)
 
 func add_logistics_network(Currnet_player_color:Vector3) -> void:
+	AudioController.play_sfx(AudioController.Sfx.RADIO)
 	if not %Logistics_Network.visible:
 		%Logistics_Network.show()
 		%Logistics_Network/Logistics_Text.material.set_shader_parameter("tint_color", Currnet_player_color)

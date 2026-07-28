@@ -15,10 +15,11 @@ var Preview_placables:Array = [
 	preload("res://Assets/Icons/IntelNetwork.png"),
 	preload("res://Assets/Icons/LogiNetwork.png")
 ]
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_parent().find_child("GameConfig").clean_game_over.connect(Clean_UI_script)
 	%Phase_timer.wait_time = Phase_timer_time
-	get_parent().get_child(3).clean_game_over.connect(Clean_UI_script)
 	%Open_Market_Button.set_disabled(true)
 	$Error_Message.hide()
 	#Overseer.change_player.connect(_player_switch_ui)
@@ -182,12 +183,12 @@ func _on_open_market_button_pressed() -> void:
 	%Support_store_window.show()
 	#!!! Reminder !!! The portion below is added for testing purposes
 	# Should be depricated when testing is finished
-	if multiplayer.is_server():
-		for players:Resource in Overseer.player_list:
-			players.Weapons += 30
-			players.Money += 30
-			players.Man_power += 30
-		Overseer.Resources_to_rpc.rpc()
+	#if multiplayer.is_server():
+		#for players:Resource in Overseer.player_list:
+			#players.Weapons += 30
+			#players.Money += 30
+			#players.Man_power += 30
+		#Overseer.Resources_to_rpc.rpc()
 
 func _on_buy_button_pressed() -> void:
 	Store_action = "Buy"
@@ -247,14 +248,14 @@ func Manpower_action(Player_ID:int,action:String)-> void:
 			Player_resource.Man_power += 1
 			Player_resource.Player_stats["Earned_man_power"] += 1
 			Player_resource.Money -= 5
-			Player_resource.Player_stats["Spent_moeny"] += 5
+			Player_resource.Player_stats["Spent_money"] += 5
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		elif Store_action == "Sell" and Player_resource.Man_power >= 1:
 			Player_resource.Man_power -= 1
 			Player_resource.Player_stats["Spent_man_power"] += 1
 			Player_resource.Money += 5
-			Player_resource.Player_stats["Earned_moeny"] += 5
+			Player_resource.Player_stats["Earned_money"] += 5
 			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else: 
@@ -392,13 +393,15 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Weapons += 1
 					Current_player.Player_stats["Earned_weapons"] += 1
 					Overseer.Resources_to_rpc()
-				
+					_play_buy_sfx(Player_ID)
+					
 				elif Current_player.Money >= 5 && Current_player.Player_faction == 0:
 					Current_player.Money -= 5
 					Current_player.Player_stats["Spent_money"] += 5
 					Current_player.Weapons += 1
 					Current_player.Player_stats["Earned_weapons"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Unique_player_ID)
@@ -412,6 +415,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Military_Base"] += 1
 					Current_player.Player_stats["Buy_base"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				elif Current_player.Man_power >= 10 && Current_player.Money >= 30 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 10 
@@ -421,6 +425,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Military_Base"] += 1
 					Current_player.Player_stats["Buy_base"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
@@ -436,6 +441,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Fighter"] += 1
 					Current_player.Player_stats["Buy_fighter"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				elif Current_player.Man_power >= 5 && Current_player.Money >= 10 && Current_player.Weapons >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5
@@ -447,6 +453,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Fighter"] += 1
 					Current_player.Player_stats["Buy_fighter"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
@@ -460,6 +467,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Influence"] += 1
 					Current_player.Player_stats["Buy_influence"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				elif Current_player.Man_power >= 5 && Current_player.Money >= 15 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 5 
@@ -469,6 +477,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Influence"] += 1
 					Current_player.Player_stats["Buy_influence"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
@@ -482,6 +491,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Intelligence"] += 1
 					Current_player.Player_stats["Buy_Intel"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				elif Current_player.Man_power >= 1 && Current_player.Money >= 10 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
@@ -491,6 +501,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Intelligence"] += 1
 					Current_player.Player_stats["Buy_Intel"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
@@ -504,6 +515,7 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Logistics"] += 1
 					Current_player.Player_stats["Buy_Logs"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				elif Current_player.Man_power >= 1 && Current_player.Money >= 5 && Current_player.Player_faction == 0:
 					Current_player.Man_power -= 1 
@@ -513,9 +525,16 @@ func check_buy_action(Buyable:String,Player_ID:int) -> void:
 					Current_player.Player_storage["Logistics"] += 1
 					Current_player.Player_stats["Buy_Logs"] += 1
 					Overseer.Resources_to_rpc()
+					_play_buy_sfx(Player_ID)
 				
 				else:
 					action_error.rpc("You do not have enough resoucres to buy this!",Player_ID)
+
+func _play_buy_sfx(id:int) -> void:
+	if id == 1:
+		AudioController.play_sfx(AudioController.Sfx.CASH)
+	else:
+		AudioController.play_sfx_for_client(id, AudioController.Sfx.CASH)
 
 func Display_purchase_info(Item_name:String) -> void:
 	$Action_Container/VBoxContainer/Purchase_Hover_Text.show()
@@ -853,6 +872,7 @@ func Reconstitution_possible(Caller_ID:int,unit_type:int,unit_UUID:String,node_n
 			if units.disrupted and units.unit_UUID == unit_UUID:
 				checked_unit =  units
 		if checked_unit:
+			AudioController.play_sfx_for_client(Caller_ID,AudioController.Sfx.DEFIBRILLATOR)
 			match unit_type:
 				0:
 					if Player_resource.Player_faction == 1:
@@ -943,10 +963,11 @@ func Show_stats_button() -> void:
 	$Show_Stats_Button.show()
 
 func Clean_UI_script(Leaving_game:bool) -> void: #Leaving_game exists so function call does not crash
-	Overseer.player_resources_updated.disconnect(Check_store_unlocked)
-	Overseer.change_phase.disconnect(Check_store_unlocked)
-	Overseer.change_phase.disconnect(Update_available_buttons)
-	Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
+	if get_parent().find_child("Board").texture != null and get_parent().get_children().size() > 8:
+		Overseer.player_resources_updated.disconnect(Check_store_unlocked)
+		Overseer.change_phase.disconnect(Check_store_unlocked)
+		Overseer.change_phase.disconnect(Update_available_buttons)
+		Overseer.change_phase.disconnect(Overseer.Profit_and_Taxes)
 	hide()
 
 func _on_game_clock_timeout() -> void:

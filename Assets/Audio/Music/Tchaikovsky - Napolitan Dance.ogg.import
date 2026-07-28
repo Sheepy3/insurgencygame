@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bvihpien8gmd7"
+path="res://.godot/imported/Tchaikovsky - Napolitan Dance.ogg-421338d3bf8770ceebd4f0eb75857b0f.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Tchaikovsky - Napolitan Dance.ogg"
+dest_files=["res://.godot/imported/Tchaikovsky - Napolitan Dance.ogg-421338d3bf8770ceebd4f0eb75857b0f.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

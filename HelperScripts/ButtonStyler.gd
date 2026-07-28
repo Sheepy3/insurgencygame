@@ -105,7 +105,8 @@ func _set_state(button: Button, material: ShaderMaterial, state: ButtonState) ->
 		"state",
 		ButtonState.DISABLED if button.disabled else state
 	)
-
+	if state == ButtonState.PRESSED:
+		AudioController.play_sfx(AudioController.Sfx.CLICK)
 
 func _update_button_size(button: Button, material: ShaderMaterial) -> void:
 	var safe_width := maxf(button.size.x, 1.0)

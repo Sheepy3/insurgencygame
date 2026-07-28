@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://p06w6ln2yopj"
+path="res://.godot/imported/Beethoven - Sonata No_6.ogg-46996271f18c8413c719f53e60fefbf4.oggvorbisstr"
+
+[deps]
+
+source_file="res://Assets/Audio/Music/Beethoven - Sonata No_6.ogg"
+dest_files=["res://.godot/imported/Beethoven - Sonata No_6.ogg-46996271f18c8413c719f53e60fefbf4.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
