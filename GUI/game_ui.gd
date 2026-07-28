@@ -322,6 +322,12 @@ func update_node_unit_list(units:Array, mapnode:StringName) -> void:
 			new_unit_display.set_color(unit.color)
 			new_unit_display.set_type(unit.unit_type)
 			new_unit_display.Check_unit_phase()
+			var The_type:String
+			if unit.unit_type == 0:
+				The_type = "recon_Fighter"
+			elif unit.unit_type == 1:
+				The_type = "recon_Influence"
+			new_unit_display.find_child("Reconstitution_Button").mouse_entered.connect(Display_purchase_info.bind(The_type))
 			%Unit_Display.add_child(new_unit_display)
 			player_unit_count+=1
 			if !unit.has_fought:
@@ -539,10 +545,10 @@ func Display_purchase_info(Item_name:String) -> void:
 	var Faction:int = Overseer.Identify_player(Unique_player_ID).Player_faction
 	for Elements:Control in $Action_Container/VBoxContainer/Purchase_Hover_Price.get_children():
 		Elements.hide()
-	if Item_name == "Weapons":
+	if Item_name.contains("Weapons"):
 		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
 		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.show()
-	elif Item_name == "Fighter":
+	elif Item_name.contains("Fighter"):
 		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Image.show()
 		$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.show()
 		$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Image.show()
@@ -608,6 +614,26 @@ func Display_purchase_info(Item_name:String) -> void:
 				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
 				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "1"
 			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[5])
+	
+		"recon_Fighter":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text =  "8"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "4"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.text = "4"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "5"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "3"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Guns_Cost.text = "3"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[2])
+		
+		"recon_Influence":
+			if Faction == 1:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "13"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "4"
+			elif Faction == 0:
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Money_Cost.text = "8"
+				$Action_Container/VBoxContainer/Purchase_Hover_Price/Population_Cost.text = "3"
+			$Action_Container/VBoxContainer/Purchase_Hover_Image/Item_picture.set_texture(Preview_placables[3])
 	
 	$Action_Container/Purchase_preview_timer.start()
 	$Action_Container/VBoxContainer/Purchase_Hover_Text/Item_Name.text = Item_name
