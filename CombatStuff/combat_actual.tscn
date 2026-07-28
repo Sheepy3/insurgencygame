@@ -127,6 +127,12 @@ layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
+[node name="note3" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Weapons_label_and_count" unique_id=1746033673]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+theme_override_font_sizes/font_size = 16
+text = "(beats Manpower)"
+
 [node name="Weapons_slider" type="HSlider" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=242508244]
 unique_name_in_owner = true
 layout_mode = 2
@@ -147,6 +153,12 @@ layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
 
+[node name="note2" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Money_label_and_count" unique_id=2032996262]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+theme_override_font_sizes/font_size = 16
+text = "(beats Weapons)"
+
 [node name="Money_slider" type="HSlider" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=1653777222]
 unique_name_in_owner = true
 layout_mode = 2
@@ -166,6 +178,12 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_456j5")
 text = "0"
+
+[node name="note3" type="Label" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar/Manpower_label_and_count" unique_id=1880646738]
+layout_mode = 2
+theme = ExtResource("1_456j5")
+theme_override_font_sizes/font_size = 16
+text = "(beats Money)"
 
 [node name="Manpower_slider" type="HSlider" parent="SubViewportContainer/SubViewport/PanelContainer/VBoxContainer/HBoxContainer/Config_Sidebar" unique_id=984991593]
 unique_name_in_owner = true
