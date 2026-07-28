@@ -198,9 +198,11 @@ func _on_sell_button_pressed() -> void:
 
 func _on_manpower_button_pressed() -> void:
 	Manpower_action.rpc(Unique_player_ID,Store_action)
+	Store_action = ""
 
 func _on_weapons_button_pressed() -> void:
 	Weapons_action.rpc(Unique_player_ID,Store_action)
+	Store_action = ""
 
 func update_Player_Info() -> void:
 	var player:Resource = Overseer.Identify_player(Unique_player_ID)
@@ -242,21 +244,18 @@ func _process(delta: float) -> void:
 @rpc("any_peer","call_local")
 func Manpower_action(Player_ID:int,action:String)-> void:
 	if multiplayer.is_server():
-		Store_action = action
 		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
-		if Store_action == "Buy" and Player_resource.Money >= 5:
+		if action == "Buy" and Player_resource.Money >= 5:
 			Player_resource.Man_power += 1
 			Player_resource.Player_stats["Earned_man_power"] += 1
 			Player_resource.Money -= 5
 			Player_resource.Player_stats["Spent_money"] += 5
-			Store_action = ""
 			Overseer.Resources_to_rpc()
-		elif Store_action == "Sell" and Player_resource.Man_power >= 1:
+		elif action == "Sell" and Player_resource.Man_power >= 1:
 			Player_resource.Man_power -= 1
 			Player_resource.Player_stats["Spent_man_power"] += 1
 			Player_resource.Money += 5
 			Player_resource.Player_stats["Earned_money"] += 5
-			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else: 
 			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
@@ -264,21 +263,18 @@ func Manpower_action(Player_ID:int,action:String)-> void:
 @rpc("any_peer","call_local")
 func Weapons_action(Player_ID:int,action:String)-> void:
 	if multiplayer.is_server():
-		Store_action = action
 		var Player_resource:Resource = Overseer.Identify_player(Player_ID)
-		if Store_action == "Buy" and Player_resource.Money >= 3:
+		if action == "Buy" and Player_resource.Money >= 3:
 			Player_resource.Weapons += 1
 			Player_resource.Player_stats["Earned_weapons"] += 1
 			Player_resource.Money -= 3
 			Player_resource.Player_stats["Spent_money"] += 3
-			Store_action = ""
 			Overseer.Resources_to_rpc()
-		elif Store_action == "Sell" and Player_resource.Weapons >= 1:
+		elif action == "Sell" and Player_resource.Weapons >= 1:
 			Player_resource.Weapons -= 1
 			Player_resource.Player_stats["Spent_weapons"] += 1
 			Player_resource.Money += 3
 			Player_resource.Player_stats["Earned_money"] += 3
-			Store_action = ""
 			Overseer.Resources_to_rpc()
 		else:
 			action_error.rpc("You do not have enough resources to complete this transaction!",Player_ID)
