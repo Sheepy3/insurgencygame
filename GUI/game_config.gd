@@ -74,8 +74,8 @@ func _lobby_joined(lobby:String) -> void:
 func Add_player_resource(ID:int) -> void:
 	if multiplayer.is_server():
 		var Player_resource:Resource = Player.new()
+		Player_resource.Player_ID = ID
 		#### THE CODE BELOW SHOULD BE REMOVED BEFORE REAL PLAY ####
-		#Player_resource.Player_ID = ID
 		#Player_resource.Money = 300
 		#Player_resource.Man_power = 300
 		#Player_resource.Weapons = 300
