@@ -132,6 +132,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 	#$PanelContainer2/VBoxContainer/HSplitContainer/Dynamic_Player.text = Overseer.current_player
 
 func _phase_switch_ui() -> void:
+	AudioController.play_sfx(AudioController.Sfx.NEXT_TURN)
 	match Overseer.current_phase:
 		0:
 			$Current_Phase.text = "Maintenence"
@@ -147,6 +148,7 @@ func _phase_switch_ui() -> void:
 			$Current_Phase.text = "Place Fighter Units & Bases"
 		6:
 			$Current_Phase.text = "Collect Resources"
+			AudioController.play_sfx(AudioController.Sfx.COLLECT_RESOURCES)
 			if multiplayer.is_server():
 				Overseer.Phase_cycle += 1
 		7:

@@ -20,6 +20,7 @@ enum Sfx {
 	RADIO,
 	SHIP_HORN,
 	THROW,
+	COLLECT_RESOURCES
 }
 
 const SONG_BEETHOVEN_SONATA_NO_1: AudioStream = preload("res://Assets/Audio/Music/Beethoven - Sonata No_1.ogg")
@@ -49,6 +50,7 @@ const SFX_NEXT_TURN: AudioStream = preload("res://Assets/Audio/next_turn.ogg")
 const SFX_RADIO: AudioStream = preload("res://Assets/Audio/radio.ogg")
 const SFX_SHIP_HORN: AudioStream = preload("res://Assets/Audio/ship_horn.ogg")
 const SFX_THROW: AudioStream = preload("res://Assets/Audio/throw.ogg")
+const SFX_COLLECT_RESOURCES: AudioStream = preload("res://Assets/Audio/collect_resources.ogg")
 
 var music_player: AudioStreamPlayer
 var music_song_index := 0
@@ -159,6 +161,8 @@ func _get_sfx_stream(sfx: Sfx) -> AudioStream:
 			return SFX_SHIP_HORN
 		Sfx.THROW:
 			return SFX_THROW
+		Sfx.COLLECT_RESOURCES:
+			return SFX_COLLECT_RESOURCES
 
 	print("Unknown sound effect:" + str(sfx))
 	return null
