@@ -99,7 +99,6 @@ func get_player_color_name(color: Vector3) -> String:
 	return "Unknown"
 
 func cycle_phases() -> void:
-	AudioController.play_sfx(AudioController.Sfx.NEXT_TURN)
 	Check_VPs(false,true)
 	if Winning_players.size() >= 1:
 		current_phase = GAME_OVER
