@@ -297,3 +297,21 @@ func attempt_place_dock() -> void:
 		else:
 			%Dock.texture = dock_left
 			spawn_dock()
+
+@rpc("authority","call_local")
+func Check_for_dock() -> void:
+	if Overseer.The_support_nodes.has(name):
+		var Meets_condition:int 
+		if Has_building:
+			Meets_condition += 1
+		for units:Resource in unit_list:
+			if units.unit_type == INFLUENCE:
+				Meets_condition += 1
+				break
+		if Meets_condition >= 1:
+			if %Dock.visible:
+				pass
+			else:
+				spawn_dock()
+		else:
+			despawn_dock()

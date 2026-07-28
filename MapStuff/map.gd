@@ -112,6 +112,8 @@ func Check_node_action(Name: String,Player_ID:int,Executing_action:String) ->voi
 						source_node.remove_unit(Current_player.Player_ID,INFLUENCE)
 						Overseer.Request_node_data(Checked_node.name)
 						Overseer.Request_node_data(source_node.name)
+						Checked_node.Check_for_dock.rpc()
+						source_node.Check_for_dock.rpc()
 						Overseer.Resources_to_rpc()
 				else:
 					display_action_error("No influence found at source node!",Player_ID)

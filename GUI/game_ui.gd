@@ -134,7 +134,7 @@ func Check_container_action(Button_name:String,Action:String) -> void:
 func _phase_switch_ui() -> void:
 	match Overseer.current_phase:
 		0:
-			$Current_Phase.text = "Maintenence"
+			$Current_Phase.text = "Maintenance"
 		1:
 			$Current_Phase.text = "Purchase Units & Infrastructure"
 		2:
@@ -825,6 +825,7 @@ func destroy_undefended_base(map_node:Node, attacking_units:Array, attacker_id:i
 	map_node.reorder_units()
 	Overseer.Resources_to_rpc()
 	Overseer.Request_node_data(map_node.name)
+	map_node.Check_for_dock.rpc()
 	base_attack_complete.rpc(attacker_id)
 
 @rpc("authority", "call_local")
