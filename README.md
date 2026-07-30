@@ -4,7 +4,7 @@
 
 # insurgencygame
 
-this game's primary goal is to implement the wargame [insurgent uprising](https://apps.dtic.mil/sti/trecms/pdf/AD1053056.pdf), a Master's thesis written by a naval post graduate student. 
+this game's primary goal is to implement the wargame [insurgent uprising](https://archive.org/details/insurgentuprisin1094556773/insurgentuprisin1094556773/page/n1/mode/2up), a Master's thesis written by a naval post graduate student. 
 
 This implementation is built in godot, an open source game engine. While it is currently a work in progress, we intend to implement networked multiplayer as well as additional features past the implementation of the original wargame. 
 
